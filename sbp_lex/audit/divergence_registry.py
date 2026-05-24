@@ -2,281 +2,108 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Mapping
-
-from sbp_lex.security.pqc import generate_digest
+from typing import Any, Dict, List
 
 
 class DivergenceRegistry:
-
-    def __init__(
-
-        self,
-
-    ) -> None:
-
-        self._registry: List[
-            Dict[str, Any]
-        ] = []
-
+    def __init__(self) -> None:
+        self._registry: List[Dict[str, Any]] = []
 
     def register(
-
         self,
-
         *,
-
         divergence_type: str,
-
         stage: str,
-
         expected: Any,
-
         actual: Any,
-
         severity: str,
-
-        request_fingerprint:
-
-        str |
-
-        None = None,
-
+        request_fingerprint: str | None = None,
     ) -> Dict[str, Any]:
+        from sbp_lex.security.pqc import generate_digest
 
         record = {
-
-            "timestamp":
-
-            datetime.utcnow().isoformat(),
-
-            "divergence_type":
-
-            divergence_type,
-
-            "stage":
-
-            stage,
-
-            "expected":
-
-            deepcopy(
-
-                expected
-
-            ),
-
-            "actual":
-
-            deepcopy(
-
-                actual
-
-            ),
-
-            "severity":
-
-            severity,
-
-            "request_fingerprint":
-
-            request_fingerprint,
-
+            "timestamp": datetime.utcnow().isoformat(),
+            "divergence_type": divergence_type,
+            "stage": stage,
+            "expected": deepcopy(expected),
+            "actual": deepcopy(actual),
+            "severity": severity,
+            "request_fingerprint": request_fingerprint,
         }
 
-        record[
-
-            "divergence_hash"
-
-        ] = generate_digest(
-
-            record
-
-        )
-
-        self._registry.append(
-
-            record
-
-        )
-
+        record["divergence_hash"] = generate_digest(record)
+        self._registry.append(deepcopy(record))
         return record
 
-
-    def verify(
-
+    def register_parity_divergence(
         self,
+        *,
+        stage: str,
+        expected: Any,
+        actual: Any,
+        request_fingerprint: str | None = None,
+        severity: str = "HIGH",
+    ) -> Dict[str, Any]:
+        return self.register(
+            divergence_type="PARITY_DIVERGENCE",
+            stage=stage,
+            expected=expected,
+            actual=actual,
+            severity=severity,
+            request_fingerprint=request_fingerprint,
+        )
 
-    ) -> tuple[
+    def register_runtime_divergence(
+        self,
+        *,
+        stage: str,
+        expected: Any,
+        actual: Any,
+        request_fingerprint: str | None = None,
+        severity: str = "MEDIUM",
+    ) -> Dict[str, Any]:
+        return self.register(
+            divergence_type="RUNTIME_DIVERGENCE",
+            stage=stage,
+            expected=expected,
+            actual=actual,
+            severity=severity,
+            request_fingerprint=request_fingerprint,
+        )
 
-        bool,
+    def verify(self) -> tuple[bool, list[str]]:
+        from sbp_lex.security.pqc import generate_digest
 
-        list[str],
+        failures: list[str] = []
 
-    ]:
-
-        failures = []
-
-        for (
-
-            index,
-
-            item,
-
-        ) in enumerate(
-
-            self._registry
-
-        ):
-
+        for index, item in enumerate(self._registry):
             rebuilt = {
-
-                key:
-
-                value
-
-                for (
-
-                    key,
-
-                    value,
-
-                )
-
-                in item.items()
-
-                if key
-
-                !=
-
-                "divergence_hash"
-
+                key: value
+                for key, value in item.items()
+                if key != "divergence_hash"
             }
 
-            rebuilt_hash = (
+            if generate_digest(rebuilt) != item.get("divergence_hash"):
+                failures.append(f"DIVERGENCE_REGISTRY_CORRUPTION:{index}")
 
-                generate_digest(
+        return len(failures) == 0, failures
 
-                    rebuilt
+    def export(self) -> List[Dict[str, Any]]:
+        return deepcopy(self._registry)
 
-                )
+    def count(self) -> int:
+        return len(self._registry)
 
-            )
-
-            if (
-
-                rebuilt_hash
-
-                !=
-
-                item.get(
-
-                    "divergence_hash"
-
-                )
-
-            ):
-
-                failures.append(
-
-                    f"DIVERGENCE_REGISTRY_CORRUPTION:{index}"
-
-                )
-
-        return (
-
-            len(
-
-                failures
-
-            )
-
-            == 0,
-
-            failures,
-
-        )
-
-
-    def export(
-
-        self,
-
-    ) -> List[
-
-        Dict[
-
-            str,
-
-            Any,
-
-        ]
-
-    ]:
-
-        return deepcopy(
-
-            self._registry
-
-        )
-
-
-    def count(
-
-        self,
-
-    ) -> int:
-
-        return len(
-
-            self._registry
-
-        )
-
-
-    def by_severity(
-
-        self,
-
-        severity:
-
-        str,
-
-    ) -> List[
-
-        Dict[
-
-            str,
-
-            Any,
-
-        ]
-
-    ]:
-
+    def by_severity(self, severity: str) -> List[Dict[str, Any]]:
         return [
-
             item
+            for item in self._registry
+            if item.get("severity") == severity
+        ]
 
-            for item
-
-            in self._registry
-
-            if (
-
-                item.get(
-
-                    "severity"
-
-                )
-
-                ==
-
-                severity
-
-            )
-
-          ]
+    def by_type(self, divergence_type: str) -> List[Dict[str, Any]]:
+        return [
+            item
+            for item in self._registry
+            if item.get("divergence_type") == divergence_type
+            ]
