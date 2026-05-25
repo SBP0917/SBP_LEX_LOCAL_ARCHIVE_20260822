@@ -61,7 +61,6 @@ def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
         "last_denied_fingerprint": None,
         "pipeline_mode": "UNSELECTED",
         "pipeline_convergence": {},
-        "node_convergence": {},
     }
 
     state["state_hash"] = generate_digest(_state_for_hashing(state))
