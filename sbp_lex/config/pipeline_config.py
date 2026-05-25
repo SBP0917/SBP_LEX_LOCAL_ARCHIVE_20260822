@@ -44,8 +44,7 @@ PIPELINE_MODES = {
     "MODE_3_SINGLE_CONSTRAINED": "single_pipeline_constrained_traversal",
 }
 
-NODE_SYNC_REQUIRED_FIELDS = [
-    "node_id",
+SYNC_REQUIRED_FIELDS = [
     "request_fingerprint",
     "state_hash",
     "pipeline_mode",
@@ -54,5 +53,5 @@ NODE_SYNC_REQUIRED_FIELDS = [
     "convergence_hash",
     "decision",
     "audit_hash",
-    "node_signature",
+    "signature",
 ]
