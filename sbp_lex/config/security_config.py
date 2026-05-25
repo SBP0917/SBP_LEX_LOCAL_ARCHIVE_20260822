@@ -22,7 +22,6 @@ SECURITY_PROFILE = {
     "allow_uncontrolled_result_strings": False,
     "allow_state_without_request_fingerprint": False,
     "allow_execution_without_convergence": False,
-    "allow_node_without_attestation": False,
 }
 
 REQUIRED_CORE_TOKENS = [
