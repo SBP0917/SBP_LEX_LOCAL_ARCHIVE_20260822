@@ -61,4 +61,4 @@ def _state_summary(state: Mapping[str, Any] | None) -> Dict[str, Any] | None:
 
 
 def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
-    return {**payload, "node_signature": signature}
+    return {**payload, "signature": signature}
