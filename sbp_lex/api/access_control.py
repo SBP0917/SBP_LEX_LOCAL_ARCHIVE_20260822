@@ -13,6 +13,7 @@ ALLOWED_GET_PATHS = {
     "/health",
     "/dashboard",
     "/desktop",
+    "/desktop/static/images/sbp_lex_background.png",
     "/desktop/latest",
     "/desktop/export/latest",
     "/desktop/export/replay-ledger",
