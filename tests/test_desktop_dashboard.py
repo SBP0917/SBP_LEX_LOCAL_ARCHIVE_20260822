@@ -16,12 +16,23 @@ from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 
 def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     html = desktop_dashboard_html()
-    assert "Runtime Health" in html
+    assert "SBP-LEX Desktop V1" in html
+    assert "Local Governance Observability Console" in html
+    assert "Runtime Integrity Summary" in html
     assert "Pipeline / Convergence" in html
-    assert "Execution Decision" in html
-    assert "Audit / Replay" in html
+    assert "Dual Adaptive Deterministic Pipelines" in html
+    assert "Pipeline A / Pipeline B Progression" in html
+    assert "Convergence Proof" in html
+    assert "Execution Admissibility" in html
+    assert "Audit Continuity" in html
+    assert "Replay Comparison" in html
+    assert "Controlled Operator Actions" in html
+    assert "Run Approved Demo Traversal" in html
+    assert "Open Runtime Health" in html
+    assert "Open Runtime Integrity" in html
     assert "/runtime/traverse" in html
     assert "/runtime/replay" in html
+    assert "/runtime/integrity" in html
     assert DESKTOP_BACKGROUND_URL in html
     assert "--status-pass" in html
     assert "--status-escalate" in html
@@ -29,6 +40,7 @@ def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     assert "--status-active" in html
     assert "reasonOutcome" in html
     assert "Reason:" in html
+    assert "requestBox" not in html
 
 
 def test_desktop_background_asset_is_png() -> None:
@@ -68,7 +80,26 @@ def test_desktop_exports_are_structured() -> None:
 def test_latest_runtime_snapshot_has_operator_fields() -> None:
     snapshot = latest_runtime_snapshot()
     summary = snapshot["last_state_summary"]
+    operator = snapshot["operator_summary"]
+    integrity = snapshot["integrity_summary"]
+    replay = snapshot["latest_replay_summary"]
+
+    assert operator["console_name"] == "SBP-LEX Desktop V1"
+    assert operator["console_role"] == "Local Governance Observability Console"
+    assert operator["binding_posture"] in {"localhost-only policy", "private token policy", "security disabled"}
+    assert "healthy" in integrity
+    assert integrity["status_contract_endpoint"] == "/runtime/integrity"
     assert "decision" in summary
     assert "execution_result" in summary
+    assert "execution_verified" in summary
+    assert "admissibility_status" in summary
+    assert "pipeline_a_timeline" in summary
+    assert "pipeline_b_summary" in summary
     assert "convergence_matched" in summary
     assert "audit_hash" in summary
+    assert "available" in replay
+    assert snapshot["export_availability"] == {
+        "latest_result": True,
+        "replay_ledger": True,
+        "events": True,
+    }
