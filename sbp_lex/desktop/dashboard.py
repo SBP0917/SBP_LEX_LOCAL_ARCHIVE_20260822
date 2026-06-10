@@ -143,6 +143,7 @@ def latest_runtime_snapshot() -> Dict[str, Any]:
             "execution_verified": last_state.get("execution_verified"),
             "execution_reason": last_state.get("execution_reason"),
             "pipeline_mode": last_state.get("pipeline_mode"),
+            "pipeline_count": 2 if convergence.get("pipeline_b") is not None else 1 if last_state else 0,
             "audit_hash": last_state.get("audit_hash"),
             "state_hash": last_state.get("state_hash"),
             "convergence_matched": convergence.get("matched"),
@@ -440,6 +441,147 @@ def desktop_dashboard_html() -> str:
     details {{ margin-top: 12px; }}
     summary {{ cursor: pointer; color: var(--sbp-muted); }}
     .compact-json {{ max-height: 300px; margin-top: 10px; font-size: 12px; }}
+    .pipeline-visual-dock {{
+      width: min(560px, calc(100% - 24px));
+      margin: 0 0 18px min(2.5cm, 6vw);
+      padding: 14px 16px 16px;
+      border: 1px solid rgba(83, 171, 255, .34);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(3, 12, 31, .72), rgba(2, 8, 20, .48));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .34), inset 0 1px rgba(255, 255, 255, .05);
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }}
+    .pipeline-visual-heading {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--sbp-white);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }}
+    .pipeline-visual-reason {{
+      margin-bottom: 10px;
+      color: var(--sbp-white);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.4;
+    }}
+    .pipeline-visual-outcome {{ margin-bottom: 12px; }}
+    .pipeline-lanes {{ display: grid; gap: 10px; }}
+    .pipeline-lane {{
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+    }}
+    .pipeline-lane-label {{
+      color: var(--sbp-white);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }}
+    .pipeline-cylinder {{
+      position: relative;
+      height: 34px;
+      overflow: hidden;
+      border: 1px solid rgba(113, 128, 150, .72);
+      border-radius: 50% / 42%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 38%, rgba(0,0,0,.24)),
+        linear-gradient(90deg, rgba(71,85,105,.16), rgba(71,85,105,.44), rgba(71,85,105,.16));
+      box-shadow: inset 0 0 18px rgba(113,128,150,.2), 0 0 12px rgba(71,85,105,.18);
+    }}
+    .pipeline-cylinder::before,
+    .pipeline-cylinder::after {{
+      content: "";
+      position: absolute;
+      top: 2px;
+      bottom: 2px;
+      width: 18px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      opacity: .72;
+    }}
+    .pipeline-cylinder::before {{ left: 2px; }}
+    .pipeline-cylinder::after {{ right: 2px; }}
+    .pipeline-pulse {{
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: -34%;
+      width: 32%;
+      border-radius: 50%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.78), transparent);
+      opacity: 0;
+    }}
+    .pipeline-lane.reverse .pipeline-pulse {{ left: auto; right: -34%; }}
+    .pipeline-state-active .pipeline-cylinder {{
+      color: var(--status-active);
+      border-color: rgba(34,211,238,.92);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.22), transparent 42%, rgba(0,36,58,.3)),
+        linear-gradient(90deg, rgba(6,182,212,.12), rgba(34,211,238,.58), rgba(6,182,212,.12));
+      box-shadow: inset 0 0 22px rgba(34,211,238,.48), 0 0 21px rgba(34,211,238,.52);
+      animation: cylinder-strobe 1.1s ease-in-out infinite alternate;
+    }}
+    .pipeline-state-active .pipeline-pulse {{
+      opacity: .88;
+      animation: pipeline-flow 1.35s linear infinite;
+    }}
+    .pipeline-state-active .pipeline-lane.reverse .pipeline-pulse {{
+      animation-name: pipeline-flow-reverse;
+    }}
+    .pipeline-state-pass .pipeline-cylinder {{
+      color: var(--status-pass);
+      border-color: rgba(25,217,139,.9);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.2), transparent 42%, rgba(0,45,32,.28)),
+        linear-gradient(100deg, rgba(16,185,129,.14), rgba(25,217,139,.58), rgba(45,212,191,.24));
+      box-shadow: inset 0 0 22px rgba(25,217,139,.38), 0 0 20px rgba(25,217,139,.4);
+    }}
+    .pipeline-state-escalate .pipeline-cylinder {{
+      color: var(--status-escalate);
+      border-color: rgba(255,159,28,.94);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), transparent 42%, rgba(67,28,0,.28)),
+        linear-gradient(90deg, rgba(249,115,22,.12), rgba(255,159,28,.62), rgba(249,115,22,.12));
+      box-shadow: inset 0 0 22px rgba(255,159,28,.4), 0 0 21px rgba(255,159,28,.46);
+      animation: warning-pulse 1.8s ease-in-out infinite;
+    }}
+    .pipeline-state-deny .pipeline-cylinder,
+    .pipeline-state-fail .pipeline-cylinder {{
+      color: var(--status-deny);
+      border-color: rgba(255,59,48,.96);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), transparent 42%, rgba(66,0,0,.3)),
+        linear-gradient(90deg, rgba(220,38,38,.16), rgba(255,59,48,.62), rgba(220,38,38,.16));
+      box-shadow: inset 0 0 22px rgba(255,59,48,.44), 0 0 22px rgba(255,59,48,.5);
+    }}
+    @keyframes pipeline-flow {{
+      from {{ transform: translateX(0); }}
+      to {{ transform: translateX(440%); }}
+    }}
+    @keyframes pipeline-flow-reverse {{
+      from {{ transform: translateX(0); }}
+      to {{ transform: translateX(-440%); }}
+    }}
+    @keyframes cylinder-strobe {{
+      from {{ filter: brightness(.86); }}
+      to {{ filter: brightness(1.22); }}
+    }}
+    @keyframes warning-pulse {{
+      0%, 100% {{ filter: brightness(.9); }}
+      50% {{ filter: brightness(1.18); }}
+    }}
+    @media (prefers-reduced-motion: reduce) {{
+      .pipeline-cylinder, .pipeline-pulse {{ animation: none !important; }}
+    }}
     @media (max-width: 720px) {{
       .desktop-shell {{ padding: 12px; }}
       .metric {{ grid-template-columns: 1fr; gap: 5px; }}
@@ -451,6 +593,8 @@ def desktop_dashboard_html() -> str:
       .section-heading {{ align-items: start; flex-direction: column; }}
       .section-heading p {{ text-align: left; }}
       .timeline-row {{ grid-template-columns: 1fr; }}
+      .pipeline-visual-dock {{ width: 100%; margin-left: 0; }}
+      .pipeline-lane {{ grid-template-columns: 70px minmax(0, 1fr); gap: 8px; }}
     }}
   </style>
 </head>
@@ -470,6 +614,7 @@ def desktop_dashboard_html() -> str:
       </header>
 
       <div id=\"notice\" class=\"notice\"></div>
+      <aside id=\"pipelineVisual\" class=\"pipeline-visual-dock\" aria-live=\"polite\"></aside>
 
       <div class=\"section-heading\">
         <h2>Runtime Assurance</h2>
@@ -607,6 +752,51 @@ function reasonOutcome(reason, outcome) {{
   return `<div class=\"reason-outcome\"><div class=\"reason\">Reason: ${{escapeHtml(reason || 'No runtime result available')}}</div>${{statusBadge(outcome)}}</div>`;
 }}
 
+function pipelineVisualState(last, overrideState) {{
+  if (overrideState) return normalizeOutcome(overrideState);
+  if (!last || !last.pipeline_mode) return 'IDLE';
+  if (normalizeOutcome(last.decision) === 'ESCALATE') return 'ESCALATE';
+  if (normalizeOutcome(last.decision) === 'DENY') return 'DENY';
+  if (normalizeOutcome(last.execution_result) === 'HALT') return 'FAIL';
+  if (last.convergence_matched === false) return 'DENY';
+  if (last.convergence_matched === true) return 'PASS';
+  return 'IDLE';
+}}
+
+function pipelineVisualReason(last, state, overrideReason) {{
+  if (overrideReason) return overrideReason;
+  if (state === 'IDLE') return 'No active or completed pipeline traversal is available';
+  if (state === 'ACTIVE') return 'Canonical pipeline traversal is in progress';
+  if (state === 'PASS') return 'Pipeline traversal completed with deterministic convergence';
+  return outcomeReason(state);
+}}
+
+function pipelineCylinder(label, state, reverse) {{
+  return `<div class=\"pipeline-lane ${{reverse ? 'reverse' : ''}}\">
+    <div class=\"pipeline-lane-label\">${{escapeHtml(label)}}</div>
+    <div class=\"pipeline-cylinder\" aria-hidden=\"true\"><span class=\"pipeline-pulse\"></span></div>
+  </div>`;
+}}
+
+function renderPipelineVisual(last, options = {{}}) {{
+  const state = pipelineVisualState(last, options.state);
+  const countValue = Number(options.pipelineCount ?? last?.pipeline_count ?? 0);
+  const pipelineCount = countValue === 2 ? 2 : countValue === 1 ? 1 : 0;
+  const lanes = pipelineCount === 2
+    ? pipelineCylinder('Pipeline A', state, false) + pipelineCylinder('Pipeline B', state, true)
+    : pipelineCount === 1
+      ? pipelineCylinder('Pipeline A', state, false)
+      : pipelineCylinder('Pipeline', 'IDLE', false);
+  const reason = pipelineVisualReason(last, state, options.reason);
+  document.getElementById('pipelineVisual').className =
+    `pipeline-visual-dock pipeline-state-${{state.toLowerCase()}}`;
+  document.getElementById('pipelineVisual').innerHTML =
+    `<div class=\"pipeline-visual-heading\"><span>Traversal Pipeline</span></div>
+     <div class=\"pipeline-visual-reason\">Reason: ${{escapeHtml(reason)}}</div>
+     <div class=\"pipeline-visual-outcome\">${{statusBadge(state)}}</div>
+     <div class=\"pipeline-lanes\">${{lanes}}</div>`;
+}}
+
 function metric(label, value) {{
   const display = value === null || value === undefined || value === '' ? 'Not available' : value;
   return `<div class=\"metric\"><span class=\"label\">${{escapeHtml(label)}}</span><span class=\"value\">${{escapeHtml(display)}}</span></div>`;
@@ -709,6 +899,8 @@ function renderSnapshot(data, integrityData) {{
   const exports = data.export_availability || {{}};
   const endpointIntegrity = integrityData || {{}};
   const environment = endpointIntegrity.environment_security || {{}};
+  window.lastPipelineSnapshot = last;
+  renderPipelineVisual(last);
 
   document.getElementById('landingStatus').innerHTML =
     landingItem('Runtime Mode', operator.runtime_mode) +
@@ -806,6 +998,7 @@ async function refreshAll() {{
     document.getElementById('events').innerHTML = renderEvents(events.events || []);
     document.getElementById('notice').innerHTML = '';
   }} catch (error) {{
+    renderPipelineVisual(window.lastPipelineSnapshot || {{}}, {{state: 'FAIL', reason: error.message}});
     document.getElementById('notice').innerHTML = reasonOutcome(error.message, 'FAIL');
   }}
 }}
@@ -814,6 +1007,11 @@ async function runApprovedDemo() {{
   try {{
     document.getElementById('responseStatus').innerHTML =
       reasonOutcome('Approved Desktop V1 demo traversal is in progress', 'ACTIVE');
+    renderPipelineVisual(window.lastPipelineSnapshot || {{}}, {{
+      state: 'ACTIVE',
+      pipelineCount: window.lastPipelineSnapshot?.pipeline_count || 1,
+      reason: 'Approved canonical pipeline traversal is in progress'
+    }});
     const result = await postJson('/runtime/traverse', APPROVED_DEMO);
     const state = result.state || {{}};
     document.getElementById('responseStatus').innerHTML =
@@ -821,6 +1019,7 @@ async function runApprovedDemo() {{
     document.getElementById('response').textContent = JSON.stringify(result, null, 2);
     await refreshAll();
   }} catch (error) {{
+    renderPipelineVisual(window.lastPipelineSnapshot || {{}}, {{state: 'FAIL', reason: error.message}});
     document.getElementById('responseStatus').innerHTML = reasonOutcome(error.message, 'FAIL');
   }}
 }}
@@ -831,6 +1030,11 @@ async function runReplay() {{
     payload.replay_count = 2;
     document.getElementById('responseStatus').innerHTML =
       reasonOutcome('Deterministic demo replay comparison is in progress', 'ACTIVE');
+    renderPipelineVisual(window.lastPipelineSnapshot || {{}}, {{
+      state: 'ACTIVE',
+      pipelineCount: window.lastPipelineSnapshot?.pipeline_count || 1,
+      reason: 'Deterministic pipeline replay comparison is in progress'
+    }});
     const result = await postJson('/runtime/replay', payload);
     document.getElementById('responseStatus').innerHTML =
       reasonOutcome(result.matched ? 'Replay checkpoints matched deterministically' : 'Replay checkpoint mismatch',
@@ -838,6 +1042,7 @@ async function runReplay() {{
     document.getElementById('response').textContent = JSON.stringify(result, null, 2);
     await refreshAll();
   }} catch (error) {{
+    renderPipelineVisual(window.lastPipelineSnapshot || {{}}, {{state: 'FAIL', reason: error.message}});
     document.getElementById('responseStatus').innerHTML = reasonOutcome(error.message, 'FAIL');
   }}
 }}

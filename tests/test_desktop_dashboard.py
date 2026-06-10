@@ -41,6 +41,13 @@ def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     assert "reasonOutcome" in html
     assert "Reason:" in html
     assert "requestBox" not in html
+    assert 'id="pipelineVisual"' in html
+    assert "pipeline-cylinder" in html
+    assert "renderPipelineVisual" in html
+    assert "pipeline-visual-reason" in html
+    assert "pipeline-visual-outcome" in html
+    assert "pipeline-flow-reverse" in html
+    assert "prefers-reduced-motion" in html
 
 
 def test_desktop_background_asset_is_png() -> None:
@@ -103,3 +110,4 @@ def test_latest_runtime_snapshot_has_operator_fields() -> None:
         "replay_ledger": True,
         "events": True,
     }
+    assert summary["pipeline_count"] in {1, 2}
