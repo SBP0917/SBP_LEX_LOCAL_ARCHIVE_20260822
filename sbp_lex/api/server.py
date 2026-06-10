@@ -12,6 +12,7 @@ from sbp_lex.api.rate_limit import API_RATE_LIMITER
 from sbp_lex.api.schema_validation import validate_api_body_schema, validate_runtime_request_schema
 from sbp_lex.connector.envelope import build_connector_envelope
 from sbp_lex.desktop.dashboard import (
+    desktop_background_bytes,
     desktop_dashboard_html,
     export_latest_runtime_json,
     export_replay_ledger_json,
@@ -52,6 +53,19 @@ def _html_response(handler: BaseHTTPRequestHandler, status: int, html: str) -> N
     handler.send_header("Referrer-Policy", "no-referrer")
     handler.end_headers()
     handler.wfile.write(body)
+
+
+def _png_response(handler: BaseHTTPRequestHandler, status: int, body: bytes) -> None:
+    handler.send_response(status)
+    handler.send_header("Content-Type", "image/png")
+    handler.send_header("Content-Length", str(len(body)))
+    handler.send_header("Cache-Control", "private, max-age=3600")
+    handler.send_header("X-Content-Type-Options", "nosniff")
+    handler.send_header("X-Frame-Options", "DENY")
+    handler.send_header("Referrer-Policy", "no-referrer")
+    handler.end_headers()
+    handler.wfile.write(body)
+
 
 def _validate_endpoint_payload(path: str, payload: Dict[str, Any]) -> tuple[bool, list[str]]:
     if path in {"/runtime/traverse", "/runtime/replay"} and "action" in payload:
@@ -107,6 +121,8 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
             return _json_response(self, 200, {"ok": True, "service": "SBP-LEX V1 Canonical Runtime", "access": payload.get("access")})
         if parsed.path in {"/dashboard", "/desktop"}:
             return _html_response(self, 200, desktop_dashboard_html())
+        if parsed.path == "/desktop/static/images/sbp_lex_background.png":
+            return _png_response(self, 200, desktop_background_bytes())
         if parsed.path == "/desktop/latest":
             return _json_response(self, 200, latest_runtime_snapshot())
         if parsed.path == "/desktop/export/latest":
