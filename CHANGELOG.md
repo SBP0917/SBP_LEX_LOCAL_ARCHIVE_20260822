@@ -1,5 +1,14 @@
 # Changelog
 
+## SBP_LEX_DUAL_V6_BASELINE_14_DESKTOP_V1_OPERATOR_RELEASE_LOCK
+
+- Locked the completed Phase 13 institutional operator console for release.
+- Added beginner-safe direct launch and troubleshooting guidance.
+- Added operator release-lock and release-ZIP documentation.
+- Added a final Phase 14 verification and handoff report.
+- Preserved runtime, governance, execution, replay, audit, and chronology logic.
+- Preserved Dual Adaptive Deterministic Pipelines and localhost/private posture.
+
 ## SBP_LEX_DUAL_V6_DESKTOP_RUNTIME_BASELINE_1.0.0
 
 - Locked V1 hardened backend baseline.

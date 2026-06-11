@@ -1,41 +1,41 @@
-# SBP-LEX DUAL V6 — V1 HARDENED DESKTOP RUNTIME BASELINE LOCK
+# SBP-LEX DUAL V6 Baseline 14 Lock
 
-## Locked Baseline
-
-Version:
+## Locked baseline
 
 ```text
-SBP_LEX_DUAL_V6_DESKTOP_RUNTIME_BASELINE_1.0.0
+14_desktop_v1_operator_release_lock
 ```
 
-## Active Scope
+Version identifier:
 
 ```text
-Desktop Prototype
-→ Canonical Runtime
-→ Connector/API Layer
-→ Dual Adaptive Deterministic Pipelines
-→ Parity / Convergence
-→ Execution Gate
-→ Audit + Observability
+SBP_LEX_DUAL_V6_BASELINE_14_DESKTOP_V1_OPERATOR_RELEASE_LOCK
 ```
 
-## Locked Constraints
+## Locked scope
 
-- Local-first runtime interface.
-- Private operator orientation.
-- Dual adaptive deterministic pipelines remain active.
-- Pipeline A / Pipeline B parity remains active.
-- Canonical runtime remains the single execution authority.
-- Canonical chronology remains the single chronology authority.
-- Execution gate remains fail-closed.
-- Audit/replay continuity remains mandatory.
-- JSON export is the first export format.
-- PDF export is deferred.
-- Public deployment is deferred until local desktop runtime is stable.
+- Desktop V1 institutional operator console
+- Canonical runtime connection and observability
+- Supplied visual identity and secured background asset
+- Dual Adaptive Deterministic Pipelines
+- Pipeline A / Pipeline B convergence proof
+- Execution admissibility visibility
+- Audit continuity and deterministic replay visibility
+- Controlled approved demo action and JSON exports
+- Localhost/private operator posture
 
-## Baseline Purpose
+## Locked constraints
 
-This lock creates the rollback point before further interface, deployment, and observability expansion.
+- Canonical runtime remains the sole execution authority.
+- Dashboard remains non-authoritative and observability-only.
+- Governance, admissibility, execution gate, chronology, replay, and audit
+  authority remain in their existing runtime modules.
+- No nodes, quorum, distributed runtime topology, or cloud services are added.
+- APK, V2, and V3 work remain outside this baseline.
+- Arbitrary adjacent static paths remain denied.
+- The editable arbitrary request generator remains absent.
 
-If future changes break runtime traversal, replay determinism, token validation, execution gating, or audit finalisation, restore this baseline.
+## Recovery purpose
+
+This baseline is the repeatable Desktop V1 operator release rollback point.
+Keep a clean ZIP backup and do not edit runtime files inside that backup.
