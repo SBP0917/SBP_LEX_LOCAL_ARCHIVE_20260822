@@ -17,6 +17,24 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
         "convergence_hash": working_state.get("convergence_hash"),
         "audit_chain": working_state.get("hash_chain", []),
         "pipeline_mode": working_state.get("pipeline_mode"),
+        "integration_evidence": {
+            "stage_order": working_state.get("integration_stage_order", []),
+            "hard_entry_gate": working_state.get("hard_entry_gate", {}),
+            "collective_signal_evidence": working_state.get("collective_signal_evidence", {}),
+            "ap_acf_precheck_result": working_state.get("ap_acf_precheck_result"),
+            "authority_first_result": working_state.get("authority_first_result"),
+            "procedural_truth_result": working_state.get("procedural_truth_result"),
+            "threshold_snapshot": working_state.get("governance_feedback", {}).get("threshold_snapshot", {}),
+            "classification_result": working_state.get("classification_result"),
+            "licensing_result": working_state.get("licensing_result"),
+            "governance_result": working_state.get("governance_result"),
+            "grc_result": working_state.get("grc_result"),
+            "domain_wrap": working_state.get("governance_feedback", {}).get("domain_wrap", {}),
+            "aurion15_result": working_state.get("aurion15_result"),
+            "token_verification_failures": working_state.get("token_verification_failures", []),
+            "operational_state": working_state.get("operational_state"),
+            "governed_reentry": working_state.get("governed_reentry", {}),
+        },
     }
     audit_record = build_audit_record(audit_state)
     audit_finalisation = finalise_audit(audit_record) if audit_record.get("valid") else {"audit_complete": False, "reason": audit_record.get("reason")}

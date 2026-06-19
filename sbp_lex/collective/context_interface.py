@@ -3,8 +3,16 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, Mapping
 
-from sbp_lex.collective.digital_twin_network_engine import prepare_dtn_context, sign_dtn_context
-from sbp_lex.collective.sovereign_knowledge_graph_engine import prepare_skg_context, sign_skg_context
+from sbp_lex.collective.digital_twin_network_engine import (
+    prepare_dtn_context,
+    sign_dtn_context,
+    verify_dtn_context,
+)
+from sbp_lex.collective.sovereign_knowledge_graph_engine import (
+    prepare_skg_context,
+    sign_skg_context,
+    verify_skg_context,
+)
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash
 
@@ -37,6 +45,8 @@ def prepare_pre_context_signals(request: Mapping[str, Any]) -> Dict[str, Any]:
         "manufacturer_declaration": request.get("manufacturer_declaration", {}),
         "skg_digest": skg_context.get("skg_digest"),
         "dtn_digest": dtn_context.get("dtn_digest"),
+        "skg_context": skg_context,
+        "dtn_context": dtn_context,
         "timestamp": timestamp,
         "timestamp_authority": CANONICAL_SIGNAL_AUTHORITY,
         "nonce": generate_digest(
@@ -69,6 +79,20 @@ def validate_collective_signal_package(*, signals: Mapping[str, Any], request_fi
         failures.append("collective_signal_nonce_missing")
     if not isinstance(signals.get("timestamp"), int):
         failures.append("collective_signal_timestamp_invalid")
+    skg_context = signals.get("skg_context", {})
+    dtn_context = signals.get("dtn_context", {})
+    skg_valid, skg_failures = verify_skg_context(skg_context)
+    if not skg_valid:
+        failures.extend(skg_failures)
+    dtn_valid, dtn_failures = verify_dtn_context(
+        dtn_context, expected_skg_digest=signals.get("skg_digest")
+    )
+    if not dtn_valid:
+        failures.extend(dtn_failures)
+    if signals.get("skg_digest") != skg_context.get("skg_digest"):
+        failures.append("collective_skg_digest_mismatch")
+    if signals.get("dtn_digest") != dtn_context.get("dtn_digest"):
+        failures.append("collective_dtn_digest_mismatch")
     return len(failures) == 0, failures
 
 
@@ -81,6 +105,14 @@ def attach_collective_signals(state: Mapping[str, Any], pre_context_signals: Map
         return append_hash_entry(working_state, stage="collective_attach", payload={"status": COLLECTIVE_SIGNAL_STATUS_EMPTY})
 
     valid, failures = validate_collective_signal_package(signals=pre_context_signals, request_fingerprint=working_state.get("request_fingerprint", ""))
+    authority_signal = pre_context_signals.get("authority_link_signal", {})
+    jurisdiction_signal = pre_context_signals.get("jurisdiction_signal", {})
+    if authority_signal.get("resolved_authority") != working_state.get("resolved_authority"):
+        failures.append("collective_authority_context_mismatch")
+        valid = False
+    if jurisdiction_signal.get("jurisdiction") != working_state.get("jurisdiction"):
+        failures.append("collective_jurisdiction_context_mismatch")
+        valid = False
     if not valid:
         working_state["collective_signals"] = {}
         working_state["collective_signal_status"] = COLLECTIVE_SIGNAL_STATUS_REJECTED
@@ -92,6 +124,18 @@ def attach_collective_signals(state: Mapping[str, Any], pre_context_signals: Map
 
     working_state["collective_signals"] = deepcopy(dict(pre_context_signals))
     working_state["collective_signal_status"] = COLLECTIVE_SIGNAL_STATUS_ATTACHED
+    working_state["collective_signal_evidence"] = {
+        "role": "context_only_non_authoritative",
+        "request_bound": True,
+        "skg_verified": True,
+        "dtn_verified": True,
+        "skg_dtn_relation_verified": True,
+        "provenance": {
+            "skg_digest": pre_context_signals.get("skg_digest"),
+            "dtn_digest": pre_context_signals.get("dtn_digest"),
+            "timestamp_authority": pre_context_signals.get("timestamp_authority"),
+        },
+    }
     working_state.setdefault("audit_trace", []).append({"stage": "collective_attach", "event": "COLLECTIVE_SIGNAL_ATTACHED", "digest": pre_context_signals.get("digest")})
     working_state = append_hash_entry(working_state, stage="collective_attach", payload={"status": COLLECTIVE_SIGNAL_STATUS_ATTACHED, "digest": pre_context_signals.get("digest")})
     working_state["state_hash"] = rebuild_state_hash(working_state)

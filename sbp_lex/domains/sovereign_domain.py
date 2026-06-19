@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Mapping
 
-from sbp_lex.domains.base_domain import DOMAIN_FAIL, DOMAIN_PASS, make_domain_result
+from sbp_lex.domains.base_domain import DOMAIN_ESCALATE, DOMAIN_PASS, make_domain_result
 
 
 class SovereignDomain:
@@ -38,7 +38,7 @@ class SovereignDomain:
         if failures:
             return make_domain_result(
                 domain=self.name,
-                result=DOMAIN_FAIL,
+                result=DOMAIN_ESCALATE,
                 reason="sovereign_domain_failed",
                 failures=failures,
                 evidence=evidence,

@@ -1,0 +1,20 @@
+{
+  "request_fingerprint": "phase-15-6a-demo-request-fingerprint",
+  "authorities": [
+    {"authority_id": "au-root", "name": "AU Root Authority", "jurisdiction": "AU", "legitimacy_status": "verified"},
+    {"authority_id": "au-demo", "name": "AU Demo Authority", "jurisdiction": "AU", "parent_authority_id": "au-root", "legitimacy_status": "verified"}
+  ],
+  "rules": [
+    {"rule_id": "demo-rule", "authority_id": "au-root", "jurisdiction": "AU", "effective_at": "2026-01-01T00:00:00Z", "precedence": 10}
+  ],
+  "conflicts": [],
+  "source_records": [
+    {"source_id": "skg-demo-source", "source_type": "authority-register", "source_uri": "local://demo/skg", "verified": true, "attested": true, "freshness_valid": true, "consistency_valid": true, "retrieved_at": "2026-06-19T00:00:00Z"}
+  ],
+  "authority_id": "au-demo",
+  "jurisdiction": "AU",
+  "procedural_requirements": [{"requirement_id": "demo-procedure", "required": true}],
+  "licensing_authorities": [{"authority_id": "au-root", "scope": "demo-license"}],
+  "classification_authorities": [{"authority_id": "au-root", "scope": "demo-classification"}]
+}
+

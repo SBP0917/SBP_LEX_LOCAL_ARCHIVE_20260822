@@ -24,9 +24,9 @@ def sample_request() -> dict:
         "jurisdiction": "AU-PACIFIC",
         "context": {
             "evidence": [
-                {"source": "test_source_a", "content": "evidence_a"},
-                {"source": "test_source_b", "content": "evidence_b"},
-                {"source": "test_source_c", "content": "evidence_c"},
+                {"source": "test_source_a", "content": "evidence_a", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
+                {"source": "test_source_b", "content": "evidence_b", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
+                {"source": "test_source_c", "content": "evidence_c", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
             ],
             "financial_amount": 5000,
             "operational_scope": "controlled_test",

@@ -40,7 +40,10 @@ class RiskDomain:
             }
         )
 
-        if "top_financial_tier_without_authority_confirmation" in failures:
+        if (
+            "top_financial_tier_without_authority_confirmation" in failures
+            or "top_consequence_low_class_mismatch" in failures
+        ):
             return make_domain_result(
                 domain=self.name,
                 result=DOMAIN_ESCALATE,

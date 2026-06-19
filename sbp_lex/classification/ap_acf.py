@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from typing import Any, Dict, Mapping
+
+from sbp_lex.security.pqc import generate_digest
+from sbp_lex.shared.hash_chain import append_hash_entry
 
 AP_ACF_CLASSES = {
     "CLASS_1": {
@@ -133,4 +137,49 @@ def derive_pipeline_mode_from_class(ap_acf_class: str | None, threshold_tier: st
     if profile["risk_level"] >= 3 or threshold_tier == "MEDIUM":
         return "MODE_2_SPLIT_VALIDATOR"
     return "MODE_3_SINGLE_CONSTRAINED"
-    
+
+
+def run_ap_acf_precheck(state: Mapping[str, Any]) -> Dict[str, Any]:
+    working_state = deepcopy(dict(state))
+    payload = working_state.get("payload", {}) or {}
+    collective = working_state.get("collective_signals", {}) or {}
+    declaration = payload.get("classification") or collective.get("ap_acf_declaration") or {}
+    failures: list[str] = []
+    if not isinstance(declaration, Mapping):
+        declaration = {}
+        failures.append("ap_acf_declaration_not_mapping")
+    normalized_class = normalize_ap_acf_class(
+        declaration.get("ap_acf_class") or declaration.get("class")
+    )
+    if normalized_class is None:
+        failures.append("ap_acf_class_missing_or_invalid")
+    collective_declaration = collective.get("ap_acf_declaration", {})
+    if collective_declaration and generate_digest(collective_declaration) != generate_digest(declaration):
+        failures.append("ap_acf_collective_declaration_mismatch")
+
+    result = "PASS" if not failures else "FAIL"
+    declaration_record = deepcopy(dict(declaration))
+    declaration_record["ap_acf_class"] = normalized_class
+    working_state["ap_acf_precheck_result"] = result
+    working_state["ap_acf_declaration"] = declaration_record
+    working_state["ap_acf_declaration_hash"] = generate_digest(declaration_record)
+    if failures:
+        working_state["decision"] = "DENY"
+        working_state["execution_result"] = "HALT"
+    working_state.setdefault("governance_feedback", {})["ap_acf_precheck"] = {
+        "result": result,
+        "failures": failures,
+        "declaration_hash": working_state["ap_acf_declaration_hash"],
+    }
+    working_state.setdefault("audit_trace", []).append(
+        {"stage": "ap_acf_precheck", "result": result, "failures": failures}
+    )
+    return append_hash_entry(
+        working_state,
+        stage="ap_acf_precheck",
+        payload={
+            "result": result,
+            "failures": failures,
+            "declaration_hash": working_state["ap_acf_declaration_hash"],
+        },
+    )

@@ -7,6 +7,7 @@ from typing import Any, Dict
 from sbp_lex.audit.pipeline_replay_ledger import PIPELINE_REPLAY_LEDGER
 from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 from sbp_lex.runtime.event_bus import RUNTIME_EVENTS
+from sbp_lex.desktop.cockpit import render_operator_cockpit
 
 
 DESKTOP_BACKGROUND_PATH = (
@@ -38,9 +39,9 @@ def sample_request_payload() -> Dict[str, Any]:
             "jurisdiction": "AU-PACIFIC",
             "context": {
                 "evidence": [
-                    {"source": "test_source_a", "content": "evidence_a"},
-                    {"source": "test_source_b", "content": "evidence_b"},
-                    {"source": "test_source_c", "content": "evidence_c"},
+                    {"source": "test_source_a", "content": "evidence_a", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
+                    {"source": "test_source_b", "content": "evidence_b", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
+                    {"source": "test_source_c", "content": "evidence_c", "verified": True, "attested": True, "freshness_valid": True, "consistency_valid": True},
                 ],
                 "financial_amount": 5000,
                 "operational_scope": "controlled_test",
@@ -100,6 +101,18 @@ def latest_runtime_snapshot() -> Dict[str, Any]:
     governance_feedback = last_state.get("governance_feedback", {}) if isinstance(last_state, dict) else {}
     admissibility = governance_feedback.get("admissibility", {}) if isinstance(governance_feedback, dict) else {}
     audit_finalisation = last_state.get("audit_finalisation", {}) if isinstance(last_state, dict) else {}
+    payload = last_state.get("payload", {}) if isinstance(last_state, dict) else {}
+    context = last_state.get("context", {}) if isinstance(last_state, dict) else {}
+    classification = last_state.get("classification", {}) if isinstance(last_state, dict) else {}
+    payload = payload if isinstance(payload, dict) else {}
+    context = context if isinstance(context, dict) else {}
+    classification = classification if isinstance(classification, dict) else {}
+    declaration = payload.get("classification", {}) if isinstance(payload, dict) else {}
+    manufacturer = classification.get("manufacturer_declaration", {}) if isinstance(classification, dict) else {}
+    if not manufacturer and isinstance(payload, dict):
+        manufacturer = payload.get("manufacturer_declaration", {}) or {}
+    manufacturer = manufacturer if isinstance(manufacturer, dict) else {}
+    governed_reentry = last_state.get("governed_reentry", {}) if isinstance(last_state, dict) else {}
     integrity_ok = all(
         status.get(field) is True
         for field in (
@@ -159,6 +172,30 @@ def latest_runtime_snapshot() -> Dict[str, Any]:
             "audit_verified": audit_finalisation.get("audit_verified"),
             "token_count": len(tokens),
             "token_failures": last_state.get("token_verification_failures", []),
+            "procedural_truth_status": last_state.get("procedural_truth_result"),
+            "recoverable": bool(governed_reentry.get("reentry_permitted"))
+            or last_state.get("decision") == "ESCALATE",
+            "governed_reentry": governed_reentry,
+        },
+        "identity_summary": {
+            "manufacturer": manufacturer.get("manufacturer") or manufacturer.get("name"),
+            "system_name": manufacturer.get("system_name") or payload.get("system_name"),
+            "model": manufacturer.get("model") or payload.get("model"),
+            "version": manufacturer.get("version") or payload.get("version"),
+            "unique_system_identifier": manufacturer.get("unique_system_identifier")
+            or manufacturer.get("system_id")
+            or payload.get("unique_system_identifier"),
+            "ap_acf_class": classification.get("ap_acf_class") or declaration.get("ap_acf_class"),
+            "ap_acf_subclass": classification.get("ap_acf_subclass") or classification.get("subclass"),
+            "autonomy_level": classification.get("autonomy_level") or declaration.get("autonomy_level"),
+            "autonomy_ceiling": classification.get("autonomy_ceiling") or declaration.get("autonomy_ceiling"),
+            "operational_scope": classification.get("operational_scope")
+            or declaration.get("operational_scope")
+            or context.get("operational_scope"),
+            "operational_environment": context.get("environment"),
+            "licence_state": payload.get("licence_state") or context.get("licence_state"),
+            "licence_authority": payload.get("licence_authority") or context.get("licence_authority"),
+            "request_fingerprint": last_state.get("request_fingerprint"),
         },
         "latest_events": events[-25:],
         "latest_event_count": len(events),
@@ -206,6 +243,10 @@ def export_traversal_events_json() -> Dict[str, Any]:
 
 
 def desktop_dashboard_html() -> str:
+    return render_operator_cockpit(sample_request_payload(), DESKTOP_BACKGROUND_URL)
+
+
+def _legacy_desktop_dashboard_html() -> str:
     sample = sample_request_payload()
     return f"""<!doctype html>
 <html lang=\"en\">

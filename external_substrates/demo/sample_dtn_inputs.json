@@ -1,0 +1,15 @@
+{
+  "source_records": [
+    {"source_id": "dtn-demo-source", "source_type": "operational-declaration", "source_uri": "local://demo/dtn", "verified": true, "attested": true, "freshness_valid": true, "consistency_valid": true, "retrieved_at": "2026-06-19T00:00:00Z"}
+  ],
+  "context": {
+    "environment": {"type": "controlled-demo", "controlled": true, "human_proximity": "low", "conditions": ["stable"]},
+    "operational_state": {"status": "declared-ready", "contained": true, "emergency_stop_available": true},
+    "dependencies": [{"dependency_id": "demo-power", "available": true}],
+    "capabilities": [{"capability_id": "demo-observe", "available": true}],
+    "pathway": {"pathway_id": "demo-pathway", "objective": "read-only inspection", "steps": ["inspect"]},
+    "declared_risk": 1,
+    "cascading_impact": {"affected_dependencies": 0, "propagation_level": 0, "bounded": true}
+  }
+}
+

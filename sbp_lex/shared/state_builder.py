@@ -7,6 +7,14 @@ from sbp_lex.config.security_config import STATE_VERSION
 from sbp_lex.security.pqc import generate_digest
 
 
+def _safe_factor(value: Any) -> int:
+    try:
+        factor = int(value)
+    except (TypeError, ValueError):
+        return 0
+    return factor if factor >= 0 else 0
+
+
 def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
     request_dict = deepcopy(dict(request))
     request_fingerprint = generate_digest(request_dict)
@@ -21,11 +29,12 @@ def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
         "jurisdiction": request_dict.get("jurisdiction", ""),
         "collective_signals": {},
         "collective_signal_status": "UNATTACHED",
+        "collective_signal_evidence": {},
         "safety_profile": {
-            "human_safety": int(request_dict.get("safety_profile", {}).get("human_safety", 0)),
-            "irreversibility": int(request_dict.get("safety_profile", {}).get("irreversibility", 0)),
-            "cascading_impact": int(request_dict.get("safety_profile", {}).get("cascading_impact", 0)),
-            "financial_operational": int(request_dict.get("safety_profile", {}).get("financial_operational", 0)),
+            "human_safety": _safe_factor(request_dict.get("safety_profile", {}).get("human_safety")),
+            "irreversibility": _safe_factor(request_dict.get("safety_profile", {}).get("irreversibility")),
+            "cascading_impact": _safe_factor(request_dict.get("safety_profile", {}).get("cascading_impact")),
+            "financial_operational": _safe_factor(request_dict.get("safety_profile", {}).get("financial_operational")),
             "computed_tier": "LOW",
             "financial_tier": "LOW",
         },
@@ -41,6 +50,12 @@ def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
         "governance_result": "UNSET",
         "governance_reason": "",
         "governance_feedback": {},
+        "hard_entry_gate": {},
+        "integration_stage_order": [],
+        "ap_acf_precheck_result": "UNSET",
+        "ap_acf_declaration": {},
+        "ap_acf_declaration_hash": "",
+        "grc_result": "UNSET",
         "domain_result": "UNSET",
         "aurion15_result": "UNSET",
         "candidate_attempt_count": 0,
@@ -59,6 +74,10 @@ def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
         "audit_hash": "",
         "audit_ledger": [],
         "last_denied_fingerprint": None,
+        "operational_state": "UNSET",
+        "persistent_inoperability": False,
+        "controlled_return_required": False,
+        "governed_reentry": {},
         "pipeline_mode": "UNSELECTED",
         "pipeline_convergence": {},
     }

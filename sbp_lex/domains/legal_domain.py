@@ -32,11 +32,15 @@ class LegalDomain:
         evidence["operational_scope"] = operational_scope
         evidence["legal_hold"] = legal_hold
 
-        if "legal_hold_active" in failures:
+        if "legal_hold_active" in failures or "operational_scope_legally_prohibited" in failures:
             return make_domain_result(
                 domain=self.name,
                 result=DOMAIN_ESCALATE,
-                reason="legal_hold_requires_escalation",
+                reason=(
+                    "legal_hold_requires_escalation"
+                    if "legal_hold_active" in failures
+                    else "prohibited_scope_requires_escalation"
+                ),
                 failures=failures,
                 evidence=evidence,
             )

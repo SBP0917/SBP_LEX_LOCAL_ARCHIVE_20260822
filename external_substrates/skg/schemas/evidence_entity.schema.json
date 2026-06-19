@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"EvidenceEntity","type":"object","required":["evidence_id","claim","source_records"],"properties":{"evidence_id":{"type":"string"},"claim":{"type":"string"},"source_records":{"type":"array","items":{"type":"object"}}},"additionalProperties":true}

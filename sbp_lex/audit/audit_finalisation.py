@@ -12,6 +12,7 @@ REQUIRED_AUDIT_FIELDS = [
     "convergence_hash",
     "audit_chain",
     "pipeline_mode",
+    "integration_evidence",
 ]
 
 VALID_AUDIT_DECISIONS = {"ALLOW", "DENY", "ESCALATE", "PERSISTENT_INOPERABILITY"}

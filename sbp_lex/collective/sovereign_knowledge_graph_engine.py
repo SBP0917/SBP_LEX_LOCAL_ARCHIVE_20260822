@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, Mapping
 
-from sbp_lex.security.pqc import generate_digest, sign_payload
+from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 
 def prepare_skg_context(request: Mapping[str, Any]) -> Dict[str, Any]:
@@ -40,3 +40,26 @@ def prepare_skg_context(request: Mapping[str, Any]) -> Dict[str, Any]:
 def sign_skg_context(skg_context: Mapping[str, Any]) -> Dict[str, Any]:
     payload = dict(skg_context)
     return {**payload, "skg_signature": sign_payload(payload)}
+
+
+def verify_skg_context(skg_context: Mapping[str, Any]) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    if not isinstance(skg_context, Mapping):
+        return False, ["skg_context_not_mapping"]
+    payload = {
+        key: deepcopy(value)
+        for key, value in dict(skg_context).items()
+        if key not in {"skg_digest", "skg_signature"}
+    }
+    if skg_context.get("skg_digest") != generate_digest(payload):
+        failures.append("skg_digest_mismatch")
+    signed_payload = {**payload, "skg_digest": skg_context.get("skg_digest")}
+    if not verify_signature(signed_payload, skg_context.get("skg_signature", {})):
+        failures.append("skg_signature_invalid")
+    authority = payload.get("authority_link_signal", {})
+    jurisdiction = payload.get("jurisdiction_signal", {})
+    if not authority.get("authority_declared"):
+        failures.append("skg_authority_unresolved")
+    if not jurisdiction.get("jurisdiction_declared"):
+        failures.append("skg_jurisdiction_unresolved")
+    return len(failures) == 0, failures

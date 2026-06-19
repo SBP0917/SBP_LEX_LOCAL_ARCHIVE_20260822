@@ -6,6 +6,7 @@ from typing import Any, Dict, Mapping
 from sbp_lex.classification.ap_acf import derive_pipeline_mode_from_class, derive_subclass, get_class_profile, normalize_ap_acf_class
 from sbp_lex.classification.environment_modifiers import environment_requires_escalation, normalize_environment_modifiers, public_exposure_is_high
 from sbp_lex.security.token_stack import issue_token
+from sbp_lex.security.pqc import generate_digest
 from sbp_lex.shared.hash_chain import append_hash_entry
 
 
@@ -17,11 +18,15 @@ def run_classification(state: Mapping[str, Any]) -> Dict[str, Any]:
     context = working_state.get("context", {}) or {}
     collective = working_state.get("collective_signals", {}) or {}
     payload = working_state.get("payload", {}) or {}
-    declaration = payload.get("classification") or payload.get("ap_acf") or working_state.get("classification") or collective.get("ap_acf_declaration") or context.get("classification") or {}
+    declaration = working_state.get("ap_acf_declaration") or payload.get("classification") or payload.get("ap_acf") or working_state.get("classification") or collective.get("ap_acf_declaration") or context.get("classification") or {}
 
     if not isinstance(declaration, Mapping):
         declaration = {}
         failures.append("classification_declaration_invalid")
+    if working_state.get("ap_acf_precheck_result") != "PASS":
+        failures.append("ap_acf_precheck_not_pass")
+    if working_state.get("ap_acf_declaration_hash") != generate_digest(declaration):
+        failures.append("ap_acf_declaration_changed_after_precheck")
 
     ap_acf_class = normalize_ap_acf_class(declaration.get("ap_acf_class") or declaration.get("class") or declaration.get("risk_class"))
     if ap_acf_class is None:

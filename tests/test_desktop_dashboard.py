@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import ast
+from pathlib import Path
+
 from sbp_lex.api.access_control import validate_path
 from sbp_lex.desktop.dashboard import (
     DESKTOP_BACKGROUND_URL,
@@ -17,19 +20,21 @@ from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     html = desktop_dashboard_html()
     assert "SBP-LEX Desktop V1" in html
+    assert "SBP-LEX Operator Cockpit" in html
     assert "Local Governance Observability Console" in html
-    assert "Runtime Integrity Summary" in html
-    assert "Pipeline / Convergence" in html
     assert "Dual Adaptive Deterministic Pipelines" in html
     assert "Pipeline A / Pipeline B Progression" in html
-    assert "Convergence Proof" in html
-    assert "Execution Admissibility" in html
     assert "Audit Continuity" in html
     assert "Replay Comparison" in html
     assert "Controlled Operator Actions" in html
     assert "Run Approved Demo Traversal" in html
-    assert "Open Runtime Health" in html
-    assert "Open Runtime Integrity" in html
+    assert "Start Live Test" in html
+    assert "Runtime Status" in html
+    assert "Reset / Clear View" in html
+    assert "Load Demo Request" in html
+    assert "Stop / Halt" in html
+    assert "Procedural Truth Details" in html
+    assert "SKG/DTN Bridge Details" in html
     assert "/runtime/traverse" in html
     assert "/runtime/replay" in html
     assert "/runtime/integrity" in html
@@ -44,10 +49,101 @@ def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     assert 'id="pipelineVisual"' in html
     assert "pipeline-cylinder" in html
     assert "renderPipelineVisual" in html
-    assert "pipeline-visual-reason" in html
-    assert "pipeline-visual-outcome" in html
-    assert "pipeline-flow-reverse" in html
+    assert 'id="pipelineA"' in html
+    assert 'id="pipelineB"' in html
+    assert 'id="scaleArena"' in html
     assert "prefers-reduced-motion" in html
+
+
+def test_cockpit_semantic_classes_cover_owner_defined_states() -> None:
+    html = desktop_dashboard_html()
+    for state in ("PASS", "ALLOW", "ESCALATE", "REFINE", "DENY", "FAIL", "HALT", "STOP", "ACTIVE", "LIVE", "IDLE", "WAITING"):
+        assert state in html
+    assert "--status-pass: #19d98b" in html
+    assert "--status-escalate: #ff9f1c" in html
+    assert "--status-deny: #ff3b30" in html
+    assert "--status-active: #19cfff" in html
+    assert "--status-idle: #718096" in html
+
+
+def test_ecg_is_exclusive_to_live_traversal() -> None:
+    html = desktop_dashboard_html()
+    assert "function ecgMarkup(mode)" in html
+    assert "mode==='LIVE'?`<svg class=\"ecg-trace\"" in html
+    assert "Live traversal ECG" in html
+    assert "ecg-travel" in html
+    assert "pipeline-mode-live" in html
+
+
+def test_alive_last_current_and_historical_motion_rules_exist() -> None:
+    html = desktop_dashboard_html()
+    assert "pipeline-mode-alive" in html
+    assert "heartbeat-state" in html
+    assert "heartbeat-glow 2s" in html
+    assert "near-life" in html
+    assert "Last Current Traversed" in html
+    assert "state-glow" in html
+    assert "Steady glow · no ECG" in html
+    assert "state-historical" in html
+    assert "state-terminal" in html
+    assert "Heartbeat · governed continuation possible" in html
+
+
+def test_halt_and_deny_remain_visually_distinct_labels() -> None:
+    html = desktop_dashboard_html()
+    assert "execution_result==='HALT'?'HALT'" in html
+    assert "DENY:'Governed refusal concluded traversal'" in html
+    assert "HALT:'Execution-control stop applied'" in html
+
+
+def test_storm_scales_and_celestial_workspace_follow_state() -> None:
+    html = desktop_dashboard_html()
+    for state in ("storm-calm", "storm-live", "storm-alive", "storm-escalate", "storm-deny", "storm-execute"):
+        assert state in html
+    assert "storm-withdraw" in html
+    assert "scale-state-live" in html
+    assert "scale-state-alive" in html
+    assert "scale-state-escalate" in html
+    assert "scale-state-deny" in html
+    assert "360° · degree / minute / second markings" in html
+    assert "Pop Out Celestial Workspace" in html
+
+
+def test_detail_panel_reserves_space_and_identity_envelope_renders() -> None:
+    html = desktop_dashboard_html()
+    assert 'id="detailPanel"' in html
+    assert ".detail-open .desktop-shell" in html
+    assert "margin-right:390px" in html
+    assert "position:relative; inset:auto" in html
+    assert 'id="identityEnvelope"' in html
+    assert "Manufacturer" in html
+    assert "AP-ACF" in html
+    assert "Licence Authority" in html
+
+
+def test_cockpit_renderer_imports_no_runtime_authority_modules() -> None:
+    path = Path("sbp_lex/desktop/cockpit.py")
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    internal_imports: list[str] = []
+    for item in ast.walk(tree):
+        if isinstance(item, ast.Import):
+            internal_imports.extend(alias.name for alias in item.names if alias.name.startswith("sbp_lex"))
+        elif isinstance(item, ast.ImportFrom) and (item.module or "").startswith("sbp_lex"):
+            internal_imports.append(item.module or "")
+    assert internal_imports == []
+
+
+def test_cockpit_renderer_introduces_no_prohibited_topology_terms() -> None:
+    source = Path("sbp_lex/desktop/cockpit.py").read_text(encoding="utf-8").lower()
+    prohibited = (
+        "node_quorum",
+        "node_attestation",
+        "distributed consensus",
+        "multi-node execution",
+        "distributed mesh",
+        "quorum execution",
+    )
+    assert [term for term in prohibited if term in source] == []
 
 
 def test_desktop_background_asset_is_png() -> None:
@@ -90,6 +186,7 @@ def test_latest_runtime_snapshot_has_operator_fields() -> None:
     operator = snapshot["operator_summary"]
     integrity = snapshot["integrity_summary"]
     replay = snapshot["latest_replay_summary"]
+    identity = snapshot["identity_summary"]
 
     assert operator["console_name"] == "SBP-LEX Desktop V1"
     assert operator["console_role"] == "Local Governance Observability Console"
@@ -104,6 +201,25 @@ def test_latest_runtime_snapshot_has_operator_fields() -> None:
     assert "pipeline_b_summary" in summary
     assert "convergence_matched" in summary
     assert "audit_hash" in summary
+    assert "procedural_truth_status" in summary
+    assert "recoverable" in summary
+    assert "governed_reentry" in summary
+    assert set(identity) == {
+        "manufacturer",
+        "system_name",
+        "model",
+        "version",
+        "unique_system_identifier",
+        "ap_acf_class",
+        "ap_acf_subclass",
+        "autonomy_level",
+        "autonomy_ceiling",
+        "operational_scope",
+        "operational_environment",
+        "licence_state",
+        "licence_authority",
+        "request_fingerprint",
+    }
     assert "available" in replay
     assert snapshot["export_availability"] == {
         "latest_result": True,
