@@ -29,6 +29,7 @@ DTN_SIGNAL_TYPES = (
     "cascading_impact_signal",
     "pathway_context_signal",
 )
+DTN_PACKAGE_VERSION = "1.0"
 
 
 def _package_body(package: Mapping[str, Any]) -> dict[str, Any]:
@@ -89,7 +90,7 @@ def build_dtn_signal_package(
     }
     package: dict[str, Any] = {
         "package_type": "external_dtn_signal_package",
-        "package_version": "1.0",
+        "package_version": DTN_PACKAGE_VERSION,
         "request_fingerprint": request_fingerprint,
         "skg_constraint_digest": constraint_digest,
         "signals": signals,
@@ -113,7 +114,11 @@ def validate_dtn_signal_package(
     required = {"package_type", "request_fingerprint", "skg_constraint_digest", "signals", "digest", "signature", "timestamp"}
     if not isinstance(package, Mapping) or not required.issubset(package):
         return False
-    if package.get("package_type") != "external_dtn_signal_package" or contains_prohibited_authority(package):
+    if (
+        package.get("package_type") != "external_dtn_signal_package"
+        or package.get("package_version") != DTN_PACKAGE_VERSION
+        or contains_prohibited_authority(package)
+    ):
         return False
     if package.get("freshness_valid") is not True or package.get("consistency_valid") is not True:
         return False

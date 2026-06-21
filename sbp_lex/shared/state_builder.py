@@ -29,6 +29,8 @@ def build_state(
     state = {
         "state_version": STATE_VERSION,
         "request_fingerprint": request_fingerprint,
+        "request_identity_snapshot": request_dict,
+        "request_identity_digest": request_fingerprint,
         "action": request_dict.get("action", ""),
         "payload": request_dict.get("payload", {}),
         "context": request_dict.get("context", {}),

@@ -6,6 +6,7 @@ from sbp_lex.audit.audit_finalisation import verify_audit_record
 from sbp_lex.security.execution_attestation import verify_execution_attestation
 from sbp_lex.security.pqc import generate_digest, verify_signature
 from sbp_lex.shared.hash_chain import verify_hash_chain
+from sbp_lex.execution.controlled_outcome import verify_controlled_outcome
 
 AUDIT_CORRUPTION_DETECTED = "AUDIT_CORRUPTION_DETECTED"
 HASH_CHAIN_MISMATCH = "HASH_CHAIN_MISMATCH"
@@ -13,6 +14,7 @@ LINEAGE_MISMATCH = "LINEAGE_MISMATCH"
 ROOT_OF_TRUST_MISMATCH = "ROOT_OF_TRUST_MISMATCH"
 REQUEST_IDENTITY_MISMATCH = "REQUEST_IDENTITY_MISMATCH"
 PT_ENVELOPE_MISMATCH = "PT_ENVELOPE_MISMATCH"
+SPLIT_HISTORY_DETECTED = "split_history_detected"
 
 
 def _append(failures: list[str], reason: str) -> None:
@@ -93,5 +95,33 @@ def verify_historical_state(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
             _append(failures, LINEAGE_MISMATCH)
     if not verify_execution_attestation(state, state.get("execution_attestation", {})):
         _append(failures, LINEAGE_MISMATCH)
+    controlled_outcome = state.get("controlled_outcome", {})
+    if not verify_controlled_outcome(controlled_outcome):
+        _append(failures, LINEAGE_MISMATCH)
+    else:
+        outcome_payload = controlled_outcome.get("payload", {})
+        if (
+            outcome_payload.get("audit_hash") != state.get("audit_hash")
+            or outcome_payload.get("decision") != state.get("decision")
+            or outcome_payload.get("convergence_hash") != state.get("convergence_hash")
+        ):
+            _append(failures, LINEAGE_MISMATCH)
 
     return not failures, failures
+
+
+def detect_competing_historical_states(
+    states: list[Mapping[str, Any]],
+) -> tuple[bool, list[str]]:
+    accepted: dict[str, tuple[str, str]] = {}
+    for state in states:
+        valid, failures = verify_historical_state(state)
+        if not valid:
+            return False, failures
+        fingerprint = str(state.get("request_fingerprint"))
+        identity = (str(state.get("audit_hash")), str(state.get("state_hash")))
+        previous = accepted.get(fingerprint)
+        if previous is not None and previous != identity:
+            return False, [SPLIT_HISTORY_DETECTED]
+        accepted[fingerprint] = identity
+    return True, []

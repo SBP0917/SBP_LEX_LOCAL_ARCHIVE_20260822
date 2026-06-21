@@ -19,7 +19,7 @@ def process_connector_envelope(envelope: Mapping[str, Any]) -> Dict[str, Any]:
         RUNTIME_EVENTS.emit("connector_envelope_rejected", {"request_id": request_id, "failures": failures})
         return {"accepted": False, "request_id": request_id, "failures": failures, "rejection": rejection}
 
-    if CONNECTOR_RECOVERY.exists(request_id):
+    if not CONNECTOR_RECOVERY.claim(request_id):
         failures = ["duplicate_connector_request_id"]
         rejection = CONNECTOR_RECOVERY.save_rejection(request_id, failures=failures, source=source)
         RUNTIME_EVENTS.emit("connector_envelope_rejected", {"request_id": request_id, "failures": failures})

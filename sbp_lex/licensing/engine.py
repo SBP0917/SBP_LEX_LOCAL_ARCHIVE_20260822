@@ -6,12 +6,18 @@ from typing import Any, Dict, Mapping
 from sbp_lex.licensing.autonomy_ceiling_engine import validate_autonomy_ceiling
 from sbp_lex.licensing.scope_engine import validate_deployment_scope
 from sbp_lex.security.token_stack import issue_token
+from sbp_lex.security.authority_boundary import validate_canonical_upstream
 from sbp_lex.shared.hash_chain import append_hash_entry
 
 
 def run_licensing(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
     failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        working_state, required_tokens=("classification",)
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
 
     if working_state.get("classification_result") != "ALLOW":
         failures.append("classification_not_allowed")

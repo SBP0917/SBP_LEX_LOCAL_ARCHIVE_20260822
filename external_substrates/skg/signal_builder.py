@@ -27,6 +27,7 @@ SKG_SIGNAL_TYPES = (
     "revocation_signal",
     "truth_lineage_signal",
 )
+SKG_PACKAGE_VERSION = "1.0"
 
 
 def _package_body(package: Mapping[str, Any]) -> dict[str, Any]:
@@ -78,7 +79,7 @@ def build_skg_signal_package(
     }
     package: dict[str, Any] = {
         "package_type": "external_skg_signal_package",
-        "package_version": "1.0",
+        "package_version": SKG_PACKAGE_VERSION,
         "request_fingerprint": request_fingerprint,
         "signals": signals,
         "source_records": sources,
@@ -100,7 +101,11 @@ def validate_skg_signal_package(
     required = {"package_type", "request_fingerprint", "signals", "digest", "signature", "timestamp"}
     if not isinstance(package, Mapping) or not required.issubset(package):
         return False
-    if package.get("package_type") != "external_skg_signal_package" or contains_prohibited_authority(package):
+    if (
+        package.get("package_type") != "external_skg_signal_package"
+        or package.get("package_version") != SKG_PACKAGE_VERSION
+        or contains_prohibited_authority(package)
+    ):
         return False
     if package.get("freshness_valid") is not True or package.get("consistency_valid") is not True:
         return False

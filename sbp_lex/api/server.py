@@ -9,7 +9,7 @@ from sbp_lex.api.access_control import decide_access, max_body_bytes, max_replay
 from sbp_lex.api.apk_contract import validate_runtime_status_contract
 from sbp_lex.config.environment import environment_security_report
 from sbp_lex.api.rate_limit import API_RATE_LIMITER
-from sbp_lex.api.schema_validation import validate_api_body_schema, validate_runtime_request_schema
+from sbp_lex.api.schema_validation import loads_strict_json, validate_api_body_schema, validate_runtime_request_schema
 from sbp_lex.connector.envelope import build_connector_envelope
 from sbp_lex.desktop.dashboard import (
     desktop_background_bytes,
@@ -187,7 +187,7 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
             if length > limit:
                 return _json_response(self, 413, {"error": "request_too_large", "limit": limit})
             body = self.rfile.read(length).decode("utf-8")
-            payload = json.loads(body or "{}")
+            payload = loads_strict_json(body or "{}")
             if not isinstance(payload, dict):
                 return _json_response(self, 400, {"error": "json_body_must_be_object"})
         except Exception as exc:
