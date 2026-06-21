@@ -9,6 +9,7 @@ from sbp_lex.security.threshold_tokens import verify_threshold_bundle
 from sbp_lex.security.token_stack import issue_token, issue_token_bundle, verify_required_tokens
 from sbp_lex.shared.convergence_digest import build_convergence_digest, verify_convergence_digest
 from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash, verify_hash_chain
+from sbp_lex.security.authority_boundary import validate_canonical_upstream, verify_canonical_stage_lineage
 
 STRICT_REQUIRED_TOKENS = [
     "authority",
@@ -43,6 +44,20 @@ def _apply_fail_closed(state: Dict[str, Any], failures: list[str]) -> Dict[str, 
 def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
     failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        working_state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+            "governance",
+            "domain",
+            "aurion",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
 
     if not verify_hash_chain(working_state):
         failures.append("hash_chain_invalid")
@@ -169,6 +184,25 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
 
 def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, Any]:
     failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+            "governance",
+            "domain",
+            "aurion",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
+    stage_valid, stage_failures = verify_canonical_stage_lineage(
+        state, required_tokens=("execution_attestation",)
+    )
+    if not stage_valid:
+        failures.extend(stage_failures)
 
     if state.get("procedural_truth_result") != "PASS":
         failures.append("procedural_truth_not_pass")

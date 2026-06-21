@@ -35,6 +35,7 @@ from sbp_lex.governance.corroboration_engine import run_corroboration_validation
 from sbp_lex.governance.evidence_engine import run_evidence_validation
 from sbp_lex.governance.threshold_conditioning_engine import run_threshold_conditioning
 from sbp_lex.security.threshold_tokens import verify_threshold_bundle
+from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.state_builder import build_state
 
 
@@ -174,23 +175,18 @@ class _NeverPasses:
 
 
 def _domain_state(profile: str | None = None) -> dict:
-    context = {"operational_scope": "test_scope"}
+    request = sample_request()
+    request["action"] = "governed_test"
+    request["context"]["operational_scope"] = "test_scope"
     if profile:
-        context["deployment_profile"] = profile
-    return {
-        "governance_result": "ALLOW",
-        "action": "governed_test",
-        "context": context,
-        "classification": {"operational_scope": "test_scope"},
-        "request_fingerprint": "domain-test-fingerprint",
-        "state_hash": "",
-        "hash_chain": [],
-        "tokens": {},
-        "token_trace": [],
-        "audit_trace": [],
-        "governance_feedback": {},
-        "safety_profile": {"computed_tier": LOW},
-    }
+        request["context"]["deployment_profile"] = profile
+    state = main(request)
+    state["classification"] = {"operational_scope": "test_scope"}
+    state["safety_profile"]["computed_tier"] = LOW
+    state["audit_trace"] = [
+        item for item in state["audit_trace"] if item.get("stage") != "domain_wrap_attempt"
+    ]
+    return state
 
 
 def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:

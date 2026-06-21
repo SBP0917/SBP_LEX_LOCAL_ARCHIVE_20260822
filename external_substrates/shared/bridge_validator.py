@@ -6,6 +6,8 @@ from typing import Any, Mapping
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.signing import verify_signature
 
+BRIDGE_PACKAGE_VERSION = "1.0"
+
 
 def _append(failures: list[str], reason: str) -> None:
     if reason not in failures:
@@ -111,6 +113,8 @@ def validate_pre_context_package_for_bridge(
     }
     if pre_context_package.get("package_type") != "external_pre_context_signal_package":
         _append(failures, "invalid_package_type")
+    if pre_context_package.get("package_version") != BRIDGE_PACKAGE_VERSION:
+        _append(failures, "protocol_downgrade_rejected")
     _validate_common(
         pre_context_package,
         request_reason="missing_pre_context_request_fingerprint",

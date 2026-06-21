@@ -6,6 +6,21 @@ from typing import Any, Dict, Mapping
 from sbp_lex.config.security_config import REQUIRED_CORE_TOKENS, SYSTEM_ISSUER, TOKEN_VERSION
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
+TOKEN_SIGNED_FIELDS = {
+    "version",
+    "name",
+    "request_fingerprint",
+    "state_hash",
+    "tier",
+    "corroboration_required",
+    "issuer",
+    "issued_at_stage",
+    "issued_at",
+    "issued_at_source",
+    "payload",
+}
+TOKEN_WRAPPER_FIELDS = TOKEN_SIGNED_FIELDS | {"digest", "signature", "verified"}
+
 
 def _token_signed_payload(token: Mapping[str, Any]) -> Dict[str, Any]:
     return {
@@ -77,7 +92,17 @@ def issue_token(
 def verify_token(token: Mapping[str, Any], *, expected_request_fingerprint: str | None = None) -> bool:
     if not isinstance(token, Mapping):
         return False
+    if set(token) != TOKEN_WRAPPER_FIELDS:
+        return False
+    if token.get("version") != TOKEN_VERSION:
+        return False
+    if token.get("issuer") != SYSTEM_ISSUER:
+        return False
+    if token.get("name") in (None, "") or token.get("verified") is not True:
+        return False
     signed_payload = _token_signed_payload(token)
+    if set(signed_payload) != TOKEN_SIGNED_FIELDS:
+        return False
     if token.get("digest") != generate_digest(signed_payload):
         return False
     if expected_request_fingerprint is not None and token.get("request_fingerprint") != expected_request_fingerprint:

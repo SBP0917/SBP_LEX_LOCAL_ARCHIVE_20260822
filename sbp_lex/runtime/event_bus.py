@@ -24,6 +24,16 @@ ALLOWED_EVENT_TYPES = {
 }
 
 
+def sanitise_event_text(value: str, *, limit: int) -> str:
+    escaped = "".join(
+        {"\r": "\\r", "\n": "\\n", "\t": "\\t"}.get(character, character)
+        if ord(character) >= 32 or character in "\r\n\t"
+        else f"\\u{ord(character):04x}"
+        for character in value
+    )
+    return escaped[:limit]
+
+
 def _safe_payload(payload: Mapping[str, Any] | None) -> Dict[str, Any]:
     raw = dict(payload or {})
     safe: Dict[str, Any] = {}
@@ -31,9 +41,11 @@ def _safe_payload(payload: Mapping[str, Any] | None) -> Dict[str, Any]:
         if index >= MAX_EVENT_PAYLOAD_KEYS:
             safe["payload_truncated"] = True
             break
-        key_text = str(key)[:128]
+        key_text = sanitise_event_text(str(key), limit=128)
         if isinstance(value, str):
-            safe[key_text] = value[:MAX_EVENT_PAYLOAD_STRING_LENGTH]
+            safe[key_text] = sanitise_event_text(
+                value, limit=MAX_EVENT_PAYLOAD_STRING_LENGTH
+            )
         elif isinstance(value, (int, float, bool)) or value is None:
             safe[key_text] = value
         else:

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import math
 import re
 from typing import Any, Mapping
 
@@ -13,6 +15,15 @@ MAX_PRE_CONTEXT_SIGNAL_KEYS = 32
 ACTION_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9_:\-]{0,63}$")
 REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9_:\-.]{1,128}$")
 SOURCE_PATTERN = re.compile(r"^[A-Za-z0-9_:\-.]{1,128}$")
+COMMAND_INJECTION_PATTERN = re.compile(
+    r"(?:\$\(|`|&&|\|\||(?:^|\s)(?:cmd(?:\.exe)?|powershell(?:\.exe)?|bash|sh)\s+(?:/c|-c)\b)",
+    re.IGNORECASE,
+)
+TEMPLATE_INJECTION_PATTERN = re.compile(r"(?:\{\{|\{%|<%|\$\{)")
+REPORT_INJECTION_PATTERN = re.compile(
+    r"(?:<script\b|javascript:|data:text/html|(?:\r?\n)#{1,6}\s)",
+    re.IGNORECASE,
+)
 
 FORBIDDEN_KEYS = {
     "__class__",
@@ -136,6 +147,34 @@ PRE_CONTEXT_SIGNAL_ALLOWED_KEYS = {
     "nonce",
 }
 
+EVIDENCE_ALLOWED_KEYS = {
+    "source",
+    "content",
+    "verified",
+    "attested",
+    "freshness_valid",
+    "consistency_valid",
+}
+
+
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate_json_key:{key}")
+        result[key] = value
+    return result
+
+
+def loads_strict_json(text: str) -> Any:
+    return json.loads(
+        text,
+        object_pairs_hook=_reject_duplicate_keys,
+        parse_constant=lambda value: (_ for _ in ()).throw(
+            ValueError(f"non_finite_json_number:{value}")
+        ),
+    )
+
 
 def _is_mapping(value: Any) -> bool:
     return isinstance(value, Mapping)
@@ -179,6 +218,22 @@ def _validate_primitive_limits(value: Any, *, path: str, failures: list[str], de
             failures.append(f"string_length_exceeded:{path}")
         if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in value):
             failures.append(f"control_character_detected:{path}")
+        if COMMAND_INJECTION_PATTERN.search(value):
+            failures.append(f"command_injection_rejected:{path}")
+        if TEMPLATE_INJECTION_PATTERN.search(value):
+            failures.append(f"template_injection_rejected:{path}")
+        if REPORT_INJECTION_PATTERN.search(value):
+            failures.append(f"report_injection_rejected:{path}")
+        return
+
+    if isinstance(value, float) and not math.isfinite(value):
+        failures.append(f"non_finite_number:{path}")
+        return
+
+    if value is None or isinstance(value, (bool, int, float)):
+        return
+
+    failures.append(f"unsupported_json_type:{path}:{type(value).__name__}")
 
 
 def validate_json_shape(value: Any, *, root_name: str = "json") -> tuple[bool, list[str]]:
@@ -230,6 +285,30 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
             failures.append("context_evidence_must_be_list")
         elif len(evidence) > MAX_EVIDENCE_ITEMS:
             failures.append("context_evidence_limit_exceeded")
+        else:
+            for index, item in enumerate(evidence):
+                if not _is_mapping(item):
+                    failures.append(f"evidence_item_not_mapping:{index}")
+                    continue
+                _append_unknown_keys(
+                    failures,
+                    prefix=f"context.evidence[{index}]",
+                    data=item,
+                    allowed=EVIDENCE_ALLOWED_KEYS,
+                )
+                source = item.get("source")
+                if not isinstance(source, str) or not SOURCE_PATTERN.match(source):
+                    failures.append(f"invalid_evidence_source:{index}")
+                if not isinstance(item.get("content"), str):
+                    failures.append(f"invalid_evidence_content:{index}")
+                for flag in (
+                    "verified",
+                    "attested",
+                    "freshness_valid",
+                    "consistency_valid",
+                ):
+                    if item.get(flag) is not None and not isinstance(item.get(flag), bool):
+                        failures.append(f"evidence_{flag}_must_be_bool:{index}")
 
     safety_profile = request.get("safety_profile")
     if not _is_mapping(safety_profile):
@@ -305,6 +384,8 @@ def validate_connector_envelope_schema(envelope: Mapping[str, Any]) -> tuple[boo
     failures: list[str] = []
     if not _is_mapping(envelope):
         return False, ["envelope_not_mapping"]
+    _, shape_failures = validate_json_shape(envelope, root_name="envelope")
+    failures.extend(shape_failures)
     _append_unknown_keys(failures, prefix="envelope", data=envelope, allowed=CONNECTOR_ENVELOPE_ALLOWED_KEYS)
     if not isinstance(envelope.get("request_id"), str) or not REQUEST_ID_PATTERN.match(envelope.get("request_id", "")):
         failures.append("invalid_request_id")

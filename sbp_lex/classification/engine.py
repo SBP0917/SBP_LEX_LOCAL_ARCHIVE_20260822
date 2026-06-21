@@ -7,6 +7,7 @@ from sbp_lex.classification.ap_acf import derive_pipeline_mode_from_class, deriv
 from sbp_lex.classification.environment_modifiers import environment_requires_escalation, normalize_environment_modifiers, public_exposure_is_high
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.authority_boundary import validate_canonical_upstream
 from sbp_lex.shared.hash_chain import append_hash_entry
 
 
@@ -14,6 +15,11 @@ def run_classification(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
     failures: list[str] = []
     warnings: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        working_state, required_tokens=("authority", "procedural_truth")
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
 
     context = working_state.get("context", {}) or {}
     collective = working_state.get("collective_signals", {}) or {}

@@ -7,10 +7,15 @@ from sbp_lex.governance.admissibility_engine import run_admissibility_evaluation
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.hash_chain import append_hash_entry
 from sbp_lex.shared.results import enforce_result
+from sbp_lex.security.authority_boundary import validate_canonical_upstream
 
 
 def run_governance(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        working_state,
+        required_tokens=("authority", "procedural_truth", "classification", "licensing"),
+    )
 
     working_state = run_admissibility_evaluation(working_state)
 
@@ -18,7 +23,10 @@ def run_governance(state: Mapping[str, Any]) -> Dict[str, Any]:
 
     governance_result = enforce_result("governance", admissibility.get("result", "DENY"))
     governance_reason = admissibility.get("reason", "governance_reason_unset")
-    failures = admissibility.get("failures", [])
+    failures = list(admissibility.get("failures", [])) + upstream_failures
+    if not upstream_valid:
+        governance_result = "DENY"
+        governance_reason = "confused_deputy_rejected"
 
     working_state["governance_result"] = governance_result
     working_state["governance_reason"] = governance_reason

@@ -13,6 +13,8 @@ from external_substrates.shared.source_attestation import summarise_sources, val
 from external_substrates.shared.validation import contains_prohibited_authority, require_non_empty_string
 from external_substrates.skg.signal_builder import validate_skg_signal_package
 
+PRE_CONTEXT_PACKAGE_VERSION = "1.0"
+
 
 def _digest_body(package: Mapping[str, Any]) -> dict[str, Any]:
     return {key: deepcopy(value) for key, value in package.items() if key not in {"digest", "signature"}}
@@ -60,7 +62,7 @@ def build_pre_context_package(
     package: dict[str, Any] = {
         "package_type": "external_pre_context_signal_package",
         "request_fingerprint": request_fingerprint,
-        "package_version": "1.0",
+        "package_version": PRE_CONTEXT_PACKAGE_VERSION,
         "skg_package_digest": skg_package["digest"],
         "dtn_package_digest": dtn_package["digest"],
         "signals": signals,
@@ -86,6 +88,8 @@ def validate_pre_context_package(
     if not isinstance(package, Mapping) or not PRE_CONTEXT_REQUIRED_FIELDS.issubset(package):
         return False
     if package.get("package_type") != "external_pre_context_signal_package":
+        return False
+    if package.get("package_version") != PRE_CONTEXT_PACKAGE_VERSION:
         return False
     if not all(require_non_empty_string(package.get(field)) for field in ("request_fingerprint", "nonce", "timestamp", "digest", "signature")):
         return False

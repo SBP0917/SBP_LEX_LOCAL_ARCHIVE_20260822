@@ -5,9 +5,12 @@ from typing import Any, Dict, List, Mapping
 
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
+REPLAY_LEDGER_ID = "SBP_LEX_V1_PIPELINE_REPLAY_LEDGER"
+
 
 def _checkpoint_payload(entries: List[Mapping[str, Any]]) -> Dict[str, Any]:
     return {
+        "ledger_id": REPLAY_LEDGER_ID,
         "record_count": len(entries),
         "head_hash": entries[-1].get("ledger_hash") if entries else "GENESIS",
         "checkpoint_authority": "CANONICAL_RUNTIME",
@@ -48,6 +51,27 @@ def verify_replay_ledger_entries(
     ):
         failures.append("ledger_checkpoint_mismatch")
     return not failures, failures
+
+
+def compare_replay_ledger_heads(
+    trusted: Mapping[str, Any], candidate: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    trusted_payload = trusted.get("payload", {})
+    candidate_payload = candidate.get("payload", {})
+    if not verify_signature(trusted_payload, trusted.get("signature", {})):
+        return False, ["trusted_replay_checkpoint_invalid"]
+    if not verify_signature(candidate_payload, candidate.get("signature", {})):
+        return False, ["insider_modification_detected"]
+    if candidate_payload.get("ledger_id") != trusted_payload.get("ledger_id"):
+        return False, ["split_history_detected"]
+    if candidate_payload.get("record_count", -1) < trusted_payload.get("record_count", -1):
+        return False, ["rollback_rejected"]
+    if (
+        candidate_payload.get("record_count") == trusted_payload.get("record_count")
+        and candidate_payload.get("head_hash") != trusted_payload.get("head_hash")
+    ):
+        return False, ["split_history_detected"]
+    return True, []
 
 
 class PipelineReplayLedger:

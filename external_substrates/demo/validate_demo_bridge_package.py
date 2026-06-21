@@ -46,6 +46,10 @@ def validate_demo_bridge(
     manifest_valid, _ = validate_bridge_manifest(manifest)
     status = "BRIDGE_READY" if all((skg_valid, dtn_valid, pre_valid, chain_valid, manifest_valid)) else "BRIDGE_REJECTED"
     destination = manifest_path or package_dir / "sample_bridge_manifest.json"
+    package_root = package_dir.resolve()
+    destination = destination.resolve()
+    if not destination.is_relative_to(package_root):
+        raise ValueError("manifest_path_outside_package_dir")
     destination.write_text(canonical_dumps(manifest) + "\n", encoding="utf-8")
     return status, manifest
 

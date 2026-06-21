@@ -9,12 +9,31 @@ from sbp_lex.aurion15.candidate.ranker import rank_candidates
 from sbp_lex.aurion15.runtime.constraint_validator import validate_candidate_constraints
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.hash_chain import append_hash_entry
+from sbp_lex.security.authority_boundary import validate_canonical_upstream
 
 MAX_CANDIDATE_ATTEMPTS = 5
 
 
 def run_aurion_runtime(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
+
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        working_state, required_tokens=("governance", "domain")
+    )
+    if not upstream_valid:
+        working_state["aurion15_result"] = "fail"
+        working_state["decision"] = "DENY"
+        working_state["execution_result"] = "HALT"
+        working_state.setdefault("governance_feedback", {})["aurion"] = {
+            "result": "fail",
+            "reason": "confused_deputy_rejected",
+            "failures": upstream_failures,
+        }
+        return append_hash_entry(
+            working_state,
+            stage="aurion_runtime",
+            payload={"aurion15_result": "fail", "reason": "confused_deputy_rejected"},
+        )
 
     if working_state.get("domain_result") != "pass":
         working_state["aurion15_result"] = "fail"
