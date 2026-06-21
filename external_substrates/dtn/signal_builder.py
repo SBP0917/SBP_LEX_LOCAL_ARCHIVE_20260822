@@ -1,0 +1,138 @@
+from __future__ import annotations
+
+from copy import deepcopy
+from typing import Any, Mapping, Sequence
+
+from external_substrates.dtn.capability_model import model_capabilities
+from external_substrates.dtn.cascading_impact_engine import evaluate_cascading_impact
+from external_substrates.dtn.constraint_applier import apply_skg_constraints
+from external_substrates.dtn.context_ingestor import ingest_context
+from external_substrates.dtn.dependency_model import model_dependencies
+from external_substrates.dtn.environment_model import model_environment
+from external_substrates.dtn.feasibility_engine import evaluate_feasibility
+from external_substrates.dtn.operational_state_engine import model_operational_state
+from external_substrates.dtn.pathway_model import model_pathway
+from external_substrates.dtn.risk_potential_engine import evaluate_risk_potential
+from external_substrates.shared.digest import digest_mapping
+from external_substrates.shared.freshness import utc_timestamp
+from external_substrates.shared.signal_envelope import build_signal_envelope, validate_signal_envelope
+from external_substrates.shared.signing import sign_payload, verify_signature
+from external_substrates.shared.source_attestation import summarise_sources
+from external_substrates.shared.validation import contains_prohibited_authority
+
+DTN_SIGNAL_TYPES = (
+    "operational_context_signal",
+    "dependency_signal",
+    "capability_signal",
+    "feasibility_signal",
+    "risk_potential_signal",
+    "cascading_impact_signal",
+    "pathway_context_signal",
+)
+
+
+def _package_body(package: Mapping[str, Any]) -> dict[str, Any]:
+    return {key: deepcopy(value) for key, value in package.items() if key not in {"digest", "signature"}}
+
+
+def _signature_body(package: Mapping[str, Any]) -> dict[str, Any]:
+    return {key: deepcopy(value) for key, value in package.items() if key != "signature"}
+
+
+def build_dtn_signal_package(
+    *,
+    request_fingerprint: str,
+    skg_constraint_package: Mapping[str, Any],
+    context: Mapping[str, Any],
+    source_records: Sequence[Mapping[str, Any]],
+    timestamp: str | None = None,
+    signing_key: str | bytes | None = None,
+) -> dict[str, Any]:
+    if skg_constraint_package.get("request_fingerprint") != request_fingerprint:
+        raise ValueError("SKG and DTN request fingerprints must match")
+    constraints = apply_skg_constraints(skg_constraint_package)
+    if constraints.get("valid") is not True:
+        raise ValueError("SKG constraints are unresolved")
+    ingested = ingest_context(context)
+    dependencies = model_dependencies(ingested.get("dependencies", []))
+    capabilities = model_capabilities(ingested.get("capabilities", []))
+    pathway = model_pathway(ingested.get("pathway", {}), constraints)
+    feasibility = evaluate_feasibility(dependencies, capabilities, pathway)
+    cascading = evaluate_cascading_impact(ingested)
+    risk = evaluate_risk_potential(ingested, cascading)
+    payloads: dict[str, Mapping[str, Any]] = {
+        "operational_context_signal": {
+            "environment": model_environment(ingested),
+            "operational_state": model_operational_state(ingested),
+        },
+        "dependency_signal": dependencies,
+        "capability_signal": capabilities,
+        "feasibility_signal": feasibility,
+        "risk_potential_signal": risk,
+        "cascading_impact_signal": cascading,
+        "pathway_context_signal": pathway,
+    }
+    package_timestamp = timestamp or utc_timestamp()
+    sources = [deepcopy(dict(source)) for source in source_records]
+    constraint_digest = str(constraints["skg_constraint_digest"])
+    signals = {
+        signal_type: build_signal_envelope(
+            request_fingerprint=request_fingerprint,
+            signal_type=signal_type,
+            payload=payloads[signal_type],
+            source_records=sources,
+            timestamp=package_timestamp,
+            signing_key=signing_key,
+            extra={"skg_constraint_digest": constraint_digest},
+        )
+        for signal_type in DTN_SIGNAL_TYPES
+    }
+    package: dict[str, Any] = {
+        "package_type": "external_dtn_signal_package",
+        "package_version": "1.0",
+        "request_fingerprint": request_fingerprint,
+        "skg_constraint_digest": constraint_digest,
+        "signals": signals,
+        "source_records": sources,
+        "source_summary": summarise_sources(sources),
+        "freshness_valid": all(signal["freshness_valid"] for signal in signals.values()),
+        "consistency_valid": all(signal["consistency_valid"] for signal in signals.values()),
+        "timestamp": package_timestamp,
+    }
+    package["digest"] = digest_mapping(_package_body(package))
+    package["signature"] = sign_payload(_signature_body(package), signing_key)
+    return package
+
+
+def validate_dtn_signal_package(
+    package: Mapping[str, Any],
+    *,
+    skg_constraint_package: Mapping[str, Any] | None = None,
+    verification_key: str | bytes | None = None,
+) -> bool:
+    required = {"package_type", "request_fingerprint", "skg_constraint_digest", "signals", "digest", "signature", "timestamp"}
+    if not isinstance(package, Mapping) or not required.issubset(package):
+        return False
+    if package.get("package_type") != "external_dtn_signal_package" or contains_prohibited_authority(package):
+        return False
+    if package.get("freshness_valid") is not True or package.get("consistency_valid") is not True:
+        return False
+    if skg_constraint_package is not None:
+        if skg_constraint_package.get("digest") != package.get("skg_constraint_digest"):
+            return False
+        if skg_constraint_package.get("request_fingerprint") != package.get("request_fingerprint"):
+            return False
+    signals = package.get("signals")
+    if not isinstance(signals, Mapping) or set(signals) != set(DTN_SIGNAL_TYPES):
+        return False
+    if any(
+        signal.get("request_fingerprint") != package.get("request_fingerprint")
+        or signal.get("skg_constraint_digest") != package.get("skg_constraint_digest")
+        for signal in signals.values()
+    ):
+        return False
+    if not all(validate_signal_envelope(signal, verification_key=verification_key) for signal in signals.values()):
+        return False
+    if package.get("digest") != digest_mapping(_package_body(package)):
+        return False
+    return verify_signature(_signature_body(package), str(package.get("signature")), verification_key)

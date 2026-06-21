@@ -41,6 +41,14 @@ REQUIRED_BUNDLE_TOKENS = [
     "token_bundle",
 ]
 
+CONDITIONAL_THRESHOLD_TOKENS = [
+    "consequentiality_threshold",
+    "corroboration_threshold",
+    "financial_threshold",
+    "autonomy_boundary_threshold",
+    "escalation_threshold",
+]
+
 THRESHOLD_COMPONENT_TOKEN_NAMES = [
     "human_safety_threshold",
     "irreversibility_threshold",
@@ -58,3 +66,57 @@ THRESHOLD_COMPONENT_TOKEN_NAMES = [
     "public_exposure",
     "operational_scope",
 ]
+
+
+def build_pqc_config() -> dict[str, object]:
+    return {
+        "digest_algorithm": DIGEST_ALGORITHM,
+        "signature_algorithm": SIGNATURE_ALGORITHM,
+        "system_issuer": SYSTEM_ISSUER,
+    }
+
+
+def build_token_requirements() -> dict[str, list[str]]:
+    return {
+        "core": list(REQUIRED_CORE_TOKENS),
+        "bundles": list(REQUIRED_BUNDLE_TOKENS),
+        "conditional_thresholds": list(CONDITIONAL_THRESHOLD_TOKENS),
+        "expanded_threshold_components": list(THRESHOLD_COMPONENT_TOKEN_NAMES),
+    }
+
+
+def build_collective_signal_security() -> dict[str, bool]:
+    return {
+        "allow_unsigned_collective_signals": SECURITY_PROFILE["allow_unsigned_collective_signals"],
+        "require_digest_binding": SECURITY_PROFILE["require_digest_binding"],
+        "require_signature_binding": SECURITY_PROFILE["require_signature_binding"],
+    }
+
+
+def build_execution_gate_security() -> dict[str, bool]:
+    return {
+        "require_token_verification": SECURITY_PROFILE["require_token_verification"],
+        "require_state_hash": SECURITY_PROFILE["require_state_hash"],
+        "require_hash_chain": SECURITY_PROFILE["require_hash_chain"],
+        "allow_missing_execution_tokens": SECURITY_PROFILE["allow_missing_execution_tokens"],
+        "allow_execution_without_convergence": SECURITY_PROFILE["allow_execution_without_convergence"],
+    }
+
+
+def build_audit_security() -> dict[str, object]:
+    return {
+        "require_audit_hash": SECURITY_PROFILE["require_audit_hash"],
+        "hash_chain_version": HASH_CHAIN_VERSION,
+        "state_version": STATE_VERSION,
+    }
+
+
+def build_security_config() -> dict[str, object]:
+    return {
+        "profile": dict(SECURITY_PROFILE),
+        "pqc": build_pqc_config(),
+        "tokens": build_token_requirements(),
+        "collective_signals": build_collective_signal_security(),
+        "execution_gate": build_execution_gate_security(),
+        "audit": build_audit_security(),
+    }

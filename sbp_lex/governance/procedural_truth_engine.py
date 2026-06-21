@@ -27,8 +27,11 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             failures.append(check)
 
     passed = len(failures) == 0
+    corroboration = governance_feedback.get("corroboration", {})
+    failure_outcome = None if passed else corroboration.get("failure_outcome", "REFINE")
 
     working_state["procedural_truth_result"] = "PASS" if passed else "FAIL"
+    working_state["procedural_truth_failure_outcome"] = failure_outcome
 
     if passed:
         working_state = issue_token(
@@ -46,6 +49,7 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             "stage": "procedural_truth_finalization",
             "result": working_state["procedural_truth_result"],
             "failures": failures,
+            "failure_outcome": failure_outcome,
         }
     )
 
@@ -56,5 +60,6 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             "substage": "procedural_truth_finalization",
             "result": working_state["procedural_truth_result"],
             "failures": failures,
+            "failure_outcome": failure_outcome,
         },
     )

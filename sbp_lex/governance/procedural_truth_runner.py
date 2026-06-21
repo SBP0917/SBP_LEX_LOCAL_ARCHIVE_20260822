@@ -25,13 +25,21 @@ def run_procedural_truth_pipeline(state: Mapping[str, object]) -> Dict[str, obje
         working_state = engine(working_state)
 
         if working_state.get("procedural_truth_result") == "FAIL":
-            working_state["decision"] = "DENY"
+            working_state["decision"] = (
+                "ESCALATE"
+                if working_state.get("procedural_truth_failure_outcome") == "ESCALATE"
+                else "DENY"
+            )
             working_state["execution_result"] = "HALT"
             return working_state
 
     if working_state.get("procedural_truth_result") != "PASS":
         working_state["procedural_truth_result"] = "FAIL"
-        working_state["decision"] = "DENY"
+        working_state["decision"] = (
+            "ESCALATE"
+            if working_state.get("procedural_truth_failure_outcome") == "ESCALATE"
+            else "DENY"
+        )
         working_state["execution_result"] = "HALT"
 
     return working_state

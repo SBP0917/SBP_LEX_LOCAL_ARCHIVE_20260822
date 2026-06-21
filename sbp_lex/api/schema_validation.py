@@ -89,6 +89,12 @@ CONTEXT_ALLOWED_KEYS = {
     "environment_modifiers",
     "classification",
     "escalation_threshold",
+    "prior_denied_fingerprint",
+    "material_change_declared",
+    "material_change_reason",
+    "escalation_path_available",
+    "deployment_profile",
+    "domain_fallback_safe",
 }
 
 API_BODY_ALLOWED_KEYS = {
@@ -121,6 +127,8 @@ PRE_CONTEXT_SIGNAL_ALLOWED_KEYS = {
     "manufacturer_declaration",
     "skg_digest",
     "dtn_digest",
+    "skg_context",
+    "dtn_context",
     "digest",
     "signature",
     "timestamp",

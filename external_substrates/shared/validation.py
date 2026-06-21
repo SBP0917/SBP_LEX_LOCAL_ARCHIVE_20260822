@@ -1,0 +1,27 @@
+from __future__ import annotations
+
+from typing import Any, Mapping
+
+PROHIBITED_AUTHORITY_KEYS = {
+    "execution_permission",
+    "execution_result",
+    "execution_verified",
+    "governance_result",
+    "final_admissibility",
+}
+
+
+def contains_prohibited_authority(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        return any(
+            key in PROHIBITED_AUTHORITY_KEYS or contains_prohibited_authority(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, (list, tuple)):
+        return any(contains_prohibited_authority(item) for item in value)
+    return False
+
+
+def require_non_empty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+

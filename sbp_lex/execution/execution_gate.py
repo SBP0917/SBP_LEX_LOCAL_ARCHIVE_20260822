@@ -8,7 +8,7 @@ from sbp_lex.security.master_convergence_token import issue_master_convergence_t
 from sbp_lex.security.threshold_tokens import verify_threshold_bundle
 from sbp_lex.security.token_stack import issue_token, issue_token_bundle, verify_required_tokens
 from sbp_lex.shared.convergence_digest import build_convergence_digest, verify_convergence_digest
-from sbp_lex.shared.hash_chain import append_hash_entry, verify_hash_chain
+from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash, verify_hash_chain
 
 STRICT_REQUIRED_TOKENS = [
     "authority",
@@ -46,16 +46,28 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
 
     if not verify_hash_chain(working_state):
         failures.append("hash_chain_invalid")
+    if working_state.get("state_hash") != rebuild_state_hash(working_state):
+        failures.append("state_hash_mismatch")
+    request_fingerprint = working_state.get("request_fingerprint")
+    if not request_fingerprint or any(
+        entry.get("request_fingerprint") != request_fingerprint
+        for entry in working_state.get("hash_chain", [])
+    ):
+        failures.append("request_fingerprint_mismatch")
     if working_state.get("authority_first_result") != "PASS":
         failures.append("authority_not_pass")
     if working_state.get("procedural_truth_result") != "PASS":
         failures.append("procedural_truth_not_pass")
+    if working_state.get("corroboration_met") is not True:
+        failures.append("corroboration_threshold_not_met")
     if working_state.get("classification_result") != "ALLOW":
         failures.append("classification_not_allow")
     if working_state.get("licensing_result") != "ALLOW":
         failures.append("licensing_not_allow")
     if working_state.get("governance_result") != "ALLOW":
         failures.append("governance_not_allow")
+    if working_state.get("grc_result") != "PASS":
+        failures.append("grc_not_pass")
     if working_state.get("domain_result") != "pass":
         failures.append("domain_not_pass")
     if working_state.get("aurion15_result") != "pass":
@@ -156,6 +168,10 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
 def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, Any]:
     failures: list[str] = []
 
+    if state.get("procedural_truth_result") != "PASS":
+        failures.append("procedural_truth_not_pass")
+    if state.get("corroboration_met") is not True:
+        failures.append("corroboration_threshold_not_met")
     if state.get("decision") == "ALLOW" and state.get("execution_result") != "EXECUTE":
         failures.append("allow_without_execute")
     if state.get("execution_result") == "EXECUTE" and state.get("execution_verified") is not True:
@@ -168,6 +184,10 @@ def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, An
     token_ok, token_failures = verify_required_tokens(state, required=STRICT_REQUIRED_TOKENS)
     if not token_ok:
         failures.extend(token_failures)
+
+    threshold_ok, threshold_failures = verify_threshold_bundle(state)
+    if not threshold_ok:
+        failures.extend(threshold_failures)
 
     if not verify_master_token(state):
         failures.append("master_convergence_invalid")

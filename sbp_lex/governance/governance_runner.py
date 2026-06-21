@@ -13,7 +13,10 @@ def run_governance_pipeline(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = run_governance(working_state)
     working_state = run_grc(working_state)
 
-    if working_state.get("governance_result") == "ALLOW":
+    if (
+        working_state.get("governance_result") == "ALLOW"
+        and working_state.get("grc_result") == "PASS"
+    ):
         return working_state
 
     if working_state.get("governance_result") == "ESCALATE":

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 PIPELINE_ORDER = [
+    "hard_ingress",
     "state_construction",
     "collective_attach",
+    "ap_acf_precheck",
     "root_of_trust",
     "procedural_truth",
     "classification",
@@ -13,19 +15,25 @@ PIPELINE_ORDER = [
     "aurion_runtime",
     "execution_gate",
     "audit",
+    "controlled_return",
 ]
 
 HASH_CHAIN_STAGES = [
+    "hard_ingress",
+    "state_construction",
     "collective_attach",
+    "ap_acf_precheck",
     "root_of_trust",
     "procedural_truth",
     "classification",
     "licensing",
     "governance",
+    "grc",
     "domain_wrap",
     "aurion_runtime",
     "execution_gate",
     "audit",
+    "controlled_return",
 ]
 
 ROOT_OF_TRUST_ORDER = [

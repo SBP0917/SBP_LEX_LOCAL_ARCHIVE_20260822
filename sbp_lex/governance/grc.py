@@ -16,16 +16,21 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
     reentry = evaluate_reentry(working_state)
 
     if governance_result == "ALLOW":
+        grc_result = "PASS" if (
+            not reentry.get("prior_denied_fingerprint")
+            or reentry.get("reentry_permitted") is True
+        ) else "DENY"
         grc_outcome = {
-            "structured_result": "ALLOW",
-            "controlled_return": False,
-            "persistent_inoperability": False,
-            "safe_state_required": False,
+            "structured_result": "ALLOW" if grc_result == "PASS" else "DENY",
+            "controlled_return": grc_result != "PASS",
+            "persistent_inoperability": grc_result != "PASS",
+            "safe_state_required": grc_result != "PASS",
             "reentry": reentry,
             "denial_reason": None,
             "escalation_path": None,
         }
     elif governance_result == "ESCALATE":
+        grc_result = "ESCALATE"
         grc_outcome = {
             "structured_result": "ESCALATE",
             "controlled_return": True,
@@ -38,6 +43,7 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
         working_state["decision"] = "ESCALATE"
         working_state["execution_result"] = "HALT"
     else:
+        grc_result = "DENY"
         grc_outcome = {
             "structured_result": "DENY",
             "controlled_return": True,
@@ -48,6 +54,13 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
             "escalation_path": None,
         }
         working_state["decision"] = "DENY"
+        working_state["execution_result"] = "HALT"
+        working_state["last_denied_fingerprint"] = working_state.get("request_fingerprint")
+
+    working_state["grc_result"] = grc_result
+    working_state["governed_reentry"] = reentry
+    if grc_result != "PASS":
+        working_state["decision"] = "ESCALATE" if grc_result == "ESCALATE" else "DENY"
         working_state["execution_result"] = "HALT"
         working_state["last_denied_fingerprint"] = working_state.get("request_fingerprint")
 
@@ -65,7 +78,7 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
 
     return append_hash_entry(
         working_state,
-        stage="governance",
+        stage="grc",
         payload={
             "substage": "grc",
             "governance_result": governance_result,

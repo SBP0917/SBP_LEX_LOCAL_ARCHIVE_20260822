@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, Mapping
 
-from sbp_lex.security.pqc import generate_digest, sign_payload
+from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 
 def prepare_dtn_context(request: Mapping[str, Any], skg_context: Mapping[str, Any]) -> Dict[str, Any]:
@@ -47,3 +47,24 @@ def _derive_risk_potential(*, safety_profile: Mapping[str, Any], context: Mappin
 def sign_dtn_context(dtn_context: Mapping[str, Any]) -> Dict[str, Any]:
     payload = dict(dtn_context)
     return {**payload, "dtn_signature": sign_payload(payload)}
+
+
+def verify_dtn_context(
+    dtn_context: Mapping[str, Any], *, expected_skg_digest: str | None
+) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    if not isinstance(dtn_context, Mapping):
+        return False, ["dtn_context_not_mapping"]
+    payload = {
+        key: deepcopy(value)
+        for key, value in dict(dtn_context).items()
+        if key not in {"dtn_digest", "dtn_signature"}
+    }
+    if dtn_context.get("dtn_digest") != generate_digest(payload):
+        failures.append("dtn_digest_mismatch")
+    signed_payload = {**payload, "dtn_digest": dtn_context.get("dtn_digest")}
+    if not verify_signature(signed_payload, dtn_context.get("dtn_signature", {})):
+        failures.append("dtn_signature_invalid")
+    if payload.get("skg_constraint_digest") != expected_skg_digest:
+        failures.append("dtn_skg_constraint_mismatch")
+    return len(failures) == 0, failures
