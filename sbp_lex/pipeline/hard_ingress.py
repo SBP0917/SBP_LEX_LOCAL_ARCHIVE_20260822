@@ -24,6 +24,14 @@ REQUIRED_SIGNAL_FIELDS = [
     "nonce",
 ]
 CANONICAL_SIGNAL_AUTHORITY = "CANONICAL_RUNTIME"
+PROHIBITED_EXTERNAL_AUTHORITY_KEYS = {
+    "execution_permission",
+    "execution_result",
+    "execution_verified",
+    "governance_result",
+    "final_admissibility",
+}
+PROHIBITED_EXTERNAL_AUTHORITY_VALUES = {"ALLOW", "DENY", "ESCALATE"}
 
 
 def _canonical_signal_timestamp(request_fingerprint: str) -> int:
@@ -57,6 +65,18 @@ def _signal_payload_for_digest(signals: Mapping[str, Any]) -> Dict[str, Any]:
     return {key: deepcopy(value) for key, value in dict(signals).items() if key not in {"digest", "signature"}}
 
 
+def _contains_external_authority(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        return any(
+            key in PROHIBITED_EXTERNAL_AUTHORITY_KEYS
+            or _contains_external_authority(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, (list, tuple)):
+        return any(_contains_external_authority(item) for item in value)
+    return isinstance(value, str) and value.strip().upper() in PROHIBITED_EXTERNAL_AUTHORITY_VALUES
+
+
 def validate_pre_context_signal_package(
     *,
     signals: Mapping[str, Any] | None,
@@ -73,6 +93,8 @@ def validate_pre_context_signal_package(
             failures.append(f"missing_signal_field:{field}")
     if failures:
         return False, failures
+    if _contains_external_authority(signals):
+        failures.append("external_signal_contains_authority_result")
     if signals.get("request_fingerprint") != request_fingerprint:
         failures.append("signal_request_fingerprint_mismatch")
     timestamp = signals.get("timestamp")

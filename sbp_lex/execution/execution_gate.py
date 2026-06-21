@@ -58,6 +58,8 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
         failures.append("authority_not_pass")
     if working_state.get("procedural_truth_result") != "PASS":
         failures.append("procedural_truth_not_pass")
+    if working_state.get("procedural_truth_outcome") != "PT_PASS":
+        failures.append("procedural_truth_outcome_mismatch")
     if working_state.get("corroboration_met") is not True:
         failures.append("corroboration_threshold_not_met")
     if working_state.get("classification_result") != "ALLOW":
@@ -170,6 +172,8 @@ def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, An
 
     if state.get("procedural_truth_result") != "PASS":
         failures.append("procedural_truth_not_pass")
+    if state.get("procedural_truth_outcome") != "PT_PASS":
+        failures.append("procedural_truth_outcome_mismatch")
     if state.get("corroboration_met") is not True:
         failures.append("corroboration_threshold_not_met")
     if state.get("decision") == "ALLOW" and state.get("execution_result") != "EXECUTE":

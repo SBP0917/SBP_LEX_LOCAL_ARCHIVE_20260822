@@ -4,6 +4,7 @@ from copy import deepcopy
 from typing import Any, Dict, Mapping
 
 from sbp_lex.config.security_config import STATE_VERSION
+from sbp_lex.governance.procedural_truth_envelope import build_pt_evidence_envelope
 from sbp_lex.security.pqc import generate_digest
 
 
@@ -15,9 +16,15 @@ def _safe_factor(value: Any) -> int:
     return factor if factor >= 0 else 0
 
 
-def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
+def build_state(
+    request: Mapping[str, Any],
+    admitted_pre_context: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
     request_dict = deepcopy(dict(request))
     request_fingerprint = generate_digest(request_dict)
+    pt_envelope, pt_envelope_digest = build_pt_evidence_envelope(
+        request_dict, admitted_pre_context
+    )
 
     state = {
         "state_version": STATE_VERSION,
@@ -43,6 +50,11 @@ def build_state(request: Mapping[str, Any]) -> Dict[str, Any]:
         "authority_first_result": "UNSET",
         "authority_first_reason": "",
         "procedural_truth_result": "UNSET",
+        "procedural_truth_outcome": "UNSET",
+        "procedural_truth_failure_reasons": [],
+        "pt_evidence_envelope": pt_envelope,
+        "pt_evidence_envelope_digest": pt_envelope_digest,
+        "root_of_trust_evidence_anchor": {},
         "classification_result": "UNSET",
         "classification_reason": "",
         "licensing_result": "UNSET",

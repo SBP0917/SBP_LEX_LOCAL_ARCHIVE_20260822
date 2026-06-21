@@ -5,7 +5,7 @@ from typing import Any, Dict, Mapping
 
 from sbp_lex.collective.context_interface import prepare_pre_context_signals
 from sbp_lex.pipeline.dual_runner import run_dual_pipeline
-from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 REPLAY_COMPARISON_FIELDS = [
     "request_fingerprint",
@@ -14,6 +14,9 @@ REPLAY_COMPARISON_FIELDS = [
     "pipeline_mode",
     "authority_first_result",
     "procedural_truth_result",
+    "procedural_truth_outcome",
+    "pt_evidence_envelope_digest",
+    "pt_bound_metadata",
     "classification_result",
     "licensing_result",
     "governance_result",
@@ -53,11 +56,49 @@ def run_replay_check(*, request: Mapping[str, Any], pre_context_signals: Mapping
         "runs": summaries,
         "mismatches": mismatches,
     }
-    return {**replay_payload, "replay_hash": generate_digest(replay_payload)}
+    replay_hash = generate_digest(replay_payload)
+    signature_payload = {**replay_payload, "replay_hash": replay_hash}
+    return {**signature_payload, "replay_signature": sign_payload(signature_payload)}
+
+
+def verify_replay_result(result: Mapping[str, Any]) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    payload = {
+        key: deepcopy(value)
+        for key, value in dict(result).items()
+        if key not in {"replay_hash", "replay_signature"}
+    }
+    replay_hash = result.get("replay_hash")
+    signature_payload = {**payload, "replay_hash": replay_hash}
+    if replay_hash != generate_digest(payload):
+        failures.append("REPLAY_MISMATCH")
+    if not verify_signature(signature_payload, result.get("replay_signature", {})):
+        failures.append("REPLAY_MISMATCH")
+    runs = result.get("runs", [])
+    reference = result.get("reference", {})
+    if not isinstance(runs, list) or len(runs) < 2 or reference != runs[0]:
+        failures.append("REPLAY_MISMATCH")
+    else:
+        mismatches: list[Dict[str, Any]] = []
+        for index, summary in enumerate(runs[1:], start=1):
+            for field in REPLAY_COMPARISON_FIELDS:
+                if summary.get(field) != reference.get(field):
+                    mismatches.append(
+                        {
+                            "run": index,
+                            "field": field,
+                            "expected": reference.get(field),
+                            "actual": summary.get(field),
+                        }
+                    )
+        if mismatches != result.get("mismatches") or result.get("matched") is not (not mismatches):
+            failures.append("REPLAY_MISMATCH")
+    return not failures, sorted(set(failures))
 
 
 def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
     convergence = state.get("pipeline_convergence", {})
+    envelope = state.get("pt_evidence_envelope", {})
     return {
         "request_fingerprint": state.get("request_fingerprint"),
         "state_hash": state.get("state_hash"),
@@ -65,6 +106,15 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "pipeline_mode": state.get("pipeline_mode"),
         "authority_first_result": state.get("authority_first_result"),
         "procedural_truth_result": state.get("procedural_truth_result"),
+        "procedural_truth_outcome": state.get("procedural_truth_outcome"),
+        "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
+        "pt_bound_metadata": {
+            "request_fingerprint": envelope.get("request_fingerprint"),
+            "skg_digest": envelope.get("skg_digest"),
+            "dtn_digest": envelope.get("dtn_digest"),
+            "pre_context_digest": envelope.get("pre_context_digest"),
+            "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
+        },
         "classification_result": state.get("classification_result"),
         "licensing_result": state.get("licensing_result"),
         "governance_result": state.get("governance_result"),

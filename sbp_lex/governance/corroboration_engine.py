@@ -7,18 +7,18 @@ from sbp_lex.security.threshold_tokens import (
     issue_threshold_bundle_token,
     issue_threshold_component_tokens,
 )
-from sbp_lex.governance.evidence_engine import qualified_evidence
+from sbp_lex.governance.procedural_truth_envelope import qualified_sources
 from sbp_lex.shared.hash_chain import append_hash_entry
 
 
 def run_corroboration_validation(state: Mapping[str, object]) -> Dict[str, object]:
     working_state = deepcopy(dict(state))
 
-    context = working_state.get("context", {})
-    evidence = context.get("evidence", [])
+    envelope = working_state.get("pt_evidence_envelope", {})
+    evidence = envelope.get("source_records", []) if isinstance(envelope, Mapping) else []
 
     corroboration_required = int(working_state.get("corroboration_required", 0))
-    qualified = qualified_evidence(evidence)
+    qualified = qualified_sources(evidence)
     evidence_count = len(qualified)
 
     corroboration_met = evidence_count >= corroboration_required

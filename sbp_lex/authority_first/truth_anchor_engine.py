@@ -13,6 +13,10 @@ def run_truth_anchor(state: Mapping[str, object]) -> Dict[str, object]:
     payload = {
         "request_fingerprint": working_state.get("request_fingerprint"),
         "collective_digest": working_state.get("collective_signals", {}).get("digest"),
+        "skg_digest": working_state.get("pt_evidence_envelope", {}).get("skg_digest"),
+        "dtn_digest": working_state.get("pt_evidence_envelope", {}).get("dtn_digest"),
+        "pre_context_digest": working_state.get("pt_evidence_envelope", {}).get("pre_context_digest"),
+        "pt_evidence_envelope_digest": working_state.get("pt_evidence_envelope_digest"),
         "state_hash": working_state.get("state_hash"),
     }
 

@@ -28,9 +28,28 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
 
     passed = len(failures) == 0
     corroboration = governance_feedback.get("corroboration", {})
-    failure_outcome = None if passed else corroboration.get("failure_outcome", "REFINE")
+    threshold_failures = governance_feedback.get("threshold_conditioning", {}).get("failures", [])
+    if passed:
+        pt_outcome = "PT_PASS"
+        failure_outcome = None
+    elif threshold_failures:
+        pt_outcome = "PT_FAIL"
+        failure_outcome = "FAIL"
+    else:
+        failure_outcome = corroboration.get("failure_outcome", "REFINE")
+        pt_outcome = "PT_ESCALATE" if failure_outcome == "ESCALATE" else "PT_REFINE"
+
+    deterministic_failures = sorted(
+        set(
+            failures
+            + list(threshold_failures)
+            + ([] if passed else list(working_state.get("pt_evidence_envelope", {}).get("deterministic_failure_reasons", [])))
+        )
+    )
 
     working_state["procedural_truth_result"] = "PASS" if passed else "FAIL"
+    working_state["procedural_truth_outcome"] = pt_outcome
+    working_state["procedural_truth_failure_reasons"] = deterministic_failures
     working_state["procedural_truth_failure_outcome"] = failure_outcome
 
     if passed:
@@ -40,6 +59,8 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             issued_at_stage="procedural_truth",
             payload={
                 "procedural_truth_result": "PASS",
+                "procedural_truth_outcome": pt_outcome,
+                "pt_evidence_envelope_digest": working_state.get("pt_evidence_envelope_digest"),
                 "checks": required_checks,
             },
         )
@@ -49,6 +70,8 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             "stage": "procedural_truth_finalization",
             "result": working_state["procedural_truth_result"],
             "failures": failures,
+            "pt_outcome": pt_outcome,
+            "deterministic_failure_reasons": deterministic_failures,
             "failure_outcome": failure_outcome,
         }
     )
@@ -60,6 +83,8 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
             "substage": "procedural_truth_finalization",
             "result": working_state["procedural_truth_result"],
             "failures": failures,
+            "pt_outcome": pt_outcome,
+            "deterministic_failure_reasons": deterministic_failures,
             "failure_outcome": failure_outcome,
         },
     )
