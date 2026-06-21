@@ -31,6 +31,19 @@ def run_procedural_truth_pipeline(state: Mapping[str, object]) -> Dict[str, obje
                 else "DENY"
             )
             working_state["execution_result"] = "HALT"
+            working_state["execution_verified"] = False
+            working_state["governed_reentry"] = {
+                "reentry_permitted": False,
+                "retry_eligible": False,
+                "reason": "procedural_truth_failure_requires_corrected_state",
+                "required_action": "full_retraversal_after_correction",
+                "required_corrections": [
+                    "corrected_evidence",
+                    "corrected_source_package",
+                    "corrected_validation_state",
+                    "full_retraversal",
+                ],
+            }
             return working_state
 
     if working_state.get("procedural_truth_result") != "PASS":

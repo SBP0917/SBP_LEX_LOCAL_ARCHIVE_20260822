@@ -9,6 +9,7 @@ PROHIBITED_AUTHORITY_KEYS = {
     "governance_result",
     "final_admissibility",
 }
+PROHIBITED_AUTHORITY_VALUES = {"ALLOW", "DENY", "ESCALATE"}
 
 
 def contains_prohibited_authority(value: Any) -> bool:
@@ -19,9 +20,11 @@ def contains_prohibited_authority(value: Any) -> bool:
         )
     if isinstance(value, (list, tuple)):
         return any(contains_prohibited_authority(item) for item in value)
-    return False
+    return (
+        isinstance(value, str)
+        and value.strip().upper() in PROHIBITED_AUTHORITY_VALUES
+    )
 
 
 def require_non_empty_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
-

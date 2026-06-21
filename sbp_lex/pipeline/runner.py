@@ -82,7 +82,7 @@ def run_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, A
         )
         return _finalize_pipeline(state)
 
-    state = build_state(request_copy)
+    state = build_state(request_copy, admitted_pre_context=signals)
     state["hard_entry_gate"] = {
         "accepted": True,
         "failures": [],
@@ -98,6 +98,7 @@ def run_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, A
         {
             "stage": "state_construction",
             "request_fingerprint": state.get("request_fingerprint"),
+            "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
         }
     )
     state = append_hash_entry(
@@ -106,6 +107,7 @@ def run_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, A
         payload={
             "request_fingerprint": state.get("request_fingerprint"),
             "state_version": state.get("state_version"),
+            "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
         },
     )
     state = attach_collective_signals(state, signals)
@@ -119,7 +121,10 @@ def run_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, A
     if state.get("authority_first_result") == "PASS":
         state = run_procedural_truth_pipeline(state)
         state = _mark_stage(state, "procedural_truth")
-    if state.get("procedural_truth_result") == "PASS":
+    if (
+        state.get("procedural_truth_result") == "PASS"
+        and state.get("procedural_truth_outcome") == "PT_PASS"
+    ):
         state = run_classification(state)
         state = _mark_stage(state, "classification")
     if state.get("classification_result") == "ALLOW":
