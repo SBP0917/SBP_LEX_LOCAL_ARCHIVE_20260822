@@ -5,12 +5,12 @@
   "bound_local_trust_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6\\outputs\\local_trust_root_manifest.json",
   "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
-  "chain_digest": "459d9f36b74436510635769dd06e8cf80cce0608be5c5c30095d7fa8a68d6b9d",
-  "chain_payload_digest": "5ea9b817de1b9ba001ed185017637a66157d0a8a1df33adcaddc7f8ad0cb804b",
-  "chain_signature": "15876b2b999db1563b77930fbc51ac6c46280c7cc0110833ce82e5e70938579f",
+  "chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+  "chain_payload_digest": "d1bb4b1f29615267c73715ab26177233f6b1cd64ae0a55afd5f1a32c6102856f",
+  "chain_signature": "31632057be27002f755ec3c7d920c495f8eb0fac13121f9136a165a478b1f4ff",
   "chain_type": "local_evidence_chain_report_integrity_attestation",
   "chain_version": "18.7D",
-  "created_at": "2026-06-24T18:13:46+00:00",
+  "created_at": "2026-06-24T19:03:56+00:00",
   "evidence_chain_status": "EVIDENCE_CHAIN_VALID",
   "evidence_items": [
     {
@@ -144,16 +144,16 @@
       "source_phase": "Phase 18.7C"
     },
     {
-      "attestation_status": "MISSING",
+      "attestation_status": "HASHED",
       "category": "commit_report",
       "content_type": "text/markdown",
       "evidence_id": "sbp_operator_assistant_v1_commit_and_test_report",
-      "exists": false,
-      "last_modified_utc": null,
+      "exists": true,
+      "last_modified_utc": "2026-06-24T18:57:06+00:00",
       "path": "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
       "required": true,
-      "sha256": null,
-      "size_bytes": null,
+      "sha256": "c5368f644d6f887570bd76b38a5ab681857649fd2ba13ef22fb2b087e318d095",
+      "size_bytes": 3507,
       "source_phase": "SBP Operator Assistant V1"
     },
     {
@@ -219,8 +219,8 @@
       "phase_report"
     ],
     "expected_item_count": 15,
-    "missing_item_count": 1,
-    "present_item_count": 14,
+    "missing_item_count": 0,
+    "present_item_count": 15,
     "scope_name": "phase_reports_manifests_envelopes_and_trusted_outputs"
   },
   "excluded_paths": [
@@ -233,16 +233,8 @@
     ".git"
   ],
   "git_branch": "main",
-  "git_commit": "6ac6314d9590c34f5a3a9e8f304bb51f8a4428c2",
-  "missing_evidence_items": [
-    {
-      "attestation_status": "MISSING",
-      "category": "commit_report",
-      "evidence_id": "sbp_operator_assistant_v1_commit_and_test_report",
-      "path": "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
-      "required": true
-    }
-  ],
+  "git_commit": "3dc8c34f5812ce82e79adda105b76b6b95638f40",
+  "missing_evidence_items": [],
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
   "signature_mode": "EVIDENCE_CHAIN_DETERMINISTIC_PLACEHOLDER",
   "validation_failures": [],

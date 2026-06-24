@@ -95,11 +95,13 @@ def test_manifest_hashes_trusted_reports_when_present() -> None:
     assert records["reports/PHASE_RED_20D_ATTACK_REPORT.md"]["sha256"]
 
 
-def test_missing_outputs_are_recorded_deterministically() -> None:
+def test_trusted_outputs_are_hashed_when_present() -> None:
     manifest = build_local_trust_manifest(REPOSITORY_ROOT)
     records = {record["path"]: record for record in manifest["trusted_output_hashes"]}
 
-    assert records["outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md"]["status"] == "MISSING"
+    record = records["outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md"]
+    assert record["status"] == "PRESENT"
+    assert record["sha256"]
 
 
 def test_manifest_digest_validates() -> None:
