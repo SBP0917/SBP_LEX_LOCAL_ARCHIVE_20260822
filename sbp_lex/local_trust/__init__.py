@@ -10,5 +10,9 @@ __all__ = [
     "manifest",
     "manifest_validator",
     "python_provenance",
+    "regression_cases",
+    "regression_matrix",
+    "regression_runner",
+    "regression_validator",
     "report_attestation",
 ]
