@@ -1,0 +1,773 @@
+{
+  "bound_constitutional_gates_digest": "5ef81bbc776f7e89c8d7b11965ca460b2649bda43bee4fa4498a0e9e7e259e5e",
+  "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+  "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
+  "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
+  "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+  "created_at": "2026-06-24T23:20:57+00:00",
+  "dependency_file_digests": [
+    {
+      "path": "requirements.txt",
+      "sha256": "12e4ba4731303c0dcc1abdc162dc954cf2a48f4926d468a0259bc8072a12ba0c",
+      "size_bytes": 15,
+      "status": "PRESENT"
+    },
+    {
+      "path": "requirements-dev.txt",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "setup.py",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "setup.cfg",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "Pipfile",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "poetry.lock",
+      "sha256": null,
+      "size_bytes": null,
+      "status": "MISSING"
+    }
+  ],
+  "dependency_files": [
+    "requirements.txt"
+  ],
+  "git_branch": "main",
+  "git_commit": "ccf60acbf51123a9608bc1f399ee48c2e1678c31",
+  "ignored_output_paths": [
+    "outputs",
+    "outputs/local_trust_temp"
+  ],
+  "ignored_temp_paths": [
+    ".pytest_cache",
+    ".pytest_tmp_*",
+    "*sbp_lex_local_trust_pytest_basetemp",
+    "__pycache__",
+    "*.pyc"
+  ],
+  "installed_package_snapshot": {
+    "package_count": 38,
+    "packages": [
+      {
+        "name": "annotated-types",
+        "version": "0.7.0"
+      },
+      {
+        "name": "artifact_tool_v2",
+        "version": "2.8.14"
+      },
+      {
+        "name": "cffi",
+        "version": "2.0.0"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.4.7"
+      },
+      {
+        "name": "colorama",
+        "version": "0.4.6"
+      },
+      {
+        "name": "cryptography",
+        "version": "49.0.0"
+      },
+      {
+        "name": "et_xmlfile",
+        "version": "2.0.0"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.0"
+      },
+      {
+        "name": "lxml",
+        "version": "6.0.2"
+      },
+      {
+        "name": "numpy",
+        "version": "2.3.5"
+      },
+      {
+        "name": "openpyxl",
+        "version": "3.1.5"
+      },
+      {
+        "name": "packaging",
+        "version": "26.2"
+      },
+      {
+        "name": "pandas",
+        "version": "3.0.1"
+      },
+      {
+        "name": "pdf2image",
+        "version": "1.17.0"
+      },
+      {
+        "name": "pdfminer.six",
+        "version": "20251230"
+      },
+      {
+        "name": "pdfplumber",
+        "version": "0.11.9"
+      },
+      {
+        "name": "pillow",
+        "version": "12.2.0"
+      },
+      {
+        "name": "pip",
+        "version": "26.0.1"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.6.0"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.4"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.4"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.20.0"
+      },
+      {
+        "name": "pyhumps",
+        "version": "3.8.0"
+      },
+      {
+        "name": "pypdf",
+        "version": "6.10.0"
+      },
+      {
+        "name": "pypdfium2",
+        "version": "5.10.1"
+      },
+      {
+        "name": "pytest",
+        "version": "9.1.1"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "2.9.0.post0"
+      },
+      {
+        "name": "python-docx",
+        "version": "1.2.0"
+      },
+      {
+        "name": "python-pptx",
+        "version": "1.0.2"
+      },
+      {
+        "name": "reportlab",
+        "version": "4.4.9"
+      },
+      {
+        "name": "setuptools",
+        "version": "82.0.1"
+      },
+      {
+        "name": "six",
+        "version": "1.17.0"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.2"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.15.0"
+      },
+      {
+        "name": "tzdata",
+        "version": "2026.2"
+      },
+      {
+        "name": "wheel",
+        "version": "0.47.0"
+      },
+      {
+        "name": "xlsxwriter",
+        "version": "3.2.9"
+      }
+    ],
+    "snapshot_mode": "installed_distributions_name_version_only"
+  },
+  "pip_version_if_available": "26.0.1",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "pytest_collection_policy": {
+    "policy_version": "LOCAL_TRUST_PYTEST_COLLECTION_POLICY_V1",
+    "records_generated_output_exclusion": true,
+    "records_stale_temp_exclusion": true,
+    "required_options": [
+      "--ignore=outputs",
+      "--ignore-glob=.pytest_tmp_*",
+      "--ignore-glob=*sbp_lex_local_trust_pytest_basetemp",
+      "--ignore-glob=outputs/local_trust_temp/*"
+    ]
+  },
+  "pytest_version": "9.1.1",
+  "python_base_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
+  "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "python_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
+  "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "signature_mode": "TOOLCHAIN_GUARD_DETERMINISTIC_PLACEHOLDER",
+  "toolchain_checks": [
+    {
+      "check_category": "python",
+      "check_id": "python_executable_recorded",
+      "check_name": "Python executable recorded",
+      "expected_condition": "python_executable_present",
+      "observed_condition": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "reason": "python executable provenance",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "python",
+      "check_id": "python_version_recorded",
+      "check_name": "Python version recorded",
+      "expected_condition": "python_version_present",
+      "observed_condition": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+      "reason": "python version provenance",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "python",
+      "check_id": "python_executable_exists",
+      "check_name": "Python executable exists",
+      "expected_condition": "python_executable_exists",
+      "observed_condition": "exists=True",
+      "reason": "python executable filesystem check",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "python",
+      "check_id": "python_version_parseable",
+      "check_name": "Python version is parseable",
+      "expected_condition": "python_version_parseable",
+      "observed_condition": "(3, 12, 13)",
+      "reason": "major/minor/patch parse",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "pytest",
+      "check_id": "pytest_version_recorded",
+      "check_name": "pytest version recorded",
+      "expected_condition": "pytest_version_present",
+      "observed_condition": "9.1.1",
+      "reason": "pytest package metadata",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "pytest",
+      "check_id": "pytest_import_available",
+      "check_name": "pytest import availability checked",
+      "expected_condition": "pytest_import_available",
+      "observed_condition": "pytest_available",
+      "reason": "pytest version lookup",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "pip",
+      "check_id": "pip_version_recorded",
+      "check_name": "pip version recorded if available",
+      "expected_condition": "pip_version_recorded_or_unavailable",
+      "observed_condition": "26.0.1",
+      "reason": "pip is optional but state is explicit",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "dependencies",
+      "check_id": "dependency_files_discovered",
+      "check_name": "Dependency files discovered",
+      "expected_condition": "dependency_files_or_none_state_recorded",
+      "observed_condition": "requirements.txt",
+      "reason": "dependency files or explicit none marker",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "dependencies",
+      "check_id": "dependency_file_digests_recorded",
+      "check_name": "Dependency file digests recorded",
+      "expected_condition": "dependency_file_digests_recorded",
+      "observed_condition": "records=7",
+      "reason": "candidate dependency files checked",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "dependencies",
+      "check_id": "requirements_files_digested",
+      "check_name": "Requirements files digested if present",
+      "expected_condition": "requirements_files_checked",
+      "observed_condition": "requirements_checked",
+      "reason": "requirements candidates checked",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "dependencies",
+      "check_id": "pyproject_toml_digested",
+      "check_name": "pyproject.toml digested if present",
+      "expected_condition": "pyproject_toml_checked",
+      "observed_condition": "pyproject_checked",
+      "reason": "pyproject candidate checked",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "dependencies",
+      "check_id": "setup_files_digested",
+      "check_name": "setup files digested if present",
+      "expected_condition": "setup_files_checked",
+      "observed_condition": "setup_checked",
+      "reason": "setup candidates checked",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_policy_exists",
+      "check_name": "Verification command policy exists",
+      "expected_condition": "command_policy_present",
+      "observed_condition": "commands=19",
+      "reason": "required command ids recorded",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_compileall",
+      "check_name": "Verification command policy includes compileall",
+      "expected_condition": "compileall_recorded",
+      "observed_condition": "compileall",
+      "reason": "compileall command id",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_pytest",
+      "check_name": "Verification command policy includes pytest",
+      "expected_condition": "pytest_recorded",
+      "observed_condition": "pytest",
+      "reason": "pytest command id",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_run_tests_bat",
+      "check_name": "Verification command policy includes run_tests.bat",
+      "expected_condition": "run_tests_bat_recorded",
+      "observed_condition": "run_tests_bat",
+      "reason": "batch command id",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_manifest_validate",
+      "check_name": "Verification command policy includes manifest validate",
+      "expected_condition": "manifest_validate_recorded",
+      "observed_condition": "manifest_validate",
+      "reason": "manifest command id",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_execution_envelope_validate",
+      "check_name": "Verification command policy includes execution envelope validate",
+      "expected_condition": "execution_envelope_validate_recorded",
+      "observed_condition": "execution_envelope_validate",
+      "reason": "envelope command id",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_evidence_chain_validate_compare",
+      "check_name": "Verification command policy includes evidence chain validate and compare",
+      "expected_condition": "evidence_chain_commands_recorded",
+      "observed_condition": "evidence_chain_validate_compare",
+      "reason": "evidence chain command ids",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_regression_matrix_validate_show",
+      "check_name": "Verification command policy includes regression matrix validate and show",
+      "expected_condition": "regression_matrix_commands_recorded",
+      "observed_condition": "regression_matrix_validate_show",
+      "reason": "regression matrix command ids",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_constitutional_gates",
+      "check_name": "Verification command policy includes constitutional gates evaluate/validate/show",
+      "expected_condition": "constitutional_gate_commands_recorded",
+      "observed_condition": "constitutional_gates_evaluate_validate_show",
+      "reason": "constitutional gate command ids",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_toolchain_guard",
+      "check_name": "Verification command policy includes toolchain guard build/validate/show",
+      "expected_condition": "toolchain_guard_commands_recorded",
+      "observed_condition": "toolchain_guard_build_validate_show",
+      "reason": "toolchain guard command ids",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "command_policy",
+      "check_id": "verification_command_runtime_replay",
+      "check_name": "Verification command policy includes runtime and replay verification",
+      "expected_condition": "runtime_replay_commands_recorded",
+      "observed_condition": "runtime_main_replay_recorded",
+      "reason": "runtime/replay policy recorded only",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "pytest_policy",
+      "check_id": "pytest_ignore_outputs_policy",
+      "check_name": "pytest ignore policy records outputs exclusion",
+      "expected_condition": "outputs_ignored",
+      "observed_condition": "--ignore-glob=*sbp_lex_local_trust_pytest_basetemp,--ignore-glob=.pytest_tmp_*,--ignore-glob=outputs/local_trust_temp/*,--ignore=outputs",
+      "reason": "pytest output ignore option",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "pytest_policy",
+      "check_id": "pytest_ignore_temp_policy",
+      "check_name": "pytest ignore policy records stale temp and local-trust temp exclusions",
+      "expected_condition": "temp_ignored",
+      "observed_condition": "--ignore-glob=*sbp_lex_local_trust_pytest_basetemp,--ignore-glob=.pytest_tmp_*,--ignore-glob=outputs/local_trust_temp/*,--ignore=outputs",
+      "reason": "pytest temp ignore options",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "temp_policy",
+      "check_id": "temp_cache_exclusion_policy",
+      "check_name": "Temp/cache exclusion policy exists",
+      "expected_condition": "temp_cache_exclusion_recorded",
+      "observed_condition": "*.pyc,*sbp_lex_local_trust_pytest_basetemp,.pytest_cache,.pytest_tmp_*,__pycache__",
+      "reason": "temp/cache ignore policy",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "temp_policy",
+      "check_id": "generated_output_folder_policy",
+      "check_name": "Generated output folder policy exists",
+      "expected_condition": "generated_output_policy_recorded",
+      "observed_condition": "outputs,outputs/local_trust_temp",
+      "reason": "generated output folder policy",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "binding",
+      "check_id": "binds_manifest_digest",
+      "check_name": "Toolchain binds manifest digest",
+      "expected_condition": "manifest_digest_bound",
+      "observed_condition": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
+      "reason": "bound_manifest_digest",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "binding",
+      "check_id": "binds_execution_envelope_digest",
+      "check_name": "Toolchain binds execution envelope digest",
+      "expected_condition": "execution_envelope_digest_bound",
+      "observed_condition": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
+      "reason": "bound_execution_envelope_digest",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "binding",
+      "check_id": "binds_evidence_chain_digest",
+      "check_name": "Toolchain binds evidence chain digest",
+      "expected_condition": "evidence_chain_digest_bound",
+      "observed_condition": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+      "reason": "bound_evidence_chain_digest",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "binding",
+      "check_id": "binds_regression_matrix_digest",
+      "check_name": "Toolchain binds regression matrix digest",
+      "expected_condition": "regression_matrix_digest_bound",
+      "observed_condition": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+      "reason": "bound_regression_matrix_digest",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "binding",
+      "check_id": "binds_constitutional_gates_digest",
+      "check_name": "Toolchain binds constitutional gates digest",
+      "expected_condition": "constitutional_gates_digest_bound",
+      "observed_condition": "5ef81bbc776f7e89c8d7b11965ca460b2649bda43bee4fa4498a0e9e7e259e5e",
+      "reason": "bound_constitutional_gates_digest",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "repository",
+      "check_id": "working_tree_policy_recorded",
+      "check_name": "Working tree policy recorded",
+      "expected_condition": "working_tree_policy_recorded",
+      "observed_condition": "working_tree_clean=False",
+      "reason": "working tree state recorded",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "repository",
+      "check_id": "branch_recorded",
+      "check_name": "Current branch recorded",
+      "expected_condition": "branch_recorded",
+      "observed_condition": "main",
+      "reason": "git branch recorded",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "repository",
+      "check_id": "commit_recorded",
+      "check_name": "Current commit recorded",
+      "expected_condition": "commit_recorded",
+      "observed_condition": "ccf60acbf51123a9608bc1f399ee48c2e1678c31",
+      "reason": "git commit recorded",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "boundary",
+      "check_id": "phase_19_boundary_preserved",
+      "check_name": "Phase 19 not-started boundary preserved",
+      "expected_condition": "phase_19_not_started",
+      "observed_condition": "PHASE_19_NOT_STARTED",
+      "reason": "boundary inherited from constitutional gates",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "boundary",
+      "check_id": "future_surface_absent",
+      "check_name": "Future surface active implementation absent",
+      "expected_condition": "future_surface_absent",
+      "observed_condition": "active_matches=0",
+      "reason": "",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "boundary",
+      "check_id": "future_activation_absent",
+      "check_name": "Runtime activation active implementation absent",
+      "expected_condition": "active_activation_absent",
+      "observed_condition": "matches=0",
+      "reason": "",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    },
+    {
+      "check_category": "boundary",
+      "check_id": "forbidden_authority_absent",
+      "check_name": "Forbidden authority leakage absent from toolchain guard",
+      "expected_condition": "forbidden_authority_absent",
+      "observed_condition": "forbidden_key_count=0",
+      "reason": "",
+      "required": true,
+      "status": "TOOLCHAIN_CHECK_PASS"
+    }
+  ],
+  "toolchain_digest": "911121c8aaa724490edd64d92a8658ce1779baa4ea6b1b33e9c2cc2eb4934852",
+  "toolchain_guard_type": "local_trust_dependency_toolchain_guard",
+  "toolchain_guard_version": "18.7E.3",
+  "toolchain_payload_digest": "fa9a26949fbaff9296f75d443b9afa05523543b32ccb8f8ace556a8b8e015c12",
+  "toolchain_signature": "9b918594cf953dae64532ccb1f31f45e155a3dd0090a9dce03707f429459739e",
+  "toolchain_status": "TOOLCHAIN_GUARD_PASS",
+  "toolchain_summary": {
+    "all_required_checks_passed": true,
+    "error_checks": 0,
+    "failed_checks": 0,
+    "passed_checks": 39,
+    "skipped_checks": 0,
+    "total_checks": 39,
+    "working_tree_clean": false
+  },
+  "validation_failures": [],
+  "verification_command_policy": {
+    "commands": [
+      {
+        "command": "python -m compileall -q .",
+        "command_id": "compileall",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m pytest -q",
+        "command_id": "pytest",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "scripts\\run_tests.bat",
+        "command_id": "run_tests_bat",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.manifest validate",
+        "command_id": "manifest_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.execution_envelope validate",
+        "command_id": "execution_envelope_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.evidence_chain validate",
+        "command_id": "evidence_chain_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.evidence_chain compare",
+        "command_id": "evidence_chain_compare",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.regression_matrix validate",
+        "command_id": "regression_matrix_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.regression_matrix show",
+        "command_id": "regression_matrix_show",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates evaluate",
+        "command_id": "constitutional_gates_evaluate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates validate",
+        "command_id": "constitutional_gates_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates show",
+        "command_id": "constitutional_gates_show",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard build",
+        "command_id": "toolchain_guard_build",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard validate",
+        "command_id": "toolchain_guard_validate",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard show",
+        "command_id": "toolchain_guard_show",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python main.py",
+        "command_id": "runtime_main",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "python main.py replay",
+        "command_id": "runtime_replay",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "git diff --check",
+        "command_id": "git_diff_check",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      },
+      {
+        "command": "git status --short",
+        "command_id": "git_status_short",
+        "executed_by_toolchain_guard": false,
+        "required": true
+      }
+    ],
+    "policy_version": "LOCAL_TRUST_VERIFICATION_COMMAND_POLICY_V1"
+  }
+}

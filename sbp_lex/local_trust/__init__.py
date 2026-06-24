@@ -1,6 +1,7 @@
 """Local-only trust root manifest tooling for repository provenance evidence."""
 
 __all__ = [
+    "command_policy",
     "constitutional_gates",
     "evidence_chain",
     "evidence_chain_validator",
@@ -19,4 +20,8 @@ __all__ = [
     "regression_runner",
     "regression_validator",
     "report_attestation",
+    "toolchain_guard",
+    "toolchain_inventory",
+    "toolchain_policy",
+    "toolchain_validator",
 ]
