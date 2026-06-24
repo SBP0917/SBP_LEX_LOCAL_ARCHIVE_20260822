@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 from copy import deepcopy
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Dict, List, Mapping
 
@@ -46,6 +47,53 @@ def build_integrity_store_checkpoint(
         "payload": payload,
         "checkpoint_hash": generate_digest(payload),
         "signature": sign_payload(payload),
+    }
+
+
+def quarantine_poisoned_integrity_store(
+    path: Path = DEFAULT_STORE_PATH,
+    *,
+    allowed_root: Path = RUNTIME_ARTIFACT_ROOT,
+    quarantine_dir: Path | None = None,
+) -> Dict[str, Any]:
+    store = IntegrityStore(path, allowed_root=allowed_root)
+    valid, failures = store.verify()
+    if valid:
+        raise RuntimeError("integrity_store_valid")
+    source = store.path
+    if not source.exists():
+        raise FileNotFoundError(source)
+    digest = sha256(source.read_bytes()).hexdigest()
+    destination_dir = (
+        quarantine_dir.resolve()
+        if quarantine_dir is not None
+        else source.parent / "quarantine"
+    )
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    destination = destination_dir / f"{source.stem}.poisoned.{digest}{source.suffix}"
+    if destination.exists():
+        raise FileExistsError(destination)
+    size = source.stat().st_size
+    source.replace(destination)
+
+    checkpoint_destination = None
+    if store.checkpoint_path.exists():
+        checkpoint_destination = destination.with_suffix(
+            destination.suffix + ".checkpoint.json"
+        )
+        if checkpoint_destination.exists():
+            raise FileExistsError(checkpoint_destination)
+        store.checkpoint_path.replace(checkpoint_destination)
+
+    return {
+        "source": str(source),
+        "quarantine_path": str(destination),
+        "checkpoint_quarantine_path": (
+            str(checkpoint_destination) if checkpoint_destination is not None else None
+        ),
+        "sha256": digest,
+        "size": size,
+        "failures": failures,
     }
 
 

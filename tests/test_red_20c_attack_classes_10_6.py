@@ -28,7 +28,10 @@ from sbp_lex.audit.pipeline_replay_ledger import (
 from sbp_lex.connector.envelope import build_connector_envelope
 from sbp_lex.connector.recovery import ConnectorRecoveryStore
 from sbp_lex.execution.controlled_outcome import build_controlled_outcome, finalise_outcome
-from sbp_lex.persistence.integrity_store import IntegrityStore
+from sbp_lex.persistence.integrity_store import (
+    IntegrityStore,
+    quarantine_poisoned_integrity_store,
+)
 from sbp_lex.pipeline.runner import run_pipeline
 from sbp_lex.runtime.chronology import CanonicalChronology, compare_chronology_heads
 from sbp_lex.security.authority_boundary import validate_canonical_upstream
@@ -287,3 +290,29 @@ def test_21_restart_from_poisoned_checkpoint_fails_closed(tmp_path: Path) -> Non
     restarted = IntegrityStore(path, allowed_root=path.parent)
     with pytest.raises(RuntimeError, match="persistence_poisoning_detected"):
         restarted.append_state_summary(_integrity_state(2))
+
+
+def test_22_poisoned_integrity_store_quarantine_preserves_evidence(tmp_path: Path) -> None:
+    path = tmp_path / "runtime_artifacts" / "integrity.jsonl"
+    path.parent.mkdir(parents=True)
+    payload = '{"sequence":1,"sequence":2}\n'
+    path.write_text(payload, encoding="utf-8")
+    result = quarantine_poisoned_integrity_store(path, allowed_root=path.parent)
+    quarantined = Path(result["quarantine_path"])
+    assert path.exists() is False
+    assert quarantined.exists() is True
+    assert quarantined.read_text(encoding="utf-8") == payload
+    assert result["source"] == str(path.resolve())
+    assert result["checkpoint_quarantine_path"] is None
+    assert result["size"] == quarantined.stat().st_size
+    assert result["sha256"] in quarantined.name
+    assert result["failures"] == ["persistence_parse_failure:0"]
+
+
+def test_23_valid_integrity_store_is_not_quarantined(tmp_path: Path) -> None:
+    path = tmp_path / "runtime_artifacts" / "integrity.jsonl"
+    store = IntegrityStore(path, allowed_root=path.parent)
+    store.append_state_summary(_integrity_state(1))
+    with pytest.raises(RuntimeError, match="integrity_store_valid"):
+        quarantine_poisoned_integrity_store(path, allowed_root=path.parent)
+    assert path.exists() is True
