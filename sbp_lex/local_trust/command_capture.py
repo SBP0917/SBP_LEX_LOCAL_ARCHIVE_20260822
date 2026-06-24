@@ -260,15 +260,18 @@ def _safe_execution_environment(repository_root: Path) -> dict[str, str]:
     environment["PATH"] = python_dir + os.pathsep + environment.get("PATH", "")
     environment["TMP"] = str(temp_root)
     environment["TEMP"] = str(temp_root)
-    environment["PYTEST_ADDOPTS"] = _merged_pytest_addopts(environment.get("PYTEST_ADDOPTS", ""))
+    environment["PYTEST_ADDOPTS"] = _merged_pytest_addopts(environment.get("PYTEST_ADDOPTS", ""), repository_root)
     return environment
 
 
-def _merged_pytest_addopts(existing: str) -> str:
-    ignore_outputs = "--ignore=outputs"
-    if ignore_outputs in existing.split():
-        return existing
-    return f"{existing} {ignore_outputs}".strip()
+def _merged_pytest_addopts(existing: str, repository_root: Path) -> str:
+    options = existing.split()
+    if "--ignore=outputs" not in options:
+        options.append("--ignore=outputs")
+    if not any(option.startswith("--basetemp") for option in options):
+        basetemp = repository_root.parent / ".sbp_lex_local_trust_pytest_basetemp"
+        options.append(f"--basetemp={basetemp}")
+    return " ".join(options)
 
 
 def _timestamp() -> str:

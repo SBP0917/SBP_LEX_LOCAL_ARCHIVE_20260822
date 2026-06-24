@@ -1,6 +1,9 @@
 __pycache__/
 .pytest_cache/
 .pytest_tmp_*/
+outputs/local_trust_temp/
+.sbp_lex_local_trust*/
+*sbp_lex_local_trust_pytest_basetemp/
 runtime_artifacts/
 *.pyc
 venv/
