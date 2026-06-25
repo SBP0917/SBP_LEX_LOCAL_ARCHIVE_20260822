@@ -1,0 +1,171 @@
+{
+  "claim_seeds": [
+    {
+      "claim_id": "desktop_v1_local_trust_artifacts_validate",
+      "claim_scope": "local trust artifact readiness",
+      "claim_text": "Desktop V1 local trust artifacts exist and validate.",
+      "evidence_artifacts": [
+        "outputs/local_trust_root_manifest.json",
+        "outputs/local_execution_environment_trust_envelope.json",
+        "outputs/local_trust_25_year_capstone.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "manifest_validate",
+        "execution_envelope_validate",
+        "capstone_validate"
+      ]
+    },
+    {
+      "claim_id": "evidence_chain_zero_missing",
+      "claim_scope": "local evidence integrity",
+      "claim_text": "Evidence chain has zero missing evidence.",
+      "evidence_artifacts": [
+        "outputs/local_evidence_chain.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "evidence_chain_validate"
+      ]
+    },
+    {
+      "claim_id": "evidence_chain_zero_changed",
+      "claim_scope": "local evidence integrity",
+      "claim_text": "Evidence chain compare reports zero changed evidence.",
+      "evidence_artifacts": [
+        "outputs/local_evidence_chain.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "evidence_chain_compare"
+      ]
+    },
+    {
+      "claim_id": "regression_matrix_detects_drift",
+      "claim_scope": "local trust drift detection",
+      "claim_text": "Regression matrix detects local trust drift risks.",
+      "evidence_artifacts": [
+        "outputs/local_trust_regression_matrix.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "regression_matrix_validate",
+        "regression_matrix_show"
+      ]
+    },
+    {
+      "claim_id": "constitutional_gates_block_unclean_states",
+      "claim_scope": "local trust pre-flight guardrails",
+      "claim_text": "Constitutional gates block unclean local trust states.",
+      "evidence_artifacts": [
+        "outputs/local_constitutional_gates.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "constitutional_gates_evaluate",
+        "constitutional_gates_validate"
+      ]
+    },
+    {
+      "claim_id": "toolchain_guard_records_environment",
+      "claim_scope": "toolchain reproducibility",
+      "claim_text": "Toolchain guard records Python, pytest, dependency, command, and ignore-policy assumptions.",
+      "evidence_artifacts": [
+        "outputs/local_toolchain_guard.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "toolchain_guard_build",
+        "toolchain_guard_validate"
+      ]
+    },
+    {
+      "claim_id": "capstone_binds_artifact_set",
+      "claim_scope": "local trust completion",
+      "claim_text": "25-year local trust capstone binds the local trust artifact set.",
+      "evidence_artifacts": [
+        "outputs/local_trust_25_year_capstone.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "capstone_build",
+        "capstone_validate"
+      ]
+    },
+    {
+      "claim_id": "skg_dtn_external_non_authoritative",
+      "claim_scope": "authority boundary",
+      "claim_text": "SKG/DTN remain external and non-authoritative.",
+      "evidence_artifacts": [
+        "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "release_integrity_validate"
+      ]
+    },
+    {
+      "claim_id": "future_surfaces_absent",
+      "claim_scope": "future-surface exclusion",
+      "claim_text": "No active nodes/quorum/mesh/distributed/cloud/APK/V2/V3 work exists in this line.",
+      "evidence_artifacts": [
+        "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "release_integrity_validate"
+      ]
+    },
+    {
+      "claim_id": "phase_19_not_started",
+      "claim_scope": "phase boundary",
+      "claim_text": "Phase 19 remains not started.",
+      "evidence_artifacts": [
+        "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "release_integrity_validate"
+      ]
+    },
+    {
+      "claim_id": "runtime_verification_passes",
+      "claim_scope": "runtime proof reference",
+      "claim_text": "Runtime verification passes.",
+      "evidence_artifacts": [
+        "outputs/local_execution_environment_trust_envelope.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "runtime_main"
+      ]
+    },
+    {
+      "claim_id": "replay_verification_passes",
+      "claim_scope": "replay proof reference",
+      "claim_text": "Replay verification passes.",
+      "evidence_artifacts": [
+        "outputs/local_execution_environment_trust_envelope.json"
+      ],
+      "notes": "Ready for later dossier expansion; no external validation result is claimed.",
+      "status": "CLAIM_SEED_READY",
+      "verification_commands": [
+        "runtime_replay"
+      ]
+    }
+  ],
+  "claims_seed_type": "release_integrity_claims_to_evidence_seed",
+  "claims_seed_version": "18.7F",
+  "scope_note": "Seed index for later claims dossier work; it is not external validation or certification."
+}
