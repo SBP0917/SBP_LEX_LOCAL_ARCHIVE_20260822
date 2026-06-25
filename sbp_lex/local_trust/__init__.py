@@ -1,6 +1,10 @@
 """Local-only trust root manifest tooling for repository provenance evidence."""
 
 __all__ = [
+    "adversarial_cases",
+    "adversarial_negative_harness",
+    "adversarial_runner",
+    "adversarial_validator",
     "command_policy",
     "capstone_report",
     "capstone_validator",

@@ -3,9 +3,9 @@
   "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
   "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "created_at": "2026-06-25T01:38:59+00:00",
-  "gate_digest": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
-  "gate_payload_digest": "291d9f6e927fab80804826e81fd85e8e2194262fa2cd7036992eccc9b0afe094",
+  "created_at": "2026-06-25T03:34:11+00:00",
+  "gate_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
+  "gate_payload_digest": "1b4ae0366527c5ef51b4f0f47b3f8cd2c097d9cdbde74890d5505d56b6587449",
   "gate_policy_version": "LOCAL_TRUST_CONSTITUTIONAL_GATE_POLICY_V1",
   "gate_result_type": "local_trust_constitutional_enforcement_gates",
   "gate_result_version": "18.7E.2",
@@ -203,7 +203,7 @@
       "gate_id": "commit_recorded",
       "gate_name": "Current commit is recorded",
       "input_artifact": "git",
-      "observed_condition": "3de0a45cc14903d1f5f46ea64b31adbb8d5538bc",
+      "observed_condition": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
       "reason": "git commit provenance",
       "required": true,
       "status": "GATE_PASS"
@@ -275,7 +275,7 @@
       "status": "GATE_PASS"
     }
   ],
-  "gate_signature": "5da25a79b5f396589424ff4d38d4678639a9b36420e13ba492762f713d96ef9d",
+  "gate_signature": "8c2a9956d29c1517d80e6e6f55d2679fa6ec3dc3c6aa2849df1071b9949f70aa",
   "gate_status": "CONSTITUTIONAL_GATES_PASS",
   "gate_summary": {
     "all_required_gates_passed": true,
@@ -287,7 +287,7 @@
     "working_tree_clean": false
   },
   "git_branch": "main",
-  "git_commit": "3de0a45cc14903d1f5f46ea64b31adbb8d5538bc",
+  "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
   "signature_mode": "CONSTITUTIONAL_GATES_DETERMINISTIC_PLACEHOLDER",
   "validation_failures": []

@@ -1,10 +1,10 @@
 {
-  "bound_constitutional_gates_digest": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
+  "bound_constitutional_gates_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
   "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
   "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
   "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "created_at": "2026-06-25T01:39:15+00:00",
+  "created_at": "2026-06-25T03:34:52+00:00",
   "dependency_file_digests": [
     {
       "path": "requirements.txt",
@@ -53,7 +53,7 @@
     "requirements.txt"
   ],
   "git_branch": "main",
-  "git_commit": "3de0a45cc14903d1f5f46ea64b31adbb8d5538bc",
+  "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
   "ignored_output_paths": [
     "outputs",
     "outputs/local_trust_temp"
@@ -559,7 +559,7 @@
       "check_id": "binds_constitutional_gates_digest",
       "check_name": "Toolchain binds constitutional gates digest",
       "expected_condition": "constitutional_gates_digest_bound",
-      "observed_condition": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
+      "observed_condition": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
       "reason": "bound_constitutional_gates_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -589,7 +589,7 @@
       "check_id": "commit_recorded",
       "check_name": "Current commit recorded",
       "expected_condition": "commit_recorded",
-      "observed_condition": "3de0a45cc14903d1f5f46ea64b31adbb8d5538bc",
+      "observed_condition": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
       "reason": "git commit recorded",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -635,11 +635,11 @@
       "status": "TOOLCHAIN_CHECK_PASS"
     }
   ],
-  "toolchain_digest": "9a5656e118bdc7402ead31ae3e5a9403922f55ea864a9bd55b61c113ce6dcbd4",
+  "toolchain_digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
   "toolchain_guard_type": "local_trust_dependency_toolchain_guard",
   "toolchain_guard_version": "18.7E.3",
-  "toolchain_payload_digest": "a8e3ea8911846ce8b510f08088169c698061296dfafc0d60c35d1f1ab6a687b1",
-  "toolchain_signature": "1ebb99a1f920f2f890b68cc7d9038b0e82cf5b3d84ef588093b3d5f0561e8850",
+  "toolchain_payload_digest": "89565a14dd1ee0e2d12a97796798bb78c44e634ad236d16e3603804cab15ad8e",
+  "toolchain_signature": "404e15264dee89abcdea79ed431e8301e490885c19783d48cc97de312d1d04d5",
   "toolchain_status": "TOOLCHAIN_GUARD_PASS",
   "toolchain_summary": {
     "all_required_checks_passed": true,

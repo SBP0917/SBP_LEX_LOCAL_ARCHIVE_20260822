@@ -54,7 +54,7 @@
       "path": "outputs/local_constitutional_gates.json",
       "reason": "Local trust constitutional gate result.",
       "required": true,
-      "sha256": "6b7738efb4cffce60bbb7c1f05efa91818b027dc3483af242020cd903db5fb46",
+      "sha256": "8654f2b5b20de85e3c5049d82c036409d6ef49bd48035f94d82a7fbe3761e80d",
       "size_bytes": 11773
     },
     {
@@ -64,7 +64,7 @@
       "path": "outputs/local_toolchain_guard.json",
       "reason": "Dependency and toolchain guard.",
       "required": true,
-      "sha256": "ff4db05739f50cd0f4b9275c309e33df918f515642c307163c22048c20a3877f",
+      "sha256": "4c09de1e252d8cee977e1fd83a5a4bab395c61e97ba22d1922122c8f30d6c2ba",
       "size_bytes": 26967
     },
     {
@@ -74,7 +74,7 @@
       "path": "outputs/local_trust_25_year_capstone.json",
       "reason": "25-year local trust completion lock.",
       "required": true,
-      "sha256": "44a944cee550ce430dcba3158791909a2438c983a3c5b32dbccc2f9fb27cd8d3",
+      "sha256": "ecc1098bcf2fb55bd8305d31b831706cee3674b8fbe32b0c9674b7db3edb2647",
       "size_bytes": 15977
     },
     {

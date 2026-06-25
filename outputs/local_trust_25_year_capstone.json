@@ -50,7 +50,7 @@
     },
     {
       "artifact_id": "constitutional_gates",
-      "digest": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
+      "digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
       "digest_field": "gate_digest",
       "expected_status": "CONSTITUTIONAL_GATES_PASS",
       "path": "outputs\\local_constitutional_gates.json",
@@ -62,7 +62,7 @@
     },
     {
       "artifact_id": "toolchain_guard",
-      "digest": "9a5656e118bdc7402ead31ae3e5a9403922f55ea864a9bd55b61c113ce6dcbd4",
+      "digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
       "digest_field": "toolchain_digest",
       "expected_status": "TOOLCHAIN_GUARD_PASS",
       "path": "outputs\\local_toolchain_guard.json",
@@ -73,12 +73,12 @@
       "validation_status": "TOOLCHAIN_GUARD_PASS"
     }
   ],
-  "bound_constitutional_gates_digest": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
+  "bound_constitutional_gates_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
   "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
   "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
   "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "bound_toolchain_guard_digest": "9a5656e118bdc7402ead31ae3e5a9403922f55ea864a9bd55b61c113ce6dcbd4",
+  "bound_toolchain_guard_digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
   "boundary_confirmation_summary": {
     "activeBoundaryScanMatches": [],
     "capstoneIsExecutionAuthority": false,
@@ -93,9 +93,9 @@
     "sbpLexRuntimeAuthorityChanged": false,
     "skgDtnRemainExternalNonAuthoritative": true
   },
-  "capstone_digest": "dc319b7673be62fc5876b7f5ae491d22f3297c0c32748cf0b32face33d817015",
-  "capstone_payload_digest": "6296bd75b0eeccd1e5b4134c224b2867a389acceacdc82c5595b4cc6c064888a",
-  "capstone_signature": "c604370906bbc63a31659b7ed65c80cfe2a016f595a87d2f04b74fe3130f4d51",
+  "capstone_digest": "a244e1f359948176208c948939f433b3f9879ed8d42371f11f1270d0dca527cc",
+  "capstone_payload_digest": "bb77cbc9bd64afb3962382a08e86b1bf921ec20b56cc120708c5f0f1332d1d9e",
+  "capstone_signature": "30b85a7c845ed85a1c53a4548d162da299892d956bd8526981d636cca6dda46b",
   "capstone_status": "LOCAL_TRUST_CAPSTONE_PASS",
   "capstone_type": "local_trust_25_year_completion_lock",
   "capstone_version": "18.7E.4",
@@ -135,7 +135,7 @@
       "phase_id": "18.7E.2",
       "phase_name": "Constitutional Enforcement Gates",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "74ff3ed6bd2b35207c2075a52f284903e6c0b3ef596356fda220c382a20a658f",
+      "primary_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
       "primary_outputs": [
         "docs/LOCAL_TRUST_CONSTITUTIONAL_ENFORCEMENT_GATES.md",
         "reports/PHASE_18_7E_2_CONSTITUTIONAL_ENFORCEMENT_GATES_REPORT.md",
@@ -150,7 +150,7 @@
       "phase_id": "18.7E.3",
       "phase_name": "Dependency / Toolchain Guard",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "9a5656e118bdc7402ead31ae3e5a9403922f55ea864a9bd55b61c113ce6dcbd4",
+      "primary_digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
       "primary_outputs": [
         "docs/LOCAL_TRUST_TOOLCHAIN_GUARD.md",
         "reports/PHASE_18_7E_3_TOOLCHAIN_GUARD_REPORT.md",
@@ -175,9 +175,9 @@
       "verification_summary": "Capstone build/validate/show records local trust completion."
     }
   ],
-  "created_at": "2026-06-25T01:40:00+00:00",
+  "created_at": "2026-06-25T03:35:14+00:00",
   "git_branch": "main",
-  "git_commit": "3de0a45cc14903d1f5f46ea64b31adbb8d5538bc",
+  "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
