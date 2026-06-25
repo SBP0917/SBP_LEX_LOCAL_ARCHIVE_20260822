@@ -1,0 +1,390 @@
+{
+  "artifact_index": [
+    {
+      "artifact_id": "manifest",
+      "digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
+      "digest_field": "manifest_digest",
+      "expected_status": "LOCAL_TRUST_VALID",
+      "path": "outputs\\local_trust_root_manifest.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 8021,
+      "status_field": "local_trust_status",
+      "validation_failures": [],
+      "validation_status": "LOCAL_TRUST_VALID"
+    },
+    {
+      "artifact_id": "execution_envelope",
+      "digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
+      "digest_field": "envelope_digest",
+      "expected_status": "EXECUTION_ENV_VALID",
+      "path": "outputs\\local_execution_environment_trust_envelope.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 13753,
+      "status_field": "verification_status",
+      "validation_failures": [],
+      "validation_status": "EXECUTION_ENV_VALID"
+    },
+    {
+      "artifact_id": "evidence_chain",
+      "digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+      "digest_field": "chain_digest",
+      "expected_status": "EVIDENCE_CHAIN_VALID",
+      "path": "outputs\\local_evidence_chain.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 9946,
+      "status_field": "evidence_chain_status",
+      "validation_failures": [],
+      "validation_status": "EVIDENCE_CHAIN_VALID"
+    },
+    {
+      "artifact_id": "regression_matrix",
+      "digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+      "digest_field": "matrix_digest",
+      "expected_status": "REGRESSION_MATRIX_VALID",
+      "path": "outputs\\local_trust_regression_matrix.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 10934,
+      "status_field": "matrix_status",
+      "validation_failures": [],
+      "validation_status": "REGRESSION_MATRIX_VALID"
+    },
+    {
+      "artifact_id": "constitutional_gates",
+      "digest": "a23592962eb6eabf53df32010ad5f9894499d43a460eb96692f0ba785949e572",
+      "digest_field": "gate_digest",
+      "expected_status": "CONSTITUTIONAL_GATES_PASS",
+      "path": "outputs\\local_constitutional_gates.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 11773,
+      "status_field": "gate_status",
+      "validation_failures": [],
+      "validation_status": "CONSTITUTIONAL_GATES_PASS"
+    },
+    {
+      "artifact_id": "toolchain_guard",
+      "digest": "3ae3d9fdbc440060c12fea57a4f62d3de48cfec8207bf7d431addd203a8975cf",
+      "digest_field": "toolchain_digest",
+      "expected_status": "TOOLCHAIN_GUARD_PASS",
+      "path": "outputs\\local_toolchain_guard.json",
+      "presence_status": "PRESENT",
+      "size_bytes": 26967,
+      "status_field": "toolchain_status",
+      "validation_failures": [],
+      "validation_status": "TOOLCHAIN_GUARD_PASS"
+    }
+  ],
+  "bound_constitutional_gates_digest": "a23592962eb6eabf53df32010ad5f9894499d43a460eb96692f0ba785949e572",
+  "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+  "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
+  "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
+  "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+  "bound_toolchain_guard_digest": "3ae3d9fdbc440060c12fea57a4f62d3de48cfec8207bf7d431addd203a8975cf",
+  "boundary_confirmation_summary": {
+    "activeBoundaryScanMatches": [],
+    "capstoneIsExecutionAuthority": false,
+    "executionGateBehaviorChanged": false,
+    "futureRuntimeSurfacesIntroduced": false,
+    "governanceBehaviorChanged": false,
+    "hardEntryGateBehaviorChanged": false,
+    "phase19Started": false,
+    "proceduralTruthBehaviorChanged": false,
+    "protectedRuntimePathChanges": [],
+    "runtimeActivationIntroduced": false,
+    "sbpLexRuntimeAuthorityChanged": false,
+    "skgDtnRemainExternalNonAuthoritative": true
+  },
+  "capstone_digest": "98a458d45f4e2ecbbd6f05220ff1aa087c1367ae95dff3b5489c90ff856c93bb",
+  "capstone_payload_digest": "166e28cb2780deecf1df12cadad11ef7e93f0455b9b74ddfe465ca8381a11078",
+  "capstone_signature": "2d82b968128dd910e6fac93be44a44808fbadc579897c2bfc1c85dd66f244aa7",
+  "capstone_status": "LOCAL_TRUST_CAPSTONE_PASS",
+  "capstone_type": "local_trust_25_year_completion_lock",
+  "capstone_version": "18.7E.4",
+  "completed_phases": [
+    {
+      "boundary_summary": "Local evidence only; no runtime authority change.",
+      "commit_hash_if_known": "52b5d046da5af78d0377d007f19276ced554f011",
+      "phase_id": "18.7D.1",
+      "phase_name": "Evidence Chain Zero-Missing Cleanup",
+      "phase_status": "DONE_COMMITTED_PUSHED",
+      "primary_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+      "primary_outputs": [
+        "reports/PHASE_18_7D_1_ZERO_MISSING_EVIDENCE_CLEANUP_REPORT.md",
+        "outputs/local_evidence_chain.json"
+      ],
+      "test_count_if_known": 318,
+      "verification_summary": "EVIDENCE_CHAIN_VALID with zero missing evidence after cleanup."
+    },
+    {
+      "boundary_summary": "Constitutional drift detection only; no runtime authority change.",
+      "commit_hash_if_known": "d90a255b475e8637a54ecc42c9ce5bef8fbb8d78",
+      "phase_id": "18.7E.1",
+      "phase_name": "Local Trust Regression Matrix",
+      "phase_status": "DONE_COMMITTED_PUSHED",
+      "primary_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+      "primary_outputs": [
+        "docs/LOCAL_TRUST_REGRESSION_MATRIX.md",
+        "reports/PHASE_18_7E_1_LOCAL_TRUST_REGRESSION_MATRIX_REPORT.md",
+        "outputs/local_trust_regression_matrix.json"
+      ],
+      "test_count_if_known": 341,
+      "verification_summary": "REGRESSION_MATRIX_VALID with 19 passing cases."
+    },
+    {
+      "boundary_summary": "Local pre-flight guardrails only; no execution authority.",
+      "commit_hash_if_known": "ccf60acbf51123a9608bc1f399ee48c2e1678c31",
+      "phase_id": "18.7E.2",
+      "phase_name": "Constitutional Enforcement Gates",
+      "phase_status": "DONE_COMMITTED_PUSHED",
+      "primary_digest": "a23592962eb6eabf53df32010ad5f9894499d43a460eb96692f0ba785949e572",
+      "primary_outputs": [
+        "docs/LOCAL_TRUST_CONSTITUTIONAL_ENFORCEMENT_GATES.md",
+        "reports/PHASE_18_7E_2_CONSTITUTIONAL_ENFORCEMENT_GATES_REPORT.md",
+        "outputs/local_constitutional_gates.json"
+      ],
+      "test_count_if_known": 372,
+      "verification_summary": "CONSTITUTIONAL_GATES_PASS with 24 passing gates."
+    },
+    {
+      "boundary_summary": "Toolchain readiness only; no runtime command execution.",
+      "commit_hash_if_known": "eedb30cc5cd4ea7e6bc9be29d06e1c276e28a6d4",
+      "phase_id": "18.7E.3",
+      "phase_name": "Dependency / Toolchain Guard",
+      "phase_status": "DONE_COMMITTED_PUSHED",
+      "primary_digest": "3ae3d9fdbc440060c12fea57a4f62d3de48cfec8207bf7d431addd203a8975cf",
+      "primary_outputs": [
+        "docs/LOCAL_TRUST_TOOLCHAIN_GUARD.md",
+        "reports/PHASE_18_7E_3_TOOLCHAIN_GUARD_REPORT.md",
+        "outputs/local_toolchain_guard.json"
+      ],
+      "test_count_if_known": 399,
+      "verification_summary": "TOOLCHAIN_GUARD_PASS with 39 passing checks."
+    },
+    {
+      "boundary_summary": "Completion lock only; 18.7F marked as next phase without implementation.",
+      "commit_hash_if_known": "UNCOMMITTED_CURRENT_PHASE",
+      "phase_id": "18.7E.4",
+      "phase_name": "25-Year Local Trust Capstone",
+      "phase_status": "COMPLETE_VERIFIED_UNCOMMITTED",
+      "primary_digest": "RECORDED_IN_TOP_LEVEL_CAPSTONE_DIGEST",
+      "primary_outputs": [
+        "docs/LOCAL_TRUST_25_YEAR_CAPSTONE.md",
+        "reports/PHASE_18_7E_4_25_YEAR_LOCAL_TRUST_CAPSTONE_REPORT.md",
+        "outputs/local_trust_25_year_capstone.json"
+      ],
+      "test_count_if_known": "RECORDED_AFTER_FINAL_VERIFICATION",
+      "verification_summary": "Capstone build/validate/show records local trust completion."
+    }
+  ],
+  "created_at": "2026-06-25T00:31:38+00:00",
+  "git_branch": "main",
+  "git_commit": "eedb30cc5cd4ea7e6bc9be29d06e1c276e28a6d4",
+  "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
+  "github_sync_status": {
+    "branch_has_ahead_count": false,
+    "branch_has_behind_count": false,
+    "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_toolchain_guard.json\n M sbp_lex/local_trust/__init__.py",
+    "current_working_tree_clean": false,
+    "pre_phase_clean_sync_requirement": "VERIFIED_BEFORE_18_7E_4_IMPLEMENTATION",
+    "synced_to_origin_branch": true,
+    "tracked_working_tree_clean": false
+  },
+  "local_trust_completion_summary": {
+    "all_bound_artifacts_valid": true,
+    "all_required_artifacts_present": true,
+    "bound_artifact_count": 6,
+    "completed_phase_count": 5,
+    "evidence_chain_changed_items": 0,
+    "evidence_chain_unchanged": true,
+    "local_trust_completion_locked": true,
+    "next_phase_id": "18.7F",
+    "phase_19_not_started": true
+  },
+  "next_phase_readiness": {
+    "expected_future_outputs": [
+      "release bundle manifest",
+      "release hash index",
+      "artifact digest list",
+      "claims-to-evidence seed index",
+      "verification command list",
+      "runtime/replay proof references",
+      "test proof references",
+      "dependency/toolchain proof references",
+      "external review preparation structure"
+    ],
+    "implemented_in_this_phase": false,
+    "next_phase_id": "18.7F",
+    "next_phase_name": "Release Integrity Package / Reproducible Validation Bundle",
+    "purpose": "Turn the locally trusted repository into a controlled, reproducible, externally reviewable release package.",
+    "readiness_status": "READY_MARKER_ONLY"
+  },
+  "phase_scope": {
+    "excluded_work": [
+      "Phase 19",
+      "18.7F implementation",
+      "release package generation"
+    ],
+    "included_current_phase": "18.7E.4",
+    "included_prior_phases": [
+      "18.7D.1",
+      "18.7E.1",
+      "18.7E.2",
+      "18.7E.3"
+    ],
+    "phase_id": "18.7E.4",
+    "phase_name": "25-Year Local Trust Capstone Report / Local Trust Completion Lock",
+    "starts_from_commit": "eedb30cc5cd4ea7e6bc9be29d06e1c276e28a6d4"
+  },
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "signature_mode": "LOCAL_TRUST_CAPSTONE_DETERMINISTIC_PLACEHOLDER",
+  "validation_failures": [],
+  "verification_command_index": {
+    "commands": [
+      {
+        "command": "python -m compileall -q .",
+        "command_id": "compileall",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m pytest -q",
+        "command_id": "pytest",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "scripts\\run_tests.bat",
+        "command_id": "run_tests_bat",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.manifest validate",
+        "command_id": "manifest_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.execution_envelope validate",
+        "command_id": "execution_envelope_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.evidence_chain validate",
+        "command_id": "evidence_chain_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.evidence_chain compare",
+        "command_id": "evidence_chain_compare",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.regression_matrix validate",
+        "command_id": "regression_matrix_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.regression_matrix show",
+        "command_id": "regression_matrix_show",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates evaluate",
+        "command_id": "constitutional_gates_evaluate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates validate",
+        "command_id": "constitutional_gates_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.constitutional_gates show",
+        "command_id": "constitutional_gates_show",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard build",
+        "command_id": "toolchain_guard_build",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard validate",
+        "command_id": "toolchain_guard_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.toolchain_guard show",
+        "command_id": "toolchain_guard_show",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.local_trust_capstone build",
+        "command_id": "capstone_build",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.local_trust_capstone validate",
+        "command_id": "capstone_validate",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python -m sbp_lex.local_trust.local_trust_capstone show",
+        "command_id": "capstone_show",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python main.py",
+        "command_id": "runtime_main",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "python main.py replay",
+        "command_id": "runtime_replay",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "git diff --check",
+        "command_id": "git_diff_check",
+        "executed_by_capstone": false,
+        "required": true
+      },
+      {
+        "command": "git status --short",
+        "command_id": "git_status_short",
+        "executed_by_capstone": false,
+        "required": true
+      }
+    ],
+    "execution_note": "The capstone records required commands only; it does not execute them.",
+    "index_version": "LOCAL_TRUST_CAPSTONE_VERIFICATION_COMMAND_INDEX_V1"
+  },
+  "verification_result_summary": {
+    "capstone_cli_execution_note": "build/validate/show do not execute runtime, replay, pytest, batch tests, or authority systems.",
+    "constitutional_gates": "CONSTITUTIONAL_GATES_PASS",
+    "evidence_chain": "EVIDENCE_CHAIN_VALID",
+    "evidence_chain_changed_items": 0,
+    "evidence_chain_compare": "EVIDENCE_CHAIN_VALID",
+    "execution_envelope": "EXECUTION_ENV_VALID",
+    "full_verification_recorded_in_report": true,
+    "manifest": "LOCAL_TRUST_VALID",
+    "regression_matrix": "REGRESSION_MATRIX_VALID",
+    "toolchain_guard": "TOOLCHAIN_GUARD_PASS"
+  }
+}

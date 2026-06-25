@@ -2,6 +2,8 @@
 
 __all__ = [
     "command_policy",
+    "capstone_report",
+    "capstone_validator",
     "constitutional_gates",
     "evidence_chain",
     "evidence_chain_validator",
@@ -12,6 +14,7 @@ __all__ = [
     "gate_runner",
     "gate_validator",
     "git_provenance",
+    "local_trust_capstone",
     "manifest",
     "manifest_validator",
     "python_provenance",
