@@ -10,6 +10,9 @@ __all__ = [
     "capstone_validator",
     "claims_seed",
     "constitutional_gates",
+    "claims_to_evidence",
+    "dossier_manifest",
+    "dossier_validator",
     "evidence_chain",
     "evidence_chain_validator",
     "evidence_registry",
@@ -36,4 +39,6 @@ __all__ = [
     "toolchain_inventory",
     "toolchain_policy",
     "toolchain_validator",
+    "validation_dossier",
+    "validation_questions",
 ]
