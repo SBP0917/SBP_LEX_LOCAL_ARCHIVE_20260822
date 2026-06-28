@@ -2,7 +2,7 @@
   "artifact_hash_index_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-    "sha256": "58dddae4c176c91eaabaf1afa52a3ba96dd74b402c316c389968e962275bb760",
+    "sha256": "be9b72aa3f02d465f78f73c7166e447df1011269ddba776880390c74dcb2a28f",
     "size_bytes": 15656
   },
   "artifact_hash_index_summary": {
@@ -10,13 +10,13 @@
     "missing_artifact_count": 0,
     "required_artifact_count": 38
   },
-  "bound_capstone_digest": "a244e1f359948176208c948939f433b3f9879ed8d42371f11f1270d0dca527cc",
-  "bound_constitutional_gates_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
+  "bound_capstone_digest": "c7429d3530bec1fcafed498e8a4fc5e9328d6290e5a8f23b8c24b02bbe603d35",
+  "bound_constitutional_gates_digest": "091e82a5b6ad8728439609ff0f14f293ed11e461a6511f09f64435b929234ab0",
   "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
   "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
   "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "bound_toolchain_guard_digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
+  "bound_toolchain_guard_digest": "e0d40119adc763f53bec4ce293a3fed2ad10c2b99ac2533b9a44c5e4125c5284",
   "boundary_lock_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
@@ -44,16 +44,16 @@
     "18.7E.3",
     "18.7E.4"
   ],
-  "created_at": "2026-06-25T03:35:34+00:00",
+  "created_at": "2026-06-25T09:05:00+00:00",
   "git_branch": "main",
-  "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
+  "git_commit": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
     "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M sbp_lex/local_trust/__init__.py",
     "git_branch": "main",
-    "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
+    "git_commit": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
     "synced_to_origin_branch": true,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
@@ -62,7 +62,7 @@
     {
       "exists": true,
       "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-      "sha256": "58dddae4c176c91eaabaf1afa52a3ba96dd74b402c316c389968e962275bb760",
+      "sha256": "be9b72aa3f02d465f78f73c7166e447df1011269ddba776880390c74dcb2a28f",
       "size_bytes": 15656
     },
     {
@@ -90,10 +90,10 @@
       "size_bytes": 930
     }
   ],
-  "release_digest": "9ed12bd8857c46eb7b2a210da29fe030d4c6c2b16d81d50380c5839a407794e1",
+  "release_digest": "244bddb51858e69925675720dd2f7736d4c9fd878624d3087efd67e96304490d",
   "release_manifest_type": "release_integrity_reproducible_validation_bundle",
   "release_manifest_version": "18.7F",
-  "release_payload_digest": "b82b165fdfce4ac206b5ffa8b365158596001ebdb0311e4c188eabcb596faca7",
+  "release_payload_digest": "f7799382447bb40d51d7a11dcb8a304d5a1e5e9aa5855bd9826582e91b715c85",
   "release_scope": {
     "next_phase": "18.7G",
     "next_phase_implemented": false,
@@ -106,7 +106,7 @@
     "purpose": "Controlled, reproducible, externally reviewable validation package.",
     "review_readiness_only": true
   },
-  "release_signature": "628b8a7bc194f82fd4fc59d7e0557113f1556ff9c272643a49fb4ec5bde5c683",
+  "release_signature": "4bfda15b9b3534ef079182df5b849a0c77e7283564082a68424a399ad81cffff",
   "release_status": "RELEASE_INTEGRITY_PASS",
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
   "signature_mode": "RELEASE_INTEGRITY_DETERMINISTIC_PLACEHOLDER",

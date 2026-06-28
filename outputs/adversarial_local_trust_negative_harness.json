@@ -547,11 +547,11 @@
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     }
   ],
-  "adversarial_digest": "d2f92f2e45b158b3435da5ece9e2dfb799d196d621db7eb64299a63c4e8754cf",
+  "adversarial_digest": "835af571798bc547f9da18598d045f628c781e00611f5192cbdfc228780ac10f",
   "adversarial_harness_type": "adversarial_local_trust_negative_test_harness",
   "adversarial_harness_version": "18.7G",
-  "adversarial_payload_digest": "a9025f0742a8eb5b5ed4caf5aa55796c133355a8b5462d621cb269d35f4e46d9",
-  "adversarial_signature": "9099f32a70eb8a218085823c78cfe17b1c0dcb5d9d8c48e88bf41e358a596bea",
+  "adversarial_payload_digest": "0063cda2f10a3a260acb554f3d1a7fd5bd62805c6105a47e7fc8579bb5435ff3",
+  "adversarial_signature": "0fe436a2e8f18a002c3b49b15364608083a0d7c69d0b44d1a99f9425e4ff5e2f",
   "adversarial_status": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
   "adversarial_summary": {
     "all_required_cases_passed": true,
@@ -568,14 +568,14 @@
     "toolchain_drift_cases": 3,
     "total_cases": 39
   },
-  "bound_capstone_digest": "a244e1f359948176208c948939f433b3f9879ed8d42371f11f1270d0dca527cc",
-  "bound_constitutional_gates_digest": "88a6a8fe1bd15c172150f1ec348324255398536f056a83a4715daddb9562c31f",
+  "bound_capstone_digest": "c7429d3530bec1fcafed498e8a4fc5e9328d6290e5a8f23b8c24b02bbe603d35",
+  "bound_constitutional_gates_digest": "091e82a5b6ad8728439609ff0f14f293ed11e461a6511f09f64435b929234ab0",
   "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
   "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
   "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
   "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "bound_release_integrity_digest": "9ed12bd8857c46eb7b2a210da29fe030d4c6c2b16d81d50380c5839a407794e1",
-  "bound_toolchain_guard_digest": "71fa1b4b2004376767d0511167e18aac049507f5b95e9f9b05842db0752745aa",
+  "bound_release_integrity_digest": "244bddb51858e69925675720dd2f7736d4c9fd878624d3087efd67e96304490d",
+  "bound_toolchain_guard_digest": "e0d40119adc763f53bec4ce293a3fed2ad10c2b99ac2533b9a44c5e4125c5284",
   "boundary_confirmation_summary": {
     "certificationClaimed": false,
     "executionGateBehaviorChanged": false,
@@ -590,16 +590,16 @@
     "skgDtnAuthorityAdded": false,
     "skgDtnExternalNonAuthoritative": true
   },
-  "created_at": "2026-06-25T03:35:56+00:00",
+  "created_at": "2026-06-25T09:05:23+00:00",
   "git_branch": "main",
-  "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
+  "git_commit": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
     "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M sbp_lex/local_trust/__init__.py",
     "git_branch": "main",
-    "git_commit": "12755425f0ecf0d4f08c391b50b48c116581e5f2",
+    "git_commit": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
     "synced_to_origin_branch": true,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
