@@ -67,14 +67,21 @@ def verify_historical_state(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
         and anchor.get("anchor_digest") == generate_digest(dict(anchor_payload))
         and verify_signature(anchor_payload, anchor.get("signature", {}))
     )
-    expected_anchor = {
+    expected_anchor_subset = {
         "request_fingerprint": request_fingerprint,
+        "eie_hash": state.get("eie_hash"),
+        "source_payload_hash": state.get("source_payload_hash"),
         "skg_digest": envelope.get("skg_digest"),
+        "skg_verification_status": envelope.get("skg_truth_foundation_metadata", {}).get("skg_verification_status"),
+        "skg_enrichment_hash": envelope.get("skg_truth_foundation_metadata", {}).get("skg_enrichment_hash"),
         "dtn_digest": envelope.get("dtn_digest"),
+        "dtn_contextualisation_status": envelope.get("dtn_contextual_verification_metadata", {}).get("dtn_contextualisation_status"),
+        "dtn_enrichment_hash": envelope.get("dtn_contextual_verification_metadata", {}).get("dtn_enrichment_hash"),
         "pre_context_digest": envelope.get("pre_context_digest"),
         "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
+        "traversal_id": state.get("traversal_id"),
     }
-    if not anchor_valid or dict(anchor_payload) != expected_anchor:
+    if not anchor_valid or any(anchor_payload.get(key) != value for key, value in expected_anchor_subset.items()):
         _append(failures, ROOT_OF_TRUST_MISMATCH)
     if binding.get("root_of_trust_evidence_anchor") != anchor:
         _append(failures, ROOT_OF_TRUST_MISMATCH)

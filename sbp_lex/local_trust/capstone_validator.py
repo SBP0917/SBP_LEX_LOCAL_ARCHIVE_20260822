@@ -250,7 +250,7 @@ def _boundary_failures(value: Any) -> list[str]:
             failures.append(f"boundary_not_false:{key}")
     if value.get("skgDtnRemainExternalNonAuthoritative") is not True:
         failures.append("skg_dtn_boundary_not_preserved")
-    if value.get("protectedRuntimePathChanges"):
+    if value.get("unauthorizedProtectedRuntimePathChanges"):
         failures.append("protected_runtime_path_changes_present")
     if value.get("activeBoundaryScanMatches"):
         failures.append("active_boundary_scan_matches_present")

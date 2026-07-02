@@ -65,6 +65,8 @@ def build_pre_context_package(
         "package_version": PRE_CONTEXT_PACKAGE_VERSION,
         "skg_package_digest": skg_package["digest"],
         "dtn_package_digest": dtn_package["digest"],
+        "skg_truth_foundation_metadata": deepcopy(dict(skg_package.get("skg_truth_foundation_metadata", {}))),
+        "dtn_contextual_verification_metadata": deepcopy(dict(dtn_package.get("dtn_contextual_verification_metadata", {}))),
         "signals": signals,
         "source_records": sources,
         "source_summary": summarise_sources(sources),

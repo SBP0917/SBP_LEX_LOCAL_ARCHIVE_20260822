@@ -43,6 +43,9 @@ REQUEST_ALLOWED_KEYS = {
     "jurisdiction",
     "context",
     "safety_profile",
+    "adapter_identity",
+    "source_system_identity",
+    "native_format",
 }
 
 PAYLOAD_ALLOWED_KEYS = {
@@ -154,6 +157,22 @@ EVIDENCE_ALLOWED_KEYS = {
     "attested",
     "freshness_valid",
     "consistency_valid",
+    "source_independent",
+    "provenance_valid",
+    "integrity_valid",
+    "authority_valid",
+    "jurisdiction_valid",
+    "runtime_validity_valid",
+    "chain_of_custody_valid",
+    "material_contradiction",
+    "unresolved_contradiction",
+    "claim_id",
+    "source_id",
+    "source_type",
+    "source_uri",
+    "retrieved_at",
+    "digest",
+    "content_digest",
 }
 
 
@@ -306,6 +325,15 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
                     "attested",
                     "freshness_valid",
                     "consistency_valid",
+                    "source_independent",
+                    "provenance_valid",
+                    "integrity_valid",
+                    "authority_valid",
+                    "jurisdiction_valid",
+                    "runtime_validity_valid",
+                    "chain_of_custody_valid",
+                    "material_contradiction",
+                    "unresolved_contradiction",
                 ):
                     if item.get(flag) is not None and not isinstance(item.get(flag), bool):
                         failures.append(f"evidence_{flag}_must_be_bool:{index}")

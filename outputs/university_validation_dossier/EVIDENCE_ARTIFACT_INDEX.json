@@ -1,8 +1,8 @@
 {
   "artifact_summary": {
-    "evidence_artifact_count": 19,
+    "evidence_artifact_count": 30,
     "missing_artifact_count": 0,
-    "required_artifact_count": 19
+    "required_artifact_count": 30
   },
   "artifacts": [
     {
@@ -196,6 +196,162 @@
       "size_bytes": 31421
     },
     {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "eie_pt_blueprint_impact_report",
+      "exists": true,
+      "path": "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+      "reason": "Blueprint impact report for EIE/PT/SKG/DTN rebuild.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "procedural_truth_evidentiary_sufficiency_certifies",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true,
+      "sha256": "867e134a90aa5d30cd58110017aee61c5d8fbee415eec8104025fc5bf0a95726",
+      "size_bytes": 4184
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "eie_adapter_ingress_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+      "reason": "EIE ingress and state formalisation addendum.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state"
+      ],
+      "required": true,
+      "sha256": "9c305cf8ba657c63cf47d555c20acb36e7146516c5313128bd6acd66e64a55cc",
+      "size_bytes": 1583
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "skg_rebuild_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+      "reason": "SKG PT-aware enrichment addendum.",
+      "related_claim_ids": [
+        "skg_dtn_external_non_authoritative",
+        "procedural_truth_evidentiary_sufficiency_certifies"
+      ],
+      "required": true,
+      "sha256": "01e8af83bdab82f8e42ccd298645d3768b7525ea27dfc79086890aed7dc9b905",
+      "size_bytes": 1710
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "dtn_rebuild_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+      "reason": "DTN PT-aware enrichment addendum.",
+      "related_claim_ids": [
+        "skg_dtn_external_non_authoritative",
+        "procedural_truth_evidentiary_sufficiency_certifies"
+      ],
+      "required": true,
+      "sha256": "f618c6915da3c099c04b48329e736f50ca1589d3edeadd0d014fff2a28cf2f3a",
+      "size_bytes": 1660
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "procedural_truth_rebuild_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+      "reason": "Procedural Truth Evidentiary Sufficiency addendum.",
+      "related_claim_ids": [
+        "procedural_truth_evidentiary_sufficiency_certifies"
+      ],
+      "required": true,
+      "sha256": "96bb0debec1946baf689d8f19cc56b4816fd990072cc86f3a1253f71ee16d303",
+      "size_bytes": 1874
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "root_of_trust_anchorage_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+      "reason": "Root of Trust Anchorage addendum.",
+      "related_claim_ids": [
+        "root_of_trust_anchorage_binds_eie_truth_foundations"
+      ],
+      "required": true,
+      "sha256": "95dd465f17956c50f5a337833bc4ea8d76dd78048cbc429562d410e3bb675cd8",
+      "size_bytes": 1386
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "traversal_integration_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+      "reason": "Traversal integration addendum.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "execution_gate_enforces_pt_certification"
+      ],
+      "required": true,
+      "sha256": "e79026170c0bf6432786491c710d9d6ca2af7d65430d44a5c1ab939fae258e5b",
+      "size_bytes": 1469
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "execution_gate_enforcement_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+      "reason": "Execution Gate PT certification enforcement addendum.",
+      "related_claim_ids": [
+        "execution_gate_enforces_pt_certification"
+      ],
+      "required": true,
+      "sha256": "9ea132444c2c38450379e8fcdc7b2952ddf3971fc0f370e9c3fcf8e364492fd1",
+      "size_bytes": 1392
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "audit_replay_telemetry_addendum",
+      "exists": true,
+      "path": "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+      "reason": "Audit/replay metadata addendum.",
+      "related_claim_ids": [
+        "root_of_trust_anchorage_binds_eie_truth_foundations"
+      ],
+      "required": true,
+      "sha256": "0a63de805d8676d4030c21d0524da0a50908c29f2405eea41fc719b63be3f0fe",
+      "size_bytes": 1354
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "eie_pt_handover_readiness_report",
+      "exists": true,
+      "path": "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+      "reason": "Control-plane robustness, weak-point, fix-plan, test, and non-runtime code inventory report.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "procedural_truth_evidentiary_sufficiency_certifies",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
+        "execution_gate_enforces_pt_certification",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true,
+      "sha256": "ec318d3213190a8fccb6e9101278ea41422dac5f8b2bf69cb0aa8960982a42fd",
+      "size_bytes": 14202
+    },
+    {
+      "artifact_group": "eie_pt_rebuild_artifacts",
+      "artifact_id": "eie_pt_rebuild_tests",
+      "exists": true,
+      "path": "tests/test_eie_pt_sufficiency_rebuild.py",
+      "reason": "Focused EIE/PT/SKG/DTN rebuild tests.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "procedural_truth_evidentiary_sufficiency_certifies",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
+        "execution_gate_enforces_pt_certification",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true,
+      "sha256": "7c20a84383d9b0f313962f3eccef767b00978d95b9c06be1e14775b90817d987",
+      "size_bytes": 5102
+    },
+    {
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_claims_index",
       "exists": true,
@@ -208,20 +364,24 @@
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
         "dual_adaptive_deterministic_pipelines_preserved",
+        "eie_canonical_traversal_state",
         "evidence_chain_validates",
         "evidence_chain_zero_changed",
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
+        "execution_gate_enforces_pt_certification",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
         "phase_19_not_started",
+        "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
         "regression_matrix_validates",
         "release_integrity_contains_required_files",
         "release_integrity_passes",
         "replay_verification_passes_matched",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
         "runtime_authority_unchanged",
         "runtime_verification_passes_current_scenario",
         "skg_dtn_external_non_authoritative",
@@ -229,8 +389,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "3d025ea766152db142c3e9a4f187a739a12e67665559039be4c142914014fb64",
-      "size_bytes": 26793
+      "sha256": "41fe8814d2ecdb52413bfb7b9ccf7f2405143763a54de6e69309cd0e8abd737c",
+      "size_bytes": 36130
     },
     {
       "artifact_group": "dossier_outputs",
@@ -245,20 +405,24 @@
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
         "dual_adaptive_deterministic_pipelines_preserved",
+        "eie_canonical_traversal_state",
         "evidence_chain_validates",
         "evidence_chain_zero_changed",
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
+        "execution_gate_enforces_pt_certification",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
         "phase_19_not_started",
+        "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
         "regression_matrix_validates",
         "release_integrity_contains_required_files",
         "release_integrity_passes",
         "replay_verification_passes_matched",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
         "runtime_authority_unchanged",
         "runtime_verification_passes_current_scenario",
         "skg_dtn_external_non_authoritative",
@@ -266,8 +430,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "5abb69619b3cd911a2746e5aefa1047ec43603c1c25035cb304fe91e4c530861",
-      "size_bytes": 12007
+      "sha256": "f76a39bf3c034189d350bc58abe35911991f8d3deb49f034e1ff2b58b850d90b",
+      "size_bytes": 15356
     },
     {
       "artifact_group": "dossier_outputs",
@@ -283,8 +447,8 @@
         "governance_truth_gates_unchanged"
       ],
       "required": true,
-      "sha256": "fdda14770982fd001ae432bef528fef749b1dcd2b5fe042aab48146febb360d9",
-      "size_bytes": 1468
+      "sha256": "99e83fb03599d43691f31a48134bac871d680166aa5c87b5edf335d1ef38b5f4",
+      "size_bytes": 1865
     },
     {
       "artifact_group": "dossier_outputs",
@@ -299,20 +463,24 @@
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
         "dual_adaptive_deterministic_pipelines_preserved",
+        "eie_canonical_traversal_state",
         "evidence_chain_validates",
         "evidence_chain_zero_changed",
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
+        "execution_gate_enforces_pt_certification",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
         "phase_19_not_started",
+        "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
         "regression_matrix_validates",
         "release_integrity_contains_required_files",
         "release_integrity_passes",
         "replay_verification_passes_matched",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
         "runtime_authority_unchanged",
         "runtime_verification_passes_current_scenario",
         "skg_dtn_external_non_authoritative",
@@ -320,8 +488,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "e2e6e5c991d32bb690c75f8db9d940dc91cd42212d1f7fe5dd67319fdf5c553b",
-      "size_bytes": 11488
+      "sha256": "daf8de78d7260252690f881f4d04479a7677ac969bc5435bae0ad2ffa0f880f9",
+      "size_bytes": 13208
     },
     {
       "artifact_group": "dossier_outputs",
@@ -336,20 +504,24 @@
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
         "dual_adaptive_deterministic_pipelines_preserved",
+        "eie_canonical_traversal_state",
         "evidence_chain_validates",
         "evidence_chain_zero_changed",
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
+        "execution_gate_enforces_pt_certification",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
         "phase_19_not_started",
+        "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
         "regression_matrix_validates",
         "release_integrity_contains_required_files",
         "release_integrity_passes",
         "replay_verification_passes_matched",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
         "runtime_authority_unchanged",
         "runtime_verification_passes_current_scenario",
         "skg_dtn_external_non_authoritative",
@@ -357,8 +529,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "93e7fca24126db28066fcce407978a6c223251b29476511c0f7fc302cb222446",
-      "size_bytes": 2282
+      "sha256": "bbfbbaf98ebec49feb5f81bfb05d8163de8694412b1ad886d4b9f4d2e2391038",
+      "size_bytes": 2610
     }
   ],
   "evidence_artifact_index_type": "university_validation_evidence_artifact_index",

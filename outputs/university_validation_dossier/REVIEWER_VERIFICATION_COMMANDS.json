@@ -1,7 +1,7 @@
 {
   "command_summary": {
-    "required_command_count": 31,
-    "reviewer_command_count": 31
+    "required_command_count": 35,
+    "reviewer_command_count": 35
   },
   "commands": [
     {
@@ -279,6 +279,50 @@
       "purpose": "Show dossier summary.",
       "related_claim_ids": [
         "phase_19_not_started"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_eie_pt_sufficiency_rebuild.py",
+      "command_id": "pytest_eie_pt_rebuild",
+      "expected_result": "PASS",
+      "purpose": "Verify EIE/PT/SKG/DTN rebuild behavior.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "procedural_truth_evidentiary_sufficiency_certifies",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
+        "execution_gate_enforces_pt_certification",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_procedural_truth_binding.py",
+      "command_id": "pytest_phase18_pt_binding",
+      "expected_result": "PASS",
+      "purpose": "Verify existing Phase 18 PT binding regression behavior.",
+      "related_claim_ids": [
+        "procedural_truth_evidentiary_sufficiency_certifies"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_execution_gate_strictness.py",
+      "command_id": "pytest_execution_gate_strictness",
+      "expected_result": "PASS",
+      "purpose": "Verify strict Execution Gate enforcement.",
+      "related_claim_ids": [
+        "execution_gate_enforces_pt_certification"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_6_historical_audit_mutation.py",
+      "command_id": "pytest_historical_integrity",
+      "expected_result": "PASS",
+      "purpose": "Verify expanded Root of Trust and audit lineage integrity.",
+      "related_claim_ids": [
+        "root_of_trust_anchorage_binds_eie_truth_foundations"
       ],
       "required": true
     },

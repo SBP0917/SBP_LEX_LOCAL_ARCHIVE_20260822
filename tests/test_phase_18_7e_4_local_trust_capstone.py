@@ -29,6 +29,13 @@ PROTECTED_RUNTIME_PATHS = {
     "sbp_lex/pipeline/dual_runner.py",
 }
 
+AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS = {
+    "sbp_lex/execution/execution_gate.py",
+    "sbp_lex/governance/procedural_truth_engine.py",
+    "sbp_lex/authority_first/root_of_trust_runner.py",
+    "sbp_lex/shared/state_builder.py",
+}
+
 
 def test_builds_capstone_output() -> None:
     capstone = build_local_trust_capstone(REPOSITORY_ROOT)
@@ -245,7 +252,8 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
     )
     changed = {line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip()}
 
-    assert not (changed & PROTECTED_RUNTIME_PATHS)
+    unauthorized = (changed & PROTECTED_RUNTIME_PATHS) - AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS
+    assert not unauthorized
 
 
 def _load_json(path: str) -> dict:

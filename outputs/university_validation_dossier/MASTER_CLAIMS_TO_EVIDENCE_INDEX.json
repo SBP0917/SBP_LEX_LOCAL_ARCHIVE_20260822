@@ -1,10 +1,10 @@
 {
   "claim_scope_note": "Bounded review claims only; no external validation result or certification is claimed.",
   "claim_summary": {
-    "claim_count": 25,
+    "claim_count": 29,
     "incomplete_claim_count": 0,
     "out_of_scope_claim_count": 0,
-    "ready_claim_count": 25
+    "ready_claim_count": 29
   },
   "claims": [
     {
@@ -468,23 +468,168 @@
     {
       "claim_category": "boundary",
       "claim_id": "skg_dtn_external_non_authoritative",
-      "claim_scope": "authority boundary",
+      "claim_scope": "authority boundary and PT-aware enrichment",
       "claim_status": "CLAIM_READY_FOR_REVIEW",
-      "claim_text": "SKG/DTN remain external and non-authoritative.",
+      "claim_text": "SKG/DTN remain non-authoritative while now preserving PT-aware enrichment metadata for the EIE traversal.",
       "exclusions": [
         "No university validation result is claimed.",
         "No certification is claimed.",
         "No runtime activation is claimed.",
         "No Phase 19 work is claimed."
       ],
-      "expected_validation_answer": "Supported if the scope lock preserves the SKG/DTN boundary.",
-      "notes": "No SKG/DTN authority is added by this dossier.",
-      "reviewer_validation_question": "Can the reviewer confirm SKG/DTN remain external and non-authoritative?",
+      "expected_validation_answer": "Supported if the scope lock and rebuild tests show SKG/DTN enrichment is preserved without governance or execution authority.",
+      "notes": "SKG and DTN metadata now supports Procedural Truth certification but does not authorise execution.",
+      "reviewer_validation_question": "Can the reviewer confirm SKG/DTN remain non-authoritative while preserving PT-aware enrichment metadata?",
       "supporting_evidence_artifacts": [
-        "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json"
+        "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
+        "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+        "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+        "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+        "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+        "tests/test_eie_pt_sufficiency_rebuild.py"
       ],
       "supporting_verification_commands": [
-        "validation_dossier_validate"
+        "validation_dossier_validate",
+        "pytest_eie_pt_rebuild"
+      ]
+    },
+    {
+      "claim_category": "runtime_traversal",
+      "claim_id": "eie_canonical_traversal_state",
+      "claim_scope": "EIE state construction and traversal preservation",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "The Execution Intent Envelope is the canonical state-bearing traversal object after adapter ingress.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if tests show EIE exists, remains canonical, and carries traversal identity through downstream stages.",
+      "notes": "State Construction formalises the EIE rather than replacing it with an unrelated state object.",
+      "reviewer_validation_question": "Can the reviewer confirm EIE is preserved as canonical traversal state?",
+      "supporting_evidence_artifacts": [
+        "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+        "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+        "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+        "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+        "tests/test_eie_pt_sufficiency_rebuild.py"
+      ],
+      "supporting_verification_commands": [
+        "pytest_eie_pt_rebuild",
+        "runtime_main",
+        "runtime_replay"
+      ]
+    },
+    {
+      "claim_category": "procedural_truth",
+      "claim_id": "procedural_truth_evidentiary_sufficiency_certifies",
+      "claim_scope": "PT certification result and failure modes",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "Procedural Truth now returns deterministic Evidentiary Sufficiency certification beyond source-count floors.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if tests show structured certification, independence/provenance/contradiction failure handling, and fail-closed outcomes.",
+      "notes": "LOW/MEDIUM/TOP thresholds remain minimum source floors only.",
+      "reviewer_validation_question": "Can the reviewer confirm Procedural Truth evaluates evidentiary sufficiency rather than source count alone?",
+      "supporting_evidence_artifacts": [
+        "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+        "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+        "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+        "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+        "tests/test_eie_pt_sufficiency_rebuild.py"
+      ],
+      "supporting_verification_commands": [
+        "pytest_eie_pt_rebuild",
+        "pytest_phase18_pt_binding"
+      ]
+    },
+    {
+      "claim_category": "root_of_trust",
+      "claim_id": "root_of_trust_anchorage_binds_eie_truth_foundations",
+      "claim_scope": "Root of Trust evidence anchor",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "Root of Trust Anchorage binds EIE identity, SKG/DTN enrichment hashes, evidence package hash, state hash, traversal ID, token chain, and audit chain references.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if root anchor payload and historical integrity tests preserve the expanded anchorage.",
+      "notes": "Root of Trust failure prevents Procedural Truth certification.",
+      "reviewer_validation_question": "Can the reviewer confirm Root of Trust binds the expanded EIE/SKG/DTN/PT evidence set?",
+      "supporting_evidence_artifacts": [
+        "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+        "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+        "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+        "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+        "tests/test_eie_pt_sufficiency_rebuild.py"
+      ],
+      "supporting_verification_commands": [
+        "pytest_eie_pt_rebuild",
+        "pytest_historical_integrity"
+      ]
+    },
+    {
+      "claim_category": "execution_gate",
+      "claim_id": "execution_gate_enforces_pt_certification",
+      "claim_scope": "execution authorization boundary",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "Execution Gate denies execution unless Procedural Truth certification, PT token hash, sufficiency factors, EIE hash, SKG/DTN status, and Root of Trust anchorage are valid.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if Execution Gate strictness tests reject missing or mismatched PT certification state.",
+      "notes": "REFINE, ESCALATE, DENY, NOT_CERTIFIED, stale, missing, or mismatched PT states fail closed.",
+      "reviewer_validation_question": "Can the reviewer confirm Execution Gate enforces PT certification before execution?",
+      "supporting_evidence_artifacts": [
+        "docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md",
+        "docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md",
+        "docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md",
+        "docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md",
+        "reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md",
+        "tests/test_eie_pt_sufficiency_rebuild.py"
+      ],
+      "supporting_verification_commands": [
+        "pytest_eie_pt_rebuild",
+        "pytest_execution_gate_strictness"
       ]
     },
     {
@@ -536,16 +681,16 @@
       "claim_id": "runtime_authority_unchanged",
       "claim_scope": "local trust through 18.8",
       "claim_status": "CLAIM_READY_FOR_REVIEW",
-      "claim_text": "SBP-LEX runtime authority was not changed by the local trust/release/adversarial phases.",
+      "claim_text": "SBP-LEX runtime authority was intentionally changed only for the EIE/PT/SKG/DTN rebuild and remains bounded to the canonical control-plane traversal.",
       "exclusions": [
         "No university validation result is claimed.",
         "No certification is claimed.",
         "No runtime activation is claimed.",
         "No Phase 19 work is claimed."
       ],
-      "expected_validation_answer": "Supported if scope lock and git diff review show no runtime authority changes.",
+      "expected_validation_answer": "Supported if scope lock and git diff review show only the authorised EIE/PT rebuild runtime touch points.",
       "notes": "The dossier is not an execution authority.",
-      "reviewer_validation_question": "Can the reviewer confirm SBP-LEX runtime authority was unchanged by these phases?",
+      "reviewer_validation_question": "Can the reviewer confirm SBP-LEX runtime authority changes are limited to the authorised EIE/PT rebuild?",
       "supporting_evidence_artifacts": [
         "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json"
       ],
@@ -559,16 +704,16 @@
       "claim_id": "governance_truth_gates_unchanged",
       "claim_scope": "local trust through 18.8",
       "claim_status": "CLAIM_READY_FOR_REVIEW",
-      "claim_text": "Governance, Procedural Truth, Execution Gate, and Hard Entry Gate were unchanged by these phases.",
+      "claim_text": "Hard Entry and Governance remain bounded, while Procedural Truth and Execution Gate were intentionally updated for EIE evidentiary sufficiency enforcement.",
       "exclusions": [
         "No university validation result is claimed.",
         "No certification is claimed.",
         "No runtime activation is claimed.",
         "No Phase 19 work is claimed."
       ],
-      "expected_validation_answer": "Supported if scope lock and git diff review show no changes to those authority boundaries.",
+      "expected_validation_answer": "Supported if scope lock and git diff review show Hard Entry/Governance boundaries are preserved and PT/Execution Gate changes are the authorised rebuild scope.",
       "notes": "These boundaries remain outside dossier authority.",
-      "reviewer_validation_question": "Can the reviewer confirm Governance, Procedural Truth, Execution Gate, and Hard Entry Gate were unchanged?",
+      "reviewer_validation_question": "Can the reviewer confirm Hard Entry/Governance are preserved and PT/Execution Gate changes are authorised rebuild changes?",
       "supporting_evidence_artifacts": [
         "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json"
       ],

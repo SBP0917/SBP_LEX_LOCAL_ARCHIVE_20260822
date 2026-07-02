@@ -29,9 +29,9 @@ outputs/release_integrity_bundle/RELEASE_MANIFEST.json
 
 ## Implementation Summary
 
-Phase 18.8 adds a deterministic university validation dossier for the SBP-LEX Desktop V1 local trust evidence line. The dossier maps bounded review claims to evidence artifacts, reviewer commands, validation questions, scope exclusions, and handoff instructions.
+Phase 18.8 adds a deterministic university validation dossier for the SBP-LEX Desktop V1 local trust evidence line. This handover update rewrites the dossier package so it also covers the EIE / SKG / DTN / Root of Trust / Procedural Truth Evidentiary Sufficiency / Execution Gate rebuild.
 
-The validation dossier consumes existing local trust, release integrity, and adversarial negative-test artifacts. It does not run runtime, replay, pytest, the batch test runner, Governance, Execution Gate, Hard Entry Gate, SKG, or DTN. Reviewer commands are recorded as data only.
+The validation dossier consumes local trust, release integrity, adversarial negative-test artifacts, blueprint addenda, focused rebuild tests, and the EIE/PT/SKG/DTN handover readiness report. Reviewer commands are recorded as data only. The dossier is not external certification or runtime authority.
 
 ## Dossier Output Path
 
@@ -43,11 +43,11 @@ outputs/university_validation_dossier/
 
 ```text
 dossier_status=VALIDATION_DOSSIER_READY
-dossier_digest=65937e557d1ea4acb89a410da797956760c0bb49eeee8583ca54fdfad587e078
-claim_count=25
-validation_question_count=16
-evidence_artifact_count=19
-reviewer_command_count=31
+dossier_digest=94f58706c45026159537982cf3cbf257d8faf9fbf78cf7fddce6e7f2f672ebfb
+claim_count=29
+validation_question_count=20
+evidence_artifact_count=30
+reviewer_command_count=35
 ```
 
 ## Bound Digests
@@ -104,17 +104,17 @@ Generated-output pytest ignores are expected to be used:
 
 No runtime activation was introduced.
 
-No SBP-LEX runtime authority was changed.
+SBP-LEX runtime authority was intentionally changed only for the authorised EIE/PT/SKG/DTN rebuild touch points.
 
 Governance behavior was unchanged.
 
-Procedural Truth behavior was unchanged.
+Procedural Truth was rebuilt to produce deterministic Evidentiary Sufficiency certification.
 
-Execution Gate behavior was unchanged.
+Execution Gate was updated to enforce PT certification, PT token hash, EIE hash, Root/SKG/DTN status, sufficiency factors, and contradiction handling.
 
 Hard Entry Gate behavior was unchanged.
 
-SKG and DTN remain external and non-authoritative.
+SKG and DTN remain non-authoritative and now preserve PT-aware enrichment metadata.
 
 No nodes, quorum, mesh, distributed runtime, cloud, APK, V2, or V3 work was introduced.
 

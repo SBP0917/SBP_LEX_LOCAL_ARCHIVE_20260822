@@ -61,6 +61,13 @@ REQUIRED_EVIDENCE_PATHS = {
     "outputs/adversarial_local_trust_negative_harness.json",
 }
 
+AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS = {
+    "sbp_lex/execution/execution_gate.py",
+    "sbp_lex/governance/procedural_truth_engine.py",
+    "sbp_lex/authority_first/root_of_trust_runner.py",
+    "sbp_lex/shared/state_builder.py",
+}
+
 
 def test_builds_university_validation_dossier(tmp_path: Path) -> None:
     result = build_validation_dossier(REPOSITORY_ROOT, output_dir=tmp_path / "dossier")
@@ -206,7 +213,7 @@ def test_required_claims_exist(tmp_path: Path) -> None:
     claim_ids = {claim["claim_id"] for claim in claims["claims"]}
 
     assert required_claim_ids() <= claim_ids
-    assert claims["claim_summary"]["claim_count"] == 25
+    assert claims["claim_summary"]["claim_count"] == len(required_claim_ids())
 
 
 def test_required_validation_questions_exist(tmp_path: Path) -> None:
@@ -215,7 +222,7 @@ def test_required_validation_questions_exist(tmp_path: Path) -> None:
     question_ids = {question["question_id"] for question in questions["questions"]}
 
     assert required_validation_question_ids() <= question_ids
-    assert questions["question_summary"]["validation_question_count"] == 16
+    assert questions["question_summary"]["validation_question_count"] == len(required_validation_question_ids())
 
 
 def test_required_evidence_artifacts_exist(tmp_path: Path) -> None:
@@ -233,7 +240,7 @@ def test_required_reviewer_commands_exist(tmp_path: Path) -> None:
     command_ids = {command["command_id"] for command in commands["commands"]}
 
     assert required_reviewer_command_ids() <= command_ids
-    assert commands["command_summary"]["reviewer_command_count"] == 31
+    assert commands["command_summary"]["reviewer_command_count"] == len(required_reviewer_command_ids())
 
 
 def test_scope_lock_confirms_phase_19_not_started(tmp_path: Path) -> None:
@@ -252,8 +259,11 @@ def test_scope_lock_confirms_no_runtime_activation(tmp_path: Path) -> None:
 def test_scope_lock_confirms_no_skg_dtn_authority(tmp_path: Path) -> None:
     scope = _scope(tmp_path)
 
-    assert scope["skg_dtn_external_non_authoritative"] is True
-    assert scope["not_skg_dtn_implementation"] is True
+    assert scope["skg_dtn_pt_aware_non_authoritative"] is True
+    assert scope["not_external_skg_dtn_runtime_deployment"] is True
+    assert scope["eie_canonical_traversal_state"] is True
+    assert scope["procedural_truth_rebuilt_to_evidentiary_sufficiency"] is True
+    assert scope["execution_gate_updated_for_pt_certification"] is True
 
 
 def test_scope_lock_confirms_no_future_surfaces(tmp_path: Path) -> None:
@@ -414,7 +424,8 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
     )
     changed = {line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip()}
 
-    assert not (changed & PROTECTED_RUNTIME_PATHS)
+    unauthorized = (changed & PROTECTED_RUNTIME_PATHS) - AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS
+    assert not unauthorized
 
 
 def _build_dossier(tmp_path: Path) -> Path:

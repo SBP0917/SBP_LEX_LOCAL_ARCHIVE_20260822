@@ -84,10 +84,39 @@ def build_skg_signal_package(
         "signals": signals,
         "source_records": sources,
         "source_summary": summarise_sources(sources),
+        "skg_truth_foundation_metadata": {
+            "provenance_metadata": [
+                {
+                    "source_id": source.get("source_id"),
+                    "source_type": source.get("source_type"),
+                    "source_uri": source.get("source_uri"),
+                    "retrieved_at": source.get("retrieved_at"),
+                }
+                for source in sources
+            ],
+            "source_origin_metadata": [source.get("source_uri") for source in sources],
+            "source_independence_mapping": {
+                "source_count": len(sources),
+                "independent": len({str(source.get("source_id")) for source in sources}) == len(sources),
+            },
+            "authority_relationship_mapping": payloads["authority_link_signal"],
+            "corroboration_metadata": summarise_sources(sources),
+            "freshness_metadata": {"freshness_valid": all(signal["freshness_valid"] for signal in signals.values())},
+            "consistency_information": {"consistency_valid": all(signal["consistency_valid"] for signal in signals.values())},
+            "contradiction_indicators": payloads["policy_conflict_signal"],
+            "attestation_status": "VALID" if all(source.get("attested") is True for source in sources) else "INVALID",
+            "integrity_references": [source.get("digest") for source in sources],
+            "jurisdictional_relevance": payloads["jurisdiction_signal"],
+            "skg_verification_status": "VALID",
+            "truth_foundation_readiness_status": "READY",
+        },
         "freshness_valid": all(signal["freshness_valid"] for signal in signals.values()),
         "consistency_valid": all(signal["consistency_valid"] for signal in signals.values()),
         "timestamp": package_timestamp,
     }
+    package["skg_truth_foundation_metadata"]["skg_enrichment_hash"] = digest_mapping(
+        package["skg_truth_foundation_metadata"]
+    )
     package["digest"] = digest_mapping(_package_body(package))
     package["signature"] = sign_payload(_signature_body(package), signing_key)
     return package

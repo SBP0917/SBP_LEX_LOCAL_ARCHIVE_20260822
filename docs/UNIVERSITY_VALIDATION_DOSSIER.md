@@ -6,7 +6,7 @@ Phase 18.8 creates a reviewer-facing university validation dossier for the SBP-L
 
 The dossier translates local trust, release integrity, and adversarial negative-test artifacts into bounded review questions. It is intended to help reviewers see what is being claimed, which artifacts support each claim, which commands can be run, and which areas are explicitly outside the review scope.
 
-This dossier is local evidence tooling only. It is not SBP-LEX runtime authority, Governance, Procedural Truth, Execution Gate, Hard Entry Gate, SKG, or DTN.
+This dossier is local evidence tooling only. It is not external certification, university validation result, legal advice, patent validity confirmation, security certification, government approval, cloud deployment, or Phase 19. It now includes repository evidence for the EIE / SKG / DTN / Root of Trust / Procedural Truth / Execution Gate rebuild, but the dossier itself is not runtime authority.
 
 ## Why Claims-To-Evidence Mapping Is Required
 
@@ -41,7 +41,29 @@ The master claims-to-evidence index makes that mapping explicit and deterministi
 
 18.7G introduced the adversarial local trust negative-test harness.
 
-18.8 consumes those artifacts and creates a university handoff dossier. It does not replace or weaken any of the underlying validators.
+18.8 consumes those artifacts and creates a university handoff dossier. This handover update also binds the EIE / PT / SKG / DTN rebuild addenda, focused rebuild tests, and control-plane handover readiness report into the dossier evidence set. It does not replace or weaken any of the underlying validators.
+
+## EIE / PT / SKG / DTN Handover Update
+
+The dossier now includes bounded claims and reviewer questions for:
+
+```text
+EIE as canonical traversal state
+SKG truth-foundation enrichment
+DTN contextual and operational enrichment
+Root of Trust Anchorage binding
+Procedural Truth Evidentiary Sufficiency certification
+Execution Gate PT certification enforcement
+Audit/replay metadata preservation
+```
+
+The added evidence artifacts include:
+
+```text
+docs/blueprint_addenda/
+reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md
+tests/test_eie_pt_sufficiency_rebuild.py
+```
 
 ## Dossier Structure
 
@@ -140,7 +162,7 @@ related_claim_ids
 reason
 ```
 
-The index includes local trust artifacts, release integrity artifacts, adversarial negative-test output, and the dossier's own reviewer-facing files.
+The index includes local trust artifacts, release integrity artifacts, adversarial negative-test output, EIE/PT rebuild addenda, the handover readiness report, focused rebuild tests, and the dossier's own reviewer-facing files.
 
 The artifact index excludes caches, temporary folders, `.git`, secrets, credentials, and scratch paths.
 
@@ -150,6 +172,11 @@ The artifact index excludes caches, temporary folders, `.git`, secrets, credenti
 
 ```text
 SBP-LEX Desktop V1 current repository state
+EIE as canonical traversal state
+Procedural Truth Evidentiary Sufficiency certification
+SKG truth-foundation enrichment
+DTN contextual and operational enrichment
+Root of Trust Anchorage binding
 local trust evidence
 release integrity bundle
 adversarial local trust negative-test harness
@@ -168,6 +195,10 @@ security certification
 government approval
 runtime activation
 Phase 19
+external SKG/DTN runtime deployment
+production certification
+production security assurance
+live distributed deployment
 multi-node implementation
 active nodes/quorum/mesh/distributed runtime
 SKG/DTN implementation

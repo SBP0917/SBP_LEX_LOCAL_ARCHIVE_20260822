@@ -136,6 +136,23 @@ def attach_collective_signals(state: Mapping[str, Any], pre_context_signals: Map
             "timestamp_authority": pre_context_signals.get("timestamp_authority"),
         },
     }
+    envelope = working_state.get("pt_evidence_envelope", {})
+    eie = working_state.get("eie", {})
+    if isinstance(envelope, Mapping) and isinstance(eie, Mapping):
+        eie = deepcopy(dict(eie))
+        eie["skg_truth_foundation"] = deepcopy(
+            dict(envelope.get("skg_truth_foundation_metadata", {}))
+        )
+        eie["dtn_contextual_verification"] = deepcopy(
+            dict(envelope.get("dtn_contextual_verification_metadata", {}))
+        )
+        eie["eie_hash"] = generate_digest({key: value for key, value in eie.items() if key != "eie_hash"})
+        working_state["eie"] = eie
+        working_state["eie_hash"] = eie["eie_hash"]
+        envelope = deepcopy(dict(envelope))
+        envelope["eie_hash"] = eie["eie_hash"]
+        working_state["pt_evidence_envelope"] = envelope
+        working_state["pt_evidence_envelope_digest"] = generate_digest(envelope)
     working_state.setdefault("audit_trace", []).append({"stage": "collective_attach", "event": "COLLECTIVE_SIGNAL_ATTACHED", "digest": pre_context_signals.get("digest")})
     working_state = append_hash_entry(working_state, stage="collective_attach", payload={"status": COLLECTIVE_SIGNAL_STATUS_ATTACHED, "digest": pre_context_signals.get("digest")})
     working_state["state_hash"] = rebuild_state_hash(working_state)

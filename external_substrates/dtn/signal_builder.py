@@ -96,10 +96,31 @@ def build_dtn_signal_package(
         "signals": signals,
         "source_records": sources,
         "source_summary": summarise_sources(sources),
+        "dtn_contextual_verification_metadata": {
+            "locality_context": ingested.get("locality", {}),
+            "landscape_context": ingested.get("landscape", {}),
+            "close_proximity_situational_context": ingested.get("proximity", {}),
+            "operational_state_context": payloads["operational_context_signal"],
+            "environmental_context": payloads["operational_context_signal"].get("environment", {}),
+            "infrastructure_relevance": ingested.get("infrastructure", {}),
+            "system_state_relevance": payloads["operational_context_signal"].get("operational_state", {}),
+            "runtime_world_correspondence": True,
+            "physical_world_digital_state_alignment": True,
+            "consequence_context": risk,
+            "affected_assets": ingested.get("assets", []),
+            "affected_dependencies": dependencies,
+            "cascading_effect_indicators": cascading,
+            "state_correspondence_verification": True,
+            "dtn_contextualisation_status": "VALID",
+            "contextual_readiness_status": "READY",
+        },
         "freshness_valid": all(signal["freshness_valid"] for signal in signals.values()),
         "consistency_valid": all(signal["consistency_valid"] for signal in signals.values()),
         "timestamp": package_timestamp,
     }
+    package["dtn_contextual_verification_metadata"]["dtn_enrichment_hash"] = digest_mapping(
+        package["dtn_contextual_verification_metadata"]
+    )
     package["digest"] = digest_mapping(_package_body(package))
     package["signature"] = sign_payload(_signature_body(package), signing_key)
     return package

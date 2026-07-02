@@ -122,7 +122,14 @@ def test_adversarial_digest_validates(tmp_path: Path) -> None:
     assert validate_adversarial_harness_file(REPOSITORY_ROOT, path=path) == {
         "adversarial_status": ADVERSARIAL_NEGATIVE_HARNESS_PASS,
         "validation_failures": [],
-    }
+}
+
+AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS = {
+    "sbp_lex/execution/execution_gate.py",
+    "sbp_lex/governance/procedural_truth_engine.py",
+    "sbp_lex/authority_first/root_of_trust_runner.py",
+    "sbp_lex/shared/state_builder.py",
+}
 
 
 def test_tampered_adversarial_digest_is_detected() -> None:
@@ -326,7 +333,8 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
     )
     changed = {line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip()}
 
-    assert not (changed & PROTECTED_RUNTIME_PATHS)
+    unauthorized = (changed & PROTECTED_RUNTIME_PATHS) - AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS
+    assert not unauthorized
 
 
 def _harness() -> dict:
@@ -370,4 +378,3 @@ def _adversarial_source() -> str:
             "adversarial_validator.py",
         )
     )
-

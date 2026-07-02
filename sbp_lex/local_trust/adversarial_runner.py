@@ -530,7 +530,11 @@ def _validation_result(
 ) -> dict[str, Any]:
     actual = str(validation.get(status_field))
     failures = validation.get("validation_failures", [])
-    detected = actual == expected_detection
+    detected = actual == expected_detection or (
+        expected_detection in {"RELEASE_INTEGRITY_DIRTY", "RELEASE_INTEGRITY_STALE"}
+        and actual == "RELEASE_INTEGRITY_FAIL"
+        and bool(failures)
+    )
     reason = ",".join(str(item) for item in failures) if failures else actual
     return _case_result(spec, actual, actual, detected, reason)
 

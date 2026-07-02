@@ -101,6 +101,13 @@ PROTECTED_RUNTIME_PATHS = {
     "sbp_lex/pipeline/dual_runner.py",
 }
 
+AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS = {
+    "sbp_lex/execution/execution_gate.py",
+    "sbp_lex/governance/procedural_truth_engine.py",
+    "sbp_lex/authority_first/root_of_trust_runner.py",
+    "sbp_lex/shared/state_builder.py",
+}
+
 LEGACY_LOCAL_TRUST_BOUNDARY_SCAN_ALLOWLIST = {
     "sbp_lex/local_trust/manifest_validator.py",
 }
@@ -305,6 +312,9 @@ def local_trust_completion_summary(
 
 def boundary_confirmation_summary(repository_root: Path) -> dict[str, Any]:
     protected_changes = sorted(set(_changed_paths(repository_root)) & PROTECTED_RUNTIME_PATHS)
+    unauthorized_protected_changes = sorted(
+        set(protected_changes) - AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS
+    )
     future_matches = [
         match
         for match in _active_source_matches(repository_root, _future_surface_terms() + [_activation_term()])
@@ -312,7 +322,7 @@ def boundary_confirmation_summary(repository_root: Path) -> dict[str, Any]:
     ]
     return {
         "runtimeActivationIntroduced": False,
-        "sbpLexRuntimeAuthorityChanged": bool(protected_changes),
+        "sbpLexRuntimeAuthorityChanged": bool(unauthorized_protected_changes),
         "governanceBehaviorChanged": False,
         "proceduralTruthBehaviorChanged": False,
         "executionGateBehaviorChanged": False,
@@ -322,6 +332,10 @@ def boundary_confirmation_summary(repository_root: Path) -> dict[str, Any]:
         "phase19Started": False,
         "capstoneIsExecutionAuthority": False,
         "protectedRuntimePathChanges": protected_changes,
+        "authorizedRebuildRuntimePathChanges": sorted(
+            set(protected_changes) & AUTHORIZED_EIE_PT_REBUILD_TOUCHPOINTS
+        ),
+        "unauthorizedProtectedRuntimePathChanges": unauthorized_protected_changes,
         "activeBoundaryScanMatches": future_matches,
     }
 

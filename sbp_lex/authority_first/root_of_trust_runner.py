@@ -39,6 +39,7 @@ def run_root_of_trust(state: Mapping[str, object]) -> Dict[str, object]:
     working_state = deepcopy(dict(state))
 
     envelope = working_state.get("pt_evidence_envelope")
+    eie = working_state.get("eie", {})
     anchor_failures: list[str] = []
     if working_state.get("hard_entry_gate", {}).get("accepted") is not True:
         anchor_failures.append("hard_entry_not_accepted")
@@ -51,25 +52,60 @@ def run_root_of_trust(state: Mapping[str, object]) -> Dict[str, object]:
         anchor_failures.append("pt_envelope_request_fingerprint_mismatch")
     if working_state.get("hard_entry_gate", {}).get("request_fingerprint") != working_state.get("request_fingerprint"):
         anchor_failures.append("hard_entry_request_fingerprint_mismatch")
+    if not isinstance(eie, Mapping) or eie.get("canonical_traversal_state") is not True:
+        anchor_failures.append("eie_canonical_traversal_state_missing")
+        eie = {}
+    if working_state.get("eie_hash") != eie.get("eie_hash"):
+        anchor_failures.append("eie_hash_mismatch")
+    if isinstance(envelope, Mapping) and envelope.get("eie_hash") != working_state.get("eie_hash"):
+        anchor_failures.append("pt_envelope_eie_hash_mismatch")
+    skg_metadata = envelope.get("skg_truth_foundation_metadata", {}) if isinstance(envelope, Mapping) else {}
+    dtn_metadata = envelope.get("dtn_contextual_verification_metadata", {}) if isinstance(envelope, Mapping) else {}
     anchor_payload = {
+        "eie_identity": {
+            "object_type": eie.get("object_type"),
+            "eie_version": eie.get("eie_version"),
+            "request_fingerprint": working_state.get("request_fingerprint"),
+        },
+        "eie_hash": working_state.get("eie_hash"),
+        "source_payload_hash": working_state.get("source_payload_hash"),
+        "adapter_identity": eie.get("adapter_identity"),
+        "source_system_identity": eie.get("source_system_identity"),
         "request_fingerprint": working_state.get("request_fingerprint"),
         "skg_digest": envelope.get("skg_digest") if isinstance(envelope, Mapping) else None,
+        "skg_verification_status": skg_metadata.get("skg_verification_status") if isinstance(skg_metadata, Mapping) else None,
+        "skg_enrichment_hash": skg_metadata.get("skg_enrichment_hash") if isinstance(skg_metadata, Mapping) else None,
         "dtn_digest": envelope.get("dtn_digest") if isinstance(envelope, Mapping) else None,
+        "dtn_contextualisation_status": dtn_metadata.get("dtn_contextualisation_status") if isinstance(dtn_metadata, Mapping) else None,
+        "dtn_enrichment_hash": dtn_metadata.get("dtn_enrichment_hash") if isinstance(dtn_metadata, Mapping) else None,
         "pre_context_digest": envelope.get("pre_context_digest") if isinstance(envelope, Mapping) else None,
+        "evidence_package_hash": envelope.get("pre_context_digest") if isinstance(envelope, Mapping) else None,
+        "authority_reference_hash": generate_digest(skg_metadata) if isinstance(skg_metadata, Mapping) else None,
         "pt_evidence_envelope_digest": working_state.get("pt_evidence_envelope_digest"),
+        "state_hash": working_state.get("state_hash"),
+        "traversal_id": working_state.get("traversal_id"),
+        "timestamp_freshness_reference": envelope.get("freshness_status") if isinstance(envelope, Mapping) else None,
+        "token_chain_reference": generate_digest(working_state.get("token_trace", [])),
+        "audit_chain_reference": generate_digest(working_state.get("audit_trace", [])),
     }
     for field, value in anchor_payload.items():
         if not isinstance(value, str) or not value:
-            anchor_failures.append(f"root_anchor_missing:{field}")
+            if not isinstance(value, Mapping):
+                anchor_failures.append(f"root_anchor_missing:{field}")
     anchor_signature = sign_payload(anchor_payload)
     working_state["root_of_trust_evidence_anchor"] = {
         "valid": not anchor_failures and verify_signature(anchor_payload, anchor_signature),
         "anchor_digest": generate_digest(anchor_payload),
         "payload": anchor_payload,
         "signature": anchor_signature,
-        "authority": "CANONICAL_RUNTIME_ROOT_OF_TRUST",
-        "failures": sorted(set(anchor_failures)),
-    }
+            "authority": "CANONICAL_RUNTIME_ROOT_OF_TRUST",
+            "anchorage_status": "VALID" if not anchor_failures else "INVALID",
+            "failures": sorted(set(anchor_failures)),
+        }
+    if isinstance(eie, Mapping) and eie:
+        eie = deepcopy(dict(eie))
+        eie["root_of_trust_anchorage"] = deepcopy(dict(working_state["root_of_trust_evidence_anchor"]))
+        working_state["eie"] = eie
     if anchor_failures:
         working_state["authority_first_result"] = "FAIL"
         working_state["authority_first_reason"] = "root_of_trust_evidence_anchor_invalid"

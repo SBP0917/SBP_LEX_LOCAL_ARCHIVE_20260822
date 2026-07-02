@@ -75,6 +75,51 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
         failures.append("procedural_truth_not_pass")
     if working_state.get("procedural_truth_outcome") != "PT_PASS":
         failures.append("procedural_truth_outcome_mismatch")
+    certification = working_state.get("procedural_truth_certification", {})
+    if not isinstance(certification, Mapping):
+        failures.append("procedural_truth_certification_missing")
+        certification = {}
+    if certification.get("procedural_truth_status") != "PASS":
+        failures.append("procedural_truth_status_not_pass")
+    if certification.get("certification_status") != "CERTIFIED":
+        failures.append("procedural_truth_not_certified")
+    if certification.get("root_of_trust_anchorage_status") != "VALID":
+        failures.append("root_of_trust_anchorage_invalid")
+    if certification.get("skg_verification_status") != "VALID":
+        failures.append("skg_verification_invalid")
+    if certification.get("dtn_contextualisation_status") != "VALID":
+        failures.append("dtn_contextualisation_invalid")
+    if certification.get("eie_hash") != working_state.get("eie_hash"):
+        failures.append("procedural_truth_eie_hash_mismatch")
+    pt_token_for_state = working_state.get("tokens", {}).get("procedural_truth", {})
+    if certification.get("state_hash") != pt_token_for_state.get("state_hash"):
+        failures.append("procedural_truth_state_hash_mismatch")
+    if certification.get("request_fingerprint") != working_state.get("request_fingerprint"):
+        failures.append("procedural_truth_request_fingerprint_mismatch")
+    if certification.get("pt_token_required") is True:
+        pt_token = working_state.get("tokens", {}).get("procedural_truth", {})
+        if not isinstance(pt_token, Mapping) or not pt_token.get("digest"):
+            failures.append("procedural_truth_token_missing")
+        elif certification.get("pt_token_hash") != pt_token.get("digest"):
+            failures.append("procedural_truth_token_hash_mismatch")
+    required_sufficiency = [
+        "source_floor_met",
+        "independence_met",
+        "provenance_met",
+        "integrity_met",
+        "attestation_met",
+        "authority_met",
+        "jurisdiction_met",
+        "freshness_met",
+        "consistency_met",
+        "runtime_validity_met",
+        "consequence_burden_met",
+    ]
+    for field in required_sufficiency:
+        if certification.get(field) is not True:
+            failures.append(f"procedural_truth_{field}_false")
+    if certification.get("unresolved_contradictions") is True:
+        failures.append("procedural_truth_unresolved_contradiction")
     if working_state.get("corroboration_met") is not True:
         failures.append("corroboration_threshold_not_met")
     if working_state.get("classification_result") != "ALLOW":
@@ -208,6 +253,35 @@ def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, An
         failures.append("procedural_truth_not_pass")
     if state.get("procedural_truth_outcome") != "PT_PASS":
         failures.append("procedural_truth_outcome_mismatch")
+    certification = state.get("procedural_truth_certification", {})
+    if not isinstance(certification, Mapping):
+        failures.append("procedural_truth_certification_missing")
+        certification = {}
+    if certification.get("procedural_truth_status") != "PASS":
+        failures.append("procedural_truth_status_not_pass")
+    if certification.get("certification_status") != "CERTIFIED":
+        failures.append("procedural_truth_not_certified")
+    if certification.get("pt_token_required") is True:
+        pt_token = state.get("tokens", {}).get("procedural_truth", {})
+        if not isinstance(pt_token, Mapping) or certification.get("pt_token_hash") != pt_token.get("digest"):
+            failures.append("procedural_truth_token_hash_mismatch")
+    if certification.get("unresolved_contradictions") is True:
+        failures.append("procedural_truth_unresolved_contradiction")
+    for field in (
+        "source_floor_met",
+        "independence_met",
+        "provenance_met",
+        "integrity_met",
+        "attestation_met",
+        "authority_met",
+        "jurisdiction_met",
+        "freshness_met",
+        "consistency_met",
+        "runtime_validity_met",
+        "consequence_burden_met",
+    ):
+        if certification.get(field) is not True:
+            failures.append(f"procedural_truth_{field}_false")
     if state.get("corroboration_met") is not True:
         failures.append("corroboration_threshold_not_met")
     if state.get("decision") == "ALLOW" and state.get("execution_result") != "EXECUTE":

@@ -22,13 +22,46 @@ def build_state(
 ) -> Dict[str, Any]:
     request_dict = deepcopy(dict(request))
     request_fingerprint = generate_digest(request_dict)
+    source_payload_hash = generate_digest(request_dict.get("payload", {}))
+    eie = {
+        "object_type": "ExecutionIntentEnvelope",
+        "eie_version": "1.0",
+        "canonical_traversal_state": True,
+        "adapter_identity": request_dict.get("adapter_identity", "LOCAL_RUNTIME_ADAPTER"),
+        "source_system_identity": request_dict.get("source_system_identity", "LOCAL_RUNTIME"),
+        "native_format": request_dict.get("native_format", "runtime_request"),
+        "source_payload_hash": source_payload_hash,
+        "request_fingerprint": request_fingerprint,
+        "traversal_id": generate_digest(
+            {
+                "request_fingerprint": request_fingerprint,
+                "source_payload_hash": source_payload_hash,
+                "adapter_identity": request_dict.get("adapter_identity", "LOCAL_RUNTIME_ADAPTER"),
+            }
+        ),
+        "intent": request_dict.get("action", ""),
+        "payload": request_dict.get("payload", {}),
+        "context": request_dict.get("context", {}),
+        "resolved_authority": request_dict.get("resolved_authority", ""),
+        "jurisdiction": request_dict.get("jurisdiction", ""),
+        "skg_truth_foundation": {},
+        "dtn_contextual_verification": {},
+        "root_of_trust_anchorage": {},
+        "procedural_truth_certification": {},
+    }
+    eie["eie_hash"] = generate_digest(eie)
     pt_envelope, pt_envelope_digest = build_pt_evidence_envelope(
-        request_dict, admitted_pre_context
+        request_dict, admitted_pre_context, eie=eie
     )
 
     state = {
         "state_version": STATE_VERSION,
         "request_fingerprint": request_fingerprint,
+        "traversal_id": eie["traversal_id"],
+        "active_traversal_state_type": "EIE",
+        "eie": eie,
+        "eie_hash": eie["eie_hash"],
+        "source_payload_hash": source_payload_hash,
         "request_identity_snapshot": request_dict,
         "request_identity_digest": request_fingerprint,
         "action": request_dict.get("action", ""),
@@ -54,6 +87,7 @@ def build_state(
         "procedural_truth_result": "UNSET",
         "procedural_truth_outcome": "UNSET",
         "procedural_truth_failure_reasons": [],
+        "procedural_truth_certification": {},
         "pt_evidence_envelope": pt_envelope,
         "pt_evidence_envelope_digest": pt_envelope_digest,
         "root_of_trust_evidence_anchor": {},

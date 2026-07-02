@@ -9,6 +9,7 @@ This package is a reviewer-facing dossier for bounded assessment of the SBP-LEX 
 - An evidence artifact hash index.
 - A scope and exclusions lock.
 - A reviewer verification command index.
+- EIE / SKG / DTN / Root of Trust / Procedural Truth rebuild alignment evidence.
 
 ## What This Package Is Not
 
@@ -20,20 +21,20 @@ This package is a reviewer-facing dossier for bounded assessment of the SBP-LEX 
 - Not government approval.
 - Not runtime activation.
 - Not Phase 19.
-- Not SKG or DTN implementation.
+- Not external SKG or DTN runtime deployment.
 - Not nodes, quorum, mesh, distributed runtime, cloud, APK, V2, or V3 implementation.
 
 ## Current Repository Commit
 
-`96a9745ab40317f91d22b62b92e5110bdc0d94d2`
+`0f9d4d5424864cfd8753a7d42bced4f995290ce8`
 
 ## Review Scope
 
-Reviewers are asked to assess whether the bounded claims in `MASTER_CLAIMS_TO_EVIDENCE_INDEX.json` are supported by the listed artifacts and verification commands.
+Reviewers are asked to assess whether the bounded claims in `MASTER_CLAIMS_TO_EVIDENCE_INDEX.json` are supported by the listed artifacts and verification commands, including the EIE canonical traversal state, SKG/DTN enrichment, Root of Trust anchorage, Procedural Truth certification, and Execution Gate enforcement updates.
 
 ## Excluded Scope
 
-The dossier excludes certification, external validation conclusions, runtime activation, Phase 19, legal conclusions, patent validity, security certification, and future distributed or mobile implementation work.
+The dossier excludes certification, external validation conclusions, external SKG/DTN deployment, runtime activation beyond this local control-plane traversal, Phase 19, legal conclusions, patent validity, security certification, and future distributed or mobile implementation work.
 
 ## How To Verify
 
