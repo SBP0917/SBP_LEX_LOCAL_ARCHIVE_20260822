@@ -14,6 +14,7 @@ from sbp_lex.collective.sovereign_knowledge_graph_engine import (
     verify_skg_context,
 )
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
+from sbp_lex.shared.control_chain_validation import canonical_eie_digest
 from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash
 
 COLLECTIVE_SIGNAL_STATUS_ATTACHED = "ATTACHED"
@@ -146,7 +147,7 @@ def attach_collective_signals(state: Mapping[str, Any], pre_context_signals: Map
         eie["dtn_contextual_verification"] = deepcopy(
             dict(envelope.get("dtn_contextual_verification_metadata", {}))
         )
-        eie["eie_hash"] = generate_digest({key: value for key, value in eie.items() if key != "eie_hash"})
+        eie["eie_hash"] = canonical_eie_digest(eie)
         working_state["eie"] = eie
         working_state["eie_hash"] = eie["eie_hash"]
         envelope = deepcopy(dict(envelope))

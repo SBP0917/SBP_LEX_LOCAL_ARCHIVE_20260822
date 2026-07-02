@@ -139,3 +139,30 @@ Do not delete support items automatically. For handover, preserve evidence and d
 ## Handover conclusion
 
 The repository is ready for a bounded handover review after the dossier rebuild and tests pass. It should be presented as a local deterministic control-plane prototype with strong traversal-order, fail-closed, EIE/PT certification, Root anchorage, and audit/replay evidence. It should not be presented as production-certified, externally validated, or ready for live safety-critical deployment until the fix roadmap above is implemented and independently reviewed.
+
+## Phase 18.8B Final Repository-Contained Hardening
+
+Phase 18.8B pushed repository-contained hardening as far as the local deterministic control-plane prototype can honestly go without redesigning traversal or adding external production infrastructure.
+
+What was hardened after 18.8A:
+
+- Shared EIE/SKG/DTN/Root control-chain validation in `sbp_lex/shared/control_chain_validation.py`.
+- Explicit EIE hash semantics through `canonical_eie_digest`.
+- Stable Root-bound state hash preservation through `root_anchor_bound_state_hash`.
+- Root pre-anchor validation of EIE/SKG/DTN bindings.
+- Canonical upstream checks for Classification, Licensing, Governance, and Execution Gate.
+- Execution Gate independent Root anchor and control-chain verification.
+- Expanded audit and replay metadata.
+- Dossier positive overclaim detection.
+- Focused negative tests in `tests/test_phase_18_8b_repository_hardening.py`.
+- The 13-document canonical blueprint series under `docs/canonical_blueprint_series/`.
+
+A rogue, fraudulent, malformed, mismatched, stale, weakly evidenced, contradictory, unanchored, or token-invalid EIE is designed to fail closed before Classification and before Governance under the Phase 18.8B repository-contained control-chain checks.
+
+Pre-governance hardening now checks request identity, stage lineage, token validity, semantic token payloads, EIE/SKG/DTN binding, and Root anchorage. Token-chain enforcement covers threshold bundle, PT token hash, required layer tokens, signed token payloads, request fingerprint, token trace continuity, master convergence token, and execution attestation.
+
+External production dependency remains for isolated verifier processes, hardware-backed key custody, real adapter contracts, deployed SKG/DTN services, authoritative source registries, external audit custody, independent timestamping, formal safety/security/legal review, and independent university or third-party validation.
+
+SBP-LEX Dual V6 is presented as a local deterministic control-plane prototype suitable for university technical review, validation discussion, architectural assessment, stress testing, and further hardening feedback.
+
+Production-grade readiness, formal university validation, safety-critical operational approval, and external certification are not claimed.

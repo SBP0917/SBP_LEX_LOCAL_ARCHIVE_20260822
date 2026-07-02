@@ -12,6 +12,7 @@ from sbp_lex.authority_first.truth_expiry_engine import run_truth_expiry
 from sbp_lex.authority_first.truth_revocation_engine import run_truth_revocation
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.security.token_stack import issue_token
+from sbp_lex.shared.control_chain_validation import validate_eie_binding, validate_skg_dtn_binding
 
 ROOT_OF_TRUST_ORDER = [
     run_anchor_validation,
@@ -50,6 +51,12 @@ def run_root_of_trust(state: Mapping[str, object]) -> Dict[str, object]:
         anchor_failures.append("pt_evidence_envelope_digest_invalid")
     if envelope.get("request_fingerprint") != working_state.get("request_fingerprint"):
         anchor_failures.append("pt_envelope_request_fingerprint_mismatch")
+    eie_valid, eie_failures = validate_eie_binding(working_state)
+    if not eie_valid:
+        anchor_failures.extend(eie_failures)
+    skg_dtn_valid, skg_dtn_failures = validate_skg_dtn_binding(working_state)
+    if not skg_dtn_valid:
+        anchor_failures.extend(skg_dtn_failures)
     if working_state.get("hard_entry_gate", {}).get("request_fingerprint") != working_state.get("request_fingerprint"):
         anchor_failures.append("hard_entry_request_fingerprint_mismatch")
     if not isinstance(eie, Mapping) or eie.get("canonical_traversal_state") is not True:
@@ -102,6 +109,7 @@ def run_root_of_trust(state: Mapping[str, object]) -> Dict[str, object]:
             "anchorage_status": "VALID" if not anchor_failures else "INVALID",
             "failures": sorted(set(anchor_failures)),
         }
+    working_state["root_anchor_bound_state_hash"] = anchor_payload.get("state_hash")
     if isinstance(eie, Mapping) and eie:
         eie = deepcopy(dict(eie))
         eie["root_of_trust_anchorage"] = deepcopy(dict(working_state["root_of_trust_evidence_anchor"]))

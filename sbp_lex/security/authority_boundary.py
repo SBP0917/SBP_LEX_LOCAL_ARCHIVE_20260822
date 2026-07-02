@@ -5,6 +5,7 @@ from typing import Any, Mapping
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.security.token_stack import verify_token
 from sbp_lex.config.security_config import STATE_VERSION
+from sbp_lex.shared.control_chain_validation import validate_control_chain_bindings
 
 TOKEN_STAGE = {
     "authority": "root_of_trust",
@@ -128,6 +129,9 @@ def validate_canonical_upstream(
     _, failures = verify_request_identity_binding(state)
     _, stage_failures = verify_canonical_stage_lineage(state, required_tokens=required_tokens)
     failures.extend(stage_failures)
+    control_chain_valid, control_chain_failures = validate_control_chain_bindings(state)
+    if not control_chain_valid:
+        failures.extend(control_chain_failures)
     if state.get("state_version") != STATE_VERSION:
         failures.append("protocol_downgrade_rejected:state_version")
     tokens = state.get("tokens", {})

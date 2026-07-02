@@ -1,6 +1,6 @@
 # Draft Root of Trust Anchorage Blueprint Addendum
 
-Status: Draft implementation-alignment document. This addendum does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This addendum does not replace master canonical doctrine.
 
 Purpose: Bind validated EIE truth foundations to traversal so they cannot be substituted, weakened, replayed, detached, or silently altered.
 

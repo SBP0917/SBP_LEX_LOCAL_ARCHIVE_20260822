@@ -119,6 +119,11 @@ REQUIRED_EVIDENCE_PATHS = {
     "outputs/release_integrity_bundle/CLAIMS_TO_EVIDENCE_SEED.json",
     "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
     "outputs/adversarial_local_trust_negative_harness.json",
+    "reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md",
+    "reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md",
+    "reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md",
+    "docs/canonical_blueprint_series/00_CANONICAL_BLUEPRINT_SERIES_INDEX.md",
+    "docs/canonical_blueprint_series/BLUEPRINT_SOURCE_AND_SUPERSESSION_MAP.md",
 }
 
 FORBIDDEN_KEYS = {
@@ -406,6 +411,9 @@ def _scope_lock_failures(lock: Mapping[str, Any] | None) -> list[str]:
         "skg_dtn_pt_aware_non_authoritative",
         "eie_canonical_traversal_state",
         "root_of_trust_anchorage_expanded",
+        "phase_18_8b_repository_hardening_complete",
+        "canonical_blueprint_series_current",
+        "external_production_gap_reported",
         "phase_19_not_started",
     )
     for key in required_true:
@@ -470,6 +478,11 @@ def _false_claim_failures(value: Any, path: str) -> list[str]:
         "validated by a university",
         "certification has occurred",
         "certified by",
+        "production deployment readiness",
+        "production-grade readiness",
+        "external certification",
+        "safety-critical operational approval",
+        "formal university validation",
     )
     if isinstance(value, Mapping):
         for key, item in value.items():
@@ -480,7 +493,7 @@ def _false_claim_failures(value: Any, path: str) -> list[str]:
     elif isinstance(value, str):
         lower = value.lower()
         for marker in false_markers:
-            if marker in lower:
+            if marker in lower and f"not {marker}" not in lower and f"no {marker}" not in lower:
                 failures.append(f"false_validation_or_certification_claim:{path}:{marker}")
     return failures
 

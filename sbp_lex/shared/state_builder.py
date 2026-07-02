@@ -6,6 +6,7 @@ from typing import Any, Dict, Mapping
 from sbp_lex.config.security_config import STATE_VERSION
 from sbp_lex.governance.procedural_truth_envelope import build_pt_evidence_envelope
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.shared.control_chain_validation import canonical_eie_digest
 
 
 def _safe_factor(value: Any) -> int:
@@ -49,7 +50,7 @@ def build_state(
         "root_of_trust_anchorage": {},
         "procedural_truth_certification": {},
     }
-    eie["eie_hash"] = generate_digest(eie)
+    eie["eie_hash"] = canonical_eie_digest(eie)
     pt_envelope, pt_envelope_digest = build_pt_evidence_envelope(
         request_dict, admitted_pre_context, eie=eie
     )

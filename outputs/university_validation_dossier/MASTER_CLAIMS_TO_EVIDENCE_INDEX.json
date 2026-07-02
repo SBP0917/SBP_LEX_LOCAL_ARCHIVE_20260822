@@ -1,10 +1,10 @@
 {
   "claim_scope_note": "Bounded review claims only; no external validation result or certification is claimed.",
   "claim_summary": {
-    "claim_count": 29,
+    "claim_count": 32,
     "incomplete_claim_count": 0,
     "out_of_scope_claim_count": 0,
-    "ready_claim_count": 29
+    "ready_claim_count": 32
   },
   "claims": [
     {
@@ -630,6 +630,94 @@
       "supporting_verification_commands": [
         "pytest_eie_pt_rebuild",
         "pytest_execution_gate_strictness"
+      ]
+    },
+    {
+      "claim_category": "repository_hardening",
+      "claim_id": "phase_18_8b_repository_hardening_controls",
+      "claim_scope": "local deterministic control-plane prototype",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "Phase 18.8B adds repository-contained fail-closed control-chain hardening for EIE, SKG, DTN, Root, PT, token chain, Execution Gate, audit/replay, and dossier overclaim detection.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if focused negative tests pass and reports document remaining external production requirements.",
+      "notes": "This is repository-contained hardening only and is not production deployment readiness.",
+      "reviewer_validation_question": "Can the reviewer confirm Phase 18.8B hardening fails closed for local rogue EIE/control-chain cases?",
+      "supporting_evidence_artifacts": [
+        "reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md",
+        "reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md",
+        "reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md",
+        "tests/test_phase_18_8b_repository_hardening.py",
+        "sbp_lex/shared/control_chain_validation.py"
+      ],
+      "supporting_verification_commands": [
+        "pytest_phase18_8b_repository_hardening",
+        "pytest_eie_pt_rebuild",
+        "git_diff_check"
+      ]
+    },
+    {
+      "claim_category": "blueprint_alignment",
+      "claim_id": "canonical_blueprint_series_current",
+      "claim_scope": "repository documentation alignment",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "The 13-document canonical blueprint series exists and reflects the Phase 18.8B repository implementation alignment.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if the index, 13 documents, and source/supersession map exist and reference the 18.8B control-chain boundaries.",
+      "notes": "Blueprint documents are repository-side implementation alignment material pending owner canonisation.",
+      "reviewer_validation_question": "Can the reviewer confirm the 13-document blueprint series is present and current for Phase 18.8B?",
+      "supporting_evidence_artifacts": [
+        "docs/canonical_blueprint_series/00_CANONICAL_BLUEPRINT_SERIES_INDEX.md",
+        "docs/canonical_blueprint_series/01_MASTER_ARCHITECTURE_AND_TRAVERSAL_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/02_EIE_ADAPTER_INGRESS_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/03_SKG_TRUTH_FOUNDATION_ENRICHMENT_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/04_DTN_CONTEXTUAL_OPERATIONAL_VERIFICATION_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/05_ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/06_PROCEDURAL_TRUTH_EVIDENTIARY_SUFFICIENCY_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/07_CLASSIFICATION_AND_LICENSING_INTEGRATION_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/08_GOVERNANCE_AND_GRC_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/09_DOMAIN_ADMISSIBILITY_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/10_AURION_CONSTRAINED_PATHWAY_SELECTION_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/11_EXECUTION_GATE_ENFORCEMENT_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/12_AUDIT_REPLAY_TELEMETRY_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/13_ANTI_DRIFT_IMPLEMENTATION_CONTROL_BLUEPRINT.md",
+        "docs/canonical_blueprint_series/BLUEPRINT_SOURCE_AND_SUPERSESSION_MAP.md"
+      ],
+      "supporting_verification_commands": [
+        "validation_dossier_validate",
+        "git_diff_check"
+      ]
+    },
+    {
+      "claim_category": "production_boundary",
+      "claim_id": "external_production_readiness_gaps_reported",
+      "claim_scope": "external production-readiness gap reporting",
+      "claim_status": "CLAIM_READY_FOR_REVIEW",
+      "claim_text": "Remaining external-production requirements are explicitly reported and not claimed as fixed in the repository.",
+      "exclusions": [
+        "No university validation result is claimed.",
+        "No certification is claimed.",
+        "No runtime activation is claimed.",
+        "No Phase 19 work is claimed."
+      ],
+      "expected_validation_answer": "Supported if the gap report separates local hardening from external-production requirements.",
+      "notes": "External production requirements remain outside this local repository-contained pass.",
+      "reviewer_validation_question": "Can the reviewer confirm the dossier keeps deployment-readiness claims outside scope?",
+      "supporting_evidence_artifacts": [
+        "reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md",
+        "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json"
+      ],
+      "supporting_verification_commands": [
+        "validation_dossier_validate"
       ]
     },
     {

@@ -1,8 +1,8 @@
 {
   "artifact_summary": {
-    "evidence_artifact_count": 30,
+    "evidence_artifact_count": 50,
     "missing_artifact_count": 0,
-    "required_artifact_count": 30
+    "required_artifact_count": 50
   },
   "artifacts": [
     {
@@ -207,8 +207,8 @@
         "skg_dtn_external_non_authoritative"
       ],
       "required": true,
-      "sha256": "867e134a90aa5d30cd58110017aee61c5d8fbee415eec8104025fc5bf0a95726",
-      "size_bytes": 4184
+      "sha256": "6b31396f473ef2d6e8950c7045b7953f11d1ed8264d230aba4471a40fc39aeeb",
+      "size_bytes": 4204
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -220,8 +220,8 @@
         "eie_canonical_traversal_state"
       ],
       "required": true,
-      "sha256": "9c305cf8ba657c63cf47d555c20acb36e7146516c5313128bd6acd66e64a55cc",
-      "size_bytes": 1583
+      "sha256": "f4d74f321ecf05e6b866b9690c118c43e7e2f213c974fcd4fcfe24db5c1330e2",
+      "size_bytes": 1626
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -234,8 +234,8 @@
         "procedural_truth_evidentiary_sufficiency_certifies"
       ],
       "required": true,
-      "sha256": "01e8af83bdab82f8e42ccd298645d3768b7525ea27dfc79086890aed7dc9b905",
-      "size_bytes": 1710
+      "sha256": "c83f8a9f0f4f186cfc71243cd65b4730d58fdb90337931e4040c402158a1a4ff",
+      "size_bytes": 1753
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -248,8 +248,8 @@
         "procedural_truth_evidentiary_sufficiency_certifies"
       ],
       "required": true,
-      "sha256": "f618c6915da3c099c04b48329e736f50ca1589d3edeadd0d014fff2a28cf2f3a",
-      "size_bytes": 1660
+      "sha256": "88534a52c898bd004a5fefbb69d399a0a8a136313d6c2b6f438746a50f3ae56c",
+      "size_bytes": 1703
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -261,8 +261,8 @@
         "procedural_truth_evidentiary_sufficiency_certifies"
       ],
       "required": true,
-      "sha256": "96bb0debec1946baf689d8f19cc56b4816fd990072cc86f3a1253f71ee16d303",
-      "size_bytes": 1874
+      "sha256": "e7ea81968cbf92b0011bfcbfe275f2b7714aac005b3f864c8b5c776960cf5271",
+      "size_bytes": 1917
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -274,8 +274,8 @@
         "root_of_trust_anchorage_binds_eie_truth_foundations"
       ],
       "required": true,
-      "sha256": "95dd465f17956c50f5a337833bc4ea8d76dd78048cbc429562d410e3bb675cd8",
-      "size_bytes": 1386
+      "sha256": "c5ab685d93e8c108dda996e8be1f8401ba56ff618270392432f31b336e2e8b8a",
+      "size_bytes": 1429
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -288,8 +288,8 @@
         "execution_gate_enforces_pt_certification"
       ],
       "required": true,
-      "sha256": "e79026170c0bf6432786491c710d9d6ca2af7d65430d44a5c1ab939fae258e5b",
-      "size_bytes": 1469
+      "sha256": "326b083b52477cd01223c4ab38359c84435ef93789cfdd9a086a48bfeefb2d17",
+      "size_bytes": 1512
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -301,8 +301,8 @@
         "execution_gate_enforces_pt_certification"
       ],
       "required": true,
-      "sha256": "9ea132444c2c38450379e8fcdc7b2952ddf3971fc0f370e9c3fcf8e364492fd1",
-      "size_bytes": 1392
+      "sha256": "87ee2fb9b83353731c17ff339d7d99aa0c7a76294b9f52d22dc61a08e6270c8e",
+      "size_bytes": 1435
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -314,8 +314,8 @@
         "root_of_trust_anchorage_binds_eie_truth_foundations"
       ],
       "required": true,
-      "sha256": "0a63de805d8676d4030c21d0524da0a50908c29f2405eea41fc719b63be3f0fe",
-      "size_bytes": 1354
+      "sha256": "c04bcff16c0c175b50a0a001f4df225638b4885ab2dfd56b062828169089a2bd",
+      "size_bytes": 1397
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -331,8 +331,8 @@
         "skg_dtn_external_non_authoritative"
       ],
       "required": true,
-      "sha256": "ec318d3213190a8fccb6e9101278ea41422dac5f8b2bf69cb0aa8960982a42fd",
-      "size_bytes": 14202
+      "sha256": "c8758fdb8905a5b82e495c82def2f05be5ebda87e3c858b46316609db260a8f6",
+      "size_bytes": 16496
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -352,6 +352,271 @@
       "size_bytes": 5102
     },
     {
+      "artifact_group": "phase_18_8b_hardening_artifacts",
+      "artifact_id": "phase_18_8b_phase_18_8b_repository_hardening_inspection_map",
+      "exists": true,
+      "path": "reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md",
+      "reason": "Phase 18.8B repository-contained hardening evidence.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true,
+      "sha256": "692289fd481145596cc573b42ffc162ef9defddf6cab92913ba62119204eebf0",
+      "size_bytes": 4337
+    },
+    {
+      "artifact_group": "phase_18_8b_hardening_artifacts",
+      "artifact_id": "phase_18_8b_phase_18_8b_external_production_readiness_gap_report",
+      "exists": true,
+      "path": "reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md",
+      "reason": "Phase 18.8B repository-contained hardening evidence.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true,
+      "sha256": "c788bef4715799d619b67e3fa11a5aa99b1f109efe360193a5e42cdb03fe82da",
+      "size_bytes": 3776
+    },
+    {
+      "artifact_group": "phase_18_8b_hardening_artifacts",
+      "artifact_id": "phase_18_8b_phase_18_8b_maximum_repository_hardening_baseline_report",
+      "exists": true,
+      "path": "reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md",
+      "reason": "Phase 18.8B repository-contained hardening evidence.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true,
+      "sha256": "e6b6c685328999e3466df05b4218567eddc98e61c6fa1872f6d2c5c80265d94f",
+      "size_bytes": 3048
+    },
+    {
+      "artifact_group": "phase_18_8b_hardening_artifacts",
+      "artifact_id": "phase_18_8b_test_phase_18_8b_repository_hardening",
+      "exists": true,
+      "path": "tests/test_phase_18_8b_repository_hardening.py",
+      "reason": "Phase 18.8B repository-contained hardening evidence.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true,
+      "sha256": "c0b86f6756357e4555a90f0606565d9c32d7f69f364fdb3c8cbbcb05c10dbb3f",
+      "size_bytes": 10825
+    },
+    {
+      "artifact_group": "phase_18_8b_hardening_artifacts",
+      "artifact_id": "phase_18_8b_control_chain_validation",
+      "exists": true,
+      "path": "sbp_lex/shared/control_chain_validation.py",
+      "reason": "Phase 18.8B repository-contained hardening evidence.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true,
+      "sha256": "fc68d6d2a8b6109e2ea78e593352bbe2dab022f8a495fae29644f1b5c36d4c99",
+      "size_bytes": 10331
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_00_canonical_blueprint_series_index",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/00_CANONICAL_BLUEPRINT_SERIES_INDEX.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "decaaf8f02261bd18d0a832ce5ad60ee008cb878286410df7c00943ce8eb178b",
+      "size_bytes": 2075
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_01_master_architecture_and_traversal_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/01_MASTER_ARCHITECTURE_AND_TRAVERSAL_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "ce96e0eba6ef58e84cef289f3074ecec43b3890b645cb45b2ba2f233fd74d142",
+      "size_bytes": 3048
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_02_eie_adapter_ingress_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/02_EIE_ADAPTER_INGRESS_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "1166484f26633e63247169766f39ff359271c2034c0c8e96bf4cfd37dc9dc7ac",
+      "size_bytes": 2255
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_03_skg_truth_foundation_enrichment_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/03_SKG_TRUTH_FOUNDATION_ENRICHMENT_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "80ad96cc04acc60c7bc095e711559f9999c80c0bb1e811d6fee1629c489172bf",
+      "size_bytes": 2269
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_04_dtn_contextual_operational_verification_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/04_DTN_CONTEXTUAL_OPERATIONAL_VERIFICATION_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "68491c5096b772bc3b50f667c9f1f1b6a32376ef05b1bf604d8848c108f15664",
+      "size_bytes": 2124
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_05_root_of_trust_anchorage_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/05_ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "8bf8d3ef47a29dabb4c6ee67bbabfb13aba86b61f32af34d3ab1a2cffb00fcd7",
+      "size_bytes": 2174
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_06_procedural_truth_evidentiary_sufficiency_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/06_PROCEDURAL_TRUTH_EVIDENTIARY_SUFFICIENCY_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "3af77a5e43b870d23ed91a3d1e7fe580374e5652718b36729075a2a30ce82c48",
+      "size_bytes": 2195
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_07_classification_and_licensing_integration_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/07_CLASSIFICATION_AND_LICENSING_INTEGRATION_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "67962365a8be3749bede706fe2409d9055974b44e3eb35fb54f5443fa11c23e5",
+      "size_bytes": 1923
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_08_governance_and_grc_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/08_GOVERNANCE_AND_GRC_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "e2d4f20eb1ed009f800d1f8d972aecc73a4c8d57d8da656f4504cc3295735f8d",
+      "size_bytes": 1904
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_09_domain_admissibility_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/09_DOMAIN_ADMISSIBILITY_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "24e9f53b69c689e0dc8a5c0596251b7f4caf16efff32e21635adda2cca0a5e60",
+      "size_bytes": 1572
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_10_aurion_constrained_pathway_selection_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/10_AURION_CONSTRAINED_PATHWAY_SELECTION_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "bea286cb422de85bee67f5fe7894dbf95fe683af4e5c2ebbf77252eaf300918a",
+      "size_bytes": 1676
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_11_execution_gate_enforcement_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/11_EXECUTION_GATE_ENFORCEMENT_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "07aadc5dafcc932959d355bb1ff696bdea153882f36c6bc9e6f665d9976cd8fa",
+      "size_bytes": 2245
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_12_audit_replay_telemetry_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/12_AUDIT_REPLAY_TELEMETRY_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "92935ac1426905e3d58babdc0c89f58dd746ab6f716ebf2ccd7ec955151bb564",
+      "size_bytes": 2048
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_13_anti_drift_implementation_control_blueprint",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/13_ANTI_DRIFT_IMPLEMENTATION_CONTROL_BLUEPRINT.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "749fd920ae2bc5653939b680d5d54fcd9cf85964993486bf7e571f805db731f5",
+      "size_bytes": 2072
+    },
+    {
+      "artifact_group": "canonical_blueprint_series",
+      "artifact_id": "canonical_blueprint_blueprint_source_and_supersession_map",
+      "exists": true,
+      "path": "docs/canonical_blueprint_series/BLUEPRINT_SOURCE_AND_SUPERSESSION_MAP.md",
+      "reason": "Canonical blueprint series implementation-alignment document.",
+      "related_claim_ids": [
+        "canonical_blueprint_series_current"
+      ],
+      "required": true,
+      "sha256": "ca750e53a42dcc15d4d76a10bd911385796d783d42a8525bdd8d297cf6d92ab9",
+      "size_bytes": 2267
+    },
+    {
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_claims_index",
       "exists": true,
@@ -360,6 +625,7 @@
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
         "adversarial_harness_passes",
+        "canonical_blueprint_series_current",
         "constitutional_gates_block_unclean_states",
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
@@ -370,10 +636,12 @@
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
         "execution_gate_enforces_pt_certification",
+        "external_production_readiness_gaps_reported",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
+        "phase_18_8b_repository_hardening_controls",
         "phase_19_not_started",
         "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
@@ -389,8 +657,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "41fe8814d2ecdb52413bfb7b9ccf7f2405143763a54de6e69309cd0e8abd737c",
-      "size_bytes": 36130
+      "sha256": "75aad4a11b8c75101c2c343ce02703b0c698a77c46c9dd367d87a3f2de05373c",
+      "size_bytes": 41533
     },
     {
       "artifact_group": "dossier_outputs",
@@ -401,6 +669,7 @@
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
         "adversarial_harness_passes",
+        "canonical_blueprint_series_current",
         "constitutional_gates_block_unclean_states",
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
@@ -411,10 +680,12 @@
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
         "execution_gate_enforces_pt_certification",
+        "external_production_readiness_gaps_reported",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
+        "phase_18_8b_repository_hardening_controls",
         "phase_19_not_started",
         "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
@@ -430,8 +701,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "f76a39bf3c034189d350bc58abe35911991f8d3deb49f034e1ff2b58b850d90b",
-      "size_bytes": 15356
+      "sha256": "3cf4248ad1bed4ec38ac67d085bfa530c9f64ebe6b26801e8a3e58b7363fba23",
+      "size_bytes": 17921
     },
     {
       "artifact_group": "dossier_outputs",
@@ -447,8 +718,8 @@
         "governance_truth_gates_unchanged"
       ],
       "required": true,
-      "sha256": "99e83fb03599d43691f31a48134bac871d680166aa5c87b5edf335d1ef38b5f4",
-      "size_bytes": 1865
+      "sha256": "8fd63f8ed8c12871828f328077fbba9d3ef9a112415c7efa29350dbb4ef485e3",
+      "size_bytes": 2011
     },
     {
       "artifact_group": "dossier_outputs",
@@ -459,6 +730,7 @@
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
         "adversarial_harness_passes",
+        "canonical_blueprint_series_current",
         "constitutional_gates_block_unclean_states",
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
@@ -469,10 +741,12 @@
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
         "execution_gate_enforces_pt_certification",
+        "external_production_readiness_gaps_reported",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
+        "phase_18_8b_repository_hardening_controls",
         "phase_19_not_started",
         "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
@@ -488,8 +762,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "daf8de78d7260252690f881f4d04479a7677ac969bc5435bae0ad2ffa0f880f9",
-      "size_bytes": 13208
+      "sha256": "69c02e0b08568f414178feb895f410319438810e6de47e6f6649e7ba6b530a96",
+      "size_bytes": 13933
     },
     {
       "artifact_group": "dossier_outputs",
@@ -500,6 +774,7 @@
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
         "adversarial_harness_passes",
+        "canonical_blueprint_series_current",
         "constitutional_gates_block_unclean_states",
         "constitutional_gates_pass",
         "desktop_v1_local_runtime_prototype",
@@ -510,10 +785,12 @@
         "evidence_chain_zero_missing",
         "execution_envelope_validates",
         "execution_gate_enforces_pt_certification",
+        "external_production_readiness_gaps_reported",
         "future_surfaces_absent",
         "governance_truth_gates_unchanged",
         "local_trust_capstone_passes",
         "local_trust_manifest_validates",
+        "phase_18_8b_repository_hardening_controls",
         "phase_19_not_started",
         "procedural_truth_evidentiary_sufficiency_certifies",
         "regression_matrix_detects_drift",
@@ -529,8 +806,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "bbfbbaf98ebec49feb5f81bfb05d8163de8694412b1ad886d4b9f4d2e2391038",
-      "size_bytes": 2610
+      "sha256": "327e2d52e28e368164eccced07f245cd14db62a8d79fc31b112bcb373d7c3f2f",
+      "size_bytes": 3105
     }
   ],
   "evidence_artifact_index_type": "university_validation_evidence_artifact_index",

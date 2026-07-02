@@ -218,6 +218,43 @@ REQUIRED_VALIDATION_QUESTION_SPECS: tuple[dict[str, Any], ...] = (
         "reviewer_notes": "REFINE, ESCALATE, DENY, NOT_CERTIFIED, stale, missing, or mismatched PT states do not execute.",
     },
     {
+        "question_id": "confirm_phase_18_8b_repository_hardening",
+        "question_text": "Can the reviewer confirm Phase 18.8B focused negative tests fail closed for rogue EIE/control-chain cases?",
+        "related_claim_ids": ["phase_18_8b_repository_hardening_controls"],
+        "evidence_artifacts": [
+            "tests/test_phase_18_8b_repository_hardening.py",
+            "reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md",
+            "reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md",
+        ],
+        "verification_commands": ["pytest_phase18_8b_repository_hardening", "pytest"],
+        "expected_answer": "Yes, if the focused test and full suite pass.",
+        "reviewer_notes": "Passing negative tests mean the bad state was denied, invalidated, or failed closed locally.",
+    },
+    {
+        "question_id": "confirm_canonical_blueprint_series_current",
+        "question_text": "Can the reviewer confirm the 13-document canonical blueprint series exists and reflects Phase 18.8B implementation alignment?",
+        "related_claim_ids": ["canonical_blueprint_series_current"],
+        "evidence_artifacts": [
+            "docs/canonical_blueprint_series/00_CANONICAL_BLUEPRINT_SERIES_INDEX.md",
+            "docs/canonical_blueprint_series/BLUEPRINT_SOURCE_AND_SUPERSESSION_MAP.md",
+        ],
+        "verification_commands": ["validation_dossier_validate"],
+        "expected_answer": "Yes, if the index, 13 documents, and source/supersession map are present.",
+        "reviewer_notes": "The series is repository-side implementation alignment material pending owner canonisation.",
+    },
+    {
+        "question_id": "confirm_external_production_gaps_remain_separate",
+        "question_text": "Can the reviewer confirm external-production requirements are reported separately from repository-contained hardening?",
+        "related_claim_ids": ["external_production_readiness_gaps_reported"],
+        "evidence_artifacts": [
+            "reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md",
+            "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
+        ],
+        "verification_commands": ["validation_dossier_validate"],
+        "expected_answer": "Yes, if the report lists external production requirements without claiming they are fixed.",
+        "reviewer_notes": "The repository is framed as a local deterministic control-plane prototype for university technical review.",
+    },
+    {
         "question_id": "confirm_future_surfaces_absent",
         "question_text": "Can the reviewer confirm no active nodes/quorum/mesh/distributed/cloud/APK/V2/V3 implementation exists in this line?",
         "related_claim_ids": ["future_surfaces_absent"],

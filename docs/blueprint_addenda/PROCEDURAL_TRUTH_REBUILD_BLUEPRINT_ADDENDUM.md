@@ -1,6 +1,6 @@
 # Draft Procedural Truth Rebuild Blueprint Addendum
 
-Status: Draft implementation-alignment document. This addendum does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This addendum does not replace master canonical doctrine.
 
 Purpose: Upgrade Procedural Truth from fixed corroboration checking into a Procedural Truth Evidentiary Sufficiency Certification Engine.
 

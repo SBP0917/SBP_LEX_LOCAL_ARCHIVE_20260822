@@ -284,3 +284,18 @@ DTN
 ```
 
 Those commands are recorded for reviewers only. They remain external verification actions, not dossier build actions.
+
+## Phase 18.8B Handover Update
+
+The dossier now references the Phase 18.8B repository-contained hardening pass:
+
+- `reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md`
+- `reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md`
+- `reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md`
+- `docs/canonical_blueprint_series/00_CANONICAL_BLUEPRINT_SERIES_INDEX.md`
+- `docs/canonical_blueprint_series/BLUEPRINT_SOURCE_AND_SUPERSESSION_MAP.md`
+- `tests/test_phase_18_8b_repository_hardening.py`
+
+SBP-LEX Dual V6 is presented as a local deterministic control-plane prototype suitable for university technical review, validation discussion, architectural assessment, stress testing, and further hardening feedback.
+
+The dossier does not claim production deployment readiness, formal university validation, external certification, or safety-critical operational approval.

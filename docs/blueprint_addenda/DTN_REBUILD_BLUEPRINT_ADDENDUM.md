@@ -1,6 +1,6 @@
 # Draft DTN Rebuild Blueprint Addendum
 
-Status: Draft implementation-alignment document. This addendum does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This addendum does not replace master canonical doctrine.
 
 Purpose: Make DTN Procedural-Truth-aware by enriching contextual and operational EIE metadata after SKG verification.
 

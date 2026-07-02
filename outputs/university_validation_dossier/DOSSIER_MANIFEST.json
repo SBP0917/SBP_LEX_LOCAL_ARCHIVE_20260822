@@ -11,14 +11,14 @@
   "claims_to_evidence_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
-    "sha256": "41fe8814d2ecdb52413bfb7b9ccf7f2405143763a54de6e69309cd0e8abd737c",
-    "size_bytes": 36130
+    "sha256": "75aad4a11b8c75101c2c343ce02703b0c698a77c46c9dd367d87a3f2de05373c",
+    "size_bytes": 41533
   },
-  "created_at": "2026-07-02T10:39:59+00:00",
-  "dossier_digest": "94f58706c45026159537982cf3cbf257d8faf9fbf78cf7fddce6e7f2f672ebfb",
+  "created_at": "2026-07-02T22:06:00+00:00",
+  "dossier_digest": "0886d5209b0885e143ae8118705a21aabec439d981e32eae8ea8cb0360a981e2",
   "dossier_manifest_type": "university_validation_dossier_manifest",
   "dossier_manifest_version": "18.8",
-  "dossier_payload_digest": "a87c3eaed5bfc572ee55f63f38a10a9e3ca77418a680205f9904f9680e3fec29",
+  "dossier_payload_digest": "ffd28bb04a4f70df0aa376b51c117b562829b09c5cc28143b2598db6acff58d6",
   "dossier_scope": {
     "bounded_validation_questions_only": true,
     "next_phase": "18.9",
@@ -32,31 +32,31 @@
     "purpose": "Reviewer-facing bounded claims-to-evidence handoff package.",
     "review_readiness_only": true
   },
-  "dossier_signature": "14f96a810f839195bce70ab4f2a833dfc928e72a53a7a7b20032d91300e705e9",
+  "dossier_signature": "dd08cad18c007995493876a9ce96a9c6a803532adf34f9e13c3dcb581aa69c2c",
   "dossier_status": "VALIDATION_DOSSIER_READY",
   "dossier_summary": {
-    "claim_count": 29,
-    "evidence_artifact_count": 30,
+    "claim_count": 32,
+    "evidence_artifact_count": 50,
     "next_phase": "18.9",
     "phase_19_not_started": true,
-    "reviewer_command_count": 35,
-    "validation_question_count": 20
+    "reviewer_command_count": 36,
+    "validation_question_count": 23
   },
   "evidence_artifact_index_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
-    "sha256": "74fbc7a09ce544c34f692f589d475dd8320553b319f67ee0bf222498ca97347c",
-    "size_bytes": 22244
+    "sha256": "ee34119914434682e9cd109dc6fbbfbf3f12390daad9f2946f78a5f8b4bccd51",
+    "size_bytes": 34628
   },
   "git_branch": "main",
-  "git_commit": "0f9d4d5424864cfd8753a7d42bced4f995290ce8",
+  "git_commit": "67ee3176ad068558567b54dd029ee3d4df70a7ff",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/pre_context_package.py\n M external_substrates/skg/signal_builder.py\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json\n M outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json\n M outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M outputs/university_validation_dossier/VALIDATION_QUESTIONS.json\n M sbp_lex/api/schema_validation.py\n M sbp_lex/audit/audit_engine.py\n M sbp_lex/audit/historical_integrity.py\n M sbp_lex/authority_first/root_of_trust_runner.py\n M sbp_lex/collective/context_interface.py\n M sbp_lex/execution/execution_gate.py\n M sbp_lex/governance/procedural_truth_engine.py\n M sbp_lex/governance/procedural_truth_envelope.py\n M sbp_lex/local_trust/adversarial_runner.py\n M sbp_lex/local_trust/capstone_validator.py\n M sbp_lex/local_trust/claims_to_evidence.py\n M sbp_lex/local_trust/dossier_manifest.py\n M sbp_lex/local_trust/dossier_validator.py\n M sbp_lex/local_trust/local_trust_capstone.py\n M sbp_lex/local_trust/validation_questions.py\n M sbp_lex/shared/state_builder.py\n M tests/test_phase_18_7e_2_constitutional_enforcement_gates.py\n M tests/test_phase_18_7e_3_toolchain_guard.py\n M tests/test_phase_18_7e_4_local_trust_capstone.py\n M tests/test_phase_18_7f_release_integrity_package.py\n M tests/test_phase_18_7g_adversarial_local_trust_negative_harness.py\n M tests/test_phase_18_8_university_validation_dossier.py",
+    "branch_status_short": "## main...origin/main\n M docs/UNIVERSITY_VALIDATION_DOSSIER.md\n M docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md\n M docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md\n M docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md\n M docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json\n M outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json\n M outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M outputs/university_validation_dossier/VALIDATION_QUESTIONS.json\n M reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md\n M reports/PHASE_18_8_UNIVERSITY_VALIDATION_DOSSIER_REPORT.md\n M sbp_lex/audit/audit_engine.py\n M sbp_lex/authority_first/root_of_trust_runner.py\n M sbp_lex/collective/context_interface.py\n M sbp_lex/execution/execution_gate.py\n M sbp_lex/local_trust/claims_to_evidence.py\n M sbp_lex/local_trust/dossier_manifest.py\n M sbp_lex/local_trust/dossier_validator.py\n M sbp_lex/local_trust/validation_questions.py\n M sbp_lex/pipeline/replay_runner.py\n M sbp_lex/security/authority_boundary.py\n M sbp_lex/shared/state_builder.py\n M tests/test_phase_18_5_authority_boundary.py",
     "git_branch": "main",
-    "git_commit": "0f9d4d5424864cfd8753a7d42bced4f995290ce8",
+    "git_commit": "67ee3176ad068558567b54dd029ee3d4df70a7ff",
     "synced_to_origin_branch": true,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
@@ -64,21 +64,21 @@
   "handoff_readme_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
-    "sha256": "bbfbbaf98ebec49feb5f81bfb05d8163de8694412b1ad886d4b9f4d2e2391038",
-    "size_bytes": 2610
+    "sha256": "327e2d52e28e368164eccced07f245cd14db62a8d79fc31b112bcb373d7c3f2f",
+    "size_bytes": 3105
   },
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
   "reviewer_commands_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
-    "sha256": "daf8de78d7260252690f881f4d04479a7677ac969bc5435bae0ad2ffa0f880f9",
-    "size_bytes": 13208
+    "sha256": "69c02e0b08568f414178feb895f410319438810e6de47e6f6649e7ba6b530a96",
+    "size_bytes": 13933
   },
   "scope_and_exclusions_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
-    "sha256": "99e83fb03599d43691f31a48134bac871d680166aa5c87b5edf335d1ef38b5f4",
-    "size_bytes": 1865
+    "sha256": "8fd63f8ed8c12871828f328077fbba9d3ef9a112415c7efa29350dbb4ef485e3",
+    "size_bytes": 2011
   },
   "signature_mode": "UNIVERSITY_VALIDATION_DOSSIER_DETERMINISTIC_PLACEHOLDER",
   "source_phase": "18.8",
@@ -86,7 +86,7 @@
   "validation_questions_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
-    "sha256": "f76a39bf3c034189d350bc58abe35911991f8d3deb49f034e1ff2b58b850d90b",
-    "size_bytes": 15356
+    "sha256": "3cf4248ad1bed4ec38ac67d085bfa530c9f64ebe6b26801e8a3e58b7363fba23",
+    "size_bytes": 17921
   }
 }

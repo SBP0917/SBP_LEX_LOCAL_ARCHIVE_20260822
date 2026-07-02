@@ -1,6 +1,8 @@
 {
+  "canonical_blueprint_series_current": true,
   "eie_canonical_traversal_state": true,
   "execution_gate_updated_for_pt_certification": true,
+  "external_production_gap_reported": true,
   "governance_unchanged": true,
   "hard_entry_gate_unchanged": true,
   "next_phase": {
@@ -23,6 +25,7 @@
   "not_security_certification": true,
   "not_university_validation_result": true,
   "not_v2_or_v3_implementation": true,
+  "phase_18_8b_repository_hardening_complete": true,
   "phase_19_not_started": true,
   "procedural_truth_rebuilt_to_evidentiary_sufficiency": true,
   "review_readiness_only": true,

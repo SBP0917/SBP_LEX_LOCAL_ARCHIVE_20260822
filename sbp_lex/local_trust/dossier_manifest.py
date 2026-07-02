@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from sbp_lex.local_trust.adversarial_negative_harness import DEFAULT_ADVERSARIAL_OUTPUT_PATH
-from sbp_lex.local_trust.claims_to_evidence import required_claim_ids
+from sbp_lex.local_trust.claims_to_evidence import (
+    CANONICAL_BLUEPRINT_SERIES_ARTIFACTS,
+    PHASE_18_8B_HARDENING_ARTIFACTS,
+    required_claim_ids,
+)
 from sbp_lex.local_trust.manifest import canonical_json, repository_root_from
 from sbp_lex.local_trust.release_hash_index import file_sha256
 from sbp_lex.local_trust.release_integrity import DEFAULT_RELEASE_BUNDLE_DIR, load_json
@@ -478,6 +482,31 @@ EVIDENCE_ARTIFACT_SPECS: tuple[dict[str, Any], ...] = (
         ),
         "reason": "Focused EIE/PT/SKG/DTN rebuild tests.",
     },
+    *[
+        {
+            "artifact_id": f"phase_18_8b_{Path(path).stem.lower()}",
+            "artifact_group": "phase_18_8b_hardening_artifacts",
+            "path": path,
+            "required": True,
+            "related_claim_ids": _claims(
+                "phase_18_8b_repository_hardening_controls",
+                "external_production_readiness_gaps_reported",
+            ),
+            "reason": "Phase 18.8B repository-contained hardening evidence.",
+        }
+        for path in PHASE_18_8B_HARDENING_ARTIFACTS
+    ],
+    *[
+        {
+            "artifact_id": f"canonical_blueprint_{Path(path).stem.lower()}",
+            "artifact_group": "canonical_blueprint_series",
+            "path": path,
+            "required": True,
+            "related_claim_ids": _claims("canonical_blueprint_series_current"),
+            "reason": "Canonical blueprint series implementation-alignment document.",
+        }
+        for path in CANONICAL_BLUEPRINT_SERIES_ARTIFACTS
+    ],
     {
         "artifact_id": "dossier_claims_index",
         "artifact_group": "dossier_outputs",

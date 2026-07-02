@@ -1,6 +1,6 @@
 # Draft Traversal Integration Blueprint Addendum
 
-Status: Draft implementation-alignment document. This addendum does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This addendum does not replace master canonical doctrine.
 
 Purpose: Preserve the required traversal order and pass forward EIE/SKG/DTN/Root/PT metadata without redesigning unrelated layers.
 

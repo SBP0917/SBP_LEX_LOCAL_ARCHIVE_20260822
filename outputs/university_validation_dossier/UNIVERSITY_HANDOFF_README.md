@@ -22,19 +22,24 @@ This package is a reviewer-facing dossier for bounded assessment of the SBP-LEX 
 - Not runtime activation.
 - Not Phase 19.
 - Not external SKG or DTN runtime deployment.
+- Not production deployment readiness.
+- Not external certification.
+- Not safety-critical operational approval.
 - Not nodes, quorum, mesh, distributed runtime, cloud, APK, V2, or V3 implementation.
 
 ## Current Repository Commit
 
-`0f9d4d5424864cfd8753a7d42bced4f995290ce8`
+`67ee3176ad068558567b54dd029ee3d4df70a7ff`
 
 ## Review Scope
 
-Reviewers are asked to assess whether the bounded claims in `MASTER_CLAIMS_TO_EVIDENCE_INDEX.json` are supported by the listed artifacts and verification commands, including the EIE canonical traversal state, SKG/DTN enrichment, Root of Trust anchorage, Procedural Truth certification, and Execution Gate enforcement updates.
+Reviewers are asked to assess whether the bounded claims in `MASTER_CLAIMS_TO_EVIDENCE_INDEX.json` are supported by the listed artifacts and verification commands, including the EIE canonical traversal state, SKG/DTN enrichment, Root of Trust anchorage, Procedural Truth certification, Execution Gate enforcement, Phase 18.8B hardening, and the 13-document blueprint series.
 
 ## Excluded Scope
 
-The dossier excludes certification, external validation conclusions, external SKG/DTN deployment, runtime activation beyond this local control-plane traversal, Phase 19, legal conclusions, patent validity, security certification, and future distributed or mobile implementation work.
+SBP-LEX Dual V6 is presented as a local deterministic control-plane prototype suitable for university technical review, validation discussion, architectural assessment, stress testing, and further hardening feedback.
+
+The dossier excludes production deployment readiness, formal university validation, external certification, safety-critical operational approval, external validation conclusions, external SKG/DTN deployment, runtime activation beyond this local control-plane traversal, Phase 19, legal conclusions, patent validity, security certification, and future distributed or mobile implementation work.
 
 ## How To Verify
 

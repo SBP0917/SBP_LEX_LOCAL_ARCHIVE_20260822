@@ -138,13 +138,32 @@ def test_replay_preserves_pt_bound_external_metadata() -> None:
     second = replay["runs"][1]["pt_bound_metadata"]
     assert replay["matched"] is True
     assert first == second
-    assert first == {
+    assert {
+        key: first[key]
+        for key in (
+            "request_fingerprint",
+            "skg_digest",
+            "dtn_digest",
+            "pre_context_digest",
+            "pt_evidence_envelope_digest",
+        )
+    } == {
         "request_fingerprint": generate_digest(request),
         "skg_digest": signals["skg_digest"],
         "dtn_digest": signals["dtn_digest"],
         "pre_context_digest": signals["digest"],
         "pt_evidence_envelope_digest": replay["runs"][0]["pt_evidence_envelope_digest"],
     }
+    for key in (
+        "eie_hash",
+        "traversal_id",
+        "source_payload_hash",
+        "skg_enrichment_hash",
+        "dtn_enrichment_hash",
+        "root_anchor_digest",
+        "token_chain_reference",
+    ):
+        assert first[key]
 
 
 def test_audit_includes_full_pt_external_digest_lineage() -> None:

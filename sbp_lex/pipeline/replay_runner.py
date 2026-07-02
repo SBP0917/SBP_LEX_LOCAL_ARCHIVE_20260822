@@ -110,10 +110,21 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
         "pt_bound_metadata": {
             "request_fingerprint": envelope.get("request_fingerprint"),
+            "eie_hash": state.get("eie_hash"),
+            "traversal_id": state.get("traversal_id"),
+            "source_payload_hash": state.get("source_payload_hash"),
             "skg_digest": envelope.get("skg_digest"),
             "dtn_digest": envelope.get("dtn_digest"),
             "pre_context_digest": envelope.get("pre_context_digest"),
             "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
+            "skg_enrichment_hash": envelope.get("skg_truth_foundation_metadata", {}).get("skg_enrichment_hash")
+            if isinstance(envelope.get("skg_truth_foundation_metadata"), Mapping)
+            else None,
+            "dtn_enrichment_hash": envelope.get("dtn_contextual_verification_metadata", {}).get("dtn_enrichment_hash")
+            if isinstance(envelope.get("dtn_contextual_verification_metadata"), Mapping)
+            else None,
+            "root_anchor_digest": state.get("root_of_trust_evidence_anchor", {}).get("anchor_digest"),
+            "token_chain_reference": state.get("root_of_trust_evidence_anchor", {}).get("payload", {}).get("token_chain_reference"),
         },
         "classification_result": state.get("classification_result"),
         "licensing_result": state.get("licensing_result"),

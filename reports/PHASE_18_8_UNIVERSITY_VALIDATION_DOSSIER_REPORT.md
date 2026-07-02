@@ -123,3 +123,17 @@ Phase 19 remains not started.
 18.9 is marked as next phase only.
 
 18.9 was not implemented.
+
+## Phase 18.8B Dossier Update
+
+The Phase 18.8B pass updates the dossier scope to include repository-contained EIE/SKG/DTN/Root/PT/token-chain/Execution Gate/audit hardening, focused negative tests, the 13-document canonical blueprint series, and the external production-readiness gap report.
+
+New dossier evidence includes:
+
+- `reports/PHASE_18_8B_REPOSITORY_HARDENING_INSPECTION_MAP.md`
+- `reports/PHASE_18_8B_EXTERNAL_PRODUCTION_READINESS_GAP_REPORT.md`
+- `reports/PHASE_18_8B_MAXIMUM_REPOSITORY_HARDENING_BASELINE_REPORT.md`
+- `docs/canonical_blueprint_series/`
+- `tests/test_phase_18_8b_repository_hardening.py`
+
+The repository remains framed as a local deterministic control-plane prototype for university technical review and further hardening feedback. Production-grade readiness, formal university validation, safety-critical operational approval, and external certification are not claimed.

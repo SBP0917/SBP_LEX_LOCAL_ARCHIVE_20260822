@@ -1,6 +1,6 @@
 # Draft Audit / Replay / Telemetry Metadata Addendum
 
-Status: Draft implementation-alignment document. This addendum does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This addendum does not replace master canonical doctrine.
 
 Purpose: Preserve EIE, SKG, DTN, Root of Trust, and Procedural Truth certification metadata for deterministic replay and traceability.
 

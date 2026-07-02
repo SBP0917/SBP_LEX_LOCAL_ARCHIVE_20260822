@@ -1,7 +1,7 @@
 {
   "command_summary": {
-    "required_command_count": 35,
-    "reviewer_command_count": 35
+    "required_command_count": 36,
+    "reviewer_command_count": 36
   },
   "commands": [
     {
@@ -15,13 +15,14 @@
       "required": true
     },
     {
-      "command": "python -m pytest -q",
+      "command": "python -m pytest --basetemp runtime_artifacts\\pytest_tmp",
       "command_id": "pytest",
       "expected_result": "PASS",
       "purpose": "Run full pytest suite.",
       "related_claim_ids": [
         "runtime_verification_passes_current_scenario",
-        "replay_verification_passes_matched"
+        "replay_verification_passes_matched",
+        "phase_18_8b_repository_hardening_controls"
       ],
       "required": true
     },
@@ -268,7 +269,9 @@
         "phase_19_not_started",
         "future_surfaces_absent",
         "runtime_authority_unchanged",
-        "governance_truth_gates_unchanged"
+        "governance_truth_gates_unchanged",
+        "canonical_blueprint_series_current",
+        "external_production_readiness_gaps_reported"
       ],
       "required": true
     },
@@ -293,6 +296,18 @@
         "root_of_trust_anchorage_binds_eie_truth_foundations",
         "execution_gate_enforces_pt_certification",
         "skg_dtn_external_non_authoritative"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_8b_repository_hardening.py --basetemp runtime_artifacts\\pytest_tmp",
+      "command_id": "pytest_phase18_8b_repository_hardening",
+      "expected_result": "PASS",
+      "purpose": "Verify Phase 18.8B focused negative hardening cases.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "execution_gate_enforces_pt_certification",
+        "canonical_blueprint_series_current"
       ],
       "required": true
     },

@@ -1,6 +1,6 @@
 # Draft Blueprint Impact Report: EIE / PT / SKG / DTN Rebuild
 
-Status: Draft implementation-alignment report for this repository only. This report does not replace master canonical doctrine.
+Status: Draft repository-side implementation alignment material pending owner canonisation. This report does not replace master canonical doctrine.
 
 ## Blueprint documents found
 

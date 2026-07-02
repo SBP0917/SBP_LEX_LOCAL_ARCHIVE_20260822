@@ -10,6 +10,7 @@ from sbp_lex.security.token_stack import issue_token, issue_token_bundle, verify
 from sbp_lex.shared.convergence_digest import build_convergence_digest, verify_convergence_digest
 from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash, verify_hash_chain
 from sbp_lex.security.authority_boundary import validate_canonical_upstream, verify_canonical_stage_lineage
+from sbp_lex.shared.control_chain_validation import validate_control_chain_bindings, validate_root_anchor_binding
 
 STRICT_REQUIRED_TOKENS = [
     "authority",
@@ -58,6 +59,12 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
     )
     if not upstream_valid:
         failures.extend(upstream_failures)
+    control_chain_valid, control_chain_failures = validate_control_chain_bindings(working_state)
+    if not control_chain_valid:
+        failures.extend(control_chain_failures)
+    root_valid, root_failures = validate_root_anchor_binding(working_state)
+    if not root_valid:
+        failures.extend(root_failures)
 
     if not verify_hash_chain(working_state):
         failures.append("hash_chain_invalid")
@@ -96,6 +103,8 @@ def run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
         failures.append("procedural_truth_state_hash_mismatch")
     if certification.get("request_fingerprint") != working_state.get("request_fingerprint"):
         failures.append("procedural_truth_request_fingerprint_mismatch")
+    if certification.get("traversal_id") != working_state.get("traversal_id"):
+        failures.append("procedural_truth_traversal_id_mismatch")
     if certification.get("pt_token_required") is True:
         pt_token = working_state.get("tokens", {}).get("procedural_truth", {})
         if not isinstance(pt_token, Mapping) or not pt_token.get("digest"):
@@ -243,6 +252,9 @@ def evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, An
     )
     if not upstream_valid:
         failures.extend(upstream_failures)
+    control_chain_valid, control_chain_failures = validate_control_chain_bindings(state)
+    if not control_chain_valid:
+        failures.extend(control_chain_failures)
     stage_valid, stage_failures = verify_canonical_stage_lineage(
         state, required_tokens=("execution_attestation",)
     )
