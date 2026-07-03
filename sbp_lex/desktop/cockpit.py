@@ -163,16 +163,42 @@ def render_operator_cockpit(sample: Mapping[str, Any], background_url: str) -> s
     .mini-metric {{ display:flex; justify-content:space-between; gap:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,.08); color:var(--muted); font-size:9px; }}
     .mini-metric strong {{ color:var(--white); font-family:"Cascadia Mono",Consolas,monospace; text-align:right; overflow-wrap:anywhere; }}
 
-    .scale-arena {{ position:relative; padding:10px; display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; }}
+    .scale-arena {{
+      position:relative; isolation:isolate; padding:10px; display:grid; grid-template-rows:auto 1fr auto; overflow:hidden;
+      background:
+        linear-gradient(180deg,rgba(2,7,18,.32),rgba(2,7,18,.8)),
+        radial-gradient(circle at 50% 43%,rgba(25,207,255,.18),transparent 38%),
+        url('{background_url}') center 42% / cover no-repeat;
+    }}
+    .scale-arena::before {{
+      content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 44%,transparent 0 31%,rgba(2,7,18,.24) 45%,rgba(2,7,18,.72) 100%),
+        linear-gradient(90deg,rgba(2,7,18,.62),transparent 28%,transparent 72%,rgba(2,7,18,.62));
+    }}
+    .scale-arena::after {{
+      content:""; position:absolute; inset:8px; z-index:0; pointer-events:none; border:1px solid rgba(212,175,87,.38); border-radius:10px;
+      box-shadow:inset 0 0 34px rgba(25,207,255,.14),0 0 22px rgba(212,175,87,.08);
+    }}
     .celestial-ring {{
-      position:absolute; width:min(48vh,86%); aspect-ratio:1; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; opacity:.26;
+      position:absolute; z-index:1; width:min(48vh,86%); aspect-ratio:1; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; opacity:.34; mix-blend-mode:screen;
       background:repeating-conic-gradient(from -90deg,rgba(190,218,255,.8) 0 .35deg,transparent .35deg 5deg);
       -webkit-mask:radial-gradient(circle,transparent 0 45%,#000 45.5% 48%,transparent 48.5%);
       mask:radial-gradient(circle,transparent 0 45%,#000 45.5% 48%,transparent 48.5%);
     }}
     .celestial-ring::before {{ content:"360° · degree / minute / second markings"; position:absolute; left:50%; top:5%; transform:translateX(-50%); color:var(--muted); font-size:8px; white-space:nowrap; }}
     .scale-wrap {{ position:relative; z-index:2; min-height:250px; display:flex; align-items:center; justify-content:center; }}
-    .scale {{ position:relative; width:min(340px,88%); height:235px; transform-origin:50% 42%; }}
+    .scale-wrap::before {{
+      content:""; width:min(270px,76%); aspect-ratio:1; border-radius:50%;
+      border:1px solid rgba(212,175,87,.4);
+      background:
+        radial-gradient(circle at 50% 50%,rgba(25,207,255,.18),transparent 32%),
+        radial-gradient(circle,transparent 0 47%,rgba(212,175,87,.28) 47.5% 48%,transparent 48.5%),
+        repeating-conic-gradient(from -90deg,rgba(212,175,87,.3) 0 .45deg,transparent .45deg 6deg);
+      box-shadow:0 0 34px rgba(25,207,255,.2),inset 0 0 28px rgba(2,7,18,.62);
+      opacity:.82; transition:filter .6s ease, opacity .6s ease, box-shadow .6s ease;
+    }}
+    .scale {{ display:none; }}
     .scale-column {{ position:absolute; left:50%; bottom:16px; width:12px; height:145px; transform:translateX(-50%); border-radius:8px; background:linear-gradient(90deg,#60758f,#d2e6ff,#60758f); box-shadow:0 0 14px rgba(154,202,255,.32); }}
     .scale-column::after {{ content:""; position:absolute; left:50%; bottom:-13px; width:110px; height:18px; transform:translateX(-50%); border-radius:50%; background:linear-gradient(#8ba6c6,#34465e); }}
     .scale-beam {{ position:absolute; left:50%; top:76px; width:90%; height:8px; transform:translateX(-50%) rotate(var(--tilt,0deg)); transform-origin:center; border-radius:8px; background:linear-gradient(180deg,#d9eaff,#627993); box-shadow:0 0 18px rgba(165,211,255,.4); transition:transform .8s cubic-bezier(.2,.8,.2,1); }}
@@ -180,11 +206,11 @@ def render_operator_cockpit(sample: Mapping[str, Any], background_url: str) -> s
     .scale-pan::before,.scale-pan::after {{ content:""; position:absolute; top:-19px; width:1px; height:79px; background:#a8bfd9; transform-origin:top; }}
     .scale-pan::before {{ left:15%; transform:rotate(15deg); }} .scale-pan::after {{ right:15%; transform:rotate(-15deg); }}
     .pan-left {{ left:0; }} .pan-right {{ right:0; }}
-    .scale-state-live .scale {{ animation:scale-live 2.8s ease-in-out infinite; }}
-    .scale-state-alive .scale {{ animation:scale-alive 2s ease-in-out infinite; }}
-    .scale-state-escalate .scale-beam {{ --tilt:-5deg; }}
-    .scale-state-deny .scale {{ animation:scale-deny .75s ease-out 1; }}
-    .scale-state-pass .scale-beam,.scale-state-execute .scale-beam {{ --tilt:0deg; }}
+    .scale-state-live .scale-wrap::before {{ animation:scale-live 2.8s ease-in-out infinite; filter:brightness(1.25); box-shadow:0 0 42px rgba(25,207,255,.36),inset 0 0 28px rgba(2,7,18,.62); }}
+    .scale-state-alive .scale-wrap::before {{ animation:scale-alive 2s ease-in-out infinite; }}
+    .scale-state-escalate .scale-wrap::before {{ filter:brightness(1.28) saturate(1.15); box-shadow:0 0 42px rgba(255,159,28,.28),inset 0 0 28px rgba(2,7,18,.62); }}
+    .scale-state-deny .scale-wrap::before {{ animation:scale-deny .75s ease-out 1; filter:brightness(.8) saturate(.9); }}
+    .scale-state-pass .scale-wrap::before,.scale-state-execute .scale-wrap::before {{ opacity:.56; filter:brightness(.95); }}
     .state-title {{ position:relative; z-index:3; display:flex; justify-content:space-between; gap:10px; align-items:center; }}
     .state-title span {{ color:var(--muted); font-size:9px; letter-spacing:.1em; text-transform:uppercase; }}
     .central-state {{ position:relative; z-index:3; text-align:center; }}
