@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ODA Diagnostic Report",
+  "type": "object",
+  "required": ["report_type", "findings"],
+  "properties": {
+    "report_type": {"const": "ODA_DIAGNOSTIC_REPORT"},
+    "findings": {"type": "array"}
+  }
+}

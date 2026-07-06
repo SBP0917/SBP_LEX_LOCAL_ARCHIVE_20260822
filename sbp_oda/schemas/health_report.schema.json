@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ODA Health Report",
+  "type": "object",
+  "required": ["status", "deployment_id", "finding_count"],
+  "properties": {
+    "status": {"type": "string", "pattern": "^HARNESS_"},
+    "deployment_id": {"type": "string"},
+    "finding_count": {"type": "integer", "minimum": 0},
+    "findings": {"type": "array"}
+  }
+}

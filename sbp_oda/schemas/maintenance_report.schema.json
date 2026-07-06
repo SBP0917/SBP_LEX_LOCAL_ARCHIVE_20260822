@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ODA Maintenance Report",
+  "type": "object",
+  "required": ["report_type", "action_name", "status"],
+  "properties": {
+    "report_type": {"const": "ODA_MAINTENANCE_REPORT"},
+    "action_name": {"type": "string"},
+    "status": {"type": "string"}
+  }
+}

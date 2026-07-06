@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ODA Support Bundle",
+  "type": "object",
+  "required": ["bundle_type", "deployment_id", "created_at", "included_sections", "notes"],
+  "properties": {
+    "bundle_type": {"const": "ODA_SUPPORT_BUNDLE"},
+    "deployment_id": {"type": "string"},
+    "created_at": {"type": "string"},
+    "included_sections": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}

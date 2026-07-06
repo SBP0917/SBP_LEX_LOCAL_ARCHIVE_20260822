@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ODA Deployment Profile",
+  "type": "object",
+  "required": ["deployment_id", "runtime_root", "runtime_authority"],
+  "properties": {
+    "deployment_id": {"type": "string"},
+    "runtime_root": {"type": "string"},
+    "deployment_class": {"type": "string"},
+    "support_mode": {"type": "string"},
+    "runtime_authority": {"const": "NONE"}
+  }
+}
