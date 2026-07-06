@@ -8,7 +8,7 @@ This report covers the current adjusted repository after the EIE, SKG, DTN, Root
 
 The current repository is now structurally coherent as a local deterministic SBP-LEX control-plane prototype. The traversal is robust enough to demonstrate the intended control-plane purpose inside the repository's current local/private scope: adapter/request material is formalised into an EIE, SKG and DTN enrich the EIE without becoming authority, Root of Trust binds the evidence set, Procedural Truth certifies evidentiary sufficiency, downstream layers are gated, Execution Gate enforces certification, and audit/replay preserves metadata.
 
-It is not yet robust enough to claim production-grade safety, external validation, real-world adversarial cryptographic assurance, live distributed operation, or operational deployment authority. The main reasons are placeholder local signing, compatibility defaults for new evidence metadata, limited schema depth for production EIE/source semantics, and local single-process assumptions.
+It is not yet robust enough to claim production-grade safety, external validation, certified post-quantum compliance, live distributed operation, or operational deployment authority. The main reasons are remaining key-custody and certification gaps around the implemented PQC provider contract, compatibility defaults for new evidence metadata, limited schema depth for production EIE/source semantics, and local single-process assumptions.
 
 ## Repo evidence for current strengths
 
@@ -24,10 +24,10 @@ It is not yet robust enough to claim production-grade safety, external validatio
 
 ## Weak points and reasons
 
-1. Placeholder cryptography remains a core limitation.
-   - Evidence: `sbp_lex/security/pqc.py`, `sbp_lex/security/token_stack.py`, and reports such as `reports/PHASE_RED_20D_ATTACK_REPORT.md` describe placeholder/local signing assumptions.
-   - Why weak: a control plane that relies on deterministic local signatures cannot claim production resistance to signing-secret compromise, offline replay by a secret holder, HSM boundary attacks, key rotation failures, or multi-party custody failures.
-   - Complete fix plan: introduce role-separated signing keys for request/EIE, Root, PT token, audit, release, and execution attestation; move signing behind a least-privilege local signing interface; add key IDs, rotation epochs, revocation records, and negative tests for wrong-key, stale-key, revoked-key, and cross-role-signature substitution.
+1. Active PQC provider use is real but not production certification.
+   - Evidence: `sbp_lex/security/pqc.py`, `sbp_lex/security/pqc_provider.py`, and `tests/test_pqc_01_provider_contract.py` now bind the active PQC provider path to `cryptography.mldsa` with ML-DSA signatures. Placeholder/HMAC PQC signatures are no longer accepted in that active provider path, and provider-unavailable behavior fails closed.
+   - Remaining limitation: this is an implemented provider contract, not certified PQC compliance or full post-quantum security. Local-trust deterministic `PLACEHOLDER` labels still exist only as local evidence labels and must not be described as production cryptography. Older placeholder cryptography references are historical/stale unless they explicitly refer to local-trust deterministic evidence labels.
+   - Complete fix plan: introduce role-separated signing keys for request/EIE, Root, PT token, audit, release, and execution attestation; move signing behind a least-privilege signing interface; add key IDs, rotation epochs, revocation records, external custody policy, and negative tests for wrong-key, stale-key, revoked-key, provider-unavailable, and cross-role-signature substitution.
 
 2. EIE adapter ingress is structurally present but not yet backed by multiple real adapter contracts.
    - Evidence: `state_builder.py` defaults to `LOCAL_RUNTIME_ADAPTER`, `LOCAL_RUNTIME`, and `runtime_request` when adapter identity is absent.

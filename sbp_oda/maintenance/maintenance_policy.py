@@ -28,10 +28,10 @@ def evaluate_repair_class(repair_class: RepairClass) -> MaintenancePolicyDecisio
     if repair_class == RepairClass.REPORT_ONLY:
         return MaintenancePolicyDecision(
             repair_class=repair_class,
-            allowed_to_auto_apply=True,
+            allowed_to_auto_apply=False,
             owner_approval_required=False,
             status=ODAStatus.HARNESS_OK,
-            reason="Report-only action is inside ODA automatic boundary.",
+            reason="Report-only action is allowed as evidence generation only; ODA-02 does not auto-apply changes.",
         )
 
     if repair_class in {

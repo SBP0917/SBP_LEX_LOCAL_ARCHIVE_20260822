@@ -223,7 +223,7 @@ Phase 19 not started
 
 `REVIEWER_VERIFICATION_COMMANDS.json` records the verification commands reviewers may run. The dossier CLI does not execute these commands.
 
-The command index includes compile, pytest, batch test, local trust validation, release integrity validation, adversarial harness validation, dossier validation, runtime, replay, and Git hygiene commands.
+The command index includes compile, pytest, batch test, local trust validation, release integrity validation, adversarial harness validation, dossier validation, PQC provider-contract validation, runtime, replay, and Git hygiene commands.
 
 The CLI modes are:
 
@@ -232,6 +232,35 @@ python -m sbp_lex.local_trust.validation_dossier build
 python -m sbp_lex.local_trust.validation_dossier validate
 python -m sbp_lex.local_trust.validation_dossier show
 ```
+
+## PQC Provider Contract Handoff
+
+PQC-01 aligns the active enforcement-evidence signature path to a real provider
+contract:
+
+```text
+Policy: NIST_FIPS_203_204_205
+Primary signature algorithm: ML-DSA
+Backup signature policy: SLH-DSA
+KEM basis: ML-KEM
+Current provider: cryptography.mldsa
+Tested cryptography version: 49.0.0
+Provider available in bundled runtime: true
+```
+
+Provider availability is required. If the provider is unavailable, PQC
+operations fail closed. Verification cannot be faked by setting `verified=true`,
+and placeholder/HMAC PQC signatures are no longer accepted as valid provider
+signatures.
+
+Old placeholder/HMAC runtime integrity records are rejected under the real
+provider contract and may be quarantined by the existing integrity-store
+quarantine behavior. Local-trust deterministic `PLACEHOLDER` labels are not the
+active PQC provider path and must not be described as production cryptography.
+
+The dossier must not describe this as production certification, external
+certified PQC compliance, or post-quantum security beyond the implemented
+provider contract.
 
 ## What Reviewers Are Asked To Validate
 

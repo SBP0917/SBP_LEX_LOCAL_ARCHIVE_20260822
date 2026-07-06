@@ -14,3 +14,11 @@ def test_boundary_allows_health_check() -> None:
 
     assert decision.allowed is True
     assert decision.status == ODAStatus.HARNESS_OK
+
+
+def test_boundary_blocks_unknown_operation() -> None:
+    decision = check_oda_boundary("unknown", ["future_magic_repair"])
+
+    assert decision.allowed is False
+    assert decision.status == ODAStatus.HARNESS_BLOCKED_CANONICAL_BOUNDARY
+    assert decision.blocked_keywords == ["future_magic_repair"]

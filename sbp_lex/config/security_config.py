@@ -1,7 +1,22 @@
 from __future__ import annotations
 
+from sbp_lex.security.pqc_policy import (
+    FN_DSA_ENABLED,
+    PQC_FAIL_CLOSED,
+    PQC_KEM_PRIMARY,
+    PQC_POLICY_NAME,
+    PQC_REAL_PROVIDER_REQUIRED,
+    PQC_SIGNATURE_BACKUP,
+    PQC_SIGNATURE_PRIMARY,
+)
+from sbp_lex.security.pqc_provider import provider_available, provider_name, supported_algorithms
+
 DIGEST_ALGORITHM: str = "sha256"
-SIGNATURE_ALGORITHM: str = "HMAC-SHA256-PQC-PLACEHOLDER"
+DEFAULT_SIGNATURE_ALGORITHM: str = PQC_SIGNATURE_PRIMARY
+DEFAULT_SIGNATURE_ENCODING: str = "RAW_BYTES_OR_PROVIDER_DEFINED"
+PQC_PROVIDER_NAME: str = provider_name()
+PQC_PROVIDER_AVAILABLE: bool = provider_available()
+SIGNATURE_ALGORITHM: str = DEFAULT_SIGNATURE_ALGORITHM
 SYSTEM_ISSUER: str = "SBP_LEX_V6_INTERNAL_CONTROL_PLANE"
 STATE_VERSION: str = "SBP_LEX_V6_CANONICAL_STATE_1"
 TOKEN_VERSION: str = "SBP_LEX_V6_TOKEN_1"
@@ -70,8 +85,18 @@ THRESHOLD_COMPONENT_TOKEN_NAMES = [
 
 def build_pqc_config() -> dict[str, object]:
     return {
+        "policy_name": PQC_POLICY_NAME,
         "digest_algorithm": DIGEST_ALGORITHM,
-        "signature_algorithm": SIGNATURE_ALGORITHM,
+        "signature_algorithm": DEFAULT_SIGNATURE_ALGORITHM,
+        "signature_backup_algorithm": PQC_SIGNATURE_BACKUP,
+        "kem_algorithm": PQC_KEM_PRIMARY,
+        "signature_encoding": DEFAULT_SIGNATURE_ENCODING,
+        "provider_name": PQC_PROVIDER_NAME,
+        "provider_available": PQC_PROVIDER_AVAILABLE,
+        "provider_required": PQC_REAL_PROVIDER_REQUIRED,
+        "fail_closed": PQC_FAIL_CLOSED,
+        "supported_algorithms": list(supported_algorithms()),
+        "fn_dsa_enabled": FN_DSA_ENABLED,
         "system_issuer": SYSTEM_ISSUER,
     }
 

@@ -24,7 +24,7 @@ ODA-V1 is support-only deployment tooling. It is not SBP-LEX runtime authority.
 
 ## ODA Boundary Summary
 
-ODA-V1 may inspect, diagnose, report, prepare support bundles, classify deployment support issues, plan maintenance, verify support-bound metadata, and block canon/runtime-sensitive actions.
+ODA-V1 may inspect, diagnose, report, prepare support bundles, classify deployment support issues, perform maintenance policy evaluation and work-package planning only, verify support-bound metadata, and block canon/runtime-sensitive actions.
 
 ODA-V1 must not govern runtime execution, issue runtime decisions, change Procedural Truth, alter pipeline order, mutate execution gate rules, rewrite locked canon, mutate tokens, mutate audit authority, mutate hash-chain authority, bypass owner approval, or open unrestricted remote shell access.
 
@@ -35,9 +35,9 @@ ODA-V1 must not govern runtime execution, issue runtime decisions, change Proced
 - health checks
 - diagnostics
 - reporting
-- maintenance planning
+- maintenance policy evaluation and work-package planning only
 - owner-approved maintenance
-- remote support
+- remote-support metadata / outbound-only support skeleton
 - blocked canonical capabilities
 
 The index explicitly marks `runtime_governance_change` as `BLOCKED_CANONICAL` and grants no runtime authority.
@@ -48,11 +48,11 @@ The skeleton includes repository health checks, config-file health checks, diagn
 
 ## Maintenance Class Summary
 
-`RepairClass` separates report-only actions, owner-approved maintenance, Codex work-package preparation, and canon/runtime-sensitive repairs. Canon/runtime-sensitive repair is blocked by default.
+`RepairClass` separates report-only actions, owner-approved maintenance policy decisions, Codex work-package preparation, and canon/runtime-sensitive repair blocking. Maintenance wording in ODA-V1 means policy/report/work-package planning only; it does not mean auto-fix, live remote repair, signed update installation, or production maintenance-channel execution. Canon/runtime-sensitive repair is blocked by default.
 
 ## Remote Support Boundary Summary
 
-Remote support sessions are outbound-only by default. Remote shell is disabled by default. Session expiry is enforced. Remote action logs are owner-visible by default.
+Remote-support handling is metadata and outbound-only support scaffolding. There is no live remote support channel, no unrestricted remote shell, no signed maintenance package receipt implementation, no automatic repair execution, and no runtime authority. Session expiry and owner-visible remote action log models are present as support-bound records only.
 
 ## Owner Approval Gate Summary
 

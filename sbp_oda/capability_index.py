@@ -30,42 +30,42 @@ ODA_CAPABILITY_INDEX: dict[str, ODACapability] = {
         capability_class=CapabilityClass.DIAGNOSTIC,
         description="Inspect repository path, branch, working tree, and critical file presence.",
         owner_approval_required=False,
-        auto_apply_allowed=True,
+        auto_apply_allowed=False,
     ),
     "config_health_check": ODACapability(
         name="config_health_check",
         capability_class=CapabilityClass.DIAGNOSTIC,
         description="Inspect deployment configuration consistency without mutating runtime authority.",
         owner_approval_required=False,
-        auto_apply_allowed=True,
+        auto_apply_allowed=False,
     ),
     "audit_evidence_check": ODACapability(
         name="audit_evidence_check",
         capability_class=CapabilityClass.DIAGNOSTIC,
         description="Check audit, report, and evidence presence and hash consistency.",
         owner_approval_required=False,
-        auto_apply_allowed=True,
+        auto_apply_allowed=False,
     ),
     "support_bundle_generation": ODACapability(
         name="support_bundle_generation",
         capability_class=CapabilityClass.REPORTING,
-        description="Generate a support bundle for remote support triage.",
+        description="Generate a local evidence bundle for onsite support triage.",
         owner_approval_required=True,
         auto_apply_allowed=False,
     ),
     "safe_config_tweak": ODACapability(
         name="safe_config_tweak",
         capability_class=CapabilityClass.OWNER_APPROVED_MAINTENANCE,
-        description="Apply an approved non-canonical configuration tweak with rollback.",
+        description="Plan an approved non-canonical configuration work package with rollback notes.",
         owner_approval_required=True,
         auto_apply_allowed=False,
     ),
     "remote_health_sync": ODACapability(
         name="remote_health_sync",
         capability_class=CapabilityClass.REMOTE_SUPPORT,
-        description="Send outbound-only health status to support bridge.",
+        description="Prepare outbound-only health metadata for owner-reviewed support.",
         owner_approval_required=False,
-        auto_apply_allowed=True,
+        auto_apply_allowed=False,
     ),
     "runtime_governance_change": ODACapability(
         name="runtime_governance_change",
@@ -114,8 +114,6 @@ ODA_TOOLKIT_INDEX: dict[str, tuple[str, ...]] = {
         "session_expiry_validation",
         "remote_health_sync",
         "remote_diagnostic_export",
-        "signed_package_receipt_placeholder",
-        "rollback_verification_placeholder",
         "owner_visible_action_log",
         "physical_attendance_escalation_flag",
     ),
@@ -133,7 +131,6 @@ ODA_TOOLKIT_INDEX: dict[str, tuple[str, ...]] = {
         "critical_file_hash_capture",
         "branch_status_capture",
         "commit_evidence_capture",
-        "local_trust_status_placeholder",
     ),
     "SUPPORT_OUTPUTS": (
         "health_report",
@@ -143,4 +140,23 @@ ODA_TOOLKIT_INDEX: dict[str, tuple[str, ...]] = {
         "support_bundle_manifest",
         "escalation_package",
     ),
+}
+
+
+FUTURE_CAPABILITY_REGISTER: dict[str, dict[str, object]] = {
+    "signed_package_receipt": {
+        "status": "NOT_IMPLEMENTED",
+        "auto_apply_allowed": False,
+        "runtime_authority": False,
+    },
+    "rollback_verification": {
+        "status": "NOT_IMPLEMENTED",
+        "auto_apply_allowed": False,
+        "runtime_authority": False,
+    },
+    "local_trust_status_capture": {
+        "status": "NOT_IMPLEMENTED",
+        "auto_apply_allowed": False,
+        "runtime_authority": False,
+    },
 }

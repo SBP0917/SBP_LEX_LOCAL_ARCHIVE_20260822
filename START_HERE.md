@@ -15,6 +15,10 @@ This repository contains the SBP-LEX Desktop V1 local operator release.
    python -m pip install -r requirements.txt
    ```
 
+   The requirements include `cryptography>=49.0.0`, which provides the tested
+   `cryptography.mldsa` ML-DSA provider used by the PQC provider contract.
+   If that provider is unavailable, PQC signature operations fail closed.
+
 7. Start the runtime:
 
    ```text
@@ -46,3 +50,10 @@ python main.py server 8000
 
 See `DESKTOP_V1_OPERATOR_RELEASE_LOCK.md` for the full operator guide and
 `LOCAL_OPERATOR_GUIDE.md` for troubleshooting.
+
+## PQC Note
+
+The runtime uses the `NIST_FIPS_203_204_205` PQC policy: ML-DSA is the active
+signature algorithm, SLH-DSA is a reserved backup signature policy, and ML-KEM
+is the KEM basis for future session/key-establishment work. This is a provider
+contract, not a claim of production certification.
