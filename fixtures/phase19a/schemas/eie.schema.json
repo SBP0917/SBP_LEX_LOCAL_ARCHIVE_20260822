@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase19A EIE Fixture",
+  "type": "object",
+  "required": [
+    "object_type",
+    "eie_version",
+    "canonical_traversal_state",
+    "request_fingerprint",
+    "traversal_id",
+    "eie_hash",
+    "freshness_status",
+    "fixture_digest"
+  ],
+  "properties": {
+    "object_type": {"const": "ExecutionIntentEnvelope"},
+    "eie_version": {"type": "string"},
+    "canonical_traversal_state": {"const": true},
+    "request_fingerprint": {"type": "string", "minLength": 1},
+    "traversal_id": {"type": "string", "minLength": 1},
+    "eie_hash": {"type": "string", "minLength": 1},
+    "freshness_status": {"enum": ["FRESH"]},
+    "fixture_digest": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

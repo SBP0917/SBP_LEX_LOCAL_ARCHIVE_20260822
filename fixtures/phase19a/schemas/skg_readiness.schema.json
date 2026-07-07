@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase19A SKG Readiness Metadata",
+  "type": "object",
+  "required": [
+    "skg_verification_status",
+    "truth_foundation_readiness_status",
+    "skg_enrichment_hash",
+    "provenance_metadata",
+    "source_independence_mapping",
+    "freshness_metadata",
+    "consistency_information",
+    "attestation_status",
+    "integrity_references",
+    "jurisdictional_relevance"
+  ],
+  "properties": {
+    "skg_verification_status": {"const": "VALID"},
+    "truth_foundation_readiness_status": {"const": "READY"},
+    "skg_enrichment_hash": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

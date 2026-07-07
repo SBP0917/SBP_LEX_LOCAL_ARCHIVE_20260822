@@ -1,0 +1,16 @@
+{
+  "phase": "PHASE19A-IMPLEMENTATION-01",
+  "boundary": "Desktop V1 local/private runtime-support only",
+  "cases": [
+    "raw_external_package_self_traverse",
+    "external_package_request_fingerprint_unbound",
+    "external_package_contains_authority",
+    "external_pre_context_package_invalid",
+    "skg_package_unavailable",
+    "dtn_package_unavailable",
+    "dtn_package_invalid_or_not_skg_constrained",
+    "eie_malformed_object_type",
+    "eie_unbound_to_request",
+    "eie_stale"
+  ]
+}

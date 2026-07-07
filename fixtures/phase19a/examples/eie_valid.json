@@ -1,0 +1,11 @@
+{
+  "object_type": "ExecutionIntentEnvelope",
+  "eie_version": "1.0",
+  "canonical_traversal_state": true,
+  "request_fingerprint": "deterministic-runtime-request-fingerprint",
+  "traversal_id": "deterministic-traversal-id",
+  "eie_hash": "deterministic-eie-hash",
+  "freshness_status": "FRESH",
+  "fixture_digest": "deterministic-fixture-digest",
+  "example_scope": "shape example only; executable fixtures are produced by sbp_lex.phase19a.fixtures"
+}

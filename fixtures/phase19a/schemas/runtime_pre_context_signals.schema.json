@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase19A Runtime Pre-context Signal Package",
+  "type": "object",
+  "required": [
+    "request_fingerprint",
+    "intent_signal",
+    "risk_potential_signal",
+    "authority_link_signal",
+    "jurisdiction_signal",
+    "dependency_signal",
+    "policy_conflict_signal",
+    "operational_context_signal",
+    "precedence_signal",
+    "digest",
+    "signature",
+    "timestamp",
+    "timestamp_authority",
+    "nonce"
+  ],
+  "properties": {
+    "request_fingerprint": {"type": "string", "minLength": 1},
+    "timestamp_authority": {"const": "CANONICAL_RUNTIME"}
+  },
+  "additionalProperties": true
+}

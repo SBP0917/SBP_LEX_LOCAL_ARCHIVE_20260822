@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase19A DTN Readiness Metadata",
+  "type": "object",
+  "required": [
+    "dtn_contextualisation_status",
+    "contextual_readiness_status",
+    "dtn_enrichment_hash",
+    "operational_state_context",
+    "environmental_context",
+    "runtime_world_correspondence",
+    "physical_world_digital_state_alignment",
+    "consequence_context",
+    "state_correspondence_verification"
+  ],
+  "properties": {
+    "dtn_contextualisation_status": {"const": "VALID"},
+    "contextual_readiness_status": {"const": "READY"},
+    "dtn_enrichment_hash": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

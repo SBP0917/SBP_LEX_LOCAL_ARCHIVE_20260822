@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "External Pre-context Package Input",
+  "type": "object",
+  "required": [
+    "package_type",
+    "request_fingerprint",
+    "package_version",
+    "skg_package_digest",
+    "dtn_package_digest",
+    "signals",
+    "source_records",
+    "source_summary",
+    "freshness_valid",
+    "consistency_valid",
+    "digest",
+    "signature",
+    "timestamp",
+    "nonce"
+  ],
+  "properties": {
+    "package_type": {"const": "external_pre_context_signal_package"},
+    "package_version": {"const": "1.0"},
+    "freshness_valid": {"const": true},
+    "consistency_valid": {"const": true}
+  },
+  "additionalProperties": true
+}
