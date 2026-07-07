@@ -1,0 +1,17 @@
+{
+  "summary_type": "PHASE19A_DETACHED_EVIDENCE_SUMMARY",
+  "runtime_attached": false,
+  "publication_active": false,
+  "network_publication_active": false,
+  "blockchain_publication_active": false,
+  "hosted_runtime_active": false,
+  "runtime_authority": "NONE",
+  "decision_authority": "NONE",
+  "execution_authority": "NONE",
+  "support_layers": {
+    "oda_readable": true,
+    "pvpl_readable": true,
+    "sim_readable": true,
+    "support_only": true
+  }
+}

@@ -25,6 +25,20 @@ REQUIRED_EXTERNAL_SIGNALS = {
     "risk_potential_signal",
 }
 
+PHASE19A_PROHIBITED_AUTHORITY_KEYS = {
+    "governance_result",
+    "classification_result",
+    "licensing_result",
+    "domain_result",
+    "aurion_result",
+    "aurion15_result",
+    "execution_permission",
+    "execution_result",
+    "execution_verified",
+    "final_admissibility",
+}
+PHASE19A_PROHIBITED_AUTHORITY_VALUES = {"ALLOW", "DENY", "ESCALATE", "EXECUTE", "HALT"}
+
 
 @dataclass(frozen=True)
 class TranslationResult:
@@ -78,11 +92,12 @@ def translate_external_pre_context_package(
         ):
             failures.append("external_pre_context_package_invalid")
 
-    if contains_prohibited_authority(package):
+    if contains_prohibited_authority(package) or _contains_phase19a_authority(package):
         failures.append("external_package_contains_authority")
 
     _validate_metadata_readiness(package, failures)
     signal_payloads = _extract_signal_payloads(package, failures)
+    _validate_semantic_failure_markers(package, signal_payloads, failures)
 
     if failures:
         return _reject(failures)
@@ -181,10 +196,87 @@ def _extract_signal_payloads(
             failures.append(f"external_signal_payload_invalid:{name}")
             continue
         payload = deepcopy(dict(signal["payload"]))
-        if contains_prohibited_authority(payload):
+        if contains_prohibited_authority(payload) or _contains_phase19a_authority(payload):
             failures.append(f"external_signal_payload_contains_authority:{name}")
         payloads[name] = payload
     return payloads
+
+
+def _validate_semantic_failure_markers(
+    package: Mapping[str, Any],
+    payloads: Mapping[str, Mapping[str, Any]],
+    failures: list[str],
+) -> None:
+    skg_metadata = package.get("skg_truth_foundation_metadata", {})
+    dtn_metadata = package.get("dtn_contextual_verification_metadata", {})
+    if isinstance(skg_metadata, Mapping):
+        provenance = skg_metadata.get("provenance_metadata")
+        source_map = skg_metadata.get("source_independence_mapping", {})
+        if not provenance or not isinstance(provenance, list):
+            failures.append("skg_truth_foundation_insufficient")
+        elif isinstance(source_map, Mapping) and int(source_map.get("source_count", 0) or 0) < 1:
+            failures.append("skg_truth_foundation_insufficient")
+        if skg_metadata.get("attestation_status") != "VALID":
+            failures.append("skg_truth_foundation_insufficient")
+        if _truthy_conflict(skg_metadata.get("contradiction_indicators")):
+            failures.append("skg_conflict_detected")
+    if _truthy_conflict(payloads.get("policy_conflict_signal")):
+        failures.append("skg_conflict_detected")
+
+    if isinstance(dtn_metadata, Mapping):
+        if dtn_metadata.get("runtime_world_correspondence") is not True:
+            failures.append("dtn_environmental_mismatch")
+        if dtn_metadata.get("physical_world_digital_state_alignment") is not True:
+            failures.append("dtn_environmental_mismatch")
+        if dtn_metadata.get("state_correspondence_verification") is not True:
+            failures.append("dtn_context_conflict")
+        if _truthy_conflict(dtn_metadata.get("consequence_context")):
+            failures.append("dtn_context_conflict")
+    operational = payloads.get("operational_context_signal", {})
+    dependency = payloads.get("dependency_signal", {})
+    if isinstance(operational, Mapping) and (
+        operational.get("environment_mismatch") is True
+        or operational.get("context_conflict") is True
+        or operational.get("freshness_status") == "STALE"
+    ):
+        if operational.get("freshness_status") == "STALE":
+            failures.append("dtn_context_stale")
+        elif operational.get("environment_mismatch") is True:
+            failures.append("dtn_environmental_mismatch")
+        else:
+            failures.append("dtn_context_conflict")
+    if isinstance(dependency, Mapping) and (
+        dependency.get("dependency_mismatch") is True
+        or dependency.get("dependency_available") is False
+        or dependency.get("available") is False
+    ):
+        failures.append("dtn_dependency_mismatch")
+
+
+def _truthy_conflict(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        if value.get("conflict_detected") is True or value.get("valid") is False:
+            return True
+        for key in ("conflicts", "unresolved_conflicts", "contradictions"):
+            item = value.get(key)
+            if isinstance(item, list) and len(item) > 0:
+                return True
+        return any(_truthy_conflict(item) for item in value.values())
+    if isinstance(value, list):
+        return any(_truthy_conflict(item) for item in value)
+    return False
+
+
+def _contains_phase19a_authority(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        return any(
+            key in PHASE19A_PROHIBITED_AUTHORITY_KEYS
+            or _contains_phase19a_authority(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, (list, tuple)):
+        return any(_contains_phase19a_authority(item) for item in value)
+    return isinstance(value, str) and value.strip().upper() in PHASE19A_PROHIBITED_AUTHORITY_VALUES
 
 
 def _build_runtime_skg_context(

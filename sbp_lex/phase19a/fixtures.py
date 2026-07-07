@@ -30,6 +30,8 @@ def validate_eie_fixture(
         "object_type",
         "eie_version",
         "canonical_traversal_state",
+        "adapter_identity",
+        "source_system_identity",
         "request_fingerprint",
         "traversal_id",
         "eie_hash",
@@ -42,6 +44,10 @@ def validate_eie_fixture(
         failures.append("eie_malformed_object_type")
     if fixture.get("canonical_traversal_state") is not True:
         failures.append("eie_not_canonical_traversal_state")
+    if not isinstance(fixture.get("adapter_identity"), str) or not fixture.get("adapter_identity", "").strip():
+        failures.append("eie_missing_adapter_identity")
+    if not isinstance(fixture.get("source_system_identity"), str) or not fixture.get("source_system_identity", "").strip():
+        failures.append("eie_missing_source_system_identity")
     if fixture.get("freshness_status") != "FRESH":
         failures.append("eie_stale")
     if request is not None and fixture.get("request_fingerprint") != generate_digest(dict(request)):
@@ -55,6 +61,32 @@ def validate_eie_fixture(
 
 
 PHASE19A_FAILURE_MODE_CASES = (
+    "malformed_eie",
+    "stale_eie",
+    "unbound_eie",
+    "mismatched_eie_fingerprint",
+    "missing_adapter_identity",
+    "missing_source_system_identity",
+    "skg_unavailable",
+    "skg_conflict",
+    "skg_insufficient_truth_foundation",
+    "dtn_unavailable",
+    "dtn_conflict",
+    "dtn_stale_context",
+    "dtn_environmental_mismatch",
+    "dtn_dependency_mismatch",
+    "dtn_attempting_to_override_skg",
+    "pre_context_digest_mismatch",
+    "pre_context_signature_mismatch",
+    "stale_pre_context_package",
+    "missing_pre_context_provenance",
+    "prohibited_external_authority_fields",
+    "external_governance_status_injection",
+    "external_classification_result_injection",
+    "external_licensing_result_injection",
+    "external_domain_result_injection",
+    "external_aurion_result_injection",
+    "external_execution_result_injection",
     "raw_external_package_self_traverse",
     "external_package_request_fingerprint_unbound",
     "external_package_contains_authority",

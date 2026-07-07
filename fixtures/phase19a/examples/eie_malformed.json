@@ -1,0 +1,8 @@
+{
+  "object_type": "NotExecutionIntentEnvelope",
+  "eie_version": "1.0",
+  "canonical_traversal_state": false,
+  "request_fingerprint": "",
+  "freshness_status": "FRESH",
+  "expected_handling": "fail_closed"
+}

@@ -1,0 +1,12 @@
+{
+  "object_type": "ExecutionIntentEnvelope",
+  "eie_version": "1.0",
+  "canonical_traversal_state": true,
+  "adapter_identity": "LOCAL_RUNTIME_ADAPTER",
+  "source_system_identity": "LOCAL_RUNTIME",
+  "request_fingerprint": "deterministic-runtime-request-fingerprint",
+  "traversal_id": "deterministic-traversal-id",
+  "eie_hash": "deterministic-eie-hash",
+  "freshness_status": "STALE",
+  "expected_handling": "fail_closed_or_escalate_freshness_review"
+}

@@ -8,5 +8,10 @@ from sbp_lex.phase19a.pre_context_translator import (
     TranslationResult,
     translate_external_pre_context_package,
 )
+from sbp_lex.phase19a.evidence_summary import build_detached_evidence_summary
 
-__all__ = ["TranslationResult", "translate_external_pre_context_package"]
+__all__ = [
+    "TranslationResult",
+    "build_detached_evidence_summary",
+    "translate_external_pre_context_package",
+]
