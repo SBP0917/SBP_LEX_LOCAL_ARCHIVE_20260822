@@ -11,6 +11,13 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "sbp_lex/execution/schemas/execution_capability.schema.json",
     "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
     "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
+    "sbp_lex/formal/__init__.py",
+    "sbp_lex/formal/model.py",
+    "sbp_lex/formal/verifier.py",
+    "sbp_lex/formal/assurance.py",
+    "sbp_lex/formal/schemas/formal_state.schema.json",
+    "sbp_lex/formal/schemas/transition_record.schema.json",
+    "sbp_lex/formal/schemas/lineage_node.schema.json",
     "sbp_lex/governance/procedural_truth_engine.py",
     "sbp_lex/governance/procedural_truth_runner.py",
     "sbp_lex/governance/grc.py",
@@ -30,10 +37,12 @@ TRUSTED_REPORT_PATHS: tuple[str, ...] = (
     "reports/PHASE_RED_20C_ATTACK_REPORT.md",
     "reports/PHASE_RED_20D_ATTACK_REPORT.md",
     "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
+    "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
 )
 
 TRUSTED_OUTPUT_PATHS: tuple[str, ...] = (
     "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
+    "outputs/phq_formal_architecture_assurance.json",
 )
 
 VERIFICATION_COMMANDS: tuple[str, ...] = (

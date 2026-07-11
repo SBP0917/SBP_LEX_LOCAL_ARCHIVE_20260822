@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sbp-lex://phq/transition-record.schema.json",
+  "title": "PHQ Desktop V1 Transition Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "transition_identifier", "source_state", "destination_state",
+    "required_preconditions", "required_evidence", "required_tokens",
+    "required_bindings", "permitted_pipeline_modes", "failure_destination",
+    "terminal_status", "authority_owner", "audit_requirement"
+  ],
+  "properties": {
+    "transition_identifier": {"type": "string", "pattern": "^PHQ_"},
+    "source_state": {"type": "string"},
+    "destination_state": {"type": "string"},
+    "required_preconditions": {"type": "array", "items": {"type": "string"}},
+    "required_evidence": {"type": "array", "items": {"type": "string"}},
+    "required_tokens": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "required_bindings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "permitted_pipeline_modes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "failure_destination": {"type": "string"},
+    "terminal_status": {"type": "boolean"},
+    "authority_owner": {"type": "string"},
+    "audit_requirement": {"const": "REQUIRED"}
+  }
+}

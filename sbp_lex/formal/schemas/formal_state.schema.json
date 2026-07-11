@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sbp-lex://phq/formal-state.schema.json",
+  "title": "PHQ Desktop V1 Formal State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_version", "architectural_state", "decision_state", "capability_state",
+    "terminal_outcome", "audit_complete", "pipeline_mode", "convergence_state",
+    "required_evidence", "causal_predecessor", "request_fingerprint",
+    "canonical_state_hash", "eie_digest", "runtime_identity",
+    "measured_baseline_identity", "measurement_digest", "stage_history", "tokens"
+  ],
+  "properties": {
+    "model_version": {"const": "PHQ_DESKTOP_V1_FORMAL_MODEL_V1"},
+    "architectural_state": {"type": "string", "minLength": 1},
+    "decision_state": {"enum": ["UNRESOLVED", "ALLOW", "DENY", "ESCALATE", "HALT"]},
+    "capability_state": {"type": ["string", "null"]},
+    "terminal_outcome": {"type": "string"},
+    "audit_complete": {"type": "boolean"},
+    "pipeline_mode": {"enum": ["MODE_1_FULL_MIRRORED", "MODE_2_SPLIT_VALIDATOR", "MODE_3_SINGLE_CONSTRAINED"]},
+    "convergence_state": {"enum": ["UNRESOLVED", "MATCHED", "FAILED", "NOT_APPLICABLE"]},
+    "required_evidence": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "causal_predecessor": {"type": ["string", "null"]},
+    "request_fingerprint": {"$ref": "#/$defs/digest"},
+    "canonical_state_hash": {"$ref": "#/$defs/digest"},
+    "eie_digest": {"$ref": "#/$defs/digest"},
+    "runtime_identity": {"$ref": "#/$defs/digest"},
+    "measured_baseline_identity": {"type": "string", "minLength": 1},
+    "measurement_digest": {"$ref": "#/$defs/digest"},
+    "stage_history": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "tokens": {"type": "object"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

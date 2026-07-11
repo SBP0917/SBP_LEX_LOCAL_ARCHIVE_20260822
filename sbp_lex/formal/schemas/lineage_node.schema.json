@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sbp-lex://phq/lineage-node.schema.json",
+  "title": "PHQ Desktop V1 Causal Lineage Node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "node_identifier", "node_type", "predecessor_identifiers", "request_fingerprint",
+    "canonical_state_hash", "eie_digest", "runtime_identity",
+    "measured_baseline_identity", "evidence_digest", "token_stage",
+    "capability_id", "attested_capability_id", "fresh", "node_digest"
+  ],
+  "properties": {
+    "node_identifier": {"type": "string", "minLength": 1},
+    "node_type": {"type": "string", "minLength": 1},
+    "predecessor_identifiers": {"type": "array", "items": {"type": "string"}, "maxItems": 1},
+    "request_fingerprint": {"$ref": "#/$defs/digest"},
+    "canonical_state_hash": {"$ref": "#/$defs/digest"},
+    "eie_digest": {"$ref": "#/$defs/digest"},
+    "runtime_identity": {"$ref": "#/$defs/digest"},
+    "measured_baseline_identity": {"type": "string", "minLength": 1},
+    "evidence_digest": {"$ref": "#/$defs/digest"},
+    "token_stage": {"type": ["string", "null"]},
+    "capability_id": {"type": ["string", "null"]},
+    "attested_capability_id": {"type": ["string", "null"]},
+    "fresh": {"type": "boolean"},
+    "node_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

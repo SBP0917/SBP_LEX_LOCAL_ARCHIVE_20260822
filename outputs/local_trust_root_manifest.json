@@ -35,7 +35,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T19:01:13+00:00",
+  "created_at": "2026-07-11T21:38:34+00:00",
   "critical_file_hashes": [
     {
       "path": "main.py",
@@ -92,6 +92,48 @@
       "status": "PRESENT"
     },
     {
+      "path": "sbp_lex/formal/__init__.py",
+      "sha256": "ee22cb231bf6ff73313cbb9580491fb2fb4f4bbbf25b7883e55b34fdebf4b6e7",
+      "size_bytes": 737,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/model.py",
+      "sha256": "686e57939e3c48ca90f36d2f7cb5867b295cc1b6b37fae64f3d7e40af52efdf5",
+      "size_bytes": 10726,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/verifier.py",
+      "sha256": "e0c3fac902f4ab315551ba21f4d6b7d049585d5150d139f30ee7e2128c697787",
+      "size_bytes": 34850,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/assurance.py",
+      "sha256": "b4b46a78c0f9b8b8784525cf6067e23ff8d3d7e3152a224c3f96c89cef9627a2",
+      "size_bytes": 7959,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/formal_state.schema.json",
+      "sha256": "13093a711fbe10d5f940da5881f49b708855003ae7d97d3966b47ee567b2fd13",
+      "size_bytes": 1865,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/transition_record.schema.json",
+      "sha256": "56109ad26a34fe5551cc5fb33cc8f6ba9f85c50778ae092de8f4bf60b193b742",
+      "size_bytes": 1311,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/lineage_node.schema.json",
+      "sha256": "f14a15fd73e643076d82e7f0edd84fcb17a66bccd16ad7459afe2e2d7a2e8b84",
+      "size_bytes": 1395,
+      "status": "PRESENT"
+    },
+    {
       "path": "sbp_lex/governance/procedural_truth_engine.py",
       "sha256": "5e2302e80876608ee9df64c9daa4abcc10d285aacbf7f52f093d10cb9d1617be",
       "size_bytes": 10626,
@@ -141,17 +183,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "d36aa22b5e59cae61c893edabd97a701e620b962",
-  "git_status_short": "M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M reports/H7_DETERMINISTIC_EXECUTION_INTEGRITY_REPORT.md\n M sbp_lex/execution/capability_store.py\n M sbp_lex/runtime/approved_runtime_baselines.json\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h7_deterministic_execution_integrity.py\n M tests/test_h8_measured_startup_runtime_identity.py",
+  "git_commit": "27c73c2b99d08e8e9bdbec874be279e1f4103dcf",
+  "git_status_short": "M sbp_lex/local_trust/critical_paths.py\n?? outputs/phq_formal_architecture_assurance.json\n?? reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md\n?? sbp_lex/formal/\n?? tests/test_phq_formal_deterministic_architecture.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 383790,
+    "size_bytes": 439769,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "9600088e47d5cfe7004796e707722542f330a0f63a189e3b6280b02f27d6afe4",
-  "manifest_payload_digest": "2d3b3c1390fec0d13c136b5dd56a4216793b1c5a8a264883e64f65acfae3a389",
-  "manifest_signature": "cced897d7536bec2f97d5b2ec21c09e4175be2910d716483f6ea042090eaaeab",
+  "manifest_digest": "5b9e9c966587efdd8b8f0f5df04ca65ce379fc39d883e4a241dc1529bb6d0739",
+  "manifest_payload_digest": "5c738cdb1d09acd69157965fa9fe7a1e168d6781866f0b4777cf69ce44bab3e5",
+  "manifest_signature": "0f215fb8b25462ce50082c451c094d6695912b4b9f5bedfd4252200ff9fa8828",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -197,6 +239,12 @@
       "path": "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
       "sha256": "8669b8390f202872bab0e171eda84345624e9ccb9df69452f1ed28db6dbd7c85",
       "size_bytes": 3623,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/phq_formal_architecture_assurance.json",
+      "sha256": "6e668c383e4515ab23e1683c6727586290d38d99167a22c35143eaa263e3e9ca",
+      "size_bytes": 113320,
       "status": "PRESENT"
     }
   ],
@@ -247,6 +295,12 @@
       "path": "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
       "sha256": "db821f8e95d7e0d1d0882782baf4a6c145f2f915d98b62d52df68e895be37c87",
       "size_bytes": 4690,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
+      "sha256": "62cbb3bc889522319f9d537d7d6e5f0db888c009fcd843995a1c43aa4a593f98",
+      "size_bytes": 12264,
       "status": "PRESENT"
     }
   ],

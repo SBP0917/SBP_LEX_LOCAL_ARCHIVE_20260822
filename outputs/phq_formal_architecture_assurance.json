@@ -1,0 +1,3329 @@
+{
+  "integrity_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "1aa272e43eae7add09b147f32b219eee1e75e7df179437969e09c421a3c56b3d",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V1"
+  },
+  "payload": {
+    "architectural_invariants": [
+      "external_non_authority",
+      "canonical_state_singularity",
+      "attachment_order",
+      "trust_precedence",
+      "procedural_precedence",
+      "classification_licensing_separation",
+      "governance_grc_precedence",
+      "domain_limitation",
+      "aurion_limitation",
+      "execution_gate_finality",
+      "h7_execution_integrity",
+      "audit_continuity",
+      "desktop_v1_no_node_boundary"
+    ],
+    "architectural_states": [
+      "ADAPTER_TRANSLATED",
+      "AUDIT_FINALISED",
+      "AURION_RESOLVED",
+      "CANONICAL_STATE_CONSTRUCTED",
+      "CLASSIFIED",
+      "COLLECTIVE_SIGNALS_ATTACHED",
+      "DENIED",
+      "DOMAIN_RESOLVED",
+      "DTN_VERIFIED",
+      "EIE_CONSTRUCTED",
+      "ESCALATED",
+      "EXECUTION_ACTIVE",
+      "EXECUTION_AMBIGUOUS",
+      "EXECUTION_CANCELLED",
+      "EXECUTION_CAPABILITY_ISSUED",
+      "EXECUTION_COMPLETED",
+      "EXECUTION_FAILED",
+      "EXECUTION_GATE_RESOLVED",
+      "EXECUTION_RESERVED",
+      "EXTERNAL_REQUEST_RECEIVED",
+      "GOVERNANCE_RESOLVED",
+      "GRC_RESOLVED",
+      "HALTED",
+      "HARD_ENTRY_ACCEPTED",
+      "LICENSED",
+      "NATIVE_FORMAT_VALIDATED",
+      "PERSISTENTLY_INOPERABLE",
+      "PROCEDURAL_TRUTH_CERTIFIED",
+      "ROOT_OF_TRUST_ESTABLISHED",
+      "SKG_VERIFIED"
+    ],
+    "architecture": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+    "artifact_version": "PHQ_DESKTOP_V1_FORMAL_ASSURANCE_ARTIFACT_V1",
+    "assurance_owner": "SBP_LEX_DESKTOP_V1_DETACHED_FORMAL_ASSURANCE",
+    "authority_granted": false,
+    "canonical_control_states": [
+      "EXTERNAL_REQUEST_RECEIVED",
+      "NATIVE_FORMAT_VALIDATED",
+      "ADAPTER_TRANSLATED",
+      "EIE_CONSTRUCTED",
+      "SKG_VERIFIED",
+      "DTN_VERIFIED",
+      "HARD_ENTRY_ACCEPTED",
+      "CANONICAL_STATE_CONSTRUCTED",
+      "COLLECTIVE_SIGNALS_ATTACHED",
+      "ROOT_OF_TRUST_ESTABLISHED",
+      "PROCEDURAL_TRUTH_CERTIFIED",
+      "CLASSIFIED",
+      "LICENSED",
+      "GOVERNANCE_RESOLVED",
+      "GRC_RESOLVED",
+      "DOMAIN_RESOLVED",
+      "AURION_RESOLVED",
+      "EXECUTION_GATE_RESOLVED"
+    ],
+    "conservation_laws": [
+      "authority",
+      "permission",
+      "constraint",
+      "denial",
+      "identity",
+      "request",
+      "state",
+      "evidence",
+      "classification",
+      "licensing",
+      "consequentiality",
+      "corroboration",
+      "token_scope",
+      "audit"
+    ],
+    "evidence_version": "PHQ_DESKTOP_V1_FORMAL_EVIDENCE_V1",
+    "formal_specification_digest": "fc9c1c7be6c7252c72bea5eae962b153a0c4cef5d29ea7756f45e71528c1d586",
+    "formalisation_boundary": "DETACHED_NON_AUTHORITATIVE_ASSURANCE_ONLY",
+    "h7_capability_states": [
+      "ACTIVE",
+      "AMBIGUOUS",
+      "CANCELLED",
+      "COMPLETED",
+      "EXECUTING",
+      "EXPIRED",
+      "FAILED",
+      "PENDING",
+      "RESERVED",
+      "RETIRED",
+      "REVOKED"
+    ],
+    "h7_capability_transitions": {
+      "ACTIVE": [
+        "CANCELLED",
+        "EXPIRED",
+        "RESERVED",
+        "REVOKED"
+      ],
+      "AMBIGUOUS": [
+        "RETIRED"
+      ],
+      "CANCELLED": [
+        "RETIRED"
+      ],
+      "COMPLETED": [
+        "RETIRED"
+      ],
+      "EXECUTING": [
+        "AMBIGUOUS",
+        "CANCELLED",
+        "COMPLETED",
+        "EXECUTING",
+        "FAILED"
+      ],
+      "EXPIRED": [
+        "RETIRED"
+      ],
+      "FAILED": [
+        "RETIRED"
+      ],
+      "PENDING": [
+        "ACTIVE",
+        "CANCELLED"
+      ],
+      "RESERVED": [
+        "CANCELLED",
+        "EXECUTING",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "RETIRED": [],
+      "REVOKED": [
+        "RETIRED"
+      ]
+    },
+    "lineage_order": [
+      "EXTERNAL_REQUEST",
+      "NATIVE_PROTOCOL",
+      "ADAPTER_TRANSLATION",
+      "EIE",
+      "SKG_PACKAGE",
+      "DTN_PACKAGE",
+      "HARD_ENTRY",
+      "CANONICAL_STATE",
+      "COLLECTIVE_ATTACHMENT",
+      "ROOT_OF_TRUST",
+      "PROCEDURAL_TRUTH",
+      "CLASSIFICATION",
+      "LICENSING",
+      "GOVERNANCE",
+      "GRC",
+      "DOMAIN",
+      "AURION",
+      "EXECUTION_GATE",
+      "H7_CAPABILITY",
+      "EXECUTION_RESULT",
+      "EXECUTION_ATTESTATION",
+      "AUDIT"
+    ],
+    "model_version": "PHQ_DESKTOP_V1_FORMAL_MODEL_V1",
+    "mutation_protection": [
+      "classification_before_licensing",
+      "governance_before_grc",
+      "domain_cannot_restore_governance_deny",
+      "aurion_cannot_self_authorize",
+      "mode1_exact_parity",
+      "request_fingerprint_binding",
+      "canonical_state_hash_binding",
+      "token_stage_validation",
+      "h7_single_use",
+      "h7_cancellation",
+      "constraint_continuity",
+      "audit_required",
+      "external_state_construction_denied",
+      "attachment_after_state",
+      "procedural_truth_after_root",
+      "direct_downstream_reentry_denied"
+    ],
+    "pipeline_modes": [
+      "MODE_1_FULL_MIRRORED",
+      "MODE_2_SPLIT_VALIDATOR",
+      "MODE_3_SINGLE_CONSTRAINED"
+    ],
+    "safe_convergence": {
+      "ambiguous_completion": "EXECUTION_AMBIGUOUS",
+      "audit_continuity_failure": "PERSISTENTLY_INOPERABLE",
+      "aurion_failure": "HALTED",
+      "classification_failure": "DENIED",
+      "collective_attachment_failure": "HALTED",
+      "convergence_failure": "PERSISTENTLY_INOPERABLE",
+      "domain_failure": "DENIED",
+      "execution_gate_failure": "PERSISTENTLY_INOPERABLE",
+      "governance_denied": "DENIED",
+      "grc_failure": "HALTED",
+      "hard_entry_failure": "DENIED",
+      "invalid_adapter_translation": "DENIED",
+      "invalid_dtn_package": "DENIED",
+      "invalid_eie": "DENIED",
+      "invalid_h7_capability": "HALTED",
+      "invalid_native_protocol": "DENIED",
+      "invalid_skg_package": "DENIED",
+      "licensing_failure": "DENIED",
+      "mid_execution_invalidation": "EXECUTION_FAILED",
+      "procedural_truth_failure": "DENIED",
+      "root_of_trust_failure": "DENIED",
+      "state_construction_failure": "HALTED",
+      "unknown": "PERSISTENTLY_INOPERABLE"
+    },
+    "source_measurements": [
+      {
+        "path": "sbp_lex/formal/__init__.py",
+        "sha256": "ee22cb231bf6ff73313cbb9580491fb2fb4f4bbbf25b7883e55b34fdebf4b6e7",
+        "size_bytes": 737
+      },
+      {
+        "path": "sbp_lex/formal/model.py",
+        "sha256": "686e57939e3c48ca90f36d2f7cb5867b295cc1b6b37fae64f3d7e40af52efdf5",
+        "size_bytes": 10726
+      },
+      {
+        "path": "sbp_lex/formal/verifier.py",
+        "sha256": "e0c3fac902f4ab315551ba21f4d6b7d049585d5150d139f30ee7e2128c697787",
+        "size_bytes": 34850
+      },
+      {
+        "path": "sbp_lex/formal/assurance.py",
+        "sha256": "b4b46a78c0f9b8b8784525cf6067e23ff8d3d7e3152a224c3f96c89cef9627a2",
+        "size_bytes": 7959
+      },
+      {
+        "path": "sbp_lex/formal/schemas/formal_state.schema.json",
+        "sha256": "13093a711fbe10d5f940da5881f49b708855003ae7d97d3966b47ee567b2fd13",
+        "size_bytes": 1865
+      },
+      {
+        "path": "sbp_lex/formal/schemas/transition_record.schema.json",
+        "sha256": "56109ad26a34fe5551cc5fb33cc8f6ba9f85c50778ae092de8f4bf60b193b742",
+        "size_bytes": 1311
+      },
+      {
+        "path": "sbp_lex/formal/schemas/lineage_node.schema.json",
+        "sha256": "f14a15fd73e643076d82e7f0edd84fcb17a66bccd16ad7459afe2e2d7a2e8b84",
+        "size_bytes": 1395
+      }
+    ],
+    "topology": "LOCAL_PRIVATE_SINGLE_HOST_NO_NODE",
+    "transition_records": [
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "NATIVE_FORMAT_VALIDATED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:EXTERNAL_REQUEST_RECEIVED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "EXTERNAL_REQUEST_RECEIVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EXTERNAL_REQUEST_RECEIVED_TO_NATIVE_FORMAT_VALIDATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ADAPTER_TRANSLATED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:NATIVE_FORMAT_VALIDATED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "NATIVE_FORMAT_VALIDATED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_NATIVE_FORMAT_VALIDATED_TO_ADAPTER_TRANSLATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "EIE_CONSTRUCTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:ADAPTER_TRANSLATED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "ADAPTER_TRANSLATED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_ADAPTER_TRANSLATED_TO_EIE_CONSTRUCTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "SKG_VERIFIED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:EIE_CONSTRUCTED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "EIE_CONSTRUCTED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EIE_CONSTRUCTED_TO_SKG_VERIFIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DTN_VERIFIED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:SKG_VERIFIED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "SKG_VERIFIED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_SKG_VERIFIED_TO_DTN_VERIFIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HARD_ENTRY_ACCEPTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:DTN_VERIFIED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "DTN_VERIFIED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_DTN_VERIFIED_TO_HARD_ENTRY_ACCEPTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "CANONICAL_STATE_CONSTRUCTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:HARD_ENTRY_ACCEPTED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "HARD_ENTRY_ACCEPTED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_HARD_ENTRY_ACCEPTED_TO_CANONICAL_STATE_CONSTRUCTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:CANONICAL_STATE_CONSTRUCTED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "CANONICAL_STATE_CONSTRUCTED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_CANONICAL_STATE_CONSTRUCTED_TO_COLLECTIVE_SIGNALS_ATTACHED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:COLLECTIVE_SIGNALS_ATTACHED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_COLLECTIVE_SIGNALS_ATTACHED_TO_ROOT_OF_TRUST_ESTABLISHED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:ROOT_OF_TRUST_ESTABLISHED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_ROOT_OF_TRUST_ESTABLISHED_TO_PROCEDURAL_TRUTH_CERTIFIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "CLASSIFIED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:PROCEDURAL_TRUTH_CERTIFIED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_PROCEDURAL_TRUTH_CERTIFIED_TO_CLASSIFIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "LICENSED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:CLASSIFIED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "CLASSIFIED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_CLASSIFIED_TO_LICENSED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "GOVERNANCE_RESOLVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:LICENSED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "LICENSED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_LICENSED_TO_GOVERNANCE_RESOLVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "GRC_RESOLVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:GOVERNANCE_RESOLVED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "GOVERNANCE_RESOLVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_GOVERNANCE_RESOLVED_TO_GRC_RESOLVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DOMAIN_RESOLVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:GRC_RESOLVED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "GRC_RESOLVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_GRC_RESOLVED_TO_DOMAIN_RESOLVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AURION_RESOLVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:DOMAIN_RESOLVED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "DOMAIN_RESOLVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_DOMAIN_RESOLVED_TO_AURION_RESOLVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "EXECUTION_GATE_RESOLVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "evidence:AURION_RESOLVED"
+        ],
+        "required_preconditions": [
+          "source_state_valid",
+          "prior_failure_absent"
+        ],
+        "required_tokens": [],
+        "source_state": "AURION_RESOLVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_AURION_RESOLVED_TO_EXECUTION_GATE_RESOLVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_CAPABILITY_ISSUED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_GATE_RESOLVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EXECUTION_GATE_RESOLVED_TO_EXECUTION_CAPABILITY_ISSUED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_RESERVED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_CAPABILITY_ISSUED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EXECUTION_CAPABILITY_ISSUED_TO_EXECUTION_RESERVED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_ACTIVE",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_RESERVED",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EXECUTION_RESERVED_TO_EXECUTION_ACTIVE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_ACTIVE",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_ACTIVE",
+        "terminal_status": false,
+        "transition_identifier": "PHQ_EXECUTION_ACTIVE_TO_EXECUTION_ACTIVE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_COMPLETED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_ACTIVE",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_ACTIVE_TO_EXECUTION_COMPLETED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_FAILED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_ACTIVE",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_ACTIVE_TO_EXECUTION_FAILED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_CANCELLED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_ACTIVE",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_ACTIVE_TO_EXECUTION_CANCELLED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY",
+        "destination_state": "EXECUTION_AMBIGUOUS",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "h7_capability_evidence"
+        ],
+        "required_preconditions": [
+          "execution_gate_approved",
+          "h7_lifecycle_valid"
+        ],
+        "required_tokens": [
+          "authority",
+          "procedural_truth",
+          "classification",
+          "licensing",
+          "governance",
+          "grc",
+          "domain",
+          "aurion",
+          "execution_boundary",
+          "execution_attestation"
+        ],
+        "source_state": "EXECUTION_ACTIVE",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_ACTIVE_TO_EXECUTION_AMBIGUOUS"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_COMPLETED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_COMPLETED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_FAILED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_FAILED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_CANCELLED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_CANCELLED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_AMBIGUOUS",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_AMBIGUOUS_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "DENIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DENIED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "ESCALATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ESCALATED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "HALTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_HALTED_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "AUDIT_FINALISED",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "audit_lineage"
+        ],
+        "required_preconditions": [
+          "terminal_outcome_stable"
+        ],
+        "required_tokens": [],
+        "source_state": "PERSISTENTLY_INOPERABLE",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_PERSISTENTLY_INOPERABLE_TO_AUDIT_FINALISED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXTERNAL_REQUEST_RECEIVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXTERNAL_REQUEST_RECEIVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXTERNAL_REQUEST_RECEIVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXTERNAL_REQUEST_RECEIVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXTERNAL_REQUEST_RECEIVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXTERNAL_REQUEST_RECEIVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXTERNAL_REQUEST_RECEIVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXTERNAL_REQUEST_RECEIVED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "NATIVE_FORMAT_VALIDATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_NATIVE_FORMAT_VALIDATED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "NATIVE_FORMAT_VALIDATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_NATIVE_FORMAT_VALIDATED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "NATIVE_FORMAT_VALIDATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_NATIVE_FORMAT_VALIDATED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "NATIVE_FORMAT_VALIDATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_NATIVE_FORMAT_VALIDATED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ADAPTER_TRANSLATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ADAPTER_TRANSLATED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ADAPTER_TRANSLATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ADAPTER_TRANSLATED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ADAPTER_TRANSLATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ADAPTER_TRANSLATED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ADAPTER_TRANSLATED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ADAPTER_TRANSLATED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EIE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EIE_CONSTRUCTED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EIE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EIE_CONSTRUCTED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EIE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EIE_CONSTRUCTED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EIE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EIE_CONSTRUCTED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "SKG_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_SKG_VERIFIED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "SKG_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_SKG_VERIFIED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "SKG_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_SKG_VERIFIED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "SKG_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_SKG_VERIFIED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DTN_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DTN_VERIFIED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DTN_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DTN_VERIFIED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DTN_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DTN_VERIFIED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DTN_VERIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DTN_VERIFIED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "HARD_ENTRY_ACCEPTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_HARD_ENTRY_ACCEPTED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "HARD_ENTRY_ACCEPTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_HARD_ENTRY_ACCEPTED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "HARD_ENTRY_ACCEPTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_HARD_ENTRY_ACCEPTED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "HARD_ENTRY_ACCEPTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_HARD_ENTRY_ACCEPTED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CANONICAL_STATE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CANONICAL_STATE_CONSTRUCTED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CANONICAL_STATE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CANONICAL_STATE_CONSTRUCTED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CANONICAL_STATE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CANONICAL_STATE_CONSTRUCTED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CANONICAL_STATE_CONSTRUCTED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CANONICAL_STATE_CONSTRUCTED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_COLLECTIVE_SIGNALS_ATTACHED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_COLLECTIVE_SIGNALS_ATTACHED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_COLLECTIVE_SIGNALS_ATTACHED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "COLLECTIVE_SIGNALS_ATTACHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_COLLECTIVE_SIGNALS_ATTACHED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ROOT_OF_TRUST_ESTABLISHED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ROOT_OF_TRUST_ESTABLISHED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ROOT_OF_TRUST_ESTABLISHED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "ROOT_OF_TRUST_ESTABLISHED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_ROOT_OF_TRUST_ESTABLISHED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_PROCEDURAL_TRUTH_CERTIFIED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_PROCEDURAL_TRUTH_CERTIFIED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_PROCEDURAL_TRUTH_CERTIFIED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "PROCEDURAL_TRUTH_CERTIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_PROCEDURAL_TRUTH_CERTIFIED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CLASSIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CLASSIFIED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CLASSIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CLASSIFIED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CLASSIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CLASSIFIED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "CLASSIFIED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_CLASSIFIED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "LICENSED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_LICENSED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "LICENSED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_LICENSED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "LICENSED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_LICENSED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "LICENSED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_LICENSED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GOVERNANCE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GOVERNANCE_RESOLVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GOVERNANCE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GOVERNANCE_RESOLVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GOVERNANCE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GOVERNANCE_RESOLVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GOVERNANCE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GOVERNANCE_RESOLVED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GRC_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GRC_RESOLVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GRC_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GRC_RESOLVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GRC_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GRC_RESOLVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "GRC_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_GRC_RESOLVED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DOMAIN_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DOMAIN_RESOLVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DOMAIN_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DOMAIN_RESOLVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DOMAIN_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DOMAIN_RESOLVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "DOMAIN_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_DOMAIN_RESOLVED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "AURION_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_AURION_RESOLVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "AURION_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_AURION_RESOLVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "AURION_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_AURION_RESOLVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "AURION_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_AURION_RESOLVED_TO_PERSISTENTLY_INOPERABLE"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "DENIED",
+        "failure_destination": "DENIED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_GATE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_GATE_RESOLVED_TO_DENIED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "ESCALATED",
+        "failure_destination": "ESCALATED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_GATE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_GATE_RESOLVED_TO_ESCALATED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "HALTED",
+        "failure_destination": "HALTED",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_GATE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_GATE_RESOLVED_TO_HALTED"
+      },
+      {
+        "audit_requirement": "REQUIRED",
+        "authority_owner": "SBP_LEX_V1_CANONICAL_RUNTIME",
+        "destination_state": "PERSISTENTLY_INOPERABLE",
+        "failure_destination": "PERSISTENTLY_INOPERABLE",
+        "permitted_pipeline_modes": [
+          "MODE_1_FULL_MIRRORED",
+          "MODE_2_SPLIT_VALIDATOR",
+          "MODE_3_SINGLE_CONSTRAINED"
+        ],
+        "required_bindings": [
+          "request_fingerprint",
+          "canonical_state_hash",
+          "eie_digest",
+          "runtime_identity",
+          "measured_baseline_identity"
+        ],
+        "required_evidence": [
+          "failure_evidence"
+        ],
+        "required_preconditions": [
+          "binding_failure_recorded"
+        ],
+        "required_tokens": [],
+        "source_state": "EXECUTION_GATE_RESOLVED",
+        "terminal_status": true,
+        "transition_identifier": "PHQ_EXECUTION_GATE_RESOLVED_TO_PERSISTENTLY_INOPERABLE"
+      }
+    ]
+  },
+  "payload_digest": "eaf1a30890b374b8dd33c6c86f6e8b4f58d02a111699e7276f9567fe06dce80b"
+}
