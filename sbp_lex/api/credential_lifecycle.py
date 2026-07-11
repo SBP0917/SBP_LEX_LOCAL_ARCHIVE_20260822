@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import threading
+import uuid
 from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
 from typing import Any, Mapping
@@ -129,6 +130,7 @@ class CredentialRegistry:
     def _record(
         self, *, request_id: str, action: str, previous: Credential | None,
         current: Credential, actor: Credential, now: datetime,
+        persisted_new_state: Any = None,
     ) -> None:
         if not request_id or request_id in self._transition_requests:
             raise CredentialLifecycleError("lifecycle_request_replayed")
@@ -139,6 +141,22 @@ class CredentialRegistry:
             "new_status": current.status,
         }
         digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        from sbp_lex.api.security_state_store import active_security_state_store
+        store = active_security_state_store()
+        if store is not None:
+            store.append_lifecycle(
+                action=action, credential_id=current.credential_id,
+                principal_id=current.principal_id,
+                credential_version=current.credential_version,
+                request_id=request_id,
+                prior_state=_safe_credential_state(previous) if previous else None,
+                new_state=(
+                    persisted_new_state
+                    if persisted_new_state is not None
+                    else _safe_credential_state(current)
+                ),
+                reason=action.lower(), now=now,
+            )
         self._transition_requests.add(request_id)
         self._events = (*self._events, LifecycleEvent(**payload, event_digest=digest))
 
@@ -166,7 +184,20 @@ class CredentialRegistry:
         with self._lock:
             credential = self._credentials.get(credential_id)
             if credential is not None and self.can_authenticate(credential, now):
-                self._credentials[credential_id] = replace(credential, last_used_at=now)
+                current = replace(credential, last_used_at=now)
+                from sbp_lex.api.security_state_store import active_security_state_store
+                store = active_security_state_store()
+                if store is not None:
+                    store.append_lifecycle(
+                        action="USED", credential_id=current.credential_id,
+                        principal_id=current.principal_id,
+                        credential_version=current.credential_version,
+                        request_id=f"use-{uuid.uuid4()}",
+                        prior_state=_safe_credential_state(credential),
+                        new_state=_safe_credential_state(current),
+                        reason="authenticated_use", now=now,
+                    )
+                self._credentials[credential_id] = current
 
     def activate(self, credential_id: str, *, actor_id: str, request_id: str, now: datetime) -> Credential:
         with self._lock:
@@ -210,7 +241,14 @@ class CredentialRegistry:
                 target, status="ROTATING", replacement_credential_id=replacement.credential_id,
                 overlap_expires_at=now + timedelta(seconds=overlap_seconds),
             )
-            self._record(request_id=request_id, action="ROTATE", previous=target, current=rotating, actor=actor, now=now)
+            self._record(
+                request_id=request_id, action="ROTATE", previous=target,
+                current=rotating, actor=actor, now=now,
+                persisted_new_state={
+                    "source": _safe_credential_state(rotating),
+                    "replacement": _safe_credential_state(replacement),
+                },
+            )
             self._credentials[replacement.credential_id] = replacement
             self._credentials[credential_id] = rotating
             return rotating, replacement
@@ -220,7 +258,20 @@ class CredentialRegistry:
         with self._lock:
             for credential_id, credential in list(self._credentials.items()):
                 if credential.status == "ROTATING" and credential.overlap_expires_at and now >= credential.overlap_expires_at:
-                    self._credentials[credential_id] = replace(credential, status="RETIRED")
+                    current = replace(credential, status="RETIRED")
+                    from sbp_lex.api.security_state_store import active_security_state_store
+                    store = active_security_state_store()
+                    if store is not None:
+                        store.append_lifecycle(
+                            action="RETIRED", credential_id=current.credential_id,
+                            principal_id=current.principal_id,
+                            credential_version=current.credential_version,
+                            request_id=f"retire-{credential_id}-{int(now.timestamp())}",
+                            prior_state=_safe_credential_state(credential),
+                            new_state=_safe_credential_state(current),
+                            reason="rotation_overlap_expired", now=now,
+                        )
+                    self._credentials[credential_id] = current
                     retired.append(credential_id)
         return sorted(retired)
 
@@ -301,6 +352,23 @@ def credential_from_record(record: Mapping[str, Any]) -> Credential:
     )
 
 
+def _safe_credential_state(credential: Credential) -> dict[str, Any]:
+    return {
+        "credential_id": credential.credential_id,
+        "principal_id": credential.principal_id,
+        "principal_type": credential.principal_type,
+        "credential_version": credential.credential_version,
+        "allowed_scopes": sorted(credential.allowed_scopes),
+        "status": credential.status,
+        "rotation_group": credential.rotation_group,
+        "replacement_credential_id": credential.replacement_credential_id,
+        "revoked_at": credential.revoked_at.isoformat() if credential.revoked_at else None,
+        "revocation_reason": credential.revocation_reason,
+        "last_used_at": credential.last_used_at.isoformat() if credential.last_used_at else None,
+        "overlap_expires_at": credential.overlap_expires_at.isoformat() if credential.overlap_expires_at else None,
+    }
+
+
 _REGISTRY_LOCK = threading.Lock()
 _REGISTRY_SOURCE = ""
 _REGISTRY = CredentialRegistry({})
@@ -331,6 +399,25 @@ def configured_registry() -> CredentialRegistry:
                 if credential.credential_id in credentials:
                     raise CredentialLifecycleError("duplicate_credential_id")
                 credentials[credential.credential_id] = credential
+            from sbp_lex.api.security_state_store import active_security_state_store
+            store = active_security_state_store()
+            if store is not None:
+                persisted = store.state().get("credential_states", {})
+                for credential_id, state in persisted.items():
+                    if credential_id not in credentials or not isinstance(state, Mapping):
+                        continue
+                    current = credentials[credential_id]
+                    credentials[credential_id] = replace(
+                        current,
+                        status=str(state.get("status", current.status)),
+                        replacement_credential_id=state.get(
+                            "replacement_credential_id", current.replacement_credential_id
+                        ),
+                        revoked_at=parse_time(state.get("revoked_at")) or current.revoked_at,
+                        revocation_reason=state.get("revocation_reason", current.revocation_reason),
+                        last_used_at=parse_time(state.get("last_used_at")) or current.last_used_at,
+                        overlap_expires_at=parse_time(state.get("overlap_expires_at")),
+                    )
         except Exception:
             credentials = {}
         _REGISTRY_SOURCE = raw

@@ -49,6 +49,25 @@ same-principal, same-type, equal-or-narrower replacement exists. Revocation is
 immediate. REVOKED, SUSPENDED, RETIRED, EXPIRED, and unactivated PENDING
 credentials fail closed.
 
+## API security-state persistence
+
+Before binding the API listener, Desktop V1 validates the separate
+runtime_artifacts/api_security_state security ledger, checkpoint, rollback
+anchor, and any crash-recovery intent. The store is single-host and has one
+authoritative writer. Invalid, missing, stale, rolled-back, or ambiguous
+security state prevents listener binding.
+
+The append-only ledger contains domain-separated integrity signatures,
+monotonic sequences, previous-record hashes, safe credential lifecycle state,
+nonce digests, request IDs, and bounded retention metadata. It never stores
+credential secrets, bearer values, raw nonces, or reusable signatures.
+
+Ledger, checkpoint, anchor, and write-intent replacement use flushed temporary
+files and atomic replacement. A proven one-step interrupted append or
+checkpoint/anchor replacement is rolled forward; broader inconsistency fails
+closed. Records are limited to 64 KiB, the active store to 8 MiB, replay
+retention to five minutes, and a warning begins at 6 MiB.
+
 ## Runtime authority
 
 The APK remains observational/orchestration only. Execution authority remains inside the canonical runtime.

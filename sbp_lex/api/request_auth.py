@@ -12,6 +12,10 @@ from urllib.parse import parse_qsl, urlencode, urlparse
 
 from sbp_lex.api.schema_validation import loads_strict_json
 from sbp_lex.api.credential_lifecycle import configured_registry
+from sbp_lex.api.security_state_store import (
+    SecurityStatePersistenceError,
+    active_security_state_store,
+)
 
 PROTOCOL_VERSION = "SBP_LEX_REQUEST_AUTH_V1"
 AUTH_HEADER = "X-SBP-LEX-Request-Auth"
@@ -244,6 +248,20 @@ def authenticate_signed_request(
             return _deny("request_authentication_nonce_reused")
         if request_key in _USED_REQUEST_IDS:
             return _deny("request_authentication_request_id_reused")
+        persistent_store = active_security_state_store()
+        if persistent_store is not None:
+            try:
+                persistent_store.register_replay(
+                    credential_id=principal.credential_id, request_id=request_id,
+                    nonce=nonce, expires_at=expires, now=current,
+                )
+            except SecurityStatePersistenceError as exc:
+                reason = str(exc)
+                if reason == "persistent_nonce_replay":
+                    return _deny("request_authentication_nonce_reused")
+                if reason == "persistent_request_id_replay":
+                    return _deny("request_authentication_request_id_reused")
+                return _deny("security_state_persistence_failed", 503)
         _USED_NONCES.add(nonce_key)
         _USED_REQUEST_IDS.add(request_key)
     configured_registry().mark_used(principal.credential_id, current)

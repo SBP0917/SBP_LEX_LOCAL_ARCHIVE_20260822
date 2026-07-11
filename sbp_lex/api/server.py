@@ -24,6 +24,7 @@ from sbp_lex.connector.recovery import CONNECTOR_RECOVERY
 from sbp_lex.persistence.integrity_store import RUNTIME_INTEGRITY_STORE
 from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 from sbp_lex.runtime.event_bus import RUNTIME_EVENTS
+from sbp_lex.api.security_state_store import initialize_security_state_store
 
 
 def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: Dict[str, Any]) -> None:
@@ -250,6 +251,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     # Resolve before binding the socket. Invalid or non-test unauthenticated
     # configuration must prevent startup rather than fall through at request time.
     security_mode()
+    initialize_security_state_store(hold_writer=True)
     server = ThreadingHTTPServer((host, port), RuntimeAPIHandler)
     print(f"SBP-LEX V1 Canonical Runtime API listening on http://{host}:{port}")
     server.serve_forever()
