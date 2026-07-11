@@ -33,9 +33,9 @@
     "path_note": "Manifest records intended verification commands only; it does not execute them.",
     "python_executable_path": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-06-24T17:32:37+00:00",
+  "created_at": "2026-07-11T04:58:56+00:00",
   "critical_file_hashes": [
     {
       "path": "main.py",
@@ -51,20 +51,20 @@
     },
     {
       "path": "sbp_lex/persistence/integrity_store.py",
-      "sha256": "2578fa7b4f33589e5be11bb709fa7cdd22664c89ad8e8c5632884b296d801916",
-      "size_bytes": 9694,
+      "sha256": "079d68c209b1da23ae989514fce1ab69dfac39ee3d3d87754b7ff4869a8956bb",
+      "size_bytes": 9756,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/execution/execution_gate.py",
-      "sha256": "9e611f8fceb32c41115e6be647567270cc8fe907d90eb195ac3528602dd3e7f1",
-      "size_bytes": 13291,
+      "sha256": "ca54e23e428202c067c6613620585ec314417614ac9e8e23c36caa31c8389dd3",
+      "size_bytes": 17853,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/governance/procedural_truth_engine.py",
-      "sha256": "ff52fe0a9744fbc7ff0d39b6e5a5192d1f5ecfb8560bf6f9b0e6e43278620b21",
-      "size_bytes": 3200,
+      "sha256": "5e2302e80876608ee9df64c9daa4abcc10d285aacbf7f52f093d10cb9d1617be",
+      "size_bytes": 10626,
       "status": "PRESENT"
     },
     {
@@ -75,8 +75,8 @@
     },
     {
       "path": "sbp_lex/authority_first/root_of_trust_runner.py",
-      "sha256": "1e65000777c439745994728863bc85eb5920d2fcf24dcc5de23177d068651d42",
-      "size_bytes": 5878,
+      "sha256": "8082f404df520da2055d0fc5942aa8ac300d853d7cf6af87307ee1b517550213",
+      "size_bytes": 9071,
       "status": "PRESENT"
     },
     {
@@ -87,8 +87,8 @@
     },
     {
       "path": "sbp_lex/shared/state_builder.py",
-      "sha256": "e6d07abe8890350d5d9a17d5e51808d49c96bb883067c5c0c1605923a07f0c08",
-      "size_bytes": 4197,
+      "sha256": "8f256da161f0ff29542d240d3fc681d54c12e78f9740ecdfc9a6032170ca3ddf",
+      "size_bytes": 5946,
       "status": "PRESENT"
     },
     {
@@ -99,17 +99,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "b54103b907b26729cf09d4f2f8dab743cf9a691a",
-  "git_status_short": "?? docs/LOCAL_EXECUTION_ENVIRONMENT_TRUST_ENVELOPE.md\n?? docs/LOCAL_TRUST_ROOT_MANIFEST.md\n?? outputs/\n?? reports/PHASE_18_7B_LOCAL_TRUST_ROOT_MANIFEST_REPORT.md\n?? reports/PHASE_18_7C_LOCAL_EXECUTION_ENVIRONMENT_TRUST_ENVELOPE_REPORT.md\n?? sbp_lex/local_trust/\n?? tests/test_phase_18_7b_local_trust_manifest.py\n?? tests/test_phase_18_7c_local_execution_environment_trust_envelope.py",
+  "git_commit": "826b973351761b2d3e8e336f44eaae4c49ddda04",
+  "git_status_short": "",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 6684,
+    "size_bytes": 15935,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
-  "manifest_payload_digest": "c88c5fb44bf1b98e5e1e0c12511253e8ff0d8bef3fdbac14c84cf7e62ccebb7e",
-  "manifest_signature": "96da361c8e6107332b4c09ad7191f39bdc6b12fe5c4c3e321f8438707c354327",
+  "manifest_digest": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
+  "manifest_payload_digest": "80347bc08046f0e16cf933a414b692164d580625be3fc54eebd94bf8a916bbbc",
+  "manifest_signature": "8e0e14da531cb60cd08c57b86ba283c62332d8ec6fccf54dd8934e4abbb43c31",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -140,7 +140,7 @@
   "replay_baseline": {
     "latest_verified_replay": "MATCHED_RECORDED_OUTSIDE_LOCAL_TRUST"
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "repository_root_digest_scope": "relative_paths_only",
   "runtime_baseline": {
     "latest_verified_runtime": "RECORDED_OUTSIDE_LOCAL_TRUST"
@@ -153,9 +153,9 @@
   "trusted_output_hashes": [
     {
       "path": "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
-      "sha256": null,
-      "size_bytes": null,
-      "status": "MISSING"
+      "sha256": "8669b8390f202872bab0e171eda84345624e9ccb9df69452f1ed28db6dbd7c85",
+      "size_bytes": 3623,
+      "status": "PRESENT"
     }
   ],
   "trusted_report_hashes": [
@@ -203,11 +203,11 @@
     },
     {
       "path": "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
-      "sha256": "62abc4862d81b17f97e87a1db4fbe6ab3659967373f866417dfe310c30f25bd5",
-      "size_bytes": 4582,
+      "sha256": "db821f8e95d7e0d1d0882782baf4a6c145f2f915d98b62d52df68e895be37c87",
+      "size_bytes": 4690,
       "status": "PRESENT"
     }
   ],
   "validation_failures": [],
-  "working_tree_clean": false
+  "working_tree_clean": true
 }

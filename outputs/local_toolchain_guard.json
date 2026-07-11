@@ -1,15 +1,15 @@
 {
-  "bound_constitutional_gates_digest": "091e82a5b6ad8728439609ff0f14f293ed11e461a6511f09f64435b929234ab0",
-  "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
-  "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
-  "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
-  "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
-  "created_at": "2026-06-25T09:02:38+00:00",
+  "bound_constitutional_gates_digest": "9fc7aa05cc11184c3543a923a69652ee728e2cdbf33648fb72b93e1d4181d637",
+  "bound_evidence_chain_digest": "76366eca3cab51d1d81f6bf51c5dee16e30d21dfd76f75e82b8973b051c06c55",
+  "bound_execution_envelope_digest": "6b669bffba26942aa96b8310b3e2abf05590db0bcdeb46ef31adef1c0b1923ea",
+  "bound_manifest_digest": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
+  "bound_regression_matrix_digest": "3ae965acd061631ecabb9719451996fe0429f43f0f1f989b2332f0c8ff4e878f",
+  "created_at": "2026-07-11T05:05:33+00:00",
   "dependency_file_digests": [
     {
       "path": "requirements.txt",
-      "sha256": "12e4ba4731303c0dcc1abdc162dc954cf2a48f4926d468a0259bc8072a12ba0c",
-      "size_bytes": 15,
+      "sha256": "33c812b84f66fc55c7d77470a56872c8958e70787591a18c5e64ae8d40c5a541",
+      "size_bytes": 37,
       "status": "PRESENT"
     },
     {
@@ -53,7 +53,7 @@
     "requirements.txt"
   ],
   "git_branch": "main",
-  "git_commit": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
+  "git_commit": "826b973351761b2d3e8e336f44eaae4c49ddda04",
   "ignored_output_paths": [
     "outputs",
     "outputs/local_trust_temp"
@@ -74,7 +74,7 @@
       },
       {
         "name": "artifact_tool_v2",
-        "version": "2.8.14"
+        "version": "2.8.22"
       },
       {
         "name": "cffi",
@@ -170,7 +170,7 @@
       },
       {
         "name": "pypdfium2",
-        "version": "5.10.1"
+        "version": "5.11.0"
       },
       {
         "name": "pytest",
@@ -206,7 +206,7 @@
       },
       {
         "name": "typing_extensions",
-        "version": "4.15.0"
+        "version": "4.16.0"
       },
       {
         "name": "tzdata",
@@ -241,7 +241,7 @@
   "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
   "python_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
   "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "TOOLCHAIN_GUARD_DETERMINISTIC_PLACEHOLDER",
   "toolchain_checks": [
     {
@@ -519,7 +519,7 @@
       "check_id": "binds_manifest_digest",
       "check_name": "Toolchain binds manifest digest",
       "expected_condition": "manifest_digest_bound",
-      "observed_condition": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
+      "observed_condition": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
       "reason": "bound_manifest_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -529,7 +529,7 @@
       "check_id": "binds_execution_envelope_digest",
       "check_name": "Toolchain binds execution envelope digest",
       "expected_condition": "execution_envelope_digest_bound",
-      "observed_condition": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
+      "observed_condition": "6b669bffba26942aa96b8310b3e2abf05590db0bcdeb46ef31adef1c0b1923ea",
       "reason": "bound_execution_envelope_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -539,7 +539,7 @@
       "check_id": "binds_evidence_chain_digest",
       "check_name": "Toolchain binds evidence chain digest",
       "expected_condition": "evidence_chain_digest_bound",
-      "observed_condition": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
+      "observed_condition": "76366eca3cab51d1d81f6bf51c5dee16e30d21dfd76f75e82b8973b051c06c55",
       "reason": "bound_evidence_chain_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -549,7 +549,7 @@
       "check_id": "binds_regression_matrix_digest",
       "check_name": "Toolchain binds regression matrix digest",
       "expected_condition": "regression_matrix_digest_bound",
-      "observed_condition": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+      "observed_condition": "3ae965acd061631ecabb9719451996fe0429f43f0f1f989b2332f0c8ff4e878f",
       "reason": "bound_regression_matrix_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -559,7 +559,7 @@
       "check_id": "binds_constitutional_gates_digest",
       "check_name": "Toolchain binds constitutional gates digest",
       "expected_condition": "constitutional_gates_digest_bound",
-      "observed_condition": "091e82a5b6ad8728439609ff0f14f293ed11e461a6511f09f64435b929234ab0",
+      "observed_condition": "9fc7aa05cc11184c3543a923a69652ee728e2cdbf33648fb72b93e1d4181d637",
       "reason": "bound_constitutional_gates_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -589,7 +589,7 @@
       "check_id": "commit_recorded",
       "check_name": "Current commit recorded",
       "expected_condition": "commit_recorded",
-      "observed_condition": "96a9745ab40317f91d22b62b92e5110bdc0d94d2",
+      "observed_condition": "826b973351761b2d3e8e336f44eaae4c49ddda04",
       "reason": "git commit recorded",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -635,11 +635,11 @@
       "status": "TOOLCHAIN_CHECK_PASS"
     }
   ],
-  "toolchain_digest": "e0d40119adc763f53bec4ce293a3fed2ad10c2b99ac2533b9a44c5e4125c5284",
+  "toolchain_digest": "8c49b3a928f763d12ecf59506e6cfc135f1111a0f50312b0d83bffbc13675aac",
   "toolchain_guard_type": "local_trust_dependency_toolchain_guard",
   "toolchain_guard_version": "18.7E.3",
-  "toolchain_payload_digest": "24af2b14222b6c6a460223ccdc1135c2ec16cdcb6c32e7d3f8f4467a495627cf",
-  "toolchain_signature": "1c63675de49c96cff346db98812e4d0bd206978f78384021db0267eeed24c9d0",
+  "toolchain_payload_digest": "f7debc31d5484843431043549d9d92e672cffb1f7d4b65db20250169976ce52f",
+  "toolchain_signature": "bed13b7b17750327ad602a3ca59db10c32394a9547e9741caed06a94097a02c9",
   "toolchain_status": "TOOLCHAIN_GUARD_PASS",
   "toolchain_summary": {
     "all_required_checks_passed": true,

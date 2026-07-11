@@ -1,6 +1,6 @@
 {
-  "bound_local_trust_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
-  "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6\\outputs\\local_trust_root_manifest.json",
+  "bound_local_trust_manifest_digest": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
+  "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
   "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
   "command_results": [
     {
@@ -12,18 +12,18 @@
         "."
       ],
       "command_id": "compileall",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "python -m compileall -q .",
-      "duration_ms": 140,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:33:32+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-      "started_at": "2026-06-24T17:33:32+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "932772927813844533a04704a804c2be17b7b414fab7eba104c7593da23cefd3",
-      "stdout_excerpt": "Can't list '.\\\\.pytest_cache'\nCan't list '.\\\\.pytest_tmp_18_7bc'\nCan't list '.\\\\.pytest_tmp_18_7c'\nCan't list '.\\\\.pytest_tmp_18_7c_fix'\nCan't list '.\\\\.pytest_tmp_bat'\nCan't list '.\\\\.pytest_tmp_bat_18_7c'\nCan't list '.\\\\.pytest_tmp_full'\nCan't list '.\\\\.pytest_tmp_full_18_7c'\nCan't list '.\\\\.pytest_tmp_operator'\nCan't list '.\\\\outputs\\\\local_trust_temp\\\\pytest-of-LeighMC'\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -33,18 +33,18 @@
         "-q"
       ],
       "command_id": "pytest",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "python -m pytest -q",
-      "duration_ms": 24985,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:33:57+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-      "started_at": "2026-06-24T17:33:32+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "255c5fe5dd911b48e7e8632b6b1e84c8722db4d94c57b254f6471d34fcf7ec32",
-      "stdout_excerpt": "........................................................................ [ 24%]\n........................................................................ [ 49%]\n........................................................................ [ 73%]\n........................................................................ [ 98%]\n.....                                                                    [100%]\n============================== warnings summary ===============================\n..\\..\\..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\_pytest\\ca\n...[truncated]...\nependencies\\python\\Lib\\site-packages\\_pytest\\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6\\.pytest_cache\\v\\cache\\nodeids: [WinError 5] Access is denied: 'C:\\\\Users\\\\LeighMC\\\\Documents\\\\Codex\\\\2026-06-24\\\\inspect-the-latest-github-activity-in\\\\work\\\\SBP_LEX_DUAL_V6\\\\.pytest_cache\\\\v\\\\cache'\n    config.cache.set(\"cache/nodeids\", sorted(self.cached_nodeids))\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n293 passed, 1 warning in 24.70s\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -53,18 +53,18 @@
         "scripts\\run_tests.bat"
       ],
       "command_id": "run_tests_bat",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "scripts\\run_tests.bat",
-      "duration_ms": 25531,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:34:22+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": null,
-      "started_at": "2026-06-24T17:33:57+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "a6f164ea615ccd68df4a38f4db41ea4ad097c97de6085d19fb734988d4ca5bfc",
-      "stdout_excerpt": "[INFO] Running: \"python\"  -m pytest \n============================= test session starts =============================\nplatform win32 -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0\nrootdir: C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6\ncollected 293 items\n\nexternal_substrates\\demo\\tests\\test_demo_builder.py ...                  [  1%]\nexternal_substrates\\dtn\\tests\\test_dtn_substrate.py .........            [  4%]\nexternal_substrates\\shared\\tests\\test_bridge_readiness.py .............. [  8%]\n.......                                \n...[truncated]...\narning: could not create cache path C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6\\.pytest_cache\\v\\cache\\nodeids: [WinError 5] Access is denied: 'C:\\\\Users\\\\LeighMC\\\\Documents\\\\Codex\\\\2026-06-24\\\\inspect-the-latest-github-activity-in\\\\work\\\\SBP_LEX_DUAL_V6\\\\.pytest_cache\\\\v\\\\cache'\n    config.cache.set(\"cache/nodeids\", sorted(self.cached_nodeids))\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 293 passed, 1 warning in 25.00s =======================\n[PASS] Full test suite passed.\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -72,18 +72,18 @@
         "main.py"
       ],
       "command_id": "runtime_main",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "python main.py",
-      "duration_ms": 313,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:34:23+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-      "started_at": "2026-06-24T17:34:22+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "54f90e2f8bde3984fb4c1b5051a8d46c9bd0955cb124cae4508a7803ffa9ea29",
-      "stdout_excerpt": "{\n  \"decision\": \"ALLOW\",\n  \"execution_result\": \"EXECUTE\",\n  \"pipeline_mode\": \"MODE_2_SPLIT_VALIDATOR\",\n  \"audit_hash\": \"f76139687e3db432edfda4c9eb34d27dea6ad28cef3e59d8cbf419f58b95ea9d\",\n  \"convergence_matched\": true,\n  \"token_failures\": []\n}\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -92,18 +92,18 @@
         "replay"
       ],
       "command_id": "runtime_replay",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "python main.py replay",
-      "duration_ms": 531,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:34:23+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-      "started_at": "2026-06-24T17:34:23+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "581e8be0d96ae4f6279a258aff6891924b3f354efd2659505276c6cd858f4468",
-      "stdout_excerpt": "{\n  \"replay_count\": 2,\n  \"matched\": true,\n  \"comparison_fields\": [\n    \"request_fingerprint\",\n    \"state_hash\",\n    \"audit_hash\",\n    \"pipeline_mode\",\n    \"authority_first_result\",\n    \"procedural_truth_result\",\n    \"procedural_truth_outcome\",\n    \"pt_evidence_envelope_digest\",\n    \"pt_bound_metadata\",\n    \"classification_result\",\n    \"licensing_result\",\n    \"governance_result\",\n    \"domain_result\",\n    \"aurion15_result\",\n    \"decision\",\n    \"execution_result\",\n    \"execution_verified\",\n    \"convergence_hash\",\n    \"convergence_matched\",\n    \"token_failures\",\n    \"audit_finalisation\",\n...[truncated]...\n     \"final_outcome\": {\n        \"allowed\": true,\n        \"decision\": \"ALLOW\",\n        \"outcome_locked\": true\n      }\n    }\n  ],\n  \"mismatches\": [],\n  \"replay_hash\": \"7ddd431702cb37baaa46b459e278f6384d48ba2e89a9904a0cfa801d9e9d9168\",\n  \"replay_signature\": {\n    \"issuer\": \"SBP_LEX_V6_INTERNAL_CONTROL_PLANE\",\n    \"algorithm\": \"HMAC-SHA256-PQC-PLACEHOLDER\",\n    \"digest\": \"82296c9812ba55257878c6831463cd81311b6b9268efbfa4c4558161aa9ea6af\",\n    \"signature\": \"fdbb5d32ba169871cead7f420f5c3b35daafaa94f414b21f9de91db0cf29b478\",\n    \"signed_at\": \"CANONICAL_RUNTIME_DETERMINISTIC_SIGNATURE\"\n  }\n}\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -112,18 +112,18 @@
         "--check"
       ],
       "command_id": "git_diff_check",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "git diff --check",
-      "duration_ms": 62,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:34:23+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": null,
-      "started_at": "2026-06-24T17:34:23+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -132,33 +132,33 @@
         "--short"
       ],
       "command_id": "git_status_short",
-      "command_status": "COMMAND_PASS",
+      "command_status": "COMMAND_NOT_RUN",
       "command_text": "git status --short",
-      "duration_ms": 78,
-      "exit_code": 0,
-      "finished_at": "2026-06-24T17:34:23+00:00",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
       "python_executable_if_python_command": null,
-      "started_at": "2026-06-24T17:34:23+00:00",
-      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": null,
+      "stderr_digest": null,
       "stderr_excerpt": "",
-      "stdout_digest": "a30ce235221d44b58cf3a20c3bdc23553ef27b51af37a795168da9d071c73f7c",
-      "stdout_excerpt": "?? docs/LOCAL_EXECUTION_ENVIRONMENT_TRUST_ENVELOPE.md\n?? docs/LOCAL_TRUST_ROOT_MANIFEST.md\n?? outputs/\n?? reports/PHASE_18_7B_LOCAL_TRUST_ROOT_MANIFEST_REPORT.md\n?? reports/PHASE_18_7C_LOCAL_EXECUTION_ENVIRONMENT_TRUST_ENVELOPE_REPORT.md\n?? sbp_lex/local_trust/\n?? tests/test_phase_18_7b_local_trust_manifest.py\n?? tests/test_phase_18_7c_local_execution_environment_trust_envelope.py\n",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6"
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     }
   ],
-  "created_at": "2026-06-24T17:34:23+00:00",
-  "envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
-  "envelope_payload_digest": "0774fef442faf8d82b4f685e277b2f14122762c574c7c5c6baf8338bc3d0cfa3",
-  "envelope_signature": "7145cbf6595a0b2f183e59e66b9c15cfd3af7e8d28bf5fd0b701bec01263a11e",
+  "created_at": "2026-07-11T04:58:59+00:00",
+  "envelope_digest": "6b669bffba26942aa96b8310b3e2abf05590db0bcdeb46ef31adef1c0b1923ea",
+  "envelope_payload_digest": "f9030934dd3a395008446780a44cde33cc5004fd217689dad7a8739aad326d18",
+  "envelope_signature": "4f3103b19433694b91b969c405fb8d9c9a027761e5f720d0a4a7a9568f5e8fd5",
   "envelope_type": "local_execution_environment_trust_envelope",
   "envelope_version": "18.7C",
   "git_branch": "main",
-  "git_commit": "b54103b907b26729cf09d4f2f8dab743cf9a691a",
+  "git_commit": "826b973351761b2d3e8e336f44eaae4c49ddda04",
   "path_digest_or_path_summary": {
-    "path_digest": "b6e6460038c4cffa8e964091e7b72831ccfbcf994db169d36b2e814df4b5b030",
+    "path_digest": "a071daacea10ff563a0a1bfe7090c8733960a5af5082daa86f1277f79eafd169",
     "path_entry_count": 14,
     "path_first_entries": [
-      "C:\\Users\\LeighMC\\.codex\\tmp\\arg0\\codex-arg0tZPjd4",
+      "C:\\Users\\LeighMC\\.codex\\tmp\\arg0\\codex-arg0OajnVX",
       "C:\\WINDOWS\\system32",
       "C:\\WINDOWS"
     ]
@@ -166,27 +166,22 @@
   "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
   "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
   "replay_result_summary": {
-    "command_status": "COMMAND_PASS",
-    "exit_code": 0,
-    "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "stdout_digest": "581e8be0d96ae4f6279a258aff6891924b3f354efd2659505276c6cd858f4468"
+    "command_status": "COMMAND_NOT_RUN",
+    "exit_code": null,
+    "stderr_digest": null,
+    "stdout_digest": null
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "runtime_result_summary": {
-    "command_status": "COMMAND_PASS",
-    "convergence_matched": true,
-    "decision": "ALLOW",
-    "execution_result": "EXECUTE",
-    "exit_code": 0,
-    "pipeline_mode": "MODE_2_SPLIT_VALIDATOR",
-    "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "stdout_digest": "54f90e2f8bde3984fb4c1b5051a8d46c9bd0955cb124cae4508a7803ffa9ea29",
-    "token_failures": []
+    "command_status": "COMMAND_NOT_RUN",
+    "exit_code": null,
+    "stderr_digest": null,
+    "stdout_digest": null
   },
   "shell_type_if_available": "C:\\WINDOWS\\system32\\cmd.exe",
   "signature_mode": "EXECUTION_ENV_DETERMINISTIC_PLACEHOLDER",
   "validation_failures": [],
   "verification_status": "EXECUTION_ENV_VALID",
-  "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "working_tree_clean": false
 }
