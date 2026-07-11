@@ -35,8 +35,14 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T21:38:34+00:00",
+  "created_at": "2026-07-11T23:22:41+00:00",
   "critical_file_hashes": [
+    {
+      "path": "README.md",
+      "sha256": "badd4dbcad388d2b4cbe70cf98fded186fa5cc67e74b08b7632830d4121da13a",
+      "size_bytes": 7179,
+      "status": "PRESENT"
+    },
     {
       "path": "main.py",
       "sha256": "f5b7a59fff0b00ad90efd1c3ef1a93d79188a1b5d4461097fb2684654938cecc",
@@ -183,17 +189,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "27c73c2b99d08e8e9bdbec874be279e1f4103dcf",
-  "git_status_short": "M sbp_lex/local_trust/critical_paths.py\n?? outputs/phq_formal_architecture_assurance.json\n?? reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md\n?? sbp_lex/formal/\n?? tests/test_phq_formal_deterministic_architecture.py",
+  "git_commit": "056d548a81b87360c03b8735e253b9d0836ede8b",
+  "git_status_short": "M README.md\n M sbp_lex/local_trust/critical_paths.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 439769,
+    "size_bytes": 495748,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "5b9e9c966587efdd8b8f0f5df04ca65ce379fc39d883e4a241dc1529bb6d0739",
-  "manifest_payload_digest": "5c738cdb1d09acd69157965fa9fe7a1e168d6781866f0b4777cf69ce44bab3e5",
-  "manifest_signature": "0f215fb8b25462ce50082c451c094d6695912b4b9f5bedfd4252200ff9fa8828",
+  "manifest_digest": "2e12550f8e5462f96d9c2f4a3212f043d2363e91e1cd9df83446ae6d3f0dc2dc",
+  "manifest_payload_digest": "2b05a0164b6cf5f4a740656cf655a5ae02e431631b887ed24cbf55d7d1678682",
+  "manifest_signature": "2d4f07f288b2d096f31774af751439b25badbfbbe3482752c8eefba6a62ceb46",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [

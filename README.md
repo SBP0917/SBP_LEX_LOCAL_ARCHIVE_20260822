@@ -1,136 +1,131 @@
-# SBP_LEX_DUAL_V6
-
 # SBP-LEX Dual V6 Desktop V1
 
-## Overview
+SBP-LEX Dual V6 Desktop V1 is a deterministic AI-governance and execution-control engineering baseline. It evaluates bounded requests through a fixed authority-first control sequence and permits execution only when every required decision, binding, integrity check, and audit condition is satisfied.
 
-SBP-LEX Dual V6 Desktop V1 is a local-first, deterministic AI governance and execution-control architecture implementing Dual Adaptive Deterministic Pipelines for bounded execution assurance.
+Desktop V1 is intentionally local-first, private, single-host, and no-node. It does not depend on distributed consensus, cloud authority, remote governance nodes, or cognitive pipeline functionality.
 
-Desktop V1 is a single-host, no-node prototype designed to validate the engineering architecture before future pilot and production deployments.
+## Engineering posture
 
-The architecture preserves the canonical deterministic traversal:
+The runtime is designed around these properties:
 
-External System → Native Format / Protocol → Adapter Translation → Execution Intent Envelope (EIE) → SKG Verification → DTN Verification → Hard Entry Gate → State Construction → Collective Signal Attachment → Root of Trust → Procedural Truth → Classification → Licensing → Governance → GRC → Domain → Aurion → Execution Gate → Audit → Controlled Outcome.
+- deterministic processing and replay;
+- fail-closed handling of invalid, incomplete, contradictory, stale, or unverifiable state;
+- authority-first evaluation before downstream governance and execution;
+- exact request, state, identity, evidence, policy, and execution bindings;
+- no downstream restoration of an upstream denial or invalid state;
+- auditable outcomes and tamper-evident engineering evidence;
+- measured startup before runtime execution;
+- explicit approved runtime identity and drift detection;
+- local operation within the Desktop V1 trust boundary.
 
-The Desktop V1 architecture remains deterministic, fail-closed and non-bypass.
+## Canonical control architecture
 
----
-
-# Current Engineering Status
-
-Desktop V1 currently implements:
-
-* deterministic Dual Adaptive execution pipelines
-* fail-closed execution architecture
-* measured startup validation
-* approved runtime identity
-* runtime drift detection
-* deterministic replay verification
-* execution gating
-* scoped identities
-* canonical request binding
-* credential lifecycle management
-* durable security-state persistence
-* admission control
-* transport and network-boundary protection
-* external trust-boundary hardening
-* asymmetric external source identity verification
-* protected trust-store management
-* durable external replay persistence
-* Local Trust assurance
-* Constitutional Gates
-* Toolchain Guard
-* Capstone verification
-
-Desktop V1 remains:
-
-* local-only
-* single-host
-* no-node
-* non-distributed
-* cognitively isolated from experimental work
-* architecturally unchanged throughout the assurance programme
-
----
-
-# Post-Quantum Cryptography
-
-SBP-LEX uses a real post-quantum cryptographic provider contract for enforcement and verification evidence.
-
-Current repository policy:
-
-* NIST FIPS 203
-* NIST FIPS 204
-* NIST FIPS 205
-
-Current algorithms:
-
-* ML-DSA — primary digital signature algorithm
-* SLH-DSA — secondary/fallback signature policy
-* ML-KEM — key-establishment foundation for future secure session negotiation
-
-Current provider:
+The owner-declared control flow is fixed:
 
 ```text
-cryptography.mldsa
-cryptography >= 49.0.0
+External System
+-> Native Format / Protocol
+-> Adapter Translation
+-> Execution Intent Envelope (EIE)
+-> SKG verification
+-> DTN contextual verification
+-> Hard Entry Gate
+-> State Construction
+-> Collective Signal Attachment
+-> Root of Trust
+-> Procedural Truth
+-> Classification
+-> Licensing
+-> Governance
+-> GRC
+-> Domain
+-> Aurion
+-> Execution Gate
+-> Audit
 ```
 
-Provider availability is mandatory.
+External inputs, adapters, evidence packages, viewers, and support tooling do not possess canonical runtime or execution authority. State Construction remains the sole canonical internal state-construction point.
 
-If a required provider is unavailable:
+## Runtime assurance
 
-* PQC verification fails closed.
-* Verification cannot be bypassed.
-* Verification cannot be simulated by forcing successful verification flags.
-* Placeholder or HMAC-derived values are never accepted as valid PQC signatures.
+### Measured startup and runtime identity
 
-Desktop V1 distinguishes between:
+Before execution is permitted, Desktop V1 measures approved software, configuration, policies, schemas, dependencies, trust evidence, environment posture, and runtime components. Measurements are compared with an explicitly approved baseline. Critical, unknown, corrupted, rolled-back, or unexplained drift fails closed.
 
-* production PQC provider signatures; and
-* deterministic Local Trust placeholder evidence used only for bounded engineering validation.
+The approved measured state produces a deterministic runtime identity. Baseline changes require explicit approval and preserve signed lineage; changed measurements are never accepted automatically.
 
-Placeholder evidence is not production cryptography and must never be represented as such.
+### Deterministic replay
 
----
+Replay evaluates the same bounded request through the same canonical controls and compares decision-relevant fields. Mismatches are reported and do not establish execution legitimacy.
 
-# Assurance Philosophy
+### External trust boundary
 
-Desktop V1 is engineered around deterministic execution assurance.
+External identities, signed packages, transport context, trust stores, and replay state are validated before they can contribute bounded evidence. External substrates remain non-authoritative and cannot create governed internal state or execution authority.
 
-Every externally supplied object must be verified before canonical runtime traversal.
+### Cryptographic integrity
 
-Authority is never inferred.
+Security-relevant tokens, evidence, capabilities, attestations, baselines, and assurance artefacts are digest-bound and signed under the repository's cryptographic provider policy. Required provider or verification failures fail closed. Cryptographic evidence supports integrity and provenance; this repository does not claim third-party certification.
 
-Execution authority is never manufactured.
+## H7 — deterministic execution integrity
 
-Binding failures propagate forward.
+H7 protects the boundary between an approved canonical traversal and an external effect. Execution uses a strict, single-use capability lifecycle:
 
-No downstream component may restore an invalid upstream state.
+```text
+PENDING -> ACTIVE -> RESERVED -> EXECUTING -> terminal state
+```
 
-No emergency execution path exists.
+Terminal states include `COMPLETED`, `FAILED`, `CANCELLED`, `EXPIRED`, `REVOKED`, `AMBIGUOUS`, and `RETIRED` where applicable.
 
-Persistent inoperability is preferred to unauthorised execution.
+Capabilities are bound to the approved request, EIE, canonical state, pipeline results, convergence, target, operation, normalized parameters, constraints, adapter, runtime identity, measured baseline, and audit lineage. Reservation and consumption are durable and race-safe. Cancellation, revocation, expiry, mid-execution invalidation, incomplete completion evidence, or ambiguous effects cannot be promoted to successful completion.
 
----
+## PHQ — formal deterministic architecture
 
-# Repository Scope
+PHQ provides a detached, non-authoritative, machine-checkable architectural formalisation. It defines explicit architectural states, declared transitions, impossible-state detection, invariants, conservation laws, causal lineage, safe-state convergence, and equivalence laws for the three Desktop V1 pipeline modes.
 
-Desktop V1 intentionally excludes:
+PHQ also supplies deterministic property-based assurance and mutation-protection tests. It can model, verify, reject, and report; it cannot issue decisions, tokens, governance outcomes, or execution capabilities, and it cannot mutate runtime state.
 
-* distributed execution
-* node-based convergence
-* cloud authority
-* production PKI infrastructure
-* operational multi-host trust fabrics
-* cognitive experimental runtime
+PHQ is executable assurance over the implemented model. It is not presented as a complete mathematical proof by an external theorem prover or as a certification.
 
-These remain future engineering workstreams and are intentionally separated from the Desktop V1 canonical baseline.
+## Repository assurance
 
----
+The repository maintains a local evidence chain comprising:
 
-# Current Validation Position
+- **Local Trust** — protected manifests, evidence comparison, regression evidence, release integrity, validation dossier, adversarial negative testing, and capstone evidence;
+- **Constitutional Gates** — machine-enforced architectural and repository invariants;
+- **Toolchain Guard** — approved toolchain, dependency, command, and provenance checks;
+- **Release Integrity** — digest-bound release manifests and artefact indexes;
+- **Formal Assurance** — PHQ state, transition, lineage, property, mutation, and deterministic evidence.
 
-Desktop V1 represents the current canonical high-assurance engineering baseline for SBP-LEX Dual V6.
+Changes to protected source, policy, schema, documentation, or evidence require deliberate reconciliation. Unknown or unexplained changes are rejected rather than silently incorporated.
 
-Its purpose is to provide a deterministic, externally governed execution-control implementation suitable for independent engineering evaluation, validation and future pilot deployment while preserving architectural stability, deterministic replay and fail-closed execution semantics.
+## Pipeline modes
+
+Desktop V1 supports three deterministic assurance modes:
+
+- full dual mirrored traversal;
+- primary traversal with validator assurance;
+- constrained single-pipeline traversal.
+
+Modes may vary redundancy and validation depth. They do not change mandatory authority law, Procedural Truth, Classification, Licensing, Governance, GRC, Domain, Aurion limits, Execution Gate requirements, H7 integrity, audit continuity, or failure propagation.
+
+## Scope
+
+This repository represents the Desktop V1 engineering baseline. It is intended for technical review, reproducible local verification, and continued bounded engineering work.
+
+Desktop V1 does not claim public deployment readiness, commercial certification, regulatory approval, or complete formal proof. Deployment-sensitive configuration, credentials, private trust material, and operational infrastructure are outside the repository landing-page scope.
+
+Experimental cognitive work remains isolated from the canonical Desktop V1 runtime.
+
+## Local verification
+
+From an approved local environment:
+
+```text
+python -m compileall -q .
+python -m pytest -q
+scripts\run_tests.bat
+python main.py
+python main.py replay
+```
+
+Additional repository commands validate measured startup, Local Trust, evidence comparison, Constitutional Gates, Toolchain Guard, Release Integrity, the validation dossier, adversarial negative evidence, PHQ formal assurance, and the capstone baseline.

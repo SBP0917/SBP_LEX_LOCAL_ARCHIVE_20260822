@@ -2,6 +2,7 @@ from __future__ import annotations
 
 
 CRITICAL_FILE_PATHS: tuple[str, ...] = (
+    "README.md",
     "main.py",
     "scripts/run_tests.bat",
     "sbp_lex/persistence/integrity_store.py",

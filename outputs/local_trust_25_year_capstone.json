@@ -2,19 +2,19 @@
   "artifact_index": [
     {
       "artifact_id": "manifest",
-      "digest": "5b9e9c966587efdd8b8f0f5df04ca65ce379fc39d883e4a241dc1529bb6d0739",
+      "digest": "2e12550f8e5462f96d9c2f4a3212f043d2363e91e1cd9df83446ae6d3f0dc2dc",
       "digest_field": "manifest_digest",
       "expected_status": "LOCAL_TRUST_VALID",
       "path": "outputs\\local_trust_root_manifest.json",
       "presence_status": "PRESENT",
-      "size_bytes": 11293,
+      "size_bytes": 11302,
       "status_field": "local_trust_status",
       "validation_failures": [],
       "validation_status": "LOCAL_TRUST_VALID"
     },
     {
       "artifact_id": "execution_envelope",
-      "digest": "9f169eda3b6eefa15ed170dd21c8b8b79ba06e1c17de1ae65522bdbd507bc317",
+      "digest": "0a36968282c7fe25246702eeab43dafd73ba044167099e9e5ee6991d473a5cc3",
       "digest_field": "envelope_digest",
       "expected_status": "EXECUTION_ENV_VALID",
       "path": "outputs\\local_execution_environment_trust_envelope.json",
@@ -26,7 +26,7 @@
     },
     {
       "artifact_id": "evidence_chain",
-      "digest": "96b60b6bde673993d8adf259e5b13c0f9c8574cd87b457855f46428af6f555a6",
+      "digest": "2c000b3832a9f873500095f9f80f4daa9231dfdc420c58a561e193a52d0e8a2c",
       "digest_field": "chain_digest",
       "expected_status": "EVIDENCE_CHAIN_VALID",
       "path": "outputs\\local_evidence_chain.json",
@@ -38,19 +38,19 @@
     },
     {
       "artifact_id": "regression_matrix",
-      "digest": "1e936d026f26523e17e0c46a346440aa57deddf8e25ebe0f6ed8906683c2c87b",
+      "digest": "761d14eaaeb6085c0bdcf1b825895b44beac5b213e243ad8b3b09f6c6671aef1",
       "digest_field": "matrix_digest",
       "expected_status": "REGRESSION_MATRIX_VALID",
       "path": "outputs\\local_trust_regression_matrix.json",
       "presence_status": "PRESENT",
-      "size_bytes": 10882,
+      "size_bytes": 10709,
       "status_field": "matrix_status",
       "validation_failures": [],
       "validation_status": "REGRESSION_MATRIX_VALID"
     },
     {
       "artifact_id": "constitutional_gates",
-      "digest": "fd26deb85a0cf80a5cff0815268bdcd1595b04aa965bb0f836d7bca27a4eb040",
+      "digest": "b75205839762e75acaa0ebbfded4641b280deca7425ab63b05a4c55c59b81d0b",
       "digest_field": "gate_digest",
       "expected_status": "CONSTITUTIONAL_GATES_PASS",
       "path": "outputs\\local_constitutional_gates.json",
@@ -62,7 +62,7 @@
     },
     {
       "artifact_id": "toolchain_guard",
-      "digest": "6ac1bc2b6af20e83e0506c9fff6e8858983610696b4dca6965c4c8614e8e0ef8",
+      "digest": "ac73d69f72cc1a9d6adaf9da83750c59c3c431edaa9de6337a5d36b60c2bd393",
       "digest_field": "toolchain_digest",
       "expected_status": "TOOLCHAIN_GUARD_PASS",
       "path": "outputs\\local_toolchain_guard.json",
@@ -73,12 +73,12 @@
       "validation_status": "TOOLCHAIN_GUARD_PASS"
     }
   ],
-  "bound_constitutional_gates_digest": "fd26deb85a0cf80a5cff0815268bdcd1595b04aa965bb0f836d7bca27a4eb040",
-  "bound_evidence_chain_digest": "96b60b6bde673993d8adf259e5b13c0f9c8574cd87b457855f46428af6f555a6",
-  "bound_execution_envelope_digest": "9f169eda3b6eefa15ed170dd21c8b8b79ba06e1c17de1ae65522bdbd507bc317",
-  "bound_manifest_digest": "5b9e9c966587efdd8b8f0f5df04ca65ce379fc39d883e4a241dc1529bb6d0739",
-  "bound_regression_matrix_digest": "1e936d026f26523e17e0c46a346440aa57deddf8e25ebe0f6ed8906683c2c87b",
-  "bound_toolchain_guard_digest": "6ac1bc2b6af20e83e0506c9fff6e8858983610696b4dca6965c4c8614e8e0ef8",
+  "bound_constitutional_gates_digest": "b75205839762e75acaa0ebbfded4641b280deca7425ab63b05a4c55c59b81d0b",
+  "bound_evidence_chain_digest": "2c000b3832a9f873500095f9f80f4daa9231dfdc420c58a561e193a52d0e8a2c",
+  "bound_execution_envelope_digest": "0a36968282c7fe25246702eeab43dafd73ba044167099e9e5ee6991d473a5cc3",
+  "bound_manifest_digest": "2e12550f8e5462f96d9c2f4a3212f043d2363e91e1cd9df83446ae6d3f0dc2dc",
+  "bound_regression_matrix_digest": "761d14eaaeb6085c0bdcf1b825895b44beac5b213e243ad8b3b09f6c6671aef1",
+  "bound_toolchain_guard_digest": "ac73d69f72cc1a9d6adaf9da83750c59c3c431edaa9de6337a5d36b60c2bd393",
   "boundary_confirmation_summary": {
     "activeBoundaryScanMatches": [],
     "authorizedRebuildRuntimePathChanges": [],
@@ -95,9 +95,9 @@
     "skgDtnRemainExternalNonAuthoritative": true,
     "unauthorizedProtectedRuntimePathChanges": []
   },
-  "capstone_digest": "ba52417b03a8f97b2cbc1dab74646337c55f6dd609a4b4e27031516ce030f402",
-  "capstone_payload_digest": "a2cb262096bb7459099fd0ce35f5d86e534a6ca203a010f5561be2ec6dbd72c2",
-  "capstone_signature": "941f1d266b22682f9c5e532125807fd631345c08f63c84913aadfee4daa46235",
+  "capstone_digest": "e6ecf0d52e62adbcc9e15dd2b73cef5fc3ef3c39f66b80f8bd67f9426380f165",
+  "capstone_payload_digest": "96d518442d0e6c22b41699777ea2f7429214c2754dad981898f43c057249ad99",
+  "capstone_signature": "65d27424156298d70045414c8b8ce92e1b23554bc8889e2557b40964c2d09791",
   "capstone_status": "LOCAL_TRUST_CAPSTONE_PASS",
   "capstone_type": "local_trust_25_year_completion_lock",
   "capstone_version": "18.7E.4",
@@ -108,7 +108,7 @@
       "phase_id": "18.7D.1",
       "phase_name": "Evidence Chain Zero-Missing Cleanup",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "96b60b6bde673993d8adf259e5b13c0f9c8574cd87b457855f46428af6f555a6",
+      "primary_digest": "2c000b3832a9f873500095f9f80f4daa9231dfdc420c58a561e193a52d0e8a2c",
       "primary_outputs": [
         "reports/PHASE_18_7D_1_ZERO_MISSING_EVIDENCE_CLEANUP_REPORT.md",
         "outputs/local_evidence_chain.json"
@@ -122,7 +122,7 @@
       "phase_id": "18.7E.1",
       "phase_name": "Local Trust Regression Matrix",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "1e936d026f26523e17e0c46a346440aa57deddf8e25ebe0f6ed8906683c2c87b",
+      "primary_digest": "761d14eaaeb6085c0bdcf1b825895b44beac5b213e243ad8b3b09f6c6671aef1",
       "primary_outputs": [
         "docs/LOCAL_TRUST_REGRESSION_MATRIX.md",
         "reports/PHASE_18_7E_1_LOCAL_TRUST_REGRESSION_MATRIX_REPORT.md",
@@ -137,7 +137,7 @@
       "phase_id": "18.7E.2",
       "phase_name": "Constitutional Enforcement Gates",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "fd26deb85a0cf80a5cff0815268bdcd1595b04aa965bb0f836d7bca27a4eb040",
+      "primary_digest": "b75205839762e75acaa0ebbfded4641b280deca7425ab63b05a4c55c59b81d0b",
       "primary_outputs": [
         "docs/LOCAL_TRUST_CONSTITUTIONAL_ENFORCEMENT_GATES.md",
         "reports/PHASE_18_7E_2_CONSTITUTIONAL_ENFORCEMENT_GATES_REPORT.md",
@@ -152,7 +152,7 @@
       "phase_id": "18.7E.3",
       "phase_name": "Dependency / Toolchain Guard",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "6ac1bc2b6af20e83e0506c9fff6e8858983610696b4dca6965c4c8614e8e0ef8",
+      "primary_digest": "ac73d69f72cc1a9d6adaf9da83750c59c3c431edaa9de6337a5d36b60c2bd393",
       "primary_outputs": [
         "docs/LOCAL_TRUST_TOOLCHAIN_GUARD.md",
         "reports/PHASE_18_7E_3_TOOLCHAIN_GUARD_REPORT.md",
@@ -177,14 +177,14 @@
       "verification_summary": "Capstone build/validate/show records local trust completion."
     }
   ],
-  "created_at": "2026-07-11T21:38:49+00:00",
+  "created_at": "2026-07-11T23:22:55+00:00",
   "git_branch": "main",
-  "git_commit": "27c73c2b99d08e8e9bdbec874be279e1f4103dcf",
+  "git_commit": "056d548a81b87360c03b8735e253b9d0836ede8b",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main [ahead 11, behind 1]\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M sbp_lex/local_trust/critical_paths.py",
+    "branch_status_short": "## main...origin/main [ahead 13]\n M README.md\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M sbp_lex/local_trust/critical_paths.py",
     "current_working_tree_clean": false,
     "pre_phase_clean_sync_requirement": "VERIFIED_BEFORE_18_7E_4_IMPLEMENTATION",
     "synced_to_origin_branch": false,

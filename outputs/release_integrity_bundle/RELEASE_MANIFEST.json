@@ -2,7 +2,7 @@
   "artifact_hash_index_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-    "sha256": "d39c28f4728175e9f27d339e55bb3573e3b868051ce4d485977e5d879650f20e",
+    "sha256": "0adf150dce9dc07779ccd6c668eae6af731b2d766eccb71ac738ea75c71af499",
     "size_bytes": 15529
   },
   "artifact_hash_index_summary": {
@@ -10,13 +10,13 @@
     "missing_artifact_count": 0,
     "required_artifact_count": 38
   },
-  "bound_capstone_digest": "ba52417b03a8f97b2cbc1dab74646337c55f6dd609a4b4e27031516ce030f402",
-  "bound_constitutional_gates_digest": "fd26deb85a0cf80a5cff0815268bdcd1595b04aa965bb0f836d7bca27a4eb040",
-  "bound_evidence_chain_digest": "96b60b6bde673993d8adf259e5b13c0f9c8574cd87b457855f46428af6f555a6",
-  "bound_execution_envelope_digest": "9f169eda3b6eefa15ed170dd21c8b8b79ba06e1c17de1ae65522bdbd507bc317",
-  "bound_manifest_digest": "5b9e9c966587efdd8b8f0f5df04ca65ce379fc39d883e4a241dc1529bb6d0739",
-  "bound_regression_matrix_digest": "1e936d026f26523e17e0c46a346440aa57deddf8e25ebe0f6ed8906683c2c87b",
-  "bound_toolchain_guard_digest": "6ac1bc2b6af20e83e0506c9fff6e8858983610696b4dca6965c4c8614e8e0ef8",
+  "bound_capstone_digest": "e6ecf0d52e62adbcc9e15dd2b73cef5fc3ef3c39f66b80f8bd67f9426380f165",
+  "bound_constitutional_gates_digest": "b75205839762e75acaa0ebbfded4641b280deca7425ab63b05a4c55c59b81d0b",
+  "bound_evidence_chain_digest": "2c000b3832a9f873500095f9f80f4daa9231dfdc420c58a561e193a52d0e8a2c",
+  "bound_execution_envelope_digest": "0a36968282c7fe25246702eeab43dafd73ba044167099e9e5ee6991d473a5cc3",
+  "bound_manifest_digest": "2e12550f8e5462f96d9c2f4a3212f043d2363e91e1cd9df83446ae6d3f0dc2dc",
+  "bound_regression_matrix_digest": "761d14eaaeb6085c0bdcf1b825895b44beac5b213e243ad8b3b09f6c6671aef1",
+  "bound_toolchain_guard_digest": "ac73d69f72cc1a9d6adaf9da83750c59c3c431edaa9de6337a5d36b60c2bd393",
   "boundary_lock_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
@@ -44,16 +44,16 @@
     "18.7E.3",
     "18.7E.4"
   ],
-  "created_at": "2026-07-11T21:38:50+00:00",
+  "created_at": "2026-07-11T23:22:57+00:00",
   "git_branch": "main",
-  "git_commit": "27c73c2b99d08e8e9bdbec874be279e1f4103dcf",
+  "git_commit": "056d548a81b87360c03b8735e253b9d0836ede8b",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main [ahead 11, behind 1]\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M sbp_lex/local_trust/critical_paths.py",
+    "branch_status_short": "## main...origin/main [ahead 13]\n M README.md\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M sbp_lex/local_trust/critical_paths.py",
     "git_branch": "main",
-    "git_commit": "27c73c2b99d08e8e9bdbec874be279e1f4103dcf",
+    "git_commit": "056d548a81b87360c03b8735e253b9d0836ede8b",
     "synced_to_origin_branch": false,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
@@ -62,7 +62,7 @@
     {
       "exists": true,
       "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-      "sha256": "d39c28f4728175e9f27d339e55bb3573e3b868051ce4d485977e5d879650f20e",
+      "sha256": "0adf150dce9dc07779ccd6c668eae6af731b2d766eccb71ac738ea75c71af499",
       "size_bytes": 15529
     },
     {
@@ -90,10 +90,10 @@
       "size_bytes": 930
     }
   ],
-  "release_digest": "a37bf88ccf684ce3041314254bb328bf2c299eecd94b2c12cca0cf677a6c806f",
+  "release_digest": "ebdd27878b4b6c5fdf461b93f7ead1704dfadb676b4c5e12ad5c105c6f696dc7",
   "release_manifest_type": "release_integrity_reproducible_validation_bundle",
   "release_manifest_version": "18.7F",
-  "release_payload_digest": "a33cb5e1e29cc8336c81165f2fd9145a96a7d824bbde1c45dd271e65c4fe1ae3",
+  "release_payload_digest": "226f2c76c755e5221a81c099e8b03f7a43ee24321fbd79e6dd2f06328d5baccb",
   "release_scope": {
     "next_phase": "18.7G",
     "next_phase_implemented": false,
@@ -106,7 +106,7 @@
     "purpose": "Controlled, reproducible, externally reviewable validation package.",
     "review_readiness_only": true
   },
-  "release_signature": "3257d853733cc31461c7c2c9e1332ab39e27b4d37f0780e694e7d55448c17daf",
+  "release_signature": "087ee726c02973e21b10531b44ceff7283322b8c509abd78490681c9da1d9c81",
   "release_status": "RELEASE_INTEGRITY_PASS",
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "RELEASE_INTEGRITY_DETERMINISTIC_PLACEHOLDER",
