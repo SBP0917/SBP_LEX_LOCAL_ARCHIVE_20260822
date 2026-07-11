@@ -27,6 +27,20 @@ ALLOWED_GET_PATHS = {
 ALLOWED_POST_PATHS = {"/runtime/traverse", "/runtime/replay", "/connector/envelope", "/connector/build-envelope"}
 DEFAULT_MAX_BODY_BYTES = 1_000_000
 DEFAULT_MAX_REPLAY_COUNT = 5
+VALID_SECURITY_MODES = frozenset({"local", "private", "disabled"})
+INSECURE_TEST_MODE_FLAG = "SBP_LEX_ALLOW_INSECURE_TEST_MODE"
+
+
+class SecurityConfigurationError(RuntimeError):
+    """Raised when API security configuration cannot be used safely."""
+
+
+def _in_isolated_test_harness() -> bool:
+    """Allow unauthenticated mode only inside an explicitly opted-in pytest test."""
+    return (
+        os.environ.get(INSECURE_TEST_MODE_FLAG) == "1"
+        and bool(os.environ.get("PYTEST_CURRENT_TEST"))
+    )
 
 
 @dataclass(frozen=True)
@@ -51,9 +65,14 @@ def security_mode() -> str:
 
     local: localhost access only by default.
     private: token required; remote access allowed only with valid token.
-    disabled: not recommended; leaves API open for isolated test harnesses only.
+    disabled: available only to an explicitly opted-in isolated pytest test.
     """
-    return os.environ.get("SBP_LEX_API_SECURITY_MODE", "local").strip().lower()
+    mode = os.environ.get("SBP_LEX_API_SECURITY_MODE", "local").strip().lower()
+    if mode not in VALID_SECURITY_MODES:
+        raise SecurityConfigurationError(f"invalid_api_security_mode:{mode or '<empty>'}")
+    if mode == "disabled" and not _in_isolated_test_harness():
+        raise SecurityConfigurationError("disabled_api_security_mode_outside_test_harness")
+    return mode
 
 
 def configured_api_token() -> str | None:
@@ -133,7 +152,10 @@ def validate_content_type(method: str, headers: Mapping[str, str]) -> tuple[bool
 
 
 def decide_access(*, method: str, path: str, client_host: str, headers: Mapping[str, str]) -> AccessDecision:
-    mode = security_mode()
+    try:
+        mode = security_mode()
+    except SecurityConfigurationError as exc:
+        return AccessDecision(False, 503, str(exc), "invalid", client_host)
     path_ok, path_reason = validate_path(method, path)
     if not path_ok:
         return AccessDecision(False, 404, path_reason, mode, client_host)

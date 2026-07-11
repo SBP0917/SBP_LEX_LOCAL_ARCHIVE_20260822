@@ -17,7 +17,10 @@ SBP_LEX_SIGNING_SECRET=<strong signing secret>
 
 ## Do not expose without token mode
 
-Do not use `SBP_LEX_API_SECURITY_MODE=disabled` except isolated test harnesses.
+`SBP_LEX_API_SECURITY_MODE=disabled` is rejected unless an active pytest test
+also sets `SBP_LEX_ALLOW_INSECURE_TEST_MODE=1`. It cannot be used to start a
+normal runtime API process. Unknown or empty security modes also prevent API
+startup.
 
 ## Runtime authority
 

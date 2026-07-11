@@ -5,7 +5,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict
 from urllib.parse import parse_qs, urlparse
 
-from sbp_lex.api.access_control import decide_access, max_body_bytes, max_replay_count, request_security_fingerprint
+from sbp_lex.api.access_control import decide_access, max_body_bytes, max_replay_count, request_security_fingerprint, security_mode
 from sbp_lex.api.apk_contract import validate_runtime_status_contract
 from sbp_lex.config.environment import environment_security_report
 from sbp_lex.api.rate_limit import API_RATE_LIMITER
@@ -243,6 +243,9 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
+    # Resolve before binding the socket. Invalid or non-test unauthenticated
+    # configuration must prevent startup rather than fall through at request time.
+    security_mode()
     server = ThreadingHTTPServer((host, port), RuntimeAPIHandler)
     print(f"SBP-LEX V1 Canonical Runtime API listening on http://{host}:{port}")
     server.serve_forever()
