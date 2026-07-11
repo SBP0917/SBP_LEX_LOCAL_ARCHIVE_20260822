@@ -18,6 +18,7 @@ from sbp_lex.api.request_auth import (
     reset_replay_cache_for_tests,
     sign_envelope,
 )
+from sbp_lex.api.credential_lifecycle import reset_registry_for_tests
 
 SECRET = "test-only-secret-material-32-bytes"
 NOW = datetime(2026, 7, 11, 5, 0, tzinfo=timezone.utc)
@@ -30,14 +31,30 @@ ENDPOINTS = tuple([("GET", path, "observe") for path in sorted(GET_PATHS)] + [
 
 
 def _record(principal_type: str, **overrides):
+    if "scopes" in overrides:
+        overrides["allowed_scopes"] = overrides.pop("scopes")
+    if overrides.pop("revoked", False):
+        overrides["status"] = "REVOKED"
+        overrides["revoked_at"] = (NOW - timedelta(seconds=1)).isoformat()
+        overrides["revocation_reason"] = "test"
     record = {
         "credential_id": f"credential-{principal_type}",
         "principal_id": f"principal-{principal_type}",
         "principal_type": principal_type,
         "device_id": f"device-{principal_type}",
-        "scopes": sorted(ENDPOINT_SCOPE_ALLOWLIST[principal_type]),
+        "credential_version": 1,
+        "credential_purpose": "desktop-v1-api",
+        "allowed_scopes": sorted(ENDPOINT_SCOPE_ALLOWLIST[principal_type]),
+        "issued_at": (NOW - timedelta(days=1)).isoformat(),
+        "not_before": (NOW - timedelta(minutes=1)).isoformat(),
+        "expires_at": (NOW + timedelta(days=1)).isoformat(),
+        "status": "ACTIVE",
+        "rotation_group": f"rotation-{principal_type}",
+        "replacement_credential_id": None,
+        "revoked_at": None,
+        "revocation_reason": None,
+        "last_used_at": None,
         "secret": SECRET,
-        "revoked": False,
     }
     record.update(overrides)
     return record
@@ -50,7 +67,7 @@ def _principal(principal_type: str) -> Principal:
         principal_id=record["principal_id"],
         principal_type=principal_type,
         device_id=record["device_id"],
-        scopes=frozenset(record["scopes"]),
+        scopes=frozenset(record["allowed_scopes"]),
         secret=SECRET,
         expires_at=None,
         revoked=False,
@@ -59,6 +76,7 @@ def _principal(principal_type: str) -> Principal:
 
 def _install(monkeypatch, principal_type: str = "administrator", **overrides):
     monkeypatch.setenv("SBP_LEX_API_PRINCIPALS", json.dumps([_record(principal_type, **overrides)]))
+    reset_registry_for_tests()
     reset_replay_cache_for_tests()
 
 

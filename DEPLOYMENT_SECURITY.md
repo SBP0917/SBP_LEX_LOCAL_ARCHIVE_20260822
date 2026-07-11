@@ -35,6 +35,20 @@ SBP_LEX_API_PRINCIPALS. Credential secrets are used only for HMAC
 verification and are never returned in access decisions, events, health
 responses, exports, or exceptions.
 
+Each SBP_LEX_API_PRINCIPALS entry is a strict lifecycle record containing
+credential_id, principal_id, principal_type, credential_version,
+credential_purpose, allowed_scopes, issued_at, not_before, expires_at, status,
+rotation_group, replacement_credential_id, revoked_at, revocation_reason,
+last_used_at, device_id, and secret. Unknown or incomplete records invalidate
+the configured registry.
+
+Credential states are PENDING, ACTIVE, ROTATING, EXPIRED, REVOKED, SUSPENDED,
+and RETIRED. ACTIVE is the normal authenticating state. ROTATING is accepted
+only during a maximum five-minute overlap when an ACTIVE, higher-version,
+same-principal, same-type, equal-or-narrower replacement exists. Revocation is
+immediate. REVOKED, SUSPENDED, RETIRED, EXPIRED, and unactivated PENDING
+credentials fail closed.
+
 ## Runtime authority
 
 The APK remains observational/orchestration only. Execution authority remains inside the canonical runtime.

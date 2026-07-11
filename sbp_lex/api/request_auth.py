@@ -11,6 +11,7 @@ from typing import Any, Mapping
 from urllib.parse import parse_qsl, urlencode, urlparse
 
 from sbp_lex.api.schema_validation import loads_strict_json
+from sbp_lex.api.credential_lifecycle import configured_registry
 
 PROTOCOL_VERSION = "SBP_LEX_REQUEST_AUTH_V1"
 AUTH_HEADER = "X-SBP-LEX-Request-Auth"
@@ -58,6 +59,8 @@ class Principal:
     secret: str
     expires_at: datetime | None
     revoked: bool
+    credential_version: int = 1
+    status: str = "ACTIVE"
 
 
 @dataclass(frozen=True)
@@ -119,43 +122,17 @@ def sign_envelope(envelope: Mapping[str, Any], secret: str) -> str:
 
 
 def configured_principals() -> dict[str, Principal]:
-    raw = os.environ.get("SBP_LEX_API_PRINCIPALS", "")
-    if not raw:
-        return {}
-    try:
-        records = loads_strict_json(raw)
-    except Exception:
-        return {}
-    if not isinstance(records, list):
-        return {}
-    principals: dict[str, Principal] = {}
-    for record in records:
-        if not isinstance(record, Mapping):
-            continue
-        credential_id = record.get("credential_id")
-        principal_id = record.get("principal_id")
-        principal_type = record.get("principal_type")
-        device_id = record.get("device_id")
-        scopes = record.get("scopes")
-        secret = record.get("secret")
-        if (
-            not all(isinstance(item, str) and item for item in (credential_id, principal_id, device_id, secret))
-            or principal_type not in PRINCIPAL_TYPES
-            or not isinstance(scopes, list)
-            or not all(isinstance(scope, str) for scope in scopes)
-        ):
-            continue
-        principals[credential_id] = Principal(
-            credential_id=credential_id,
-            principal_id=principal_id,
-            principal_type=principal_type,
-            device_id=device_id,
-            scopes=frozenset(scopes),
-            secret=secret,
-            expires_at=_parse_time(record.get("expires_at")) if record.get("expires_at") else None,
-            revoked=record.get("revoked") is True,
+    return {
+        item.credential_id: Principal(
+            credential_id=item.credential_id, principal_id=item.principal_id,
+            principal_type=item.principal_type, device_id=item.device_id,
+            scopes=item.allowed_scopes, secret=item.secret, expires_at=item.expires_at,
+            revoked=item.status == "REVOKED", credential_version=item.credential_version,
+            status=item.status,
         )
-    return principals
+        for item in configured_registry().snapshot().values()
+        if item.principal_type in PRINCIPAL_TYPES
+    }
 
 
 def required_scope(method: str, path: str) -> str | None:
@@ -200,10 +177,21 @@ def authenticate_signed_request(
     if principal is None:
         return _deny("unknown_credential")
     current = now or datetime.now(timezone.utc)
-    if principal.revoked:
+    lifecycle_credential = configured_registry().get(principal.credential_id)
+    if lifecycle_credential is None:
+        return _deny("unknown_credential")
+    if principal.credential_version < 1:
+        return _deny("credential_version_unknown")
+    if current < lifecycle_credential.not_before:
+        return _deny("credential_not_yet_active")
+    if principal.revoked or lifecycle_credential.status == "REVOKED":
         return _deny("credential_revoked")
-    if principal.expires_at is not None and current >= principal.expires_at:
+    if current >= lifecycle_credential.expires_at:
         return _deny("credential_expired")
+    if lifecycle_credential.status in {"PENDING", "SUSPENDED", "RETIRED", "EXPIRED"}:
+        return _deny(f"credential_status_denied:{lifecycle_credential.status.lower()}")
+    if not configured_registry().can_authenticate(lifecycle_credential, current):
+        return _deny("credential_not_active")
     scope = required_scope(method, path)
     if scope is None:
         return _deny("endpoint_scope_denied", 403)
@@ -258,6 +246,7 @@ def authenticate_signed_request(
             return _deny("request_authentication_request_id_reused")
         _USED_NONCES.add(nonce_key)
         _USED_REQUEST_IDS.add(request_key)
+    configured_registry().mark_used(principal.credential_id, current)
     return AuthenticationResult(True, 200, "scoped_request_authenticated", principal.principal_id, principal.principal_type, scope)
 
 
