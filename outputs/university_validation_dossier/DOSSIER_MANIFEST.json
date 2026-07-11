@@ -1,24 +1,24 @@
 {
   "bound_adversarial_harness_digest": "835af571798bc547f9da18598d045f628c781e00611f5192cbdfc228780ac10f",
-  "bound_capstone_digest": "c7429d3530bec1fcafed498e8a4fc5e9328d6290e5a8f23b8c24b02bbe603d35",
-  "bound_constitutional_gates_digest": "091e82a5b6ad8728439609ff0f14f293ed11e461a6511f09f64435b929234ab0",
-  "bound_evidence_chain_digest": "e7cb82f7bb26fb489b09b6f739e58ebda70bad4916c0603bafeed8a706bab979",
-  "bound_execution_envelope_digest": "1cff5e9e7656da0e27645c14c96a43fc886598266139ed46dbb1be874e4c7d6c",
-  "bound_manifest_digest": "de939d9e8776f1fbd6399f5b920c19ebe6cffbf84e0eb899fe506338564742a8",
-  "bound_regression_matrix_digest": "99c4559c82d0064d14c949ecafbcd64f79e16d8135c1b9046bb0ad85ef9a6976",
+  "bound_capstone_digest": "405f430bd4d508d4ca44b0be5109c1b9a74ad6143a5d49abdc36a5ce77094a64",
+  "bound_constitutional_gates_digest": "8b8a7de4e0d08ac4b7280d1efbc7a851204f41a2f49a513d6b635c288c1d7fc6",
+  "bound_evidence_chain_digest": "b67177b965681634bfac2a43a0202af3010eeb0d1cabc5f0fd5d4ea9b9b52d4f",
+  "bound_execution_envelope_digest": "fbd1fb7e965edd259b61e1b28bbbdb0be8a2cdba84cf6ea991a3ffbaa48da059",
+  "bound_manifest_digest": "70edda8b7a3371072fe5754969d518cd8eba5d5d74ddca8e7ef8ec015a67ad9f",
+  "bound_regression_matrix_digest": "e3e4887a2ac67db32125176d94664ebbabc30fa3ac5bee1e976aef0bfb2ef7ce",
   "bound_release_integrity_digest": "244bddb51858e69925675720dd2f7736d4c9fd878624d3087efd67e96304490d",
-  "bound_toolchain_guard_digest": "e0d40119adc763f53bec4ce293a3fed2ad10c2b99ac2533b9a44c5e4125c5284",
+  "bound_toolchain_guard_digest": "df8b4d2042a99b2adabbed3a199516e8d77f3166f604b94ee9ee8cba1572f398",
   "claims_to_evidence_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
     "sha256": "75aad4a11b8c75101c2c343ce02703b0c698a77c46c9dd367d87a3f2de05373c",
     "size_bytes": 41533
   },
-  "created_at": "2026-07-02T22:06:00+00:00",
-  "dossier_digest": "0886d5209b0885e143ae8118705a21aabec439d981e32eae8ea8cb0360a981e2",
+  "created_at": "2026-07-11T09:24:40+00:00",
+  "dossier_digest": "83543a5ec034a0b70ec8d97bd7ebe80a98414749881300529d9e8999b0a16480",
   "dossier_manifest_type": "university_validation_dossier_manifest",
   "dossier_manifest_version": "18.8",
-  "dossier_payload_digest": "ffd28bb04a4f70df0aa376b51c117b562829b09c5cc28143b2598db6acff58d6",
+  "dossier_payload_digest": "095155c24b3724231971401c4605c6f3ed285e04475715eefbb12d0f6805c438",
   "dossier_scope": {
     "bounded_validation_questions_only": true,
     "next_phase": "18.9",
@@ -32,51 +32,51 @@
     "purpose": "Reviewer-facing bounded claims-to-evidence handoff package.",
     "review_readiness_only": true
   },
-  "dossier_signature": "dd08cad18c007995493876a9ce96a9c6a803532adf34f9e13c3dcb581aa69c2c",
+  "dossier_signature": "658b0fec02edf82d5c4a9bdde2794b4eeb14a60849bb101823823a4c85f0ccd1",
   "dossier_status": "VALIDATION_DOSSIER_READY",
   "dossier_summary": {
     "claim_count": 32,
     "evidence_artifact_count": 50,
     "next_phase": "18.9",
     "phase_19_not_started": true,
-    "reviewer_command_count": 37,
+    "reviewer_command_count": 36,
     "validation_question_count": 23
   },
   "evidence_artifact_index_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
-    "sha256": "ee34119914434682e9cd109dc6fbbfbf3f12390daad9f2946f78a5f8b4bccd51",
-    "size_bytes": 34628
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
+    "sha256": "96ff9374ccf4fdec570b8ddfe900be5358f22de082e18e2066f95344883e0d69",
+    "size_bytes": 34467
   },
   "git_branch": "main",
-  "git_commit": "67ee3176ad068558567b54dd029ee3d4df70a7ff",
-  "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
+  "git_commit": "1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238",
+  "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
-    "branch_has_ahead_count": false,
+    "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M docs/UNIVERSITY_VALIDATION_DOSSIER.md\n M docs/blueprint_addenda/AUDIT_REPLAY_TELEMETRY_METADATA_ADDENDUM.md\n M docs/blueprint_addenda/BLUEPRINT_IMPACT_REPORT_EIE_PT_SKG_DTN_REBUILD.md\n M docs/blueprint_addenda/DTN_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/EIE_ADAPTER_INGRESS_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/EXECUTION_GATE_ENFORCEMENT_ADDENDUM.md\n M docs/blueprint_addenda/PROCEDURAL_TRUTH_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/ROOT_OF_TRUST_ANCHORAGE_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/SKG_REBUILD_BLUEPRINT_ADDENDUM.md\n M docs/blueprint_addenda/TRAVERSAL_INTEGRATION_BLUEPRINT_ADDENDUM.md\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json\n M outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json\n M outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M outputs/university_validation_dossier/VALIDATION_QUESTIONS.json\n M reports/EIE_PT_SKG_DTN_CONTROL_PLANE_HANDOVER_READINESS_REPORT.md\n M reports/PHASE_18_8_UNIVERSITY_VALIDATION_DOSSIER_REPORT.md\n M sbp_lex/audit/audit_engine.py\n M sbp_lex/authority_first/root_of_trust_runner.py\n M sbp_lex/collective/context_interface.py\n M sbp_lex/execution/execution_gate.py\n M sbp_lex/local_trust/claims_to_evidence.py\n M sbp_lex/local_trust/dossier_manifest.py\n M sbp_lex/local_trust/dossier_validator.py\n M sbp_lex/local_trust/validation_questions.py\n M sbp_lex/pipeline/replay_runner.py\n M sbp_lex/security/authority_boundary.py\n M sbp_lex/shared/state_builder.py\n M tests/test_phase_18_5_authority_boundary.py",
+    "branch_status_short": "## main...origin/main [ahead 7]\n M DEPLOYMENT_SECURITY.md\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M sbp_lex/api/server.py\n M sbp_lex/runtime/canonical_runtime.py\n M tests/conftest.py\n M tests/test_h3_network_transport_boundary.py\n M tests/test_h4a_security_state_persistence.py",
     "git_branch": "main",
-    "git_commit": "67ee3176ad068558567b54dd029ee3d4df70a7ff",
-    "synced_to_origin_branch": true,
+    "git_commit": "1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238",
+    "synced_to_origin_branch": false,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
   },
   "handoff_readme_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
-    "sha256": "327e2d52e28e368164eccced07f245cd14db62a8d79fc31b112bcb373d7c3f2f",
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
+    "sha256": "5b6c9ae0973a8ddb50960225409c99ca28afa3f43a66399cb32c30ce8384b33f",
     "size_bytes": 3105
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-06-24\\inspect-the-latest-github-activity-in\\work\\SBP_LEX_DUAL_V6",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "reviewer_commands_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
     "sha256": "69c02e0b08568f414178feb895f410319438810e6de47e6f6649e7ba6b530a96",
     "size_bytes": 13933
   },
   "scope_and_exclusions_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
     "sha256": "8fd63f8ed8c12871828f328077fbba9d3ef9a112415c7efa29350dbb4ef485e3",
     "size_bytes": 2011
   },
@@ -85,7 +85,7 @@
   "validation_failures": [],
   "validation_questions_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/2026-06-24/inspect-the-latest-github-activity-in/work/SBP_LEX_DUAL_V6/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
+    "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
     "sha256": "3cf4248ad1bed4ec38ac67d085bfa530c9f64ebe6b26801e8a3e58b7363fba23",
     "size_bytes": 17921
   }

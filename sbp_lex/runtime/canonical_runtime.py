@@ -11,6 +11,10 @@ from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.pipeline.replay_runner import run_replay_check
 from sbp_lex.runtime.chronology import CANONICAL_CHRONOLOGY
 from sbp_lex.runtime.event_bus import RUNTIME_EVENTS
+from sbp_lex.runtime.measured_startup import (
+    default_measured_startup_service,
+    ensure_measured_startup,
+)
 from sbp_lex.security.pqc import generate_digest
 
 
@@ -29,6 +33,7 @@ class CanonicalRuntime:
         replay_ok, replay_failures = PIPELINE_REPLAY_LEDGER.verify()
         connector_ok, connector_failures = CONNECTOR_RECOVERY.verify()
         persistence_ok, persistence_failures = RUNTIME_INTEGRITY_STORE.verify()
+        measurement = default_measured_startup_service().status()
         return {
             "runtime_id": self.runtime_id,
             "api_security_mode": security_mode(),
@@ -44,6 +49,10 @@ class CanonicalRuntime:
             "connector_recovery_failures": connector_failures,
             "persistence_valid": persistence_ok,
             "persistence_failures": persistence_failures,
+            "measured_startup_status": measurement["status"],
+            "measured_runtime_identity": measurement["runtime_identity"],
+            "approved_runtime_baseline": measurement["approved_baseline_identifier"],
+            "runtime_measurement_digest": measurement["measurement_digest"],
             "last_decision": self.last_result.get("decision") if self.last_result else None,
             "last_execution_result": self.last_result.get("execution_result") if self.last_result else None,
             "last_audit_hash": self.last_result.get("audit_hash") if self.last_result else None,
@@ -56,6 +65,7 @@ class CanonicalRuntime:
         request_id: str | None = None,
         pre_context_signals: Mapping[str, Any] | None = None,
     ) -> Dict[str, Any]:
+        ensure_measured_startup()
         runtime_request_id = request_id or generate_digest({"action": request.get("action"), "payload": request.get("payload", {})})[:24]
         RUNTIME_EVENTS.emit("traversal_started", {"request_id": runtime_request_id, "action": request.get("action")})
         state = run_dual_pipeline(deepcopy(dict(request)), deepcopy(dict(pre_context_signals)) if pre_context_signals else None)
@@ -91,6 +101,7 @@ class CanonicalRuntime:
         replay_count: int = 2,
         pre_context_signals: Mapping[str, Any] | None = None,
     ) -> Dict[str, Any]:
+        ensure_measured_startup()
         RUNTIME_EVENTS.emit("replay_started", {"action": request.get("action"), "replay_count": replay_count})
         result = run_replay_check(request=request, pre_context_signals=pre_context_signals, replay_count=replay_count)
         RUNTIME_EVENTS.emit("replay_completed", {"matched": result.get("matched"), "replay_hash": result.get("replay_hash")})

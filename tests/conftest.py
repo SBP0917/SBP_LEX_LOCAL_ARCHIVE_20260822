@@ -15,6 +15,10 @@ for artifact in (TEST_STORE, TEST_CHECKPOINT):
 os.environ["SBP_LEX_INTEGRITY_STORE"] = "runtime_artifacts/pytest_integrity_store.jsonl"
 
 
+def pytest_collection_finish(session: object) -> None:
+    os.environ.pop("SBP_LEX_INTEGRITY_STORE", None)
+
+
 def pytest_sessionfinish(session: object, exitstatus: int) -> None:
     for artifact in (TEST_STORE, TEST_CHECKPOINT):
         artifact.unlink(missing_ok=True)

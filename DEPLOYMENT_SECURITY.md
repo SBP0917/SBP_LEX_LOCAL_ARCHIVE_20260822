@@ -155,6 +155,45 @@ denylist. No CRL, OCSP, public PKI, automated issuance, or real production
 certificate infrastructure is claimed. Transport device identity never grants
 API scope and does not replace signed API identity or canonical controls.
 
+## Measured startup and runtime identity
+
+Desktop V1 measures its approved engineering state before listener binding or
+canonical traversal/replay. The approved H8 baseline covers all `sbp_lex`
+Python modules, critical configuration and documentation, policy and schema
+files, committed trust outputs, declared/installed dependency versions, the
+Python executable, and security-critical environment configuration. Secret
+configuration values are represented only by domain-separated digests and
+length metadata; runtime identities and diagnostics never contain raw secrets.
+
+The deterministic measured runtime identity binds the approved baseline ID and
+the software, configuration, environment, dependency, executable, policy,
+schema, trust-store, and documentation digests. A separately signed startup
+attestation binds that stable identity to UTC startup timestamp evidence and a
+monotonic local startup sequence.
+
+The baseline store supports exactly one `APPROVED` baseline plus bounded
+`PENDING` and `RETIRED` records. Changed measurements are never adopted
+automatically. A pending baseline requires an explicit approval reference and
+explicit retirement of the prior approved ID. The ignored runtime state folder
+contains a signed high-water anchor and startup/failure evidence so previously
+observed baseline rollback, attestation replay, and store corruption fail
+closed.
+
+Critical or unknown drift prevents listener binding and canonical execution.
+The baseline manager is available through:
+
+```text
+python -m sbp_lex.runtime.measured_startup validate
+python -m sbp_lex.runtime.measured_startup show
+python -m sbp_lex.runtime.measured_startup propose --identifier <ID>
+python -m sbp_lex.runtime.measured_startup approve --identifier <ID> --retire <OLD_ID> --approval-reference <REFERENCE>
+```
+
+The anchor is local single-host evidence. It does not claim TPM measured boot,
+Secure Boot, hardware attestation, remote attestation, or protection against an
+administrator coherently restoring the repository, anchor, runtime state, and
+signing environment together.
+
 ## Runtime authority
 
 The APK remains observational/orchestration only. Execution authority remains inside the canonical runtime.

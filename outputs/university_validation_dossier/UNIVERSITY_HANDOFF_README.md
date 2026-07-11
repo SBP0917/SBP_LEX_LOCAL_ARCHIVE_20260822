@@ -29,7 +29,7 @@ This package is a reviewer-facing dossier for bounded assessment of the SBP-LEX 
 
 ## Current Repository Commit
 
-`67ee3176ad068558567b54dd029ee3d4df70a7ff`
+`1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238`
 
 ## Review Scope
 
@@ -49,33 +49,6 @@ The dossier excludes production deployment readiness, formal university validati
 4. Inspect `MASTER_CLAIMS_TO_EVIDENCE_INDEX.json` for claim support.
 5. Inspect `VALIDATION_QUESTIONS.json` for requested reviewer answers.
 6. Inspect `SCOPE_AND_EXCLUSIONS_LOCK.json` for excluded claims and boundaries.
-
-## PQC Provider Handoff
-
-The current repository uses a real PQC provider contract for enforcement-evidence
-signatures. The bounded policy is:
-
-```text
-Policy: NIST_FIPS_203_204_205
-Primary signature algorithm: ML-DSA
-Backup signature policy: SLH-DSA
-KEM basis: ML-KEM
-Provider used in current runtime: cryptography.mldsa
-Tested cryptography version: 49.0.0
-```
-
-Provider availability is required. If the provider is unavailable, PQC
-operations fail closed. Verification cannot be faked by setting `verified=true`,
-and placeholder/HMAC PQC signatures are no longer accepted as valid provider
-signatures.
-
-Old placeholder/HMAC runtime integrity records are rejected under the real
-provider contract and can be quarantined by the existing integrity-store
-quarantine behavior. Local-trust deterministic `PLACEHOLDER` labels are not the
-active PQC provider path and must not be described as production cryptography.
-
-This is not production certification and does not claim certified PQC
-compliance beyond the implemented provider contract.
 
 ## Requested Reviewer Answer
 

@@ -33,6 +33,7 @@ from sbp_lex.connector.recovery import CONNECTOR_RECOVERY
 from sbp_lex.persistence.integrity_store import RUNTIME_INTEGRITY_STORE
 from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 from sbp_lex.runtime.event_bus import RUNTIME_EVENTS
+from sbp_lex.runtime.measured_startup import ensure_measured_startup
 from sbp_lex.api.security_state_store import initialize_security_state_store
 from sbp_lex.api.transport_security import (
     TRANSPORT_SECURITY_EVENTS,
@@ -393,6 +394,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     # Resolve before binding the socket. Invalid or non-test unauthenticated
     # configuration must prevent startup rather than fall through at request time.
     mode = security_mode()
+    ensure_measured_startup()
     try:
         transport = initialize_transport_configuration()
         principal_source = os.environ.get("SBP_LEX_API_PRINCIPALS", "").strip()

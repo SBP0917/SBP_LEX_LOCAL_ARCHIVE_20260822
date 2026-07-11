@@ -1,16 +1,16 @@
 {
-  "bound_execution_envelope_digest": "6b669bffba26942aa96b8310b3e2abf05590db0bcdeb46ef31adef1c0b1923ea",
+  "bound_execution_envelope_digest": "fbd1fb7e965edd259b61e1b28bbbdb0be8a2cdba84cf6ea991a3ffbaa48da059",
   "bound_execution_envelope_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_execution_environment_trust_envelope.json",
   "bound_execution_envelope_status": "EXECUTION_ENVELOPE_BOUND",
-  "bound_local_trust_manifest_digest": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
+  "bound_local_trust_manifest_digest": "70edda8b7a3371072fe5754969d518cd8eba5d5d74ddca8e7ef8ec015a67ad9f",
   "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
   "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
-  "chain_digest": "76366eca3cab51d1d81f6bf51c5dee16e30d21dfd76f75e82b8973b051c06c55",
-  "chain_payload_digest": "bd93467f29dd780d0dac6b2648f1a818d1be90402280b5b20b01a4bbb18c9fa5",
-  "chain_signature": "10961a76f04ba9553f212d1fdd2a79800ef003eba46e63f4280ee60297e078fb",
+  "chain_digest": "b67177b965681634bfac2a43a0202af3010eeb0d1cabc5f0fd5d4ea9b9b52d4f",
+  "chain_payload_digest": "7818ffc4e879293a421b766075607f8d37b080915be257e98c019a60a6e2a6bc",
+  "chain_signature": "9af750f47465663ff55c2a03b24c238e18e3711fbee6f5d248fba1234e86168a",
   "chain_type": "local_evidence_chain_report_integrity_attestation",
   "chain_version": "18.7D",
-  "created_at": "2026-07-11T05:05:28+00:00",
+  "created_at": "2026-07-11T09:23:57+00:00",
   "evidence_chain_status": "EVIDENCE_CHAIN_VALID",
   "evidence_items": [
     {
@@ -162,11 +162,11 @@
       "content_type": "application/json",
       "evidence_id": "local_trust_root_manifest",
       "exists": true,
-      "last_modified_utc": "2026-07-11T05:00:46+00:00",
+      "last_modified_utc": "2026-07-11T09:23:50+00:00",
       "path": "outputs/local_trust_root_manifest.json",
       "required": true,
-      "sha256": "760fe6292d015d506c532f2ec743aebd37e9701d91ec1721edd9e5dcc28fa975",
-      "size_bytes": 7413,
+      "sha256": "a10252d97ef4c89df8ee7cd5ad4720a8b505a201b86f266cd105265d32b2a425",
+      "size_bytes": 7985,
       "source_phase": "Phase 18.7B"
     },
     {
@@ -175,11 +175,11 @@
       "content_type": "application/json",
       "evidence_id": "local_execution_environment_trust_envelope",
       "exists": true,
-      "last_modified_utc": "2026-07-11T05:00:46+00:00",
+      "last_modified_utc": "2026-07-11T09:23:53+00:00",
       "path": "outputs/local_execution_environment_trust_envelope.json",
       "required": true,
-      "sha256": "27f6f68a7160b35f983d02f67b741cdd4aa40419e0665d9d584d9c6858d617fe",
-      "size_bytes": 6736,
+      "sha256": "4d236bb37734ece9893f02b916cbdebb2a9cfdb572b15c8fc9bd909e0b01e5d9",
+      "size_bytes": 6923,
       "source_phase": "Phase 18.7C"
     },
     {
@@ -233,7 +233,7 @@
     ".git"
   ],
   "git_branch": "main",
-  "git_commit": "826b973351761b2d3e8e336f44eaae4c49ddda04",
+  "git_commit": "1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238",
   "missing_evidence_items": [],
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "EVIDENCE_CHAIN_DETERMINISTIC_PLACEHOLDER",

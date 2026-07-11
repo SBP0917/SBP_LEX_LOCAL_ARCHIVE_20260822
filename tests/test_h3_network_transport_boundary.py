@@ -377,6 +377,7 @@ def test_invalid_bind_fails_before_security_store_or_socket_initialization(monke
     reset_transport_configuration_for_tests()
     TRANSPORT_SECURITY_EVENTS.clear()
     monkeypatch.setenv("SBP_LEX_API_SECURITY_MODE", "local")
+    monkeypatch.setattr(server_module, "ensure_measured_startup", lambda: {"status": "MEASURED_STARTUP_APPROVED"})
     reached = []
     monkeypatch.setattr(
         server_module, "initialize_security_state_store",
@@ -392,6 +393,7 @@ def test_private_missing_authentication_fails_before_bind(monkeypatch):
     reset_transport_configuration_for_tests()
     TRANSPORT_SECURITY_EVENTS.clear()
     monkeypatch.setenv("SBP_LEX_API_SECURITY_MODE", "private")
+    monkeypatch.setattr(server_module, "ensure_measured_startup", lambda: {"status": "MEASURED_STARTUP_APPROVED"})
     monkeypatch.setenv("SBP_LEX_BIND_ADDRESS", "127.0.0.1")
     monkeypatch.delenv("SBP_LEX_API_TOKEN", raising=False)
     monkeypatch.delenv("SBP_LEX_API_PRINCIPALS", raising=False)

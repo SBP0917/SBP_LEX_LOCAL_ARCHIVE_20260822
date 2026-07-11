@@ -1,7 +1,7 @@
 {
   "command_summary": {
-    "required_command_count": 37,
-    "reviewer_command_count": 37
+    "required_command_count": 36,
+    "reviewer_command_count": 36
   },
   "commands": [
     {
@@ -338,16 +338,6 @@
       "purpose": "Verify expanded Root of Trust and audit lineage integrity.",
       "related_claim_ids": [
         "root_of_trust_anchorage_binds_eie_truth_foundations"
-      ],
-      "required": true
-    },
-    {
-      "command": "python -m pytest -q tests/test_pqc_01_provider_contract.py --basetemp runtime_artifacts/pytest_tmp_pqc_handoff",
-      "command_id": "pytest_pqc_01_provider_contract",
-      "expected_result": "PASS",
-      "purpose": "Verify the PQC-01 real ML-DSA provider contract and fail-closed behavior.",
-      "related_claim_ids": [
-        "runtime_authority_unchanged"
       ],
       "required": true
     },

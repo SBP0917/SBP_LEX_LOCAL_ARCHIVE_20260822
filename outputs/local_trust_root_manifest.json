@@ -35,7 +35,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T04:58:56+00:00",
+  "created_at": "2026-07-11T09:23:50+00:00",
   "critical_file_hashes": [
     {
       "path": "main.py",
@@ -99,17 +99,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "826b973351761b2d3e8e336f44eaae4c49ddda04",
-  "git_status_short": "",
+  "git_commit": "1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238",
+  "git_status_short": "M DEPLOYMENT_SECURITY.md\n M sbp_lex/api/server.py\n M sbp_lex/runtime/canonical_runtime.py\n M tests/conftest.py\n M tests/test_h3_network_transport_boundary.py\n M tests/test_h4a_security_state_persistence.py\n?? sbp_lex/runtime/approved_runtime_baselines.json\n?? sbp_lex/runtime/measured_startup.py\n?? tests/test_h8_measured_startup_runtime_identity.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 15935,
+    "size_bytes": 159874,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "551839dafd12d59f1c4945568f2be2fd896758eade95d8acdc3a6e4c629405e5",
-  "manifest_payload_digest": "80347bc08046f0e16cf933a414b692164d580625be3fc54eebd94bf8a916bbbc",
-  "manifest_signature": "8e0e14da531cb60cd08c57b86ba283c62332d8ec6fccf54dd8934e4abbb43c31",
+  "manifest_digest": "70edda8b7a3371072fe5754969d518cd8eba5d5d74ddca8e7ef8ec015a67ad9f",
+  "manifest_payload_digest": "6428642e1842637bcb22f04c45574a805b5f342087e11bb139144d4c92892016",
+  "manifest_signature": "143d0f4352f32ff9e4fc9e4e2b2c396172a1186adfe485b10a75e6921459786c",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -209,5 +209,5 @@
     }
   ],
   "validation_failures": [],
-  "working_tree_clean": true
+  "working_tree_clean": false
 }
