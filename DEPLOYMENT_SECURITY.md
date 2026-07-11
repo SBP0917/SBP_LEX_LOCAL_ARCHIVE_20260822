@@ -22,6 +22,19 @@ also sets `SBP_LEX_ALLOW_INSECURE_TEST_MODE=1`. It cannot be used to start a
 normal runtime API process. Unknown or empty security modes also prevent API
 startup.
 
+Private-mode GET requests retain the configured bearer-token boundary only as
+an explicit observation-only viewer compatibility identity. A legacy bearer
+cannot authorize any POST. Every private-mode POST requires
+X-SBP-LEX-Request-Auth: a signed,
+short-lived, scoped-principal envelope bound to the exact canonical JSON body,
+method, path, query, content type, credential, principal, device, scope, nonce,
+and request ID. Bearer-only private POST authorization is not accepted.
+
+Principal credentials are supplied as a JSON list in
+SBP_LEX_API_PRINCIPALS. Credential secrets are used only for HMAC
+verification and are never returned in access decisions, events, health
+responses, exports, or exceptions.
+
 ## Runtime authority
 
 The APK remains observational/orchestration only. Execution authority remains inside the canonical runtime.

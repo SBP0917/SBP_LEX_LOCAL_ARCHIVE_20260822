@@ -7,6 +7,7 @@ from typing import Any, Mapping
 from urllib.parse import urlparse
 
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.api.request_auth import AUTH_HEADER, authenticate_signed_request
 
 LOCAL_HOSTS = {"127.0.0.1", "::1", "localhost"}
 ALLOWED_GET_PATHS = {
@@ -50,6 +51,9 @@ class AccessDecision:
     reason: str
     mode: str
     client_host: str
+    principal_id: str | None = None
+    principal_type: str | None = None
+    credential_scope: str | None = None
 
     def as_payload(self) -> dict[str, Any]:
         return {
@@ -57,6 +61,9 @@ class AccessDecision:
             "reason": self.reason,
             "mode": self.mode,
             "client_host": self.client_host,
+            "principal_id": self.principal_id,
+            "principal_type": self.principal_type,
+            "credential_scope": self.credential_scope,
         }
 
 
@@ -151,7 +158,10 @@ def validate_content_type(method: str, headers: Mapping[str, str]) -> tuple[bool
     return False, "content_type_must_be_application_json"
 
 
-def decide_access(*, method: str, path: str, client_host: str, headers: Mapping[str, str]) -> AccessDecision:
+def decide_access(
+    *, method: str, path: str, client_host: str, headers: Mapping[str, str],
+    body: bytes | None = None, runtime_execution_active: bool = False,
+) -> AccessDecision:
     try:
         mode = security_mode()
     except SecurityConfigurationError as exc:
@@ -171,8 +181,28 @@ def decide_access(*, method: str, path: str, client_host: str, headers: Mapping[
     if mode == "local" and not local:
         return AccessDecision(False, 403, "local_runtime_only", mode, client_host)
 
-    if require_api_token() and not token_valid(headers):
+    signed_header = headers.get(AUTH_HEADER) or headers.get(AUTH_HEADER.lower())
+    if require_api_token() and not signed_header and not token_valid(headers):
         return AccessDecision(False, 401, "api_token_required_or_invalid", mode, client_host)
+
+    if mode == "private" and (method == "POST" or signed_header):
+        auth = authenticate_signed_request(
+            method=method, path=path,
+            content_type=headers.get("Content-Type") or headers.get("content-type") or "",
+            body=body if body is not None else b"{}",
+            envelope_text=signed_header,
+            security_mode=mode, runtime_execution_active=runtime_execution_active,
+        )
+        return AccessDecision(
+            auth.allowed, auth.status, auth.reason, mode, client_host,
+            auth.principal_id, auth.principal_type, auth.credential_scope,
+        )
+
+    if mode == "private" and method == "GET":
+        return AccessDecision(
+            True, 200, "legacy_private_viewer_compatibility", mode, client_host,
+            "legacy-private-viewer", "viewer", "observe",
+        )
 
     return AccessDecision(True, 200, "access_allowed", mode, client_host)
 

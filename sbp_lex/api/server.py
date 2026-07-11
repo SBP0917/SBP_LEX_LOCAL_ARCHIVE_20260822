@@ -86,16 +86,19 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
     def _client_host(self) -> str:
         return str(self.client_address[0]) if self.client_address else "unknown"
 
-    def _authorize(self, method: str) -> tuple[bool, int, Dict[str, Any]]:
+    def _authorize(self, method: str, body: bytes | None = None) -> tuple[bool, int, Dict[str, Any]]:
         client_host = self._client_host()
         path = self.path
         headers = self._headers_mapping()
         allowed, rate = API_RATE_LIMITER.allow(client_host)
         if not allowed:
-            RUNTIME_EVENTS.emit("api_access_rejected", {"reason": "rate_limited", "client_host": client_host, "path": path})
+            RUNTIME_EVENTS.emit(
+                "api_access_rejected",
+                {"reason": "rate_limited", "client_host": client_host, "path": urlparse(path).path},
+            )
             return False, 429, {"error": "rate_limited", "rate": rate}
 
-        decision = decide_access(method=method, path=path, client_host=client_host, headers=headers)
+        decision = decide_access(method=method, path=path, client_host=client_host, headers=headers, body=body)
         if not decision.allowed:
             RUNTIME_EVENTS.emit(
                 "api_access_rejected",
@@ -103,7 +106,7 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
                     "reason": decision.reason,
                     "status": decision.status,
                     "client_host": client_host,
-                    "path": path,
+                    "path": urlparse(path).path,
                     "security_fingerprint": request_security_fingerprint(method=method, path=path, client_host=client_host),
                 },
             )
@@ -174,10 +177,6 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
         return _json_response(self, 404, {"error": "not_found", "path": parsed.path})
 
     def do_POST(self) -> None:
-        ok, status, access_payload = self._authorize("POST")
-        if not ok:
-            return _json_response(self, status, access_payload)
-
         parsed = urlparse(self.path)
         try:
             length = int(self.headers.get("Content-Length", "0"))
@@ -186,12 +185,17 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
                 return _json_response(self, 400, {"error": "empty_request_body"})
             if length > limit:
                 return _json_response(self, 413, {"error": "request_too_large", "limit": limit})
-            body = self.rfile.read(length).decode("utf-8")
+            body_bytes = self.rfile.read(length)
+            body = body_bytes.decode("utf-8")
             payload = loads_strict_json(body or "{}")
             if not isinstance(payload, dict):
                 return _json_response(self, 400, {"error": "json_body_must_be_object"})
-        except Exception as exc:
-            return _json_response(self, 400, {"error": "invalid_json", "detail": str(exc)})
+        except Exception:
+            return _json_response(self, 400, {"error": "invalid_json"})
+
+        ok, status, access_payload = self._authorize("POST", body=body_bytes)
+        if not ok:
+            return _json_response(self, status, access_payload)
 
         schema_ok, schema_failures = _validate_endpoint_payload(parsed.path, payload)
         if not schema_ok:
