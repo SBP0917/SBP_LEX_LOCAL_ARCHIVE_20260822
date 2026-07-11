@@ -84,7 +84,12 @@ class MeasurementPolicy:
 
 DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
     category_patterns={
-        "software": ("main.py", "sbp_lex/**/*.py"),
+        "software": (
+            "main.py", "sbp_lex/**/*.py",
+            "external_substrates/shared/*.py",
+            "external_substrates/skg/*.py",
+            "external_substrates/dtn/*.py",
+        ),
         "configuration": (
             ".env.example", "VERSION", "requirements.txt", "sbp_lex/config/*.py",
         ),
@@ -117,6 +122,10 @@ DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
     required_paths=(
         "main.py", "requirements.txt", "VERSION",
         "sbp_lex/runtime/canonical_runtime.py", "sbp_lex/runtime/measured_startup.py",
+        "external_substrates/shared/external_boundary.py",
+        "external_substrates/shared/source_crypto.py",
+        "external_substrates/shared/source_trust_store.py",
+        "external_substrates/shared/external_replay_store.py",
         "sbp_lex/api/server.py", "sbp_lex/api/access_control.py",
         "sbp_lex/execution/execution_gate.py", "sbp_lex/pipeline/dual_runner.py",
         "outputs/local_trust_root_manifest.json",

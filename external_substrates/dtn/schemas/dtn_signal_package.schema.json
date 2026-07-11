@@ -25,7 +25,24 @@
     "issued_at": {"type": "string", "format": "date-time"},
     "transport_identity": {"type": "string", "minLength": 1},
     "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "signature": {"type": "string", "minLength": 1}
+    "signature": {
+      "type": "object",
+      "required": ["signature_version", "source_id", "key_id", "substrate_type", "algorithm", "purpose", "package_type", "schema_version", "package_id", "package_digest", "signature"],
+      "properties": {
+        "signature_version": {"const": "H6G_EXTERNAL_SOURCE_SIGNATURE_V1"},
+        "source_id": {"type": "string", "minLength": 1},
+        "key_id": {"type": "string", "minLength": 1},
+        "substrate_type": {"const": "DTN"},
+        "algorithm": {"const": "ML-DSA"},
+        "purpose": {"const": "EXTERNAL_EVIDENCE_PACKAGE_VERIFICATION"},
+        "package_type": {"const": "external_dtn_signal_package"},
+        "schema_version": {"const": "1.0"},
+        "package_id": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "package_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "signature": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": false
 }

@@ -10,6 +10,9 @@ from external_substrates.shared.canonical_json import canonical_dumps
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.freshness import validate_freshness
 from external_substrates.shared.package_identity import package_identity
+from external_substrates.shared.external_replay_store import ExternalReplayStore
+from external_substrates.shared.source_crypto import ALGORITHM, PURPOSE, verify_source_signature
+from external_substrates.shared.source_trust_store import ExternalSourceTrustStore
 from external_substrates.shared.pre_context_package import validate_pre_context_package
 from external_substrates.shared.signing import sign_payload
 from external_substrates.shared.source_attestation import validate_source_record
@@ -117,9 +120,11 @@ def _validate_metadata(package: Mapping[str, Any], *, expected_type: str, policy
     if package.get("schema_version") != policy.schema_version:
         raise ExternalBoundaryError("schema_version_rejected")
     required_strings = (
-        "package_id", "request_fingerprint", "issued_at", "transport_identity", "digest", "signature",
+        "package_id", "request_fingerprint", "issued_at", "transport_identity", "digest",
     )
     if any(not isinstance(package.get(key), str) or not str(package.get(key)).strip() for key in required_strings):
+        raise ExternalBoundaryError("package_metadata_missing")
+    if not package.get("signature"):
         raise ExternalBoundaryError("package_metadata_missing")
     if not validate_freshness(package.get("issued_at"), policy.max_age_seconds, now):
         raise ExternalBoundaryError("stale_package")
@@ -182,6 +187,7 @@ def _dependency_ids(package: Mapping[str, Any]) -> list[str]:
 def validate_external_chain(
     skg_package: Mapping[str, Any], dtn_package: Mapping[str, Any], pre_context_package: Mapping[str, Any],
     *, now: str, policy: BoundaryPolicy = BoundaryPolicy(), replay_registry: ReplayRegistry | None = None,
+    trust_store: ExternalSourceTrustStore | None = None,
 ) -> None:
     _validate_metadata(skg_package, expected_type="external_skg_signal_package", policy=policy, now=now)
     _validate_metadata(dtn_package, expected_type="external_dtn_signal_package", policy=policy, now=now)
@@ -214,19 +220,82 @@ def validate_external_chain(
     dependency_ids = _dependency_ids(dtn_package)
     if len(dependency_ids) != len(set(dependency_ids)):
         raise ExternalBoundaryError("dependency_ambiguity")
+    if trust_store is not None:
+        _verify_managed_source_package(skg_package, substrate_type="SKG", trust_store=trust_store, now=now)
+        _verify_managed_source_package(dtn_package, substrate_type="DTN", trust_store=trust_store, now=now)
     if replay_registry is not None:
         replay_registry.check_and_record((skg_package, dtn_package, pre_context_package))
+
+
+def _verify_managed_source_package(
+    package: Mapping[str, Any], *, substrate_type: str,
+    trust_store: ExternalSourceTrustStore, now: str,
+) -> dict[str, Any]:
+    signature = package.get("signature")
+    if not isinstance(signature, Mapping):
+        raise ExternalBoundaryError("managed_asymmetric_signature_required")
+    source_id = signature.get("source_id")
+    key_id = signature.get("key_id")
+    if not isinstance(source_id, str) or not isinstance(key_id, str):
+        raise ExternalBoundaryError("source_signature_identity_missing")
+    if signature.get("algorithm") != ALGORITHM:
+        raise ExternalBoundaryError("source_signature_algorithm_denied")
+    if signature.get("purpose") != PURPOSE:
+        raise ExternalBoundaryError("source_signature_purpose_denied")
+    if source_id not in {str(item.get("source_id")) for item in package.get("source_records", [])}:
+        raise ExternalBoundaryError("source_signature_provenance_mismatch")
+    try:
+        record = trust_store.active_record(
+            source_id=source_id, key_id=key_id, substrate_type=substrate_type,
+            package_type=str(package.get("package_type")),
+            schema_version=str(package.get("schema_version")), now=now,
+        )
+    except Exception as exc:
+        raise ExternalBoundaryError(str(exc)) from exc
+    if not verify_source_signature(
+        package,
+        public_verification_material=str(record["public_verification_material"]),
+        expected_source_id=source_id,
+        expected_key_id=key_id,
+        expected_substrate_type=substrate_type,
+        expected_algorithm=str(record["algorithm"]),
+        expected_purpose=PURPOSE,
+    ):
+        raise ExternalBoundaryError("source_signature_invalid")
+    return record
 
 
 def adapt_external_chain(
     skg_json: str, dtn_json: str, pre_context_json: str, *, now: str,
     policy: BoundaryPolicy = BoundaryPolicy(), replay_registry: ReplayRegistry | None = None,
+    trust_store: ExternalSourceTrustStore | None = None,
+    replay_store: ExternalReplayStore | None = None,
 ) -> dict[str, Any]:
     """Translate one complete external chain into one non-authoritative EIE candidate."""
     skg = parse_canonical_json(skg_json, policy=policy)
     dtn = parse_canonical_json(dtn_json, policy=policy)
     pre_context = parse_canonical_json(pre_context_json, policy=policy)
-    validate_external_chain(skg, dtn, pre_context, now=now, policy=policy, replay_registry=replay_registry)
+    if trust_store is None or replay_store is None:
+        raise ExternalBoundaryError("protected_external_security_state_required")
+    validate_external_chain(
+        skg, dtn, pre_context, now=now, policy=policy,
+        replay_registry=replay_registry, trust_store=trust_store,
+    )
+    for package, substrate in ((skg, "SKG"), (dtn, "DTN")):
+        signature = package["signature"]
+        try:
+            replay_store.accept(
+                external_package_id=str(package["package_id"]),
+                canonical_package_digest=str(package["digest"]),
+                source_id=str(signature["source_id"]),
+                key_id=str(signature["key_id"]),
+                substrate_type=substrate,
+                issued_timestamp=str(package["issued_at"]),
+                accepted_timestamp=now,
+                freshness_window=policy.max_age_seconds,
+            )
+        except Exception as exc:
+            raise ExternalBoundaryError(str(exc)) from exc
     body: dict[str, Any] = {
         "object_type": "ExternalIngressEnvelope",
         "eie_version": "1.0",

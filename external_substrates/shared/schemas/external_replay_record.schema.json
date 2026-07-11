@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Desktop V1 External Package Replay Record",
+  "type": "object",
+  "required": [
+    "record_version", "sequence", "external_package_id", "canonical_package_digest",
+    "source_id", "key_id", "substrate_type", "issued_timestamp", "accepted_timestamp",
+    "freshness_window", "protection_until", "previous_record_hash", "record_hash",
+    "integrity_binding"
+  ],
+  "properties": {
+    "record_version": {"const": "H6I_EXTERNAL_REPLAY_RECORD_V1"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "external_package_id": {"type": "string", "minLength": 1},
+    "canonical_package_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_id": {"type": "string", "minLength": 1},
+    "key_id": {"type": "string", "minLength": 1},
+    "substrate_type": {"enum": ["SKG", "DTN"]},
+    "issued_timestamp": {"type": "string", "format": "date-time"},
+    "accepted_timestamp": {"type": "string", "format": "date-time"},
+    "freshness_window": {"type": "integer", "minimum": 1},
+    "protection_until": {"type": "string", "format": "date-time"},
+    "previous_record_hash": {"type": "string", "minLength": 1},
+    "record_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "integrity_binding": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

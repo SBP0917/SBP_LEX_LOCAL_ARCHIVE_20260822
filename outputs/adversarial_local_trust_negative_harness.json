@@ -547,11 +547,11 @@
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     }
   ],
-  "adversarial_digest": "549fbb2da2657e2ce04726c6828698926384d88641a72be9db8d38fc29b6873c",
+  "adversarial_digest": "9f22ef52cb8e4daead59886230726b82d0a31082168f8a750b910a59e2206488",
   "adversarial_harness_type": "adversarial_local_trust_negative_test_harness",
   "adversarial_harness_version": "18.7G",
-  "adversarial_payload_digest": "fa40477ad08e7a6ee059792ddaf7c40a78fa7e0618cb064757d59d65e0609c7e",
-  "adversarial_signature": "9be4147f864c358d62bdee20cc7e5a6aff747fea7b6ec72fa1876039cb5ca2ff",
+  "adversarial_payload_digest": "0a46a21bb36c072dd5aaf86b7ad4f8cd737b5c931afa69cb6fc7da29808de807",
+  "adversarial_signature": "f933ef4b4d5bf30a2ace2f6fc77fc6b07f093ebd032c7df21ded4dba174b41b3",
   "adversarial_status": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
   "adversarial_summary": {
     "all_required_cases_passed": true,
@@ -568,14 +568,14 @@
     "toolchain_drift_cases": 3,
     "total_cases": 39
   },
-  "bound_capstone_digest": "405f430bd4d508d4ca44b0be5109c1b9a74ad6143a5d49abdc36a5ce77094a64",
-  "bound_constitutional_gates_digest": "cec9ed03e07afc61264c94e4559e9b4fd47dd8a867830919da0deef9f19b1ea1",
-  "bound_evidence_chain_digest": "77b3e9016331c4664d6d41da4aa84b106f4b831eb0ad6722f387b211709c1e9d",
-  "bound_execution_envelope_digest": "8c0e52441842e2825fb4db6966c7cf5690ebd5d9c0bccda21245523f4f3a0cbc",
-  "bound_manifest_digest": "e07a25a6c0989a2eacb96c78a945acc5e55e454980093402c406fb8188ed2fa7",
-  "bound_regression_matrix_digest": "376878564fa5491310f53d082c2a7306ffc60eb7fa353bebbb7e5040148fdd6a",
-  "bound_release_integrity_digest": "01d60d1e4278c8b01264ebb642941c2009b5e82b243e54122ae7b3e173970bae",
-  "bound_toolchain_guard_digest": "49ca61705c0dd9d9cd83fd480643db44aa7d03b5c4c4733cf351188e164e0691",
+  "bound_capstone_digest": "4a1a687ef7ef7b2247b9a9e2a9c692c28656e69a7a16e231a8de9bfc3f5dc2ad",
+  "bound_constitutional_gates_digest": "f2017ebbf4b1041ea9d53c4601c4a8b86641964f22b81e1e8e31972d69e7eee0",
+  "bound_evidence_chain_digest": "f9255c00a3546ea7e448885d287ba83887e6f545aa9277521a66a3cb12a98151",
+  "bound_execution_envelope_digest": "aaec5135f6e58f6a798268dd661aa8f9eb9ad1242c2aa32f7b158d7f8bdbf5ff",
+  "bound_manifest_digest": "8fac0d92c99c7d3fad1aa9b7232b0fa1b694d56f747c9b75caee90020fe09142",
+  "bound_regression_matrix_digest": "1f6ac01889c69859edd715107c4e864988047420a623edc057179784f2fb104a",
+  "bound_release_integrity_digest": "31a4b24627fabea710aa8ca058e0f3cfff4a2178cace5a6b9b7b9e32547f64a2",
+  "bound_toolchain_guard_digest": "bac0fc0edcb2a848b25ff7e674c932e6016a4b6325ad892a02bfe87e6da459e5",
   "boundary_confirmation_summary": {
     "certificationClaimed": false,
     "executionGateBehaviorChanged": false,
@@ -590,16 +590,16 @@
     "skgDtnAuthorityAdded": false,
     "skgDtnExternalNonAuthoritative": true
   },
-  "created_at": "2026-07-11T10:28:09+00:00",
+  "created_at": "2026-07-11T11:06:00+00:00",
   "git_branch": "main",
-  "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+  "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main [ahead 8]\n M external_substrates/demo/sample_bridge_manifest.json\n M external_substrates/demo/sample_dtn_package.json\n M external_substrates/demo/sample_pre_context_package.json\n M external_substrates/demo/sample_skg_package.json\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/pre_context_package.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M fixtures/phase19a/schemas/external_pre_context_package.schema.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json",
+    "branch_status_short": "## main...origin/main [ahead 9]\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/external_boundary.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h6_external_boundary_hardening.py",
     "git_branch": "main",
-    "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+    "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
     "synced_to_origin_branch": false,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false

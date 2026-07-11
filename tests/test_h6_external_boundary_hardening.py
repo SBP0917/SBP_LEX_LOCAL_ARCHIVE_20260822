@@ -46,13 +46,14 @@ def resign_signal(signal: dict) -> None:
     signal["signature"] = sign_payload(signature_body)
 
 
-def test_valid_chain_produces_exactly_one_non_authoritative_eie_candidate() -> None:
+def test_adapter_requires_protected_state_before_eie_candidate() -> None:
     skg, dtn, pre = chain()
-    result = adapt_external_chain(*(canonical_dumps(item) for item in (skg, dtn, pre)), now=NOW)
-    assert result["object_type"] == "ExternalIngressEnvelope"
-    assert result["canonical_traversal_state"] is False
-    assert result["authority_boundary"] == "EVIDENCE_ONLY_HARD_ENTRY_REQUIRED"
-    assert result["eie_digest"] and result["eie_signature"]
+    fail_code(
+        "protected_external_security_state_required",
+        adapt_external_chain,
+        *(canonical_dumps(item) for item in (skg, dtn, pre)),
+        now=NOW,
+    )
 
 
 @pytest.mark.parametrize(
@@ -165,9 +166,10 @@ def test_mixed_chain_and_poisoned_authority_never_produce_eie() -> None:
     fail_code("forged_external_authority", validate_external_chain, skg, dtn, pre, now=NOW)
 
 
-def test_adapter_is_deterministic_and_replay_registry_is_caller_owned() -> None:
-    serialized = tuple(canonical_dumps(item) for item in chain())
-    assert adapt_external_chain(*serialized, now=NOW) == adapt_external_chain(*serialized, now=NOW)
+def test_structural_validation_is_deterministic_and_replay_registry_is_caller_owned() -> None:
+    packages = chain()
+    assert validate_external_chain(*packages, now=NOW) is None
+    assert validate_external_chain(*packages, now=NOW) is None
     registry = ReplayRegistry()
-    adapt_external_chain(*serialized, now=NOW, replay_registry=registry)
-    fail_code("replayed_package_identifier", adapt_external_chain, *serialized, now=NOW, replay_registry=registry)
+    validate_external_chain(*packages, now=NOW, replay_registry=registry)
+    fail_code("replayed_package_identifier", validate_external_chain, *packages, now=NOW, replay_registry=registry)

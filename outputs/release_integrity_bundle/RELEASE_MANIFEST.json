@@ -2,7 +2,7 @@
   "artifact_hash_index_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-    "sha256": "373557c535ae54c2310578ddaa13bcbe410252557eda966853fa9cb9b6ca99e8",
+    "sha256": "022ea6e5041fb3c4c8a4b4b8f5c16d8f8dde62f5bca2baf2e35cd1581905ba6f",
     "size_bytes": 15528
   },
   "artifact_hash_index_summary": {
@@ -10,13 +10,13 @@
     "missing_artifact_count": 0,
     "required_artifact_count": 38
   },
-  "bound_capstone_digest": "4a1a687ef7ef7b2247b9a9e2a9c692c28656e69a7a16e231a8de9bfc3f5dc2ad",
-  "bound_constitutional_gates_digest": "cec9ed03e07afc61264c94e4559e9b4fd47dd8a867830919da0deef9f19b1ea1",
-  "bound_evidence_chain_digest": "77b3e9016331c4664d6d41da4aa84b106f4b831eb0ad6722f387b211709c1e9d",
-  "bound_execution_envelope_digest": "8c0e52441842e2825fb4db6966c7cf5690ebd5d9c0bccda21245523f4f3a0cbc",
-  "bound_manifest_digest": "e07a25a6c0989a2eacb96c78a945acc5e55e454980093402c406fb8188ed2fa7",
-  "bound_regression_matrix_digest": "376878564fa5491310f53d082c2a7306ffc60eb7fa353bebbb7e5040148fdd6a",
-  "bound_toolchain_guard_digest": "49ca61705c0dd9d9cd83fd480643db44aa7d03b5c4c4733cf351188e164e0691",
+  "bound_capstone_digest": "437d84506fc5ccdea11ce93397f91b0b66b557d709a79c684353c0daac79a16e",
+  "bound_constitutional_gates_digest": "f2017ebbf4b1041ea9d53c4601c4a8b86641964f22b81e1e8e31972d69e7eee0",
+  "bound_evidence_chain_digest": "f9255c00a3546ea7e448885d287ba83887e6f545aa9277521a66a3cb12a98151",
+  "bound_execution_envelope_digest": "aaec5135f6e58f6a798268dd661aa8f9eb9ad1242c2aa32f7b158d7f8bdbf5ff",
+  "bound_manifest_digest": "8fac0d92c99c7d3fad1aa9b7232b0fa1b694d56f747c9b75caee90020fe09142",
+  "bound_regression_matrix_digest": "1f6ac01889c69859edd715107c4e864988047420a623edc057179784f2fb104a",
+  "bound_toolchain_guard_digest": "bac0fc0edcb2a848b25ff7e674c932e6016a4b6325ad892a02bfe87e6da459e5",
   "boundary_lock_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
@@ -44,16 +44,16 @@
     "18.7E.3",
     "18.7E.4"
   ],
-  "created_at": "2026-07-11T10:28:13+00:00",
+  "created_at": "2026-07-11T11:06:01+00:00",
   "git_branch": "main",
-  "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+  "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main [ahead 8]\n M external_substrates/demo/sample_bridge_manifest.json\n M external_substrates/demo/sample_dtn_package.json\n M external_substrates/demo/sample_pre_context_package.json\n M external_substrates/demo/sample_skg_package.json\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/pre_context_package.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M fixtures/phase19a/schemas/external_pre_context_package.schema.json\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
+    "branch_status_short": "## main...origin/main [ahead 9]\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/external_boundary.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h6_external_boundary_hardening.py",
     "git_branch": "main",
-    "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+    "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
     "synced_to_origin_branch": false,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
@@ -62,7 +62,7 @@
     {
       "exists": true,
       "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json",
-      "sha256": "373557c535ae54c2310578ddaa13bcbe410252557eda966853fa9cb9b6ca99e8",
+      "sha256": "022ea6e5041fb3c4c8a4b4b8f5c16d8f8dde62f5bca2baf2e35cd1581905ba6f",
       "size_bytes": 15528
     },
     {
@@ -90,10 +90,10 @@
       "size_bytes": 930
     }
   ],
-  "release_digest": "31a4b24627fabea710aa8ca058e0f3cfff4a2178cace5a6b9b7b9e32547f64a2",
+  "release_digest": "e875456a9d5bc2957121afedc5e3bbd64ccf47a3c27f07e617121a068402429f",
   "release_manifest_type": "release_integrity_reproducible_validation_bundle",
   "release_manifest_version": "18.7F",
-  "release_payload_digest": "cc32fc2cbdfb9a68202071ee13a03c777c089e1fae0202fe7ddded3dd7d99716",
+  "release_payload_digest": "34e9230d74b47eae75006d55dd2b61709a862b54870d29baf50367dbda4fe6d3",
   "release_scope": {
     "next_phase": "18.7G",
     "next_phase_implemented": false,
@@ -106,7 +106,7 @@
     "purpose": "Controlled, reproducible, externally reviewable validation package.",
     "review_readiness_only": true
   },
-  "release_signature": "bec1ff51b071d59ac1061fd88cb22ec77e461386f50bbefeb9aa73a3092d45e2",
+  "release_signature": "7d56b6b004d4704096fb71fc9abb7bcf03e56301ab018f103e1984a5bdeb1a2c",
   "release_status": "RELEASE_INTEGRITY_PASS",
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "RELEASE_INTEGRITY_DETERMINISTIC_PLACEHOLDER",

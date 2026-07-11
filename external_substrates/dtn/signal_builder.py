@@ -16,6 +16,7 @@ from external_substrates.dtn.risk_potential_engine import evaluate_risk_potentia
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.freshness import utc_timestamp
 from external_substrates.shared.package_identity import package_identity
+from external_substrates.shared.source_crypto import sign_source_package, source_signature_shape_valid
 from external_substrates.shared.signal_envelope import build_signal_envelope, validate_signal_envelope
 from external_substrates.shared.signing import sign_payload, verify_signature
 from external_substrates.shared.source_attestation import summarise_sources
@@ -50,6 +51,9 @@ def build_dtn_signal_package(
     timestamp: str | None = None,
     signing_key: str | bytes | None = None,
     transport_identity: str = "desktop-v1-local-adapter",
+    source_private_key: bytes | None = None,
+    source_key_id: str | None = None,
+    source_signer_id: str | None = None,
 ) -> dict[str, Any]:
     if skg_constraint_package.get("request_fingerprint") != request_fingerprint:
         raise ValueError("SKG and DTN request fingerprints must match")
@@ -136,6 +140,13 @@ def build_dtn_signal_package(
     )
     package["digest"] = digest_mapping(_package_body(package))
     package["signature"] = sign_payload(_signature_body(package), signing_key)
+    if source_private_key is not None:
+        if not source_key_id or not source_signer_id:
+            raise ValueError("managed source key identity is required")
+        package = sign_source_package(
+            package, private_key=source_private_key, source_id=source_signer_id,
+            key_id=source_key_id, substrate_type="DTN",
+        )
     return package
 
 
@@ -174,4 +185,6 @@ def validate_dtn_signal_package(
         return False
     if package.get("digest") != digest_mapping(_package_body(package)):
         return False
+    if isinstance(package.get("signature"), Mapping):
+        return source_signature_shape_valid(package, substrate_type="DTN")
     return verify_signature(_signature_body(package), str(package.get("signature")), verification_key)

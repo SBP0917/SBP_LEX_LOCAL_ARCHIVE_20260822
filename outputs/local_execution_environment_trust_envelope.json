@@ -1,5 +1,5 @@
 {
-  "bound_local_trust_manifest_digest": "e07a25a6c0989a2eacb96c78a945acc5e55e454980093402c406fb8188ed2fa7",
+  "bound_local_trust_manifest_digest": "8fac0d92c99c7d3fad1aa9b7232b0fa1b694d56f747c9b75caee90020fe09142",
   "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
   "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
   "command_results": [
@@ -146,14 +146,14 @@
       "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     }
   ],
-  "created_at": "2026-07-11T10:27:44+00:00",
-  "envelope_digest": "8c0e52441842e2825fb4db6966c7cf5690ebd5d9c0bccda21245523f4f3a0cbc",
-  "envelope_payload_digest": "08f4f0ca65c0831ee7ba04fe02849e503d20ef9ddf6f3b89a38f21731d98fd65",
-  "envelope_signature": "22d6c38cfab892f9931194a10261ee004cd396aecf865bdd25078e044e7cb949",
+  "created_at": "2026-07-11T11:05:55+00:00",
+  "envelope_digest": "aaec5135f6e58f6a798268dd661aa8f9eb9ad1242c2aa32f7b158d7f8bdbf5ff",
+  "envelope_payload_digest": "a57b835f39869dd77a7a459dc286b1a894bafea311c06253729ad22e66669c83",
+  "envelope_signature": "1e0eb16f449e64c05adb2d83a3a82e8c6b95c8777b1bbfc830311bd27fea1d95",
   "envelope_type": "local_execution_environment_trust_envelope",
   "envelope_version": "18.7C",
   "git_branch": "main",
-  "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+  "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
   "path_digest_or_path_summary": {
     "path_digest": "a071daacea10ff563a0a1bfe7090c8733960a5af5082daa86f1277f79eafd169",
     "path_entry_count": 14,

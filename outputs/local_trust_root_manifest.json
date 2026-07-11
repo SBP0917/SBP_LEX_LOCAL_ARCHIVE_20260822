@@ -35,7 +35,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T10:27:43+00:00",
+  "created_at": "2026-07-11T11:05:54+00:00",
   "critical_file_hashes": [
     {
       "path": "main.py",
@@ -99,17 +99,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
-  "git_status_short": "M external_substrates/demo/sample_bridge_manifest.json\n M external_substrates/demo/sample_dtn_package.json\n M external_substrates/demo/sample_pre_context_package.json\n M external_substrates/demo/sample_skg_package.json\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/pre_context_package.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M fixtures/phase19a/schemas/external_pre_context_package.schema.json\n?? external_substrates/shared/external_boundary.py\n?? external_substrates/shared/package_identity.py\n?? tests/test_h6_external_boundary_hardening.py",
+  "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
+  "git_status_short": "M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/external_boundary.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h6_external_boundary_hardening.py\n?? external_substrates/shared/external_replay_store.py\n?? external_substrates/shared/schemas/\n?? external_substrates/shared/source_crypto.py\n?? external_substrates/shared/source_trust_store.py\n?? tests/test_h6ghi_external_identity_trust_replay.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 199859,
+    "size_bytes": 239844,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "e07a25a6c0989a2eacb96c78a945acc5e55e454980093402c406fb8188ed2fa7",
-  "manifest_payload_digest": "ea43efce4fefcbe3df20c88c6524f65da78d04aa0347df63c99bd29dff5208db",
-  "manifest_signature": "0740a3584bd2c155e1bc5699f338828c16d192d98d91b4c55d0aedf4e0f47070",
+  "manifest_digest": "8fac0d92c99c7d3fad1aa9b7232b0fa1b694d56f747c9b75caee90020fe09142",
+  "manifest_payload_digest": "21f5d347d1e129ade02eecefef8d5f70597d80e261b6035b8d57de3864d2ce59",
+  "manifest_signature": "7df8c2a4b00c2613499c77c8b2be39cc7a165ded012d4f45309bcf32dea16c3f",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
