@@ -54,6 +54,7 @@ class AccessDecision:
     principal_id: str | None = None
     principal_type: str | None = None
     credential_scope: str | None = None
+    credential_id: str | None = None
 
     def as_payload(self) -> dict[str, Any]:
         return {
@@ -64,6 +65,7 @@ class AccessDecision:
             "principal_id": self.principal_id,
             "principal_type": self.principal_type,
             "credential_scope": self.credential_scope,
+            "credential_id": self.credential_id,
         }
 
 
@@ -196,6 +198,7 @@ def decide_access(
         return AccessDecision(
             auth.allowed, auth.status, auth.reason, mode, client_host,
             auth.principal_id, auth.principal_type, auth.credential_scope,
+            auth.credential_id,
         )
 
     if mode == "private" and method == "GET":

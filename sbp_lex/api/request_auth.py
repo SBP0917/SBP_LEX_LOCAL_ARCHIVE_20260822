@@ -75,6 +75,7 @@ class AuthenticationResult:
     principal_id: str | None = None
     principal_type: str | None = None
     credential_scope: str | None = None
+    credential_id: str | None = None
 
 
 _REPLAY_LOCK = threading.Lock()
@@ -265,7 +266,10 @@ def authenticate_signed_request(
         _USED_NONCES.add(nonce_key)
         _USED_REQUEST_IDS.add(request_key)
     configured_registry().mark_used(principal.credential_id, current)
-    return AuthenticationResult(True, 200, "scoped_request_authenticated", principal.principal_id, principal.principal_type, scope)
+    return AuthenticationResult(
+        True, 200, "scoped_request_authenticated", principal.principal_id,
+        principal.principal_type, scope, principal.credential_id,
+    )
 
 
 def build_signed_envelope(

@@ -16,7 +16,7 @@ from sbp_lex.api.security_state_store import (
 )
 from sbp_lex.api.credential_lifecycle import CredentialRegistry, credential_from_record
 
-NOW = datetime(2026, 7, 11, 7, 0, tzinfo=timezone.utc)
+NOW = datetime.now(timezone.utc).replace(microsecond=0)
 
 
 def make_store(tmp_path: Path) -> SecurityStateStore:
