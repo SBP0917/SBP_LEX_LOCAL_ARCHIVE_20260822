@@ -4,6 +4,8 @@ from copy import deepcopy
 from typing import Any, Dict, Mapping
 
 from sbp_lex.governance.reentry_engine import evaluate_reentry
+from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.hash_chain import append_hash_entry
 from sbp_lex.shared.results import enforce_result
 
@@ -74,6 +76,17 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
             "safe_state_required": grc_outcome["safe_state_required"],
             "reentry": reentry,
         }
+    )
+
+    working_state = issue_token(
+        working_state,
+        name="grc",
+        issued_at_stage="grc",
+        payload={
+            "grc_result": grc_result,
+            "governance_result": governance_result,
+            "reentry_digest": generate_digest(reentry),
+        },
     )
 
     return append_hash_entry(

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:h7:post-execution-attestation:v1",
+  "title": "Desktop V1 H7 Post-Execution Attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "attestation_hash", "integrity_binding"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attestation_version", "attestation_id", "capability_id", "request_id",
+        "eie_digest", "canonical_state_hash", "target_identity", "operation_identity",
+        "parameter_digest", "constraint_digest", "pipeline_mode", "convergence_digest",
+        "execution_start", "execution_finish", "completion_classification", "result_digest",
+        "adapter_identity", "runtime_identity", "audit_lineage_identifier",
+        "previous_attestation_hash"
+      ],
+      "properties": {
+        "attestation_version": {"const": "H7_POST_EXECUTION_ATTESTATION_V1"},
+        "attestation_id": {"$ref": "#/$defs/digest"},
+        "capability_id": {"$ref": "#/$defs/digest"},
+        "request_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "eie_digest": {"$ref": "#/$defs/digest"},
+        "canonical_state_hash": {"$ref": "#/$defs/digest"},
+        "target_identity": {"$ref": "#/$defs/identity"},
+        "operation_identity": {"$ref": "#/$defs/identity"},
+        "parameter_digest": {"$ref": "#/$defs/digest"},
+        "constraint_digest": {"$ref": "#/$defs/digest"},
+        "pipeline_mode": {"enum": ["MODE_1_FULL_MIRRORED", "MODE_2_SPLIT_VALIDATOR", "MODE_3_SINGLE_CONSTRAINED"]},
+        "convergence_digest": {"$ref": "#/$defs/digest"},
+        "execution_start": {"type": "string", "format": "date-time"},
+        "execution_finish": {"type": "string", "format": "date-time"},
+        "completion_classification": {"enum": ["COMPLETED", "FAILED", "CANCELLED", "AMBIGUOUS"]},
+        "result_digest": {"$ref": "#/$defs/digest"},
+        "adapter_identity": {"$ref": "#/$defs/identity"},
+        "runtime_identity": {"type": "string", "minLength": 1},
+        "audit_lineage_identifier": {"$ref": "#/$defs/digest"},
+        "previous_attestation_hash": {"oneOf": [{"const": "GENESIS"}, {"$ref": "#/$defs/digest"}]}
+      }
+    },
+    "attestation_hash": {"$ref": "#/$defs/digest"},
+    "integrity_binding": {"type": "object", "minProperties": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"}
+  }
+}

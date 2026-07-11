@@ -215,6 +215,41 @@ def test_startup_after_explicitly_approved_update_succeeds(tmp_path):
     assert result["approved_baseline_identifier"] == "DESKTOP_V1_TEST_BASELINE_02"
 
 
+def test_startup_accepts_complete_intermediate_baseline_lineage(tmp_path):
+    root = fixture_root(tmp_path)
+    path = root / "approved_runtime_baselines.json"
+    original = approved_store(root)
+    write_baseline_store(path, original)
+    service = service_for(tmp_path, root)
+    service.validate_startup()
+
+    write(root / "config/runtime.json", '{"mode":"approved-update-2"}\n')
+    second = baseline_record(
+        "DESKTOP_V1_TEST_BASELINE_02", measure_runtime(root, policy=POLICY, environ={}),
+        sequence=2, status="PENDING", created_at=FIXED_TIME,
+    )
+    store_two = approve_pending_baseline(
+        add_pending_baseline(original, second), "DESKTOP_V1_TEST_BASELINE_02",
+        approval_reference="explicit-update-2-approval",
+        retire_approved_identifier="DESKTOP_V1_TEST_BASELINE_01",
+    )
+
+    write(root / "config/runtime.json", '{"mode":"approved-update-3"}\n')
+    third = baseline_record(
+        "DESKTOP_V1_TEST_BASELINE_03", measure_runtime(root, policy=POLICY, environ={}),
+        sequence=3, status="PENDING", created_at=FIXED_TIME,
+    )
+    store_three = approve_pending_baseline(
+        add_pending_baseline(store_two, third), "DESKTOP_V1_TEST_BASELINE_03",
+        approval_reference="explicit-update-3-approval",
+        retire_approved_identifier="DESKTOP_V1_TEST_BASELINE_02",
+    )
+    write_baseline_store(path, store_three)
+
+    result = service.validate_startup()
+    assert result["approved_baseline_identifier"] == "DESKTOP_V1_TEST_BASELINE_03"
+
+
 def test_environment_mutation_and_secret_mutation_are_detected(tmp_path):
     root = fixture_root(tmp_path)
     service = service_for(tmp_path, root, {"APP_MODE": "local", "APP_SECRET": "secret-one"})

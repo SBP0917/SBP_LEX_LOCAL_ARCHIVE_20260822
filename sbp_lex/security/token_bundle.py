@@ -21,6 +21,8 @@ REQUIRED_TOKENS = [
 
     "governance",
 
+    "grc",
+
     "domain",
 
     "aurion",

@@ -13,6 +13,7 @@ TOKEN_STAGE = {
     "classification": "classification",
     "licensing": "licensing",
     "governance": "governance",
+    "grc": "grc",
     "domain": "domain_wrap",
     "aurion": "aurion_runtime",
     "execution_boundary": "execution_gate",
@@ -112,6 +113,12 @@ def _semantic_token_matches(state: Mapping[str, Any], name: str, payload: Mappin
             and payload.get("procedural_truth_result") == state.get("procedural_truth_result")
             and payload.get("classification_result") == state.get("classification_result")
             and payload.get("licensing_result") == state.get("licensing_result")
+        )
+    if name == "grc":
+        return (
+            payload.get("grc_result") == state.get("grc_result")
+            and payload.get("governance_result") == state.get("governance_result")
+            and payload.get("reentry_digest") == generate_digest(state.get("governed_reentry", {}))
         )
     if name == "domain":
         return payload.get("domain_result") == state.get("domain_result")

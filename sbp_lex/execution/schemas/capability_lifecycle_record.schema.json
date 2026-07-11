@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:h7:capability-lifecycle-record:v1",
+  "title": "Desktop V1 H7 Capability Lifecycle Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_version", "sequence", "event_id", "event_type", "capability_id",
+    "prior_state", "new_state", "occurred_at", "capability_digest", "details",
+    "previous_record_hash", "record_hash", "integrity_binding"
+  ],
+  "properties": {
+    "record_version": {"const": "H7_EXECUTION_CAPABILITY_RECORD_V1"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_id": {"$ref": "#/$defs/digest"},
+    "event_type": {"type": "string", "minLength": 1},
+    "capability_id": {"$ref": "#/$defs/digest"},
+    "prior_state": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/state"}]},
+    "new_state": {"$ref": "#/$defs/state"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "capability_digest": {"$ref": "#/$defs/digest"},
+    "details": {"type": "object"},
+    "previous_record_hash": {"oneOf": [{"const": "GENESIS"}, {"$ref": "#/$defs/digest"}]},
+    "record_hash": {"$ref": "#/$defs/digest"},
+    "integrity_binding": {"type": "object", "minProperties": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "state": {"enum": ["PENDING", "ACTIVE", "RESERVED", "EXECUTING", "COMPLETED", "CANCELLED", "EXPIRED", "REVOKED", "FAILED", "AMBIGUOUS", "RETIRED"]}
+  }
+}

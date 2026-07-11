@@ -318,7 +318,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release digest replaced in memory",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,release_digest_mismatch",
+      "reason": "release_digest_mismatch",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     },
@@ -346,7 +346,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "first artifact hash replaced in copied index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest",
+      "reason": "artifact_hash_mismatch:local_trust_root_manifest",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json"
     },
@@ -360,7 +360,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "first required artifact marked missing in copied index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:toolchain_guard,artifact_missing:local_trust_root_manifest,artifact_size_mismatch:local_trust_regression_matrix",
+      "reason": "artifact_missing:local_trust_root_manifest",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json"
     },
@@ -374,7 +374,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "verification command index omitted from validation inputs",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_build,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_validate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_evaluate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:capstone_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:execution_envelope_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:manifest_validate,claim_seed_unknown_command:evidence_chain_zero_changed:evidence_chain_compare,claim_seed_unknown_command:evidence_chain_zero_missing:evidence_chain_validate,claim_seed_unknown_command:future_surfaces_absent:release_integrity_validate,claim_seed_unknown_command:phase_19_not_started:release_integrity_validate,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_show,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_validate,claim_seed_unknown_command:replay_verification_passes:runtime_replay,claim_seed_unknown_command:runtime_verification_passes:runtime_main,claim_seed_unknown_command:skg_dtn_external_non_authoritative:release_integrity_validate,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_build,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_validate,verification_commands_not_mapping",
+      "reason": "claim_seed_unknown_command:capstone_binds_artifact_set:capstone_build,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_validate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_evaluate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:capstone_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:execution_envelope_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:manifest_validate,claim_seed_unknown_command:evidence_chain_zero_changed:evidence_chain_compare,claim_seed_unknown_command:evidence_chain_zero_missing:evidence_chain_validate,claim_seed_unknown_command:future_surfaces_absent:release_integrity_validate,claim_seed_unknown_command:phase_19_not_started:release_integrity_validate,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_show,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_validate,claim_seed_unknown_command:replay_verification_passes:runtime_replay,claim_seed_unknown_command:runtime_verification_passes:runtime_main,claim_seed_unknown_command:skg_dtn_external_non_authoritative:release_integrity_validate,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_build,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_validate,verification_commands_not_mapping",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json"
     },
@@ -388,7 +388,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "required command removed from copied command index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,missing_required_command:compileall",
+      "reason": "missing_required_command:compileall",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json"
     },
@@ -416,7 +416,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "required claim removed from copied seed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,missing_required_claim:desktop_v1_local_trust_artifacts_validate",
+      "reason": "missing_required_claim:desktop_v1_local_trust_artifacts_validate",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/CLAIMS_TO_EVIDENCE_SEED.json"
     },
@@ -430,7 +430,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "boundary lock omitted from validation inputs",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_mapping",
+      "reason": "boundary_lock_not_mapping",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -444,7 +444,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "external validation exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_true:not_university_validation_result",
+      "reason": "boundary_lock_not_true:not_university_validation_result",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -458,7 +458,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "certification exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_true:not_security_certification",
+      "reason": "boundary_lock_not_true:not_security_certification",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -472,7 +472,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "Phase 19 boundary fields flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_true:not_phase_19,boundary_lock_not_true:phase_19_not_started",
+      "reason": "boundary_lock_not_true:not_phase_19,boundary_lock_not_true:phase_19_not_started",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -486,7 +486,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "runtime activation exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_true:notRuntimeActivation",
+      "reason": "boundary_lock_not_true:notRuntimeActivation",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -514,13 +514,13 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "future surface exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,boundary_lock_not_true:not_future_distributed_or_mobile_runtime_implementation",
+      "reason": "boundary_lock_not_true:not_future_distributed_or_mobile_runtime_implementation",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
     {
-      "actual_detection": "RELEASE_INTEGRITY_FAIL",
-      "actual_result": "RELEASE_INTEGRITY_FAIL",
+      "actual_detection": "RELEASE_INTEGRITY_DIRTY",
+      "actual_result": "RELEASE_INTEGRITY_DIRTY",
       "attack_type": "dirty_state_simulation",
       "case_category": "provenance_drift",
       "case_id": "dirty_working_tree_simulated",
@@ -528,13 +528,13 @@
       "expected_detection": "RELEASE_INTEGRITY_DIRTY",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release manifest clean flag flipped and re-signed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest",
+      "reason": "working_tree_dirty",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     },
     {
-      "actual_detection": "RELEASE_INTEGRITY_FAIL",
-      "actual_result": "RELEASE_INTEGRITY_FAIL",
+      "actual_detection": "RELEASE_INTEGRITY_STALE",
+      "actual_result": "RELEASE_INTEGRITY_STALE",
       "attack_type": "stale_commit_simulation",
       "case_category": "provenance_drift",
       "case_id": "stale_commit_reference_simulated",
@@ -542,16 +542,16 @@
       "expected_detection": "RELEASE_INTEGRITY_STALE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release manifest commit changed and re-signed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest",
+      "reason": "git_commit_stale",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     }
   ],
-  "adversarial_digest": "9f22ef52cb8e4daead59886230726b82d0a31082168f8a750b910a59e2206488",
+  "adversarial_digest": "ef3f6e5c9f894a2eee617d4ce6198d5aa6b21144d004a2c9090105566323a189",
   "adversarial_harness_type": "adversarial_local_trust_negative_test_harness",
   "adversarial_harness_version": "18.7G",
-  "adversarial_payload_digest": "0a46a21bb36c072dd5aaf86b7ad4f8cd737b5c931afa69cb6fc7da29808de807",
-  "adversarial_signature": "f933ef4b4d5bf30a2ace2f6fc77fc6b07f093ebd032c7df21ded4dba174b41b3",
+  "adversarial_payload_digest": "0f08c594a27c3f9810ff4aea4085c00bdac4955ffb4964f3bc9d8b6e313420a3",
+  "adversarial_signature": "d55ff0cff48f0a4d3ec62ea516dc4411fdeba1a71baa7f76dd19eb440e8fdf33",
   "adversarial_status": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
   "adversarial_summary": {
     "all_required_cases_passed": true,
@@ -568,14 +568,14 @@
     "toolchain_drift_cases": 3,
     "total_cases": 39
   },
-  "bound_capstone_digest": "4a1a687ef7ef7b2247b9a9e2a9c692c28656e69a7a16e231a8de9bfc3f5dc2ad",
-  "bound_constitutional_gates_digest": "f2017ebbf4b1041ea9d53c4601c4a8b86641964f22b81e1e8e31972d69e7eee0",
-  "bound_evidence_chain_digest": "f9255c00a3546ea7e448885d287ba83887e6f545aa9277521a66a3cb12a98151",
-  "bound_execution_envelope_digest": "aaec5135f6e58f6a798268dd661aa8f9eb9ad1242c2aa32f7b158d7f8bdbf5ff",
-  "bound_manifest_digest": "8fac0d92c99c7d3fad1aa9b7232b0fa1b694d56f747c9b75caee90020fe09142",
-  "bound_regression_matrix_digest": "1f6ac01889c69859edd715107c4e864988047420a623edc057179784f2fb104a",
-  "bound_release_integrity_digest": "31a4b24627fabea710aa8ca058e0f3cfff4a2178cace5a6b9b7b9e32547f64a2",
-  "bound_toolchain_guard_digest": "bac0fc0edcb2a848b25ff7e674c932e6016a4b6325ad892a02bfe87e6da459e5",
+  "bound_capstone_digest": "c2f3c2c7340a69a39fa1c66e12521fc42e4cbc2b913b57aae3bddd2e0fe6ad87",
+  "bound_constitutional_gates_digest": "4ce9e18cfcee2666377e83015efe36afe8afbe44e329587017f09aa2d143213c",
+  "bound_evidence_chain_digest": "5303d4cbb5928c7e07da2b946352648e547647638ccb1e7cca9412ecee93c6e4",
+  "bound_execution_envelope_digest": "1036abad1698ea72f5fd31635d8012410fa06339413f1386066bf0b21a4d18ef",
+  "bound_manifest_digest": "9600088e47d5cfe7004796e707722542f330a0f63a189e3b6280b02f27d6afe4",
+  "bound_regression_matrix_digest": "b5bd8be825d27814beae1bccb0cb1e111b5d2d72fe2b46e385b088f2bc90cda7",
+  "bound_release_integrity_digest": "d92111d55019c2d8eaa05b5e35cfbba50b47877a6c1a9ac02157fda0074a0dd8",
+  "bound_toolchain_guard_digest": "8acf642ac6f9f004806ab91e06878082f04de6364ecaa18ee656cb76bbf2fffe",
   "boundary_confirmation_summary": {
     "certificationClaimed": false,
     "executionGateBehaviorChanged": false,
@@ -590,16 +590,16 @@
     "skgDtnAuthorityAdded": false,
     "skgDtnExternalNonAuthoritative": true
   },
-  "created_at": "2026-07-11T11:06:00+00:00",
+  "created_at": "2026-07-11T19:01:26+00:00",
   "git_branch": "main",
-  "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
+  "git_commit": "d36aa22b5e59cae61c893edabd97a701e620b962",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": true,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main [ahead 9]\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/external_boundary.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h6_external_boundary_hardening.py",
+    "branch_status_short": "## main...origin/main [ahead 11]\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M reports/H7_DETERMINISTIC_EXECUTION_INTEGRITY_REPORT.md\n M sbp_lex/execution/capability_store.py\n M sbp_lex/runtime/approved_runtime_baselines.json\n M sbp_lex/runtime/measured_startup.py\n M tests/test_h7_deterministic_execution_integrity.py\n M tests/test_h8_measured_startup_runtime_identity.py",
     "git_branch": "main",
-    "git_commit": "10c80d8aa9d2d486cef757d1e9f858d94ed43fd8",
+    "git_commit": "d36aa22b5e59cae61c893edabd97a701e620b962",
     "synced_to_origin_branch": false,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false

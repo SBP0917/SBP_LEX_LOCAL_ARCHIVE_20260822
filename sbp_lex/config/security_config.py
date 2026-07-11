@@ -45,6 +45,7 @@ REQUIRED_CORE_TOKENS = [
     "classification",
     "licensing",
     "governance",
+    "grc",
     "domain",
     "aurion",
     "execution_boundary",

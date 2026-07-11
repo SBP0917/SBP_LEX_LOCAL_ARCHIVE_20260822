@@ -127,7 +127,12 @@ DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
         "external_substrates/shared/source_trust_store.py",
         "external_substrates/shared/external_replay_store.py",
         "sbp_lex/api/server.py", "sbp_lex/api/access_control.py",
-        "sbp_lex/execution/execution_gate.py", "sbp_lex/pipeline/dual_runner.py",
+        "sbp_lex/execution/execution_gate.py", "sbp_lex/execution/capability.py",
+        "sbp_lex/execution/capability_store.py",
+        "sbp_lex/execution/schemas/execution_capability.schema.json",
+        "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
+        "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
+        "sbp_lex/pipeline/dual_runner.py",
         "outputs/local_trust_root_manifest.json",
         "outputs/local_execution_environment_trust_envelope.json",
         "outputs/local_evidence_chain.json",
@@ -535,6 +540,29 @@ def approved_baseline(payload: Mapping[str, Any], requested: str | None = None) 
     return item
 
 
+def _baseline_descends_from(
+    payload: Mapping[str, Any], baseline: Mapping[str, Any], ancestor_identifier: str,
+) -> bool:
+    by_identifier = {
+        str(item["baseline_identifier"]): item
+        for item in payload.get("baselines", ())
+        if isinstance(item, Mapping) and item.get("baseline_identifier")
+    }
+    cursor = baseline
+    visited: set[str] = set()
+    while str(cursor.get("baseline_identifier", "")) != ancestor_identifier:
+        identifier = str(cursor.get("baseline_identifier", ""))
+        prior_identifier = str(cursor.get("prior_baseline_identifier", ""))
+        if not identifier or identifier in visited or not prior_identifier:
+            return False
+        visited.add(identifier)
+        prior = by_identifier.get(prior_identifier)
+        if prior is None or int(prior.get("sequence", 0)) >= int(cursor.get("sequence", 0)):
+            return False
+        cursor = prior
+    return True
+
+
 def compare_measurements(
     current: Mapping[str, Any], expected: Mapping[str, Any],
 ) -> list[DriftFinding]:
@@ -656,7 +684,9 @@ class MeasuredStartupService:
                         raise MeasuredStartupError("baseline_measurement_rollback", "critical")
                     if generation == anchor_generation and store["payload_digest"] != anchor.get("baseline_store_digest"):
                         raise MeasuredStartupError("baseline_measurement_replacement", "critical")
-                    if generation > anchor_generation and baseline.get("prior_baseline_identifier") != anchor.get("approved_baseline_identifier"):
+                    if generation > anchor_generation and not _baseline_descends_from(
+                        payload, baseline, str(anchor.get("approved_baseline_identifier", "")),
+                    ):
                         raise MeasuredStartupError("baseline_update_lineage_invalid", "critical")
                 current = measure_runtime(
                     self.repository_root, policy=self.policy, environ=self.environ,

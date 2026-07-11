@@ -6,12 +6,19 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "scripts/run_tests.bat",
     "sbp_lex/persistence/integrity_store.py",
     "sbp_lex/execution/execution_gate.py",
+    "sbp_lex/execution/capability.py",
+    "sbp_lex/execution/capability_store.py",
+    "sbp_lex/execution/schemas/execution_capability.schema.json",
+    "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
+    "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
     "sbp_lex/governance/procedural_truth_engine.py",
     "sbp_lex/governance/procedural_truth_runner.py",
+    "sbp_lex/governance/grc.py",
     "sbp_lex/authority_first/root_of_trust_runner.py",
     "sbp_lex/shared/hash_chain.py",
     "sbp_lex/shared/state_builder.py",
     "sbp_lex/pipeline/dual_runner.py",
+    "sbp_lex/runtime/canonical_runtime.py",
 )
 
 TRUSTED_REPORT_PATHS: tuple[str, ...] = (
