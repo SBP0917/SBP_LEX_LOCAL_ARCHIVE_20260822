@@ -15,6 +15,7 @@ from external_substrates.dtn.pathway_model import model_pathway
 from external_substrates.dtn.risk_potential_engine import evaluate_risk_potential
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.freshness import utc_timestamp
+from external_substrates.shared.package_identity import package_identity
 from external_substrates.shared.signal_envelope import build_signal_envelope, validate_signal_envelope
 from external_substrates.shared.signing import sign_payload, verify_signature
 from external_substrates.shared.source_attestation import summarise_sources
@@ -48,6 +49,7 @@ def build_dtn_signal_package(
     source_records: Sequence[Mapping[str, Any]],
     timestamp: str | None = None,
     signing_key: str | bytes | None = None,
+    transport_identity: str = "desktop-v1-local-adapter",
 ) -> dict[str, Any]:
     if skg_constraint_package.get("request_fingerprint") != request_fingerprint:
         raise ValueError("SKG and DTN request fingerprints must match")
@@ -91,6 +93,7 @@ def build_dtn_signal_package(
     package: dict[str, Any] = {
         "package_type": "external_dtn_signal_package",
         "package_version": DTN_PACKAGE_VERSION,
+        "schema_version": DTN_PACKAGE_VERSION,
         "request_fingerprint": request_fingerprint,
         "skg_constraint_digest": constraint_digest,
         "signals": signals,
@@ -117,7 +120,17 @@ def build_dtn_signal_package(
         "freshness_valid": all(signal["freshness_valid"] for signal in signals.values()),
         "consistency_valid": all(signal["consistency_valid"] for signal in signals.values()),
         "timestamp": package_timestamp,
+        "issued_at": package_timestamp,
+        "transport_identity": transport_identity,
     }
+    package["package_id"] = package_identity(
+        package_type=package["package_type"],
+        package_version=package["package_version"],
+        request_fingerprint=request_fingerprint,
+        issued_at=package_timestamp,
+        source_digests=[str(source.get("digest")) for source in sources],
+        transport_identity=transport_identity,
+    )
     package["dtn_contextual_verification_metadata"]["dtn_enrichment_hash"] = digest_mapping(
         package["dtn_contextual_verification_metadata"]
     )

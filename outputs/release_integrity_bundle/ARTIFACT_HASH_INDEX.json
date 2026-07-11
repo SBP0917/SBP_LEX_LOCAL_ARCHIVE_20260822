@@ -14,8 +14,8 @@
       "path": "outputs/local_trust_root_manifest.json",
       "reason": "Local trust root manifest.",
       "required": true,
-      "sha256": "a10252d97ef4c89df8ee7cd5ad4720a8b505a201b86f266cd105265d32b2a425",
-      "size_bytes": 7985
+      "sha256": "6a3cf30123a2683c6b4e7a27d9103db67242fdc2a27adaedebf51bd0402b91b6",
+      "size_bytes": 8352
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -24,7 +24,7 @@
       "path": "outputs/local_execution_environment_trust_envelope.json",
       "reason": "Runtime and verification environment provenance.",
       "required": true,
-      "sha256": "4d236bb37734ece9893f02b916cbdebb2a9cfdb572b15c8fc9bd909e0b01e5d9",
+      "sha256": "7bd7d82074a76219211764c2b6a6711caa7d4d2087b14665e402f7ab1ea4f34f",
       "size_bytes": 6923
     },
     {
@@ -34,7 +34,7 @@
       "path": "outputs/local_evidence_chain.json",
       "reason": "Report integrity and evidence-chain attestation.",
       "required": true,
-      "sha256": "a9b2a33a1194e250e58206d7dc2c55763ed86bc41b8fe1f0f188616c1d8c4395",
+      "sha256": "6bdfca9a6cd58d09fe2111354582cda7cd179264f47c5b2b8773ac32d16e7a63",
       "size_bytes": 9843
     },
     {
@@ -44,8 +44,8 @@
       "path": "outputs/local_trust_regression_matrix.json",
       "reason": "Local trust drift regression baseline.",
       "required": true,
-      "sha256": "20069e6c5fc19c76160359de38ee4c50385828daa71d5be7e062181be40e9e29",
-      "size_bytes": 11013
+      "sha256": "3446de15b131647a49d72612662092c9810295dd23211862877ab06dfee5836b",
+      "size_bytes": 11380
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -54,7 +54,7 @@
       "path": "outputs/local_constitutional_gates.json",
       "reason": "Local trust constitutional gate result.",
       "required": true,
-      "sha256": "eb29f7f59d429f23db2f98a1bbbbd47ac415c37d6eab31185d83ccbbc670e81c",
+      "sha256": "f5b1a6c16e1f568f0758ec09d9a46995c0bc46c7a55930eb250d1f125a6ad3a9",
       "size_bytes": 11603
     },
     {
@@ -64,7 +64,7 @@
       "path": "outputs/local_toolchain_guard.json",
       "reason": "Dependency and toolchain guard.",
       "required": true,
-      "sha256": "149d5883a9fd6f023452cf05df7ad7095bde854c174a1ee68bfb948e21f7db4c",
+      "sha256": "d8a5e23e3fe2db464149561c6f5305d6c4f4152996d9a5e45165493d9bb3cf88",
       "size_bytes": 26933
     },
     {
@@ -74,8 +74,8 @@
       "path": "outputs/local_trust_25_year_capstone.json",
       "reason": "25-year local trust completion lock.",
       "required": true,
-      "sha256": "9807af4b035d1bdb6fb6c46de3605314ddebb071a1caef81ddd6e1f45a75a8ec",
-      "size_bytes": 16399
+      "sha256": "aa5f827dd225e208ced555990615e863458f64481d3bc7a18702d7b310ca9c2b",
+      "size_bytes": 16819
     },
     {
       "artifact_group": "phase_reports",

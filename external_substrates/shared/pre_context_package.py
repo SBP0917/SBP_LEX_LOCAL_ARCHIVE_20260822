@@ -6,6 +6,7 @@ from typing import Any, Mapping
 from external_substrates.dtn.signal_builder import validate_dtn_signal_package
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.freshness import utc_timestamp
+from external_substrates.shared.package_identity import package_identity
 from external_substrates.shared.pre_context_schema import PRE_CONTEXT_REQUIRED_FIELDS, PRE_CONTEXT_SIGNAL_TYPES
 from external_substrates.shared.signal_envelope import validate_signal_envelope
 from external_substrates.shared.signing import sign_payload, verify_signature
@@ -39,6 +40,7 @@ def build_pre_context_package(
     nonce: str,
     timestamp: str | None = None,
     signing_key: str | bytes | None = None,
+    transport_identity: str = "desktop-v1-local-adapter",
 ) -> dict[str, Any]:
     if not validate_skg_signal_package(skg_package):
         raise ValueError("valid SKG package is required")
@@ -63,6 +65,7 @@ def build_pre_context_package(
         "package_type": "external_pre_context_signal_package",
         "request_fingerprint": request_fingerprint,
         "package_version": PRE_CONTEXT_PACKAGE_VERSION,
+        "schema_version": PRE_CONTEXT_PACKAGE_VERSION,
         "skg_package_digest": skg_package["digest"],
         "dtn_package_digest": dtn_package["digest"],
         "skg_truth_foundation_metadata": deepcopy(dict(skg_package.get("skg_truth_foundation_metadata", {}))),
@@ -74,7 +77,17 @@ def build_pre_context_package(
         "consistency_valid": skg_package.get("consistency_valid") is True and dtn_package.get("consistency_valid") is True,
         "timestamp": timestamp or utc_timestamp(),
         "nonce": nonce,
+        "transport_identity": transport_identity,
     }
+    package["issued_at"] = package["timestamp"]
+    package["package_id"] = package_identity(
+        package_type=package["package_type"],
+        package_version=package["package_version"],
+        request_fingerprint=str(request_fingerprint),
+        issued_at=str(package["issued_at"]),
+        source_digests=[str(source.get("digest")) for source in sources],
+        transport_identity=transport_identity,
+    )
     package["digest"] = digest_mapping(_digest_body(package))
     package["signature"] = sign_payload(_signature_body(package), signing_key)
     return package

@@ -1,1 +1,31 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"ExternalDTNSignalPackage","type":"object","required":["package_type","request_fingerprint","skg_constraint_digest","signals","digest","signature","timestamp"],"properties":{"package_type":{"const":"external_dtn_signal_package"},"request_fingerprint":{"type":"string","minLength":1},"skg_constraint_digest":{"type":"string","pattern":"^[a-f0-9]{64}$"},"signals":{"type":"object"},"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"},"signature":{"type":"string","minLength":1},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":true,"$defs":{"signal":{"type":"object","required":["request_fingerprint","signal_type","skg_constraint_digest","source_records","attestation_count","freshness_valid","consistency_valid","digest","signature","timestamp"],"properties":{"request_fingerprint":{"type":"string"},"signal_type":{"type":"string"},"skg_constraint_digest":{"type":"string"},"source_records":{"type":"array"},"attestation_count":{"type":"integer"},"freshness_valid":{"type":"boolean"},"consistency_valid":{"type":"boolean"},"digest":{"type":"string"},"signature":{"type":"string"},"timestamp":{"type":"string"}},"additionalProperties":true}}}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExternalDTNSignalPackage",
+  "type": "object",
+  "required": [
+    "package_type", "package_version", "schema_version", "package_id",
+    "request_fingerprint", "skg_constraint_digest", "signals", "source_records",
+    "source_summary", "dtn_contextual_verification_metadata", "freshness_valid",
+    "consistency_valid", "timestamp", "issued_at", "transport_identity", "digest", "signature"
+  ],
+  "properties": {
+    "package_type": {"const": "external_dtn_signal_package"},
+    "package_version": {"const": "1.0"},
+    "schema_version": {"const": "1.0"},
+    "package_id": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "request_fingerprint": {"type": "string", "minLength": 1},
+    "skg_constraint_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "signals": {"type": "object", "minProperties": 1},
+    "source_records": {"type": "array", "minItems": 1},
+    "source_summary": {"type": "object"},
+    "dtn_contextual_verification_metadata": {"type": "object"},
+    "freshness_valid": {"const": true},
+    "consistency_valid": {"const": true},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "transport_identity": {"type": "string", "minLength": 1},
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "signature": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

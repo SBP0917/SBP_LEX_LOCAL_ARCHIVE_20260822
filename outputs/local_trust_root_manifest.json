@@ -35,7 +35,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T09:23:50+00:00",
+  "created_at": "2026-07-11T10:27:43+00:00",
   "critical_file_hashes": [
     {
       "path": "main.py",
@@ -99,17 +99,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "1c5d98cb9f881cb7b093a8a99b1a20fabd8dd238",
-  "git_status_short": "M DEPLOYMENT_SECURITY.md\n M sbp_lex/api/server.py\n M sbp_lex/runtime/canonical_runtime.py\n M tests/conftest.py\n M tests/test_h3_network_transport_boundary.py\n M tests/test_h4a_security_state_persistence.py\n?? sbp_lex/runtime/approved_runtime_baselines.json\n?? sbp_lex/runtime/measured_startup.py\n?? tests/test_h8_measured_startup_runtime_identity.py",
+  "git_commit": "73d23877cdba1ed69196c1d3f08ec7d53ac479c4",
+  "git_status_short": "M external_substrates/demo/sample_bridge_manifest.json\n M external_substrates/demo/sample_dtn_package.json\n M external_substrates/demo/sample_pre_context_package.json\n M external_substrates/demo/sample_skg_package.json\n M external_substrates/dtn/schemas/dtn_signal_package.schema.json\n M external_substrates/dtn/signal_builder.py\n M external_substrates/shared/pre_context_package.py\n M external_substrates/skg/schemas/skg_signal_package.schema.json\n M external_substrates/skg/signal_builder.py\n M fixtures/phase19a/schemas/external_pre_context_package.schema.json\n?? external_substrates/shared/external_boundary.py\n?? external_substrates/shared/package_identity.py\n?? tests/test_h6_external_boundary_hardening.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 159874,
+    "size_bytes": 199859,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "70edda8b7a3371072fe5754969d518cd8eba5d5d74ddca8e7ef8ec015a67ad9f",
-  "manifest_payload_digest": "6428642e1842637bcb22f04c45574a805b5f342087e11bb139144d4c92892016",
-  "manifest_signature": "143d0f4352f32ff9e4fc9e4e2b2c396172a1186adfe485b10a75e6921459786c",
+  "manifest_digest": "e07a25a6c0989a2eacb96c78a945acc5e55e454980093402c406fb8188ed2fa7",
+  "manifest_payload_digest": "ea43efce4fefcbe3df20c88c6524f65da78d04aa0347df63c99bd29dff5208db",
+  "manifest_signature": "0740a3584bd2c155e1bc5699f338828c16d192d98d91b4c55d0aedf4e0f47070",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
