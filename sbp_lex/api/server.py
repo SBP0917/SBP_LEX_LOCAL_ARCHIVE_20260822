@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import json
+import os
+import socket
+import ssl
 from hashlib import sha256
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict
 from urllib.parse import parse_qs, urlparse
 
-from sbp_lex.api.access_control import decide_access, max_body_bytes, max_replay_count, request_security_fingerprint, security_mode
+from sbp_lex.api.access_control import configured_api_token, decide_access, max_body_bytes, max_replay_count, request_security_fingerprint, security_mode
 from sbp_lex.api.apk_contract import validate_runtime_status_contract
+from sbp_lex.api.credential_lifecycle import configured_registry
 from sbp_lex.config.environment import environment_security_report
 from sbp_lex.api.rate_limit import (
     AdmissionLease,
@@ -30,6 +34,17 @@ from sbp_lex.persistence.integrity_store import RUNTIME_INTEGRITY_STORE
 from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 from sbp_lex.runtime.event_bus import RUNTIME_EVENTS
 from sbp_lex.api.security_state_store import initialize_security_state_store
+from sbp_lex.api.transport_security import (
+    TRANSPORT_SECURITY_EVENTS,
+    TransportDecision,
+    active_transport_configuration,
+    build_ssl_context,
+    certificate_record_from_socket,
+    evaluate_transport,
+    initialize_transport_configuration,
+    normalise_ip,
+    validate_bind_policy,
+)
 
 
 def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: Dict[str, Any]) -> None:
@@ -92,10 +107,50 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
     def _client_host(self) -> str:
         return str(self.client_address[0]) if self.client_address else "unknown"
 
+    def _transport_decision(self) -> TransportDecision:
+        decision = evaluate_transport(
+            socket_peer=self._client_host(),
+            headers=list(self.headers.raw_items()),
+            configuration=active_transport_configuration(),
+            secure_transport=isinstance(self.connection, ssl.SSLSocket),
+            certificate=certificate_record_from_socket(self.connection),
+        )
+        if decision.evidence_event or not decision.allowed:
+            TRANSPORT_SECURITY_EVENTS.record(
+                decision.evidence_event or "transport_profile_failure",
+                reason=decision.reason,
+                evidence={
+                    "socket_peer": decision.socket_peer,
+                    "transport_profile": decision.transport_profile,
+                    "forwarding_chain": decision.forwarding_chain,
+                },
+            )
+            RUNTIME_EVENTS.emit(
+                "api_transport_observed" if decision.allowed else "api_transport_rejected",
+                {
+                    "reason": decision.reason,
+                    "socket_peer": decision.socket_peer,
+                    "transport_profile": decision.transport_profile,
+                    "forwarding_chain_digest": sha256(
+                        "\0".join(decision.forwarding_chain).encode("utf-8")
+                    ).hexdigest(),
+                    "trusted_proxy_identity_digest": sha256(
+                        (decision.trusted_proxy_identity or "").encode("utf-8")
+                    ).hexdigest(),
+                },
+            )
+        return decision
+
     def _authorize(
         self, method: str, body: bytes | None = None,
+        transport: TransportDecision | None = None,
     ) -> tuple[bool, int, Dict[str, Any], AdmissionLease | None]:
-        client_host = self._client_host()
+        transport = transport or self._transport_decision()
+        if not transport.allowed:
+            return False, transport.status, {
+                "error": transport.reason, "transport": transport.as_payload(),
+            }, None
+        client_host = transport.socket_peer
         path = self.path
         headers = self._headers_mapping()
         preflight = active_admission_controller().preflight_failure_limits(
@@ -155,6 +210,7 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
             }, None
         return True, 200, {
             "access": decision.as_payload(), "admission": lease.result.as_payload(),
+            "transport": transport.as_payload(),
         }, lease
 
     def _record_malformed(self, path: str) -> tuple[int, Dict[str, Any]] | None:
@@ -232,8 +288,14 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        transport = self._transport_decision()
+        if not transport.allowed:
+            return _json_response(
+                self, transport.status,
+                {"error": transport.reason, "transport": transport.as_payload()},
+            )
         preflight = active_admission_controller().preflight_failure_limits(
-            source_address=self._client_host(), endpoint=parsed.path,
+            source_address=transport.socket_peer, endpoint=parsed.path,
             failure_types=("malformed_request",),
         )
         if not preflight.allowed:
@@ -260,7 +322,9 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
             malformed = self._record_malformed(parsed.path)
             return _json_response(self, *(malformed or (400, {"error": "invalid_json"})))
 
-        ok, status, access_payload, lease = self._authorize("POST", body=body_bytes)
+        ok, status, access_payload, lease = self._authorize(
+            "POST", body=body_bytes, transport=transport,
+        )
         if not ok:
             return _json_response(self, status, access_payload)
         try:
@@ -317,12 +381,47 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
                 lease.release()
 
 
+class IPv6OnlyThreadingHTTPServer(ThreadingHTTPServer):
+    address_family = socket.AF_INET6
+
+    def server_bind(self) -> None:
+        self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
+        super().server_bind()
+
+
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     # Resolve before binding the socket. Invalid or non-test unauthenticated
     # configuration must prevent startup rather than fall through at request time.
-    security_mode()
+    mode = security_mode()
+    try:
+        transport = initialize_transport_configuration()
+        principal_source = os.environ.get("SBP_LEX_API_PRINCIPALS", "").strip()
+        authentication_configured = bool(
+            configured_api_token()
+            or (principal_source and configured_registry().snapshot())
+        )
+        bind_host = validate_bind_policy(
+            security_mode=mode, bind_host=host, configuration=transport,
+            authentication_configured=mode != "private" or authentication_configured,
+        )
+        ssl_context = build_ssl_context(transport)
+    except Exception as exc:
+        reason = (
+            str(exc) if exc.__class__.__name__ == "TransportConfigurationError"
+            else "transport_profile_initialization_failed"
+        )
+        event_id = "bind_policy_failure" if "bind" in reason or "authentication" in reason else "transport_profile_failure"
+        TRANSPORT_SECURITY_EVENTS.record(
+            event_id, reason=reason,
+            evidence={"bind_host": host, "security_mode": mode},
+        )
+        raise
     initialize_security_state_store(hold_writer=True)
     initialize_admission_controller(persist=True)
-    server = ThreadingHTTPServer((host, port), RuntimeAPIHandler)
-    print(f"SBP-LEX V1 Canonical Runtime API listening on http://{host}:{port}")
+    server_class = IPv6OnlyThreadingHTTPServer if normalise_ip(bind_host).version == 6 else ThreadingHTTPServer
+    server = server_class((bind_host, port), RuntimeAPIHandler)
+    if ssl_context is not None:
+        server.socket = ssl_context.wrap_socket(server.socket, server_side=True)
+    scheme = "https" if ssl_context is not None else "http"
+    print(f"SBP-LEX V1 Canonical Runtime API listening on {scheme}://{bind_host}:{port}")
     server.serve_forever()

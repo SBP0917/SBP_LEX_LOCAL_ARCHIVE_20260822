@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.api.request_auth import AUTH_HEADER, authenticate_signed_request
+from sbp_lex.api.transport_security import is_loopback_address
 
 LOCAL_HOSTS = {"127.0.0.1", "::1", "localhost"}
 ALLOWED_GET_PATHS = {
@@ -118,7 +119,7 @@ def max_replay_count() -> int:
 
 
 def is_local_client(client_host: str) -> bool:
-    return client_host in LOCAL_HOSTS or client_host.startswith("127.")
+    return client_host == "localhost" or is_loopback_address(client_host)
 
 
 def extract_bearer_token(headers: Mapping[str, str]) -> str | None:

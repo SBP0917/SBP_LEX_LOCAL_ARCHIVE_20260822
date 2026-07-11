@@ -98,6 +98,63 @@ values prevent listener startup. Rate/cooldown state is stored as bounded,
 safe digests in a separately signed H2D admission snapshot. It is not
 credential lifecycle, runtime audit, or canonical governed state.
 
+## Network and transport boundary
+
+The actual socket peer is the authoritative transport origin. Forwarding
+headers are ignored and evidenced unless the immediate peer matches an
+explicit trusted proxy address or bounded network and supplies the configured
+proxy identity. A trusted forwarding chain is strictly parsed, hop-bounded,
+and rejected when malformed, duplicated, ambiguous, or routed through an
+untrusted intermediary. An asserted localhost address never replaces the
+socket peer for local-mode authorization.
+
+Local mode accepts only validated IPv4 or IPv6 loopback bind literals. It
+rejects wildcard, hostname, non-loopback, zone-qualified, and ambiguous
+dual-stack binds before security-state initialization or socket creation.
+Private mode additionally requires an exact `SBP_LEX_BIND_ADDRESS`, configured
+API authentication, and an allowed transport profile.
+
+The default profile is inactive-infrastructure `LOCAL_PRIVATE`. Pilot TLS
+profiles are disabled until every activation and file setting is explicit:
+
+```text
+SBP_LEX_TRANSPORT_PROFILE=LOCAL_PRIVATE
+SBP_LEX_ALLOWED_TRANSPORT_PROFILES=LOCAL_PRIVATE
+SBP_LEX_PROXY_MODE=disabled
+
+# Explicit trusted-proxy pilot settings
+SBP_LEX_PROXY_MODE=trusted
+SBP_LEX_TRUSTED_PROXY_ADDRESSES=<comma-separated exact IP literals>
+SBP_LEX_TRUSTED_PROXY_NETWORKS=<optional bounded CIDRs>
+SBP_LEX_MAX_FORWARD_HOPS=3
+SBP_LEX_REQUIRED_PROXY_IDENTITY=<proxy identity>
+
+# Explicit private TLS/mTLS pilot settings
+SBP_LEX_TRANSPORT_PROFILE=PILOT_PRIVATE_TLS
+SBP_LEX_ALLOWED_TRANSPORT_PROFILES=PILOT_PRIVATE_TLS
+SBP_LEX_ENABLE_REMOTE_TRANSPORT=1
+SBP_LEX_TLS_ENABLED=1
+SBP_LEX_BIND_ADDRESS=<exact approved IP literal>
+SBP_LEX_TLS_CERT_FILE=<server certificate PEM>
+SBP_LEX_TLS_KEY_FILE=<server private-key PEM>
+
+# Additional mTLS settings
+SBP_LEX_TRANSPORT_PROFILE=PILOT_PRIVATE_MTLS
+SBP_LEX_ALLOWED_TRANSPORT_PROFILES=PILOT_PRIVATE_MTLS
+SBP_LEX_TLS_CA_FILE=<client CA PEM>
+SBP_LEX_TLS_REQUIRED_SERVICE_IDENTITY=<exact certificate SAN identity>
+SBP_LEX_TLS_REQUIRED_CERTIFICATE_PURPOSE=desktop-v1-transport
+SBP_LEX_REVOKED_CERTIFICATE_FINGERPRINTS=<optional SHA-256 denylist>
+```
+
+`REMOTE_PRODUCTION_DISABLED` cannot be activated. Remote plaintext is denied.
+Pilot TLS uses Python's server TLS context with TLS 1.2 minimum; pilot mTLS
+also requires client certificates, validates the configured CA, clientAuth
+purpose, expiry, exact service identity, and the bounded local fingerprint
+denylist. No CRL, OCSP, public PKI, automated issuance, or real production
+certificate infrastructure is claimed. Transport device identity never grants
+API scope and does not replace signed API identity or canonical controls.
+
 ## Runtime authority
 
 The APK remains observational/orchestration only. Execution authority remains inside the canonical runtime.
