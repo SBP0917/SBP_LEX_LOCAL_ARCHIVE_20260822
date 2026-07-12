@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R3 custody chain event","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}

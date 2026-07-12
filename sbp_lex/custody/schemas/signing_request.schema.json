@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R3 external signing request","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}

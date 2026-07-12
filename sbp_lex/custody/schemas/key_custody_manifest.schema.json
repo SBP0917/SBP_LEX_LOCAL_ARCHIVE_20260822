@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R3 external public-key custody manifest","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}

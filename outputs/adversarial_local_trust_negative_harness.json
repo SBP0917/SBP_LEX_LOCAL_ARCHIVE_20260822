@@ -547,11 +547,11 @@
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     }
   ],
-  "adversarial_digest": "df7a6024797ecfd3683019099b8e03e02dac6dd35deec8f87b3210c2fe78bdd4",
+  "adversarial_digest": "9d38023677588ce4bcbd4ae8ea57f07ea951f3dd231b99c17ff6f26719ed87e6",
   "adversarial_harness_type": "adversarial_local_trust_negative_test_harness",
   "adversarial_harness_version": "18.7G",
-  "adversarial_payload_digest": "6c314d9a5094b3f0fc7447bcbf2c6ef3d54a1cc1a08322d15932f2c1c4abf9aa",
-  "adversarial_signature": "532e3149a2a8e1f0796caeda1c5eb119bb08f01a863f266edc44c0384dae2d6d",
+  "adversarial_payload_digest": "70f3016e8f053de32b926a6587b047160f2d02a7e324b0c7e7f307650043623b",
+  "adversarial_signature": "ebbfae7d015d137171dde97e8382374e8dfedbb4aa57931c74ce26e2940e7a41",
   "adversarial_status": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
   "adversarial_summary": {
     "all_required_cases_passed": true,
@@ -568,14 +568,14 @@
     "toolchain_drift_cases": 3,
     "total_cases": 39
   },
-  "bound_capstone_digest": "56584319c6041087a3aa3750a1f792190f8682c7a6a5fbbaf4c1cdbc8f8f543d",
-  "bound_constitutional_gates_digest": "c0611eb691b74afe2dab3b16c8ee2feadf79f46c50ea798dfcffc058abbfe0bf",
-  "bound_evidence_chain_digest": "d04f26b0aeb5d5623b1c57e516bd004e4c94654528c741e59df0cb5c96397aac",
-  "bound_execution_envelope_digest": "21d452ed999355c04e6f327a4b9d0ffcf50f7310e473d66835ba2fe306665bc9",
-  "bound_manifest_digest": "91d1031e8dca5dfea57fae5707465ce7798a6ee14c5eed7da9aa3c015147f288",
-  "bound_regression_matrix_digest": "f110317052516213c7830eb6eac43f8e8398bf83f742a9134fe0f1cfb65ca4fb",
-  "bound_release_integrity_digest": "9d58100910d7dbdc910f67cb24ecb28fde863cafc0fe877054b826ba5d8dbae0",
-  "bound_toolchain_guard_digest": "a29e80d8165de45103ad5e419ef3249d781631801ad2ddb5160913067468565b",
+  "bound_capstone_digest": "53a1b98e04db49ff533baae691298192f985f82d996475ab67336549d00005da",
+  "bound_constitutional_gates_digest": "41aa63c3639316c51e8bf6ee429f36ebb18f5ce6a4431fe4831e3508c4db462d",
+  "bound_evidence_chain_digest": "f89093ef501872a7be1fa37156028a373e6c989dedad0e37d852d502e9b3af17",
+  "bound_execution_envelope_digest": "5d608493480b3d099c4e83e2bd6cf8efb79ec34c82545c07f582371f316458e0",
+  "bound_manifest_digest": "f4b90d102e9131967c27fd17605d2e7fb5567db5eb8640a7dd62457fa472b4c3",
+  "bound_regression_matrix_digest": "f1118b78586db3a3b6eb96be36b2e68e3407676938ed8026067385359baeab15",
+  "bound_release_integrity_digest": "3b0b42599b133eae5c8b3f49a98e9a601d5260f54e785cc165c06906fcfe03e6",
+  "bound_toolchain_guard_digest": "297574ffcf22136433b89070ae7a9137a75d69bb7ecf0f6daea2b892e1b5e51f",
   "boundary_confirmation_summary": {
     "certificationClaimed": false,
     "executionGateBehaviorChanged": false,
@@ -590,16 +590,16 @@
     "skgDtnAuthorityAdded": false,
     "skgDtnExternalNonAuthoritative": true
   },
-  "created_at": "2026-07-12T05:26:36+00:00",
+  "created_at": "2026-07-12T06:11:40+00:00",
   "git_branch": "main",
-  "git_commit": "42b17ba9c87a8d17a6d48c46b608ed68ce19efab",
+  "git_commit": "da2e90bed64169caad3989fe9557fd30e6a8a107",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M sbp_lex/local_trust/critical_paths.py\n M sbp_lex/runtime/approved_runtime_baselines.json\n M tests/test_h2ab_scoped_request_auth.py",
+    "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M sbp_lex/local_trust/critical_paths.py",
     "git_branch": "main",
-    "git_commit": "42b17ba9c87a8d17a6d48c46b608ed68ce19efab",
+    "git_commit": "da2e90bed64169caad3989fe9557fd30e6a8a107",
     "synced_to_origin_branch": true,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false

@@ -48,6 +48,21 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "sbp_lex/supply_chain/schemas/r2_sbom.schema.json",
     "sbp_lex/supply_chain/schemas/r2_build_manifest.schema.json",
     "tests/test_r2_supply_chain_build_provenance.py",
+    "sbp_lex/custody/__init__.py",
+    "sbp_lex/custody/common.py",
+    "sbp_lex/custody/custody_manifest.py",
+    "sbp_lex/custody/custody_chain.py",
+    "sbp_lex/custody/external_key_custody.py",
+    "sbp_lex/custody/recovery_media.py",
+    "sbp_lex/custody/custody_verifier.py",
+    "sbp_lex/custody/assurance.py",
+    "sbp_lex/custody/schemas/custody_manifest.schema.json",
+    "sbp_lex/custody/schemas/custody_event.schema.json",
+    "sbp_lex/custody/schemas/key_custody_manifest.schema.json",
+    "sbp_lex/custody/schemas/signing_request.schema.json",
+    "sbp_lex/custody/schemas/signing_response.schema.json",
+    "sbp_lex/custody/schemas/recovery_media.schema.json",
+    "tests/test_r3_external_custody_recovery.py",
 )
 
 TRUSTED_REPORT_PATHS: tuple[str, ...] = (
@@ -62,6 +77,7 @@ TRUSTED_REPORT_PATHS: tuple[str, ...] = (
     "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
     "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
     "reports/R2_SUPPLY_CHAIN_BUILD_PROVENANCE_REPORT.md",
+    "reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md",
 )
 
 TRUSTED_OUTPUT_PATHS: tuple[str, ...] = (
@@ -79,6 +95,7 @@ VERIFICATION_COMMANDS: tuple[str, ...] = (
     "python main.py replay",
     "python -m sbp_lex.supply_chain.assurance validate",
     "python -m sbp_lex.supply_chain.offline_verify",
+    "python -m sbp_lex.custody.assurance validate",
     "git diff --check",
     "git status --short",
 )
