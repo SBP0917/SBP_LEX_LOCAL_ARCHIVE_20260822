@@ -63,6 +63,14 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "sbp_lex/custody/schemas/signing_response.schema.json",
     "sbp_lex/custody/schemas/recovery_media.schema.json",
     "tests/test_r3_external_custody_recovery.py",
+    "sbp_lex/ivvp/__init__.py",
+    "sbp_lex/ivvp/common.py",
+    "sbp_lex/ivvp/package.py",
+    "sbp_lex/ivvp/verifier.py",
+    "sbp_lex/ivvp/schemas/package_manifest.schema.json",
+    "sbp_lex/ivvp/schemas/engineering_claims.schema.json",
+    "sbp_lex/ivvp/schemas/evidence_inventory.schema.json",
+    "tests/test_r4_independent_verification_package.py",
 )
 
 TRUSTED_REPORT_PATHS: tuple[str, ...] = (
@@ -78,6 +86,7 @@ TRUSTED_REPORT_PATHS: tuple[str, ...] = (
     "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
     "reports/R2_SUPPLY_CHAIN_BUILD_PROVENANCE_REPORT.md",
     "reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md",
+    "reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
 )
 
 TRUSTED_OUTPUT_PATHS: tuple[str, ...] = (
@@ -96,6 +105,7 @@ VERIFICATION_COMMANDS: tuple[str, ...] = (
     "python -m sbp_lex.supply_chain.assurance validate",
     "python -m sbp_lex.supply_chain.offline_verify",
     "python -m sbp_lex.custody.assurance validate",
+    "python -m sbp_lex.ivvp.verifier validation_package",
     "git diff --check",
     "git status --short",
 )

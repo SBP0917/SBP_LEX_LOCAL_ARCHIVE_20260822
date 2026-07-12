@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R4 engineering claims register","type":"object","required":["register_version","claims","claims_digest"],"additionalProperties":true}

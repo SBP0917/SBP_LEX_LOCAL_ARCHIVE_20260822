@@ -34,6 +34,10 @@
         "executed_by_manifest": false
       },
       {
+        "command": "python -m sbp_lex.ivvp.verifier validation_package",
+        "executed_by_manifest": false
+      },
+      {
         "command": "git diff --check",
         "executed_by_manifest": false
       },
@@ -47,7 +51,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-12T06:11:28+00:00",
+  "created_at": "2026-07-12T14:12:43+00:00",
   "critical_file_hashes": [
     {
       "path": "README.md",
@@ -414,20 +418,68 @@
       "sha256": "64f0bc010e29b2b643fa0d6837a1180eabf4fc96a3cd564360d13c770393ee12",
       "size_bytes": 17752,
       "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/__init__.py",
+      "sha256": "912f50eeecbcad53f539e068859537cf90d1005b4bd2f04b440bc030a93907db",
+      "size_bytes": 72,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/common.py",
+      "sha256": "98d22475e69da049e31231213c75c45c139626c95dc505fc48170def6aaab1ad",
+      "size_bytes": 2688,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/package.py",
+      "sha256": "770ba7df112b8f20d274da58287c82acc23d016ffb305f14eefb9e0a8f01b7a0",
+      "size_bytes": 16816,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/verifier.py",
+      "sha256": "c43f6ea2d5aabcbe2abb6b13981fe15a0764f07f06cc0f69b7cd9c895301d912",
+      "size_bytes": 10236,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/package_manifest.schema.json",
+      "sha256": "15691d232e60f8df47acd4099000ed10432392f334de07e5d520ee352b82aba2",
+      "size_bytes": 201,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/engineering_claims.schema.json",
+      "sha256": "035e6fbffa5578116e4d6df5568f0623fe89532a2657579839b3b94030bbeff3",
+      "size_bytes": 201,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/evidence_inventory.schema.json",
+      "sha256": "575e11b041f90ce3525934db9249885dc201cec60cc2a4f90f966dd41599cd1f",
+      "size_bytes": 207,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r4_independent_verification_package.py",
+      "sha256": "d3e6184f3a29ba1f87a1141998b4740a341e02e98a90b2077e8a178bf845e56c",
+      "size_bytes": 11660,
+      "status": "PRESENT"
     }
   ],
   "git_branch": "main",
-  "git_commit": "da2e90bed64169caad3989fe9557fd30e6a8a107",
-  "git_status_short": "M sbp_lex/local_trust/critical_paths.py\n?? reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md\n?? runtime_artifactspytest_tmp_r2_batch_final/\n?? sbp_lex/custody/\n?? tests/test_r3_external_custody_recovery.py",
+  "git_commit": "a9d9f57a2a92d1320add5aa3b60935fbd1e1f390",
+  "git_status_short": "M sbp_lex/local_trust/critical_paths.py\n?? reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md\n?? runtime_artifactspytest_tmp_r2_batch_final/\n?? sbp_lex/ivvp/\n?? tests/test_r4_independent_verification_package.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 679679,
+    "size_bytes": 727661,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "f4b90d102e9131967c27fd17605d2e7fb5567db5eb8640a7dd62457fa472b4c3",
-  "manifest_payload_digest": "9595e91647ea90e7554d165e63dd89d48bf31dca672b9a9a1629c82db1658711",
-  "manifest_signature": "0566abd7d0c7872bd5e5463750557ecb848328607f7451d8922e23a6638ca996",
+  "manifest_digest": "d2954ea556d0de75b778ae822b28fa5a0ee7f0344a8dc78308bf8a4778f78626",
+  "manifest_payload_digest": "643caa4d9cb48136f0ff6f25b618cd3bb607da4aa29fbbaacb8111d6a5a22f5b",
+  "manifest_signature": "e4802e0b2de365f2901867a620953948b4b0415148c3f2f4c3d1398d90e0994f",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -565,6 +617,12 @@
       "path": "reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md",
       "sha256": "12320795b6c18e69b746355ffb7c9c300021b76b6001527678d3588a95bcb1af",
       "size_bytes": 7175,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
+      "sha256": "481c0ef8f7481af1ba6d27fa0d8fda32e87f035eaf5ee8f70c03211b9caf937b",
+      "size_bytes": 7959,
       "status": "PRESENT"
     }
   ],

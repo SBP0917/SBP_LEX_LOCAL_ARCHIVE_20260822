@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R4 evidence inventory","type":"object","required":["inventory_version","evidence","evidence_inventory_digest"],"additionalProperties":true}

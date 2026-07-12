@@ -1,0 +1,631 @@
+{
+  "command_provenance": {
+    "commands": [
+      {
+        "command": "python -m compileall -q .",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python -m pytest -q",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "scripts\\run_tests.bat",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python main.py",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python main.py replay",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python -m sbp_lex.supply_chain.assurance validate",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python -m sbp_lex.supply_chain.offline_verify",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python -m sbp_lex.custody.assurance validate",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "python -m sbp_lex.ivvp.verifier validation_package",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "git diff --check",
+        "executed_by_manifest": false
+      },
+      {
+        "command": "git status --short",
+        "executed_by_manifest": false
+      }
+    ],
+    "path_note": "Manifest records intended verification commands only; it does not execute them.",
+    "python_executable_path": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+  },
+  "created_at": "2026-07-12T14:12:43+00:00",
+  "critical_file_hashes": [
+    {
+      "path": "README.md",
+      "sha256": "badd4dbcad388d2b4cbe70cf98fded186fa5cc67e74b08b7632830d4121da13a",
+      "size_bytes": 7179,
+      "status": "PRESENT"
+    },
+    {
+      "path": "main.py",
+      "sha256": "f5b7a59fff0b00ad90efd1c3ef1a93d79188a1b5d4461097fb2684654938cecc",
+      "size_bytes": 3058,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_tests.bat",
+      "sha256": "691ad283d78105bf05b56ecf1ae86c1e9cd7823ff1d89ccd2c5a01b3bd9b70fb",
+      "size_bytes": 1444,
+      "status": "PRESENT"
+    },
+    {
+      "path": "pytest.ini",
+      "sha256": "fe7dd7849b155044cd759231cf872cb5a5433e7dcad12c85c6f0e59185c9cc19",
+      "size_bytes": 163,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/persistence/integrity_store.py",
+      "sha256": "079d68c209b1da23ae989514fce1ab69dfac39ee3d3d87754b7ff4869a8956bb",
+      "size_bytes": 9756,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/execution_gate.py",
+      "sha256": "f769050867c89d1e735a2ba06e66d1ff221d46a679af462b6835b0bb1e8d5c42",
+      "size_bytes": 17913,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/capability.py",
+      "sha256": "74b7a8b5d8d67d0a3d4a10e6b25f42efd5608786ca6ad8b827e163bc6db11993",
+      "size_bytes": 72818,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/capability_store.py",
+      "sha256": "b249a42d5e0e3fbc4fba8f437f942ec2a3b41bb95c4996daffda082f648e2e5a",
+      "size_bytes": 36230,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/schemas/execution_capability.schema.json",
+      "sha256": "8cea6e09e78236e918494ce08eec7f339461d5d164760590104d68da824d28e1",
+      "size_bytes": 4530,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
+      "sha256": "29410058f978e32a38bc88ff0c66c43d0b9335e6591e0ecfa22232d4d6dc6f53",
+      "size_bytes": 2568,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
+      "sha256": "351c3c4f7530ea18234cc71b728030248a4b52661d1763a5adab0da8d37e4cb7",
+      "size_bytes": 1479,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/__init__.py",
+      "sha256": "ee22cb231bf6ff73313cbb9580491fb2fb4f4bbbf25b7883e55b34fdebf4b6e7",
+      "size_bytes": 737,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/model.py",
+      "sha256": "686e57939e3c48ca90f36d2f7cb5867b295cc1b6b37fae64f3d7e40af52efdf5",
+      "size_bytes": 10726,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/verifier.py",
+      "sha256": "e0c3fac902f4ab315551ba21f4d6b7d049585d5150d139f30ee7e2128c697787",
+      "size_bytes": 34850,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/assurance.py",
+      "sha256": "b4b46a78c0f9b8b8784525cf6067e23ff8d3d7e3152a224c3f96c89cef9627a2",
+      "size_bytes": 7959,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/formal_state.schema.json",
+      "sha256": "13093a711fbe10d5f940da5881f49b708855003ae7d97d3966b47ee567b2fd13",
+      "size_bytes": 1865,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/transition_record.schema.json",
+      "sha256": "56109ad26a34fe5551cc5fb33cc8f6ba9f85c50778ae092de8f4bf60b193b742",
+      "size_bytes": 1311,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/formal/schemas/lineage_node.schema.json",
+      "sha256": "f14a15fd73e643076d82e7f0edd84fcb17a66bccd16ad7459afe2e2d7a2e8b84",
+      "size_bytes": 1395,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/governance/procedural_truth_engine.py",
+      "sha256": "5e2302e80876608ee9df64c9daa4abcc10d285aacbf7f52f093d10cb9d1617be",
+      "size_bytes": 10626,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/governance/procedural_truth_runner.py",
+      "sha256": "f6e6dc3027cb3ee0c0e99a8f5985ef44039067f9c483813d563e12084bf742cc",
+      "size_bytes": 2297,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/governance/grc.py",
+      "sha256": "4657c2ce3a26c572abb7014b20eeec4488c9f62f0a71ca16df2ce7b47526ec70",
+      "size_bytes": 3761,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/authority_first/root_of_trust_runner.py",
+      "sha256": "8082f404df520da2055d0fc5942aa8ac300d853d7cf6af87307ee1b517550213",
+      "size_bytes": 9071,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/shared/hash_chain.py",
+      "sha256": "d6ee621a9538d6ea1c67ca2b524e1244c7deaa3b801c2dbdab11337e0884ccc5",
+      "size_bytes": 2450,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/shared/state_builder.py",
+      "sha256": "8f256da161f0ff29542d240d3fc681d54c12e78f9740ecdfc9a6032170ca3ddf",
+      "size_bytes": 5946,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/pipeline/dual_runner.py",
+      "sha256": "8979a0db88815673227bd896e711bcd86396a4696351413f618f78b2248bba37",
+      "size_bytes": 1765,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/runtime/canonical_runtime.py",
+      "sha256": "fb7d810a07f53fb087481c08e57e50cebf9cd926fb9907486ce74d3725c21c82",
+      "size_bytes": 7646,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/__init__.py",
+      "sha256": "8c7d94c890f8c6750ba0f2ef66e4751c9d0c2ae7538a506a9a580aa9c9f0e97a",
+      "size_bytes": 365,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/common.py",
+      "sha256": "ec5320715120f3b717b5d8740d721a03ae57991fccbfb5df99d6f33d52791208",
+      "size_bytes": 8254,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/inventory.py",
+      "sha256": "55499be5d8080c3331c518a161ce81dfbcb920cced13cf721ffa339cefe0dcd1",
+      "size_bytes": 18082,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/manifest.py",
+      "sha256": "d92d5de796867faffae0b9fa21ce83e898ff54be4a57ab1197e5ffd77e99a995",
+      "size_bytes": 10356,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/backup.py",
+      "sha256": "4c0455f084b0b6cfe592a073a3c9e84c55cb6270ea3f663ba78becf5baa05647",
+      "size_bytes": 6208,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/restore.py",
+      "sha256": "b085f7bce6ee44296a7081f1d5580408d1ea5d704d723f7a042b0b5fd98e0f65",
+      "size_bytes": 13897,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/recovery_drill.py",
+      "sha256": "4544514e524ed5ecde41996c2dd2660c32672fb91fd90a5c83005ccc21712903",
+      "size_bytes": 7841,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/schemas/recovery_inventory.schema.json",
+      "sha256": "7289863bb21a86d463579bc1a0ed996cd36d6afe32f277b0f1441e85a5b356e7",
+      "size_bytes": 774,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json",
+      "sha256": "94299f1e3dbc62d221db3e58eeda6cc95c325ca39162afaecee8f07060cce033",
+      "size_bytes": 491,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r1_canonical_backup_recovery.py",
+      "sha256": "fa57e3cd9207265c9bb406d5d394c185778b4a927685fa19fb82e6120de5cce4",
+      "size_bytes": 26276,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/recovery_critical_inventory.json",
+      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
+      "size_bytes": 10214,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/r1_recovery_drill.json",
+      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
+      "size_bytes": 559,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/__init__.py",
+      "sha256": "13fb47133663539892d9d91f5e71dcc5b7a46d2b482a21263efa5ce55b2410d1",
+      "size_bytes": 71,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/common.py",
+      "sha256": "bfc45612a20eb73f1e2a3ee131cbf10c571c0632cddcd05e0e643f7f14557951",
+      "size_bytes": 4439,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/provenance.py",
+      "sha256": "e4208f98936fe61cb729c65d9b3884dad285824277141d0166f7293a8ecbd705",
+      "size_bytes": 16104,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/assurance.py",
+      "sha256": "23e57e15d1d8155ab137f40fcb96ed5049d80e2af0fc9bc0f36d8da6f6db804e",
+      "size_bytes": 9808,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/offline_verify.py",
+      "sha256": "afb2a80bc92006ca98d522e77bd0ae8cbcb456f70c64485b6245674a9daebfee",
+      "size_bytes": 1141,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/schemas/r2_sbom.schema.json",
+      "sha256": "81463a2deb1f8d53516ac9e8bff1925ffc2d44be926f7d7414dbb7a8a48f69c9",
+      "size_bytes": 244,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/supply_chain/schemas/r2_build_manifest.schema.json",
+      "sha256": "c486cfe9d0a8b4dfba17a8fd8aed3f22d8ed44f314813663494be26ccb038db1",
+      "size_bytes": 219,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r2_supply_chain_build_provenance.py",
+      "sha256": "350a521dace346023c30817fef0c93928daaf58bae48310de7886278d15c1233",
+      "size_bytes": 12583,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/__init__.py",
+      "sha256": "365e4dc407dc1a79067267467538ac94d75ac5f70f0ffbe913c3d2b7a1524a30",
+      "size_bytes": 70,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/common.py",
+      "sha256": "644c2556fbf2c55a697bafe81d5f1293b4a83c8af2d2a1e93cf66107bebf6e11",
+      "size_bytes": 4563,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/custody_manifest.py",
+      "sha256": "eec60c0333296215ffd087de5a936d3cbae0cfc8378004d0ba08de2f2d1247bb",
+      "size_bytes": 7599,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/custody_chain.py",
+      "sha256": "7bc6bd64c42c0924c193b663774588615bd2544a3a87c46025b06317d3aa697a",
+      "size_bytes": 3420,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/external_key_custody.py",
+      "sha256": "efda083765c2e335e01444cd08c375d6a0a93fc95b7c360e54647fe9b904caa2",
+      "size_bytes": 8170,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/recovery_media.py",
+      "sha256": "57ef486842a63e6ca564570ed4d33fbd2bc461a78e55ca2c47c6c20fb58a7818",
+      "size_bytes": 4064,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/custody_verifier.py",
+      "sha256": "88462b5ab83a9b364c8ac984d156bb20f1aedf9ffe414b024a7819713161425e",
+      "size_bytes": 3107,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/assurance.py",
+      "sha256": "d439543d6a4ed08d5c6cb5101c1e3737206702d52fffca1a684bad5b059fd3fa",
+      "size_bytes": 3969,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/custody_manifest.schema.json",
+      "sha256": "93a658981666c488abf09ca7445a3df272d31c12e6d181223a67e8564c418e5d",
+      "size_bytes": 205,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/custody_event.schema.json",
+      "sha256": "b333556ad323ad87777a6b4e45886ba8847614bcb62a2aaa6496ae6680246198",
+      "size_bytes": 199,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/key_custody_manifest.schema.json",
+      "sha256": "2541ea8792e8d2c103b87bf5c830e8d03d109e263bfddb2b98e2788afc59c88a",
+      "size_bytes": 216,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/signing_request.schema.json",
+      "sha256": "bec37a5c71718209bd34428c4ce853eaceb6e7aee7f623ad4f9e5bc5e7b6d849",
+      "size_bytes": 204,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/signing_response.schema.json",
+      "sha256": "fba3467b808732c3346b4a02d83759424464215289450feb199dd872e40d13db",
+      "size_bytes": 205,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/custody/schemas/recovery_media.schema.json",
+      "sha256": "464a4c64e2e13d5f5ee1fbfcea213857f6fa652db4b42788562b83c4a5eed9fb",
+      "size_bytes": 215,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r3_external_custody_recovery.py",
+      "sha256": "64f0bc010e29b2b643fa0d6837a1180eabf4fc96a3cd564360d13c770393ee12",
+      "size_bytes": 17752,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/__init__.py",
+      "sha256": "912f50eeecbcad53f539e068859537cf90d1005b4bd2f04b440bc030a93907db",
+      "size_bytes": 72,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/common.py",
+      "sha256": "98d22475e69da049e31231213c75c45c139626c95dc505fc48170def6aaab1ad",
+      "size_bytes": 2688,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/package.py",
+      "sha256": "770ba7df112b8f20d274da58287c82acc23d016ffb305f14eefb9e0a8f01b7a0",
+      "size_bytes": 16816,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/verifier.py",
+      "sha256": "c43f6ea2d5aabcbe2abb6b13981fe15a0764f07f06cc0f69b7cd9c895301d912",
+      "size_bytes": 10236,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/package_manifest.schema.json",
+      "sha256": "15691d232e60f8df47acd4099000ed10432392f334de07e5d520ee352b82aba2",
+      "size_bytes": 201,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/engineering_claims.schema.json",
+      "sha256": "035e6fbffa5578116e4d6df5568f0623fe89532a2657579839b3b94030bbeff3",
+      "size_bytes": 201,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/ivvp/schemas/evidence_inventory.schema.json",
+      "sha256": "575e11b041f90ce3525934db9249885dc201cec60cc2a4f90f966dd41599cd1f",
+      "size_bytes": 207,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r4_independent_verification_package.py",
+      "sha256": "d3e6184f3a29ba1f87a1141998b4740a341e02e98a90b2077e8a178bf845e56c",
+      "size_bytes": 11660,
+      "status": "PRESENT"
+    }
+  ],
+  "git_branch": "main",
+  "git_commit": "a9d9f57a2a92d1320add5aa3b60935fbd1e1f390",
+  "git_status_short": "M sbp_lex/local_trust/critical_paths.py\n?? reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md\n?? runtime_artifactspytest_tmp_r2_batch_final/\n?? sbp_lex/ivvp/\n?? tests/test_r4_independent_verification_package.py",
+  "integrity_store_status_if_available": {
+    "path": "runtime_artifacts/integrity_store.jsonl",
+    "size_bytes": 727661,
+    "status": "PRESENT"
+  },
+  "local_trust_status": "LOCAL_TRUST_VALID",
+  "manifest_digest": "d2954ea556d0de75b778ae822b28fa5a0ee7f0344a8dc78308bf8a4778f78626",
+  "manifest_payload_digest": "643caa4d9cb48136f0ff6f25b618cd3bb607da4aa29fbbaacb8111d6a5a22f5b",
+  "manifest_signature": "e4802e0b2de365f2901867a620953948b4b0415148c3f2f4c3d1398d90e0994f",
+  "manifest_type": "local_trust_root_manifest",
+  "manifest_version": "18.7B",
+  "phase_baseline": [
+    "Phase 15.5A complete",
+    "Phase 15.5B complete",
+    "Phase 15.5C complete",
+    "Phase 15.5D complete",
+    "Phase 15.6A complete",
+    "Phase 15.6B complete",
+    "Phase 18 complete",
+    "Phase 18.5 complete",
+    "Phase 18.6 complete",
+    "RED-20A complete",
+    "RED-20B complete",
+    "RED-20C complete",
+    "RED-20D complete",
+    "Post-RED-20 integrity-store quarantine complete",
+    "SBP Operator Assistant V1 complete",
+    "Phase 19 not started"
+  ],
+  "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "python_runtime_digest_if_available": "3c6a206b7d93cca823934a83732220dcffd413fd1036d9fb82eebb64599cf7f3",
+  "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+  "quarantine_evidence_status_if_available": {
+    "path": "runtime_artifacts/quarantine",
+    "status": "MISSING"
+  },
+  "replay_baseline": {
+    "latest_verified_replay": "MATCHED_RECORDED_OUTSIDE_LOCAL_TRUST"
+  },
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root_digest_scope": "relative_paths_only",
+  "runtime_baseline": {
+    "latest_verified_runtime": "RECORDED_OUTSIDE_LOCAL_TRUST"
+  },
+  "signature_mode": "LOCAL_TRUST_DETERMINISTIC_PLACEHOLDER",
+  "test_baseline": {
+    "expected_suite": "pytest",
+    "latest_verified_count": 243
+  },
+  "trusted_output_hashes": [
+    {
+      "path": "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
+      "sha256": "8669b8390f202872bab0e171eda84345624e9ccb9df69452f1ed28db6dbd7c85",
+      "size_bytes": 3623,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/phq_formal_architecture_assurance.json",
+      "sha256": "6e668c383e4515ab23e1683c6727586290d38d99167a22c35143eaa263e3e9ca",
+      "size_bytes": 113320,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/recovery_critical_inventory.json",
+      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
+      "size_bytes": 10214,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/r1_recovery_drill.json",
+      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
+      "size_bytes": 559,
+      "status": "PRESENT"
+    }
+  ],
+  "trusted_report_hashes": [
+    {
+      "path": "reports/PHASE_18_PROCEDURAL_TRUTH_BINDING_REPORT.md",
+      "sha256": "49a80e8852187c8f4cbdddc5a88360fde01acdd351e5681c44440e6cd8ec8173",
+      "size_bytes": 4991,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_5_PRE_ACTIVATION_AUTHORITY_BOUNDARY_AUDIT.md",
+      "sha256": "aa1a978726991e49ebbd2de6ae7ed386c9d73939325cf29eb5c3423c9bc053df",
+      "size_bytes": 6168,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_6_HISTORICAL_AUDIT_MUTATION_ATTACK_REPORT.md",
+      "sha256": "668eec9860c6eb9b8eb1acb6f791bdb8c4f0982d8fbc145ba7c91340a830ad42",
+      "size_bytes": 5578,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_RED_20A_ATTACK_REPORT.md",
+      "sha256": "02303a33846318027fa1224692d4cc01dc1031b0fa04c7f19b850f39a7b9644a",
+      "size_bytes": 5820,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_RED_20B_ATTACK_REPORT.md",
+      "sha256": "da8f135192a71d6ff87d91339d99f4f8cc6c5675b969fa4db8023a3fec7c7a88",
+      "size_bytes": 7068,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_RED_20C_ATTACK_REPORT.md",
+      "sha256": "5b0db78091b98151a61dd0072aa17717f0fa2d556f07b9d9af20a059313259bb",
+      "size_bytes": 7293,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_RED_20D_ATTACK_REPORT.md",
+      "sha256": "599b6d3fa8d642524db293511d4875e7f1df7960ae297b3a82787d8c13bf5cb2",
+      "size_bytes": 7313,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
+      "sha256": "db821f8e95d7e0d1d0882782baf4a6c145f2f915d98b62d52df68e895be37c87",
+      "size_bytes": 4690,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
+      "sha256": "62cbb3bc889522319f9d537d7d6e5f0db888c009fcd843995a1c43aa4a593f98",
+      "size_bytes": 12264,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
+      "sha256": "7266d71bf8b023e4ab4eea143dae087b9d8c8f9254b28283cf01db32862fee90",
+      "size_bytes": 15126,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R2_SUPPLY_CHAIN_BUILD_PROVENANCE_REPORT.md",
+      "sha256": "19362e6522bfed80d1847d1c5efb485b81e5e149990207b8400f5406b9f76109",
+      "size_bytes": 9157,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md",
+      "sha256": "12320795b6c18e69b746355ffb7c9c300021b76b6001527678d3588a95bcb1af",
+      "size_bytes": 7175,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
+      "sha256": "481c0ef8f7481af1ba6d27fa0d8fda32e87f035eaf5ee8f70c03211b9caf937b",
+      "size_bytes": 7959,
+      "status": "PRESENT"
+    }
+  ],
+  "validation_failures": [],
+  "working_tree_clean": false
+}
