@@ -35,7 +35,7 @@
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
     "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-11T23:22:41+00:00",
+  "created_at": "2026-07-12T01:24:03+00:00",
   "critical_file_hashes": [
     {
       "path": "README.md",
@@ -53,6 +53,12 @@
       "path": "scripts/run_tests.bat",
       "sha256": "691ad283d78105bf05b56ecf1ae86c1e9cd7823ff1d89ccd2c5a01b3bd9b70fb",
       "size_bytes": 1444,
+      "status": "PRESENT"
+    },
+    {
+      "path": "pytest.ini",
+      "sha256": "fe7dd7849b155044cd759231cf872cb5a5433e7dcad12c85c6f0e59185c9cc19",
+      "size_bytes": 163,
       "status": "PRESENT"
     },
     {
@@ -186,20 +192,92 @@
       "sha256": "fb7d810a07f53fb087481c08e57e50cebf9cd926fb9907486ce74d3725c21c82",
       "size_bytes": 7646,
       "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/__init__.py",
+      "sha256": "8c7d94c890f8c6750ba0f2ef66e4751c9d0c2ae7538a506a9a580aa9c9f0e97a",
+      "size_bytes": 365,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/common.py",
+      "sha256": "ec5320715120f3b717b5d8740d721a03ae57991fccbfb5df99d6f33d52791208",
+      "size_bytes": 8254,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/inventory.py",
+      "sha256": "55499be5d8080c3331c518a161ce81dfbcb920cced13cf721ffa339cefe0dcd1",
+      "size_bytes": 18082,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/manifest.py",
+      "sha256": "d92d5de796867faffae0b9fa21ce83e898ff54be4a57ab1197e5ffd77e99a995",
+      "size_bytes": 10356,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/backup.py",
+      "sha256": "4c0455f084b0b6cfe592a073a3c9e84c55cb6270ea3f663ba78becf5baa05647",
+      "size_bytes": 6208,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/restore.py",
+      "sha256": "b085f7bce6ee44296a7081f1d5580408d1ea5d704d723f7a042b0b5fd98e0f65",
+      "size_bytes": 13897,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/recovery_drill.py",
+      "sha256": "4544514e524ed5ecde41996c2dd2660c32672fb91fd90a5c83005ccc21712903",
+      "size_bytes": 7841,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/schemas/recovery_inventory.schema.json",
+      "sha256": "7289863bb21a86d463579bc1a0ed996cd36d6afe32f277b0f1441e85a5b356e7",
+      "size_bytes": 774,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json",
+      "sha256": "94299f1e3dbc62d221db3e58eeda6cc95c325ca39162afaecee8f07060cce033",
+      "size_bytes": 491,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_r1_canonical_backup_recovery.py",
+      "sha256": "fa57e3cd9207265c9bb406d5d394c185778b4a927685fa19fb82e6120de5cce4",
+      "size_bytes": 26276,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/recovery_critical_inventory.json",
+      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
+      "size_bytes": 10214,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/r1_recovery_drill.json",
+      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
+      "size_bytes": 559,
+      "status": "PRESENT"
     }
   ],
   "git_branch": "main",
-  "git_commit": "056d548a81b87360c03b8735e253b9d0836ede8b",
-  "git_status_short": "M README.md\n M sbp_lex/local_trust/critical_paths.py",
+  "git_commit": "517d9346a208a6043440dfd61a2c9d5c36aaf2dc",
+  "git_status_short": "MM outputs/adversarial_local_trust_negative_harness.json\nMM outputs/local_constitutional_gates.json\nMM outputs/local_evidence_chain.json\nMM outputs/local_execution_environment_trust_envelope.json\nMM outputs/local_toolchain_guard.json\nMM outputs/local_trust_25_year_capstone.json\nMM outputs/local_trust_regression_matrix.json\nMM outputs/local_trust_root_manifest.json\nA  outputs/r1_recovery_drill.json\nA  outputs/recovery_critical_inventory.json\nMM outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\nMM outputs/release_integrity_bundle/RELEASE_MANIFEST.json\nMM outputs/university_validation_dossier/DOSSIER_MANIFEST.json\nMM outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\nM  outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\nA  pytest.ini\nAM reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md\nM  sbp_lex/local_trust/critical_paths.py\nA  sbp_lex/recovery/__init__.py\nA  sbp_lex/recovery/backup.py\nA  sbp_lex/recovery/common.py\nA  sbp_lex/recovery/inventory.py\nA  sbp_lex/recovery/manifest.py\nA  sbp_lex/recovery/recovery_drill.py\nA  sbp_lex/recovery/restore.py\nA  sbp_lex/recovery/schemas/recovery_inventory.schema.json\nA  sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json\nMM sbp_lex/runtime/approved_runtime_baselines.json\nM  sbp_lex/runtime/measured_startup.py\nA  tests/test_r1_canonical_backup_recovery.py",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 495748,
+    "size_bytes": 599709,
     "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "2e12550f8e5462f96d9c2f4a3212f043d2363e91e1cd9df83446ae6d3f0dc2dc",
-  "manifest_payload_digest": "2b05a0164b6cf5f4a740656cf655a5ae02e431631b887ed24cbf55d7d1678682",
-  "manifest_signature": "2d4f07f288b2d096f31774af751439b25badbfbbe3482752c8eefba6a62ceb46",
+  "manifest_digest": "cd6cd26a393ba0982efc1b43af248151dfcf0ade1ffec7d631863070edff8cad",
+  "manifest_payload_digest": "0431c2b9ae0b69b216f8502829f387020583c54c4bb65d6463cca683eb8a12ea",
+  "manifest_signature": "8854a743c8a980ac0b429691628b9202dac2938ff97b92ee2feb09a377f8ecaa",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -251,6 +329,18 @@
       "path": "outputs/phq_formal_architecture_assurance.json",
       "sha256": "6e668c383e4515ab23e1683c6727586290d38d99167a22c35143eaa263e3e9ca",
       "size_bytes": 113320,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/recovery_critical_inventory.json",
+      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
+      "size_bytes": 10214,
+      "status": "PRESENT"
+    },
+    {
+      "path": "outputs/r1_recovery_drill.json",
+      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
+      "size_bytes": 559,
       "status": "PRESENT"
     }
   ],
@@ -307,6 +397,12 @@
       "path": "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
       "sha256": "62cbb3bc889522319f9d537d7d6e5f0db888c009fcd843995a1c43aa4a593f98",
       "size_bytes": 12264,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
+      "sha256": "7266d71bf8b023e4ab4eea143dae087b9d8c8f9254b28283cf01db32862fee90",
+      "size_bytes": 15126,
       "status": "PRESENT"
     }
   ],

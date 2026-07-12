@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sbp-lex.local/schemas/r1/sealed_backup_manifest.schema.json",
+  "title": "Desktop V1 R1 Sealed Backup Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "payload_digest", "integrity_signature"],
+  "properties": {
+    "payload": {"type": "object"},
+    "payload_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "integrity_signature": {"type": "object"}
+  }
+}

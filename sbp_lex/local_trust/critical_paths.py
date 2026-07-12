@@ -5,6 +5,7 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "README.md",
     "main.py",
     "scripts/run_tests.bat",
+    "pytest.ini",
     "sbp_lex/persistence/integrity_store.py",
     "sbp_lex/execution/execution_gate.py",
     "sbp_lex/execution/capability.py",
@@ -27,6 +28,18 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "sbp_lex/shared/state_builder.py",
     "sbp_lex/pipeline/dual_runner.py",
     "sbp_lex/runtime/canonical_runtime.py",
+    "sbp_lex/recovery/__init__.py",
+    "sbp_lex/recovery/common.py",
+    "sbp_lex/recovery/inventory.py",
+    "sbp_lex/recovery/manifest.py",
+    "sbp_lex/recovery/backup.py",
+    "sbp_lex/recovery/restore.py",
+    "sbp_lex/recovery/recovery_drill.py",
+    "sbp_lex/recovery/schemas/recovery_inventory.schema.json",
+    "sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json",
+    "tests/test_r1_canonical_backup_recovery.py",
+    "outputs/recovery_critical_inventory.json",
+    "outputs/r1_recovery_drill.json",
 )
 
 TRUSTED_REPORT_PATHS: tuple[str, ...] = (
@@ -39,11 +52,14 @@ TRUSTED_REPORT_PATHS: tuple[str, ...] = (
     "reports/PHASE_RED_20D_ATTACK_REPORT.md",
     "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
     "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
+    "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
 )
 
 TRUSTED_OUTPUT_PATHS: tuple[str, ...] = (
     "outputs/SBP_OPERATOR_ASSISTANT_V1_COMMIT_AND_TEST_REPORT.md",
     "outputs/phq_formal_architecture_assurance.json",
+    "outputs/recovery_critical_inventory.json",
+    "outputs/r1_recovery_drill.json",
 )
 
 VERIFICATION_COMMANDS: tuple[str, ...] = (

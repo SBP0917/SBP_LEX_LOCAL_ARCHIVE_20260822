@@ -29,7 +29,7 @@ This package is a reviewer-facing dossier for bounded assessment of the SBP-LEX 
 
 ## Current Repository Commit
 
-`056d548a81b87360c03b8735e253b9d0836ede8b`
+`517d9346a208a6043440dfd61a2c9d5c36aaf2dc`
 
 ## Review Scope
 

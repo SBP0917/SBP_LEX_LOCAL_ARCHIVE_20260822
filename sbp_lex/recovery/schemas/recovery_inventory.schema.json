@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sbp-lex.local/schemas/r1/recovery_inventory.schema.json",
+  "title": "Desktop V1 R1 Recovery Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["inventory_version", "recovery_version", "desktop_scope", "artefacts", "aggregate_digest"],
+  "properties": {
+    "inventory_version": {"const": "R1_DESKTOP_V1_RECOVERY_INVENTORY_V1"},
+    "recovery_version": {"const": "R1_DESKTOP_V1_RECOVERY_V1"},
+    "desktop_scope": {"const": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_PRIVATE_SINGLE_HOST_NO_NODE"},
+    "artefacts": {"type": "array", "minItems": 1, "maxItems": 512, "items": {"type": "object"}},
+    "aggregate_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
