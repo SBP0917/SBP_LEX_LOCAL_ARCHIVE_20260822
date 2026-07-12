@@ -40,6 +40,14 @@ CRITICAL_FILE_PATHS: tuple[str, ...] = (
     "tests/test_r1_canonical_backup_recovery.py",
     "outputs/recovery_critical_inventory.json",
     "outputs/r1_recovery_drill.json",
+    "sbp_lex/supply_chain/__init__.py",
+    "sbp_lex/supply_chain/common.py",
+    "sbp_lex/supply_chain/provenance.py",
+    "sbp_lex/supply_chain/assurance.py",
+    "sbp_lex/supply_chain/offline_verify.py",
+    "sbp_lex/supply_chain/schemas/r2_sbom.schema.json",
+    "sbp_lex/supply_chain/schemas/r2_build_manifest.schema.json",
+    "tests/test_r2_supply_chain_build_provenance.py",
 )
 
 TRUSTED_REPORT_PATHS: tuple[str, ...] = (
@@ -53,6 +61,7 @@ TRUSTED_REPORT_PATHS: tuple[str, ...] = (
     "reports/SBP_OPERATOR_ASSISTANT_V1_IMPLEMENTATION_REPORT.md",
     "reports/PHQ_FORMAL_DETERMINISTIC_ARCHITECTURE_REPORT.md",
     "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
+    "reports/R2_SUPPLY_CHAIN_BUILD_PROVENANCE_REPORT.md",
 )
 
 TRUSTED_OUTPUT_PATHS: tuple[str, ...] = (
@@ -68,6 +77,8 @@ VERIFICATION_COMMANDS: tuple[str, ...] = (
     "scripts\\run_tests.bat",
     "python main.py",
     "python main.py replay",
+    "python -m sbp_lex.supply_chain.assurance validate",
+    "python -m sbp_lex.supply_chain.offline_verify",
     "git diff --check",
     "git status --short",
 )

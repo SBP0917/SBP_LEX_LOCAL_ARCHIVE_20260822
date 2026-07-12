@@ -162,8 +162,13 @@ def test_valid_signed_request_and_private_server_decision(monkeypatch):
     )
     assert result.allowed
     monkeypatch.setenv("SBP_LEX_API_SECURITY_MODE", "private")
-    reset_replay_cache_for_tests()
     live_now = datetime.now(timezone.utc)
+    _install(
+        monkeypatch,
+        issued_at=(live_now - timedelta(days=1)).isoformat(),
+        not_before=(live_now - timedelta(minutes=1)).isoformat(),
+        expires_at=(live_now + timedelta(days=1)).isoformat(),
+    )
     envelope = _envelope(issued=live_now, expires=live_now + timedelta(seconds=60))
     decision = decide_access(
         method="POST", path="/runtime/traverse", client_host="203.0.113.8",

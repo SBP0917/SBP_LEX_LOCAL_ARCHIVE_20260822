@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Desktop V1 R2 deterministic build manifest","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}

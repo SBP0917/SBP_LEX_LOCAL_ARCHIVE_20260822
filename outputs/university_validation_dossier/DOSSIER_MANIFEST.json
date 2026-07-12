@@ -1,24 +1,24 @@
 {
-  "bound_adversarial_harness_digest": "98028ae3458a329264d6d68dac197a0bfaa83475b5c523c60298b495cd9829fe",
-  "bound_capstone_digest": "204b89b969d2cfce89fd34ccb949b1d17b461058b461118fd55f783e5dc855fc",
-  "bound_constitutional_gates_digest": "84f4e8f276bad39fa783396fd614618bc29f148e429a4b2d04f7b8fe0acfc7f3",
-  "bound_evidence_chain_digest": "1d4cf02d7c76675b6bd7ae6b60aacb128f1a643afe708d468cdd7c0d183b7e21",
-  "bound_execution_envelope_digest": "a93f5506d77737f4a44dee95be416fa0b234ff2b9ae89d02de3f1b0b53a7c334",
-  "bound_manifest_digest": "cd6cd26a393ba0982efc1b43af248151dfcf0ade1ffec7d631863070edff8cad",
-  "bound_regression_matrix_digest": "8ab5d6d0d8c6845b0dec69391eb4a58a1d58d74a2a55fc5e30370b671877695f",
-  "bound_release_integrity_digest": "5eec4c1285530168835d24b8196c94912877e808e6b741f6d88a5e95abcef8ac",
-  "bound_toolchain_guard_digest": "74942791db58133581ab93188af917672acc8f3dafb5ffa9017d6ba44577673c",
+  "bound_adversarial_harness_digest": "df7a6024797ecfd3683019099b8e03e02dac6dd35deec8f87b3210c2fe78bdd4",
+  "bound_capstone_digest": "56584319c6041087a3aa3750a1f792190f8682c7a6a5fbbaf4c1cdbc8f8f543d",
+  "bound_constitutional_gates_digest": "c0611eb691b74afe2dab3b16c8ee2feadf79f46c50ea798dfcffc058abbfe0bf",
+  "bound_evidence_chain_digest": "d04f26b0aeb5d5623b1c57e516bd004e4c94654528c741e59df0cb5c96397aac",
+  "bound_execution_envelope_digest": "21d452ed999355c04e6f327a4b9d0ffcf50f7310e473d66835ba2fe306665bc9",
+  "bound_manifest_digest": "91d1031e8dca5dfea57fae5707465ce7798a6ee14c5eed7da9aa3c015147f288",
+  "bound_regression_matrix_digest": "f110317052516213c7830eb6eac43f8e8398bf83f742a9134fe0f1cfb65ca4fb",
+  "bound_release_integrity_digest": "9d58100910d7dbdc910f67cb24ecb28fde863cafc0fe877054b826ba5d8dbae0",
+  "bound_toolchain_guard_digest": "a29e80d8165de45103ad5e419ef3249d781631801ad2ddb5160913067468565b",
   "claims_to_evidence_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
     "sha256": "75aad4a11b8c75101c2c343ce02703b0c698a77c46c9dd367d87a3f2de05373c",
     "size_bytes": 41533
   },
-  "created_at": "2026-07-12T01:24:19+00:00",
-  "dossier_digest": "b14328e55bae09ca3351c2f939a1d19648ccd5357a9ecc31047ee68f47a0dd26",
+  "created_at": "2026-07-12T05:26:37+00:00",
+  "dossier_digest": "0df005fa7d14a1c063f24dc761cae3cdfcdb11ae6b95346e169dae9546dc49c9",
   "dossier_manifest_type": "university_validation_dossier_manifest",
   "dossier_manifest_version": "18.8",
-  "dossier_payload_digest": "2501779e957714634875e1fad3a32ec7306aa4112ce885093a90706ce0a9b018",
+  "dossier_payload_digest": "f08533d605bb74d34a0b1a6022c84a05ea88049bf3656c7797e96e37f7af5cfc",
   "dossier_scope": {
     "bounded_validation_questions_only": true,
     "next_phase": "18.9",
@@ -32,7 +32,7 @@
     "purpose": "Reviewer-facing bounded claims-to-evidence handoff package.",
     "review_readiness_only": true
   },
-  "dossier_signature": "a5a0be4c2bda82a3d082ec6e1cf946f9fdd2bfe7349ef8712440f35103394819",
+  "dossier_signature": "bbc1447c5c8f7cc8c2b509ebf800d7f8952f6a4cea2f03f05618a49695838a70",
   "dossier_status": "VALIDATION_DOSSIER_READY",
   "dossier_summary": {
     "claim_count": 32,
@@ -45,18 +45,18 @@
   "evidence_artifact_index_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
-    "sha256": "64645ec54b32e0573be4d972818cdae9c95d387a5c42d26597dcc33518ebef0e",
+    "sha256": "372bbfafba7e722afac80ff37063b42d1d5087e3a2f48caa4c2deee2bb41ea3b",
     "size_bytes": 34468
   },
   "git_branch": "main",
-  "git_commit": "517d9346a208a6043440dfd61a2c9d5c36aaf2dc",
+  "git_commit": "42b17ba9c87a8d17a6d48c46b608ed68ce19efab",
   "github_remote": "UNKNOWN_FROM_CURRENT_CONTEXT",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\nMM outputs/adversarial_local_trust_negative_harness.json\nMM outputs/local_constitutional_gates.json\nMM outputs/local_evidence_chain.json\nMM outputs/local_execution_environment_trust_envelope.json\nMM outputs/local_toolchain_guard.json\nMM outputs/local_trust_25_year_capstone.json\nMM outputs/local_trust_regression_matrix.json\nMM outputs/local_trust_root_manifest.json\nA  outputs/r1_recovery_drill.json\nA  outputs/recovery_critical_inventory.json\nMM outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\nMM outputs/release_integrity_bundle/RELEASE_MANIFEST.json\nMM outputs/university_validation_dossier/DOSSIER_MANIFEST.json\nMM outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\nM  outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\nA  pytest.ini\nAM reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md\nM  sbp_lex/local_trust/critical_paths.py\nA  sbp_lex/recovery/__init__.py\nA  sbp_lex/recovery/backup.py\nA  sbp_lex/recovery/common.py\nA  sbp_lex/recovery/inventory.py\nA  sbp_lex/recovery/manifest.py\nA  sbp_lex/recovery/recovery_drill.py\nA  sbp_lex/recovery/restore.py\nA  sbp_lex/recovery/schemas/recovery_inventory.schema.json\nA  sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json\nMM sbp_lex/runtime/approved_runtime_baselines.json\nM  sbp_lex/runtime/measured_startup.py\nA  tests/test_r1_canonical_backup_recovery.py",
+    "branch_status_short": "## main...origin/main\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M outputs/university_validation_dossier/DOSSIER_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M sbp_lex/local_trust/critical_paths.py\n M sbp_lex/runtime/approved_runtime_baselines.json\n M tests/test_h2ab_scoped_request_auth.py",
     "git_branch": "main",
-    "git_commit": "517d9346a208a6043440dfd61a2c9d5c36aaf2dc",
+    "git_commit": "42b17ba9c87a8d17a6d48c46b608ed68ce19efab",
     "synced_to_origin_branch": true,
     "tracked_working_tree_clean": false,
     "working_tree_clean": false
@@ -64,7 +64,7 @@
   "handoff_readme_reference": {
     "exists": true,
     "path": "C:/Users/LeighMC/Documents/Codex/2026-07-11/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
-    "sha256": "ae2e0dc6805fffab8834d0c4e63d3445e0ac3a71f8d6d2847c6de1d681f9cf19",
+    "sha256": "93f55d0a7e536aec2f8491f3282326b82987d957e459654ae10598fe58eca522",
     "size_bytes": 3105
   },
   "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",

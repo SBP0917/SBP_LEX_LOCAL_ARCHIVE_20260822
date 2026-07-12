@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Desktop V1 R2 deterministic SBOM","type":"object","required":["sbom_version","desktop_scope","dependency_count","dependencies","dependency_digest"],"additionalProperties":true}
