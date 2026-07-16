@@ -1,0 +1,21 @@
+# Canonical repository text representation.
+# Measured-startup hashes raw bytes, so checkout line endings must not depend on
+# a user's core.autocrlf setting.
+* text=auto eol=lf
+
+# Native Windows command launchers retain conventional CRLF checkout bytes.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets must never undergo line-ending conversion.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.whl binary
+*.exe binary
+*.dll binary
+*.pyd binary
