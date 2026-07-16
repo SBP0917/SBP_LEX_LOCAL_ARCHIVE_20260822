@@ -7,6 +7,17 @@
 *.bat text eol=crlf
 *.cmd text eol=crlf
 
+# Windows-generated, hash-bound evidence is serialized as CRLF. Preserve that
+# representation so committing and checking out the evidence cannot invalidate
+# its embedded file hashes and signatures.
+outputs/local_*.json text eol=crlf
+outputs/adversarial_*.json text eol=crlf
+outputs/release_integrity_bundle/** text eol=crlf
+outputs/university_validation_dossier/** text eol=crlf
+validation_package/evidence/outputs/local_*.json text eol=crlf
+validation_package/evidence/outputs/adversarial_*.json text eol=crlf
+validation_package/evidence/outputs/release_integrity_bundle/** text eol=crlf
+
 # Binary assets must never undergo line-ending conversion.
 *.png binary
 *.jpg binary

@@ -1,15 +1,15 @@
 {
-  "bound_constitutional_gates_digest": "6f66d4c61e28b3e00f4e035c2df2a392ff1e67a731e49343dcb203f3b51b70f5",
-  "bound_evidence_chain_digest": "ca013258ed31e1370791153efc24bb0f16e48c7d6ac1c733412b99d3b8dbab2a",
-  "bound_execution_envelope_digest": "a82ea7f348277519d589aa118305b7b7aabe1b26acf7a8646096344cd08ee48a",
-  "bound_manifest_digest": "d2954ea556d0de75b778ae822b28fa5a0ee7f0344a8dc78308bf8a4778f78626",
-  "bound_regression_matrix_digest": "4aab3b2839c32ee078635088ce3bb0113fbe78a13db8686ff5211266359fbb8b",
-  "created_at": "2026-07-12T14:12:51+00:00",
+  "bound_constitutional_gates_digest": "6add25ccf648b4736d8f7cfdf1c15c12df278bde7e5bf13441ccfb09ba10d0ea",
+  "bound_evidence_chain_digest": "ff4c98c8609d6bf4e989522119d461148cddb2290c688d995332c0f2bab6ceb5",
+  "bound_execution_envelope_digest": "cbfe7ee2c141592fd0d283f33e7c9b005ef8708669a436ae9ee5d2b69c198f8e",
+  "bound_manifest_digest": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
+  "bound_regression_matrix_digest": "774ac441718391fa77eec60fd9c83db4bd4c82bbefa116bb3beb558bdec42ce7",
+  "created_at": "2026-07-16T07:11:47+00:00",
   "dependency_file_digests": [
     {
       "path": "requirements.txt",
-      "sha256": "33c812b84f66fc55c7d77470a56872c8958e70787591a18c5e64ae8d40c5a541",
-      "size_bytes": 37,
+      "sha256": "c4fa1e7633f0e8b8937cbea0097f0e310895065682ef5a2825fc8c8541bf1dc0",
+      "size_bytes": 35,
       "status": "PRESENT"
     },
     {
@@ -53,7 +53,7 @@
     "requirements.txt"
   ],
   "git_branch": "main",
-  "git_commit": "a9d9f57a2a92d1320add5aa3b60935fbd1e1f390",
+  "git_commit": "85ae1af085170f48f438fda547a303c5721110ee",
   "ignored_output_paths": [
     "outputs",
     "outputs/local_trust_temp"
@@ -74,15 +74,15 @@
       },
       {
         "name": "artifact_tool_v2",
-        "version": "2.8.22"
+        "version": "2.8.23"
       },
       {
         "name": "cffi",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       {
         "name": "charset-normalizer",
-        "version": "3.4.7"
+        "version": "3.4.9"
       },
       {
         "name": "colorama",
@@ -194,7 +194,7 @@
       },
       {
         "name": "setuptools",
-        "version": "82.0.1"
+        "version": "83.0.0"
       },
       {
         "name": "six",
@@ -241,7 +241,7 @@
   "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
   "python_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
   "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\2026-07-11\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "TOOLCHAIN_GUARD_DETERMINISTIC_PLACEHOLDER",
   "toolchain_checks": [
     {
@@ -519,7 +519,7 @@
       "check_id": "binds_manifest_digest",
       "check_name": "Toolchain binds manifest digest",
       "expected_condition": "manifest_digest_bound",
-      "observed_condition": "d2954ea556d0de75b778ae822b28fa5a0ee7f0344a8dc78308bf8a4778f78626",
+      "observed_condition": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
       "reason": "bound_manifest_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -529,7 +529,7 @@
       "check_id": "binds_execution_envelope_digest",
       "check_name": "Toolchain binds execution envelope digest",
       "expected_condition": "execution_envelope_digest_bound",
-      "observed_condition": "a82ea7f348277519d589aa118305b7b7aabe1b26acf7a8646096344cd08ee48a",
+      "observed_condition": "cbfe7ee2c141592fd0d283f33e7c9b005ef8708669a436ae9ee5d2b69c198f8e",
       "reason": "bound_execution_envelope_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -539,7 +539,7 @@
       "check_id": "binds_evidence_chain_digest",
       "check_name": "Toolchain binds evidence chain digest",
       "expected_condition": "evidence_chain_digest_bound",
-      "observed_condition": "ca013258ed31e1370791153efc24bb0f16e48c7d6ac1c733412b99d3b8dbab2a",
+      "observed_condition": "ff4c98c8609d6bf4e989522119d461148cddb2290c688d995332c0f2bab6ceb5",
       "reason": "bound_evidence_chain_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -549,7 +549,7 @@
       "check_id": "binds_regression_matrix_digest",
       "check_name": "Toolchain binds regression matrix digest",
       "expected_condition": "regression_matrix_digest_bound",
-      "observed_condition": "4aab3b2839c32ee078635088ce3bb0113fbe78a13db8686ff5211266359fbb8b",
+      "observed_condition": "774ac441718391fa77eec60fd9c83db4bd4c82bbefa116bb3beb558bdec42ce7",
       "reason": "bound_regression_matrix_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -559,7 +559,7 @@
       "check_id": "binds_constitutional_gates_digest",
       "check_name": "Toolchain binds constitutional gates digest",
       "expected_condition": "constitutional_gates_digest_bound",
-      "observed_condition": "6f66d4c61e28b3e00f4e035c2df2a392ff1e67a731e49343dcb203f3b51b70f5",
+      "observed_condition": "6add25ccf648b4736d8f7cfdf1c15c12df278bde7e5bf13441ccfb09ba10d0ea",
       "reason": "bound_constitutional_gates_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -589,7 +589,7 @@
       "check_id": "commit_recorded",
       "check_name": "Current commit recorded",
       "expected_condition": "commit_recorded",
-      "observed_condition": "a9d9f57a2a92d1320add5aa3b60935fbd1e1f390",
+      "observed_condition": "85ae1af085170f48f438fda547a303c5721110ee",
       "reason": "git commit recorded",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -635,11 +635,11 @@
       "status": "TOOLCHAIN_CHECK_PASS"
     }
   ],
-  "toolchain_digest": "5b70890a179afcf6f7db33894332d8aeb36cea4f183999a4de7b6483eb419d10",
+  "toolchain_digest": "50f695ba072075525f3edc5b2cc4a0e4d8cbdaee67159d20d59d5e6ac03f1766",
   "toolchain_guard_type": "local_trust_dependency_toolchain_guard",
   "toolchain_guard_version": "18.7E.3",
-  "toolchain_payload_digest": "48944d2351c53c5f2abb8efbe9fe03c65c10a8623cbe2b2001dc7644efb955f8",
-  "toolchain_signature": "fee087133f76a8f131a1b3c592d4e5942ff95f209f9560fb79e768556c439447",
+  "toolchain_payload_digest": "db9b34b8ca62163288fbf3268a92a8fc2ebeb33e6a5e51863435f19815b15068",
+  "toolchain_signature": "b966fd074904a6bc26b7141ac2c798d7d36abf716ae492ad5becccdb17962bfb",
   "toolchain_status": "TOOLCHAIN_GUARD_PASS",
   "toolchain_summary": {
     "all_required_checks_passed": true,
