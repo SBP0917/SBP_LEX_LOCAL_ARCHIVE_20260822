@@ -14,8 +14,8 @@
       "path": "outputs/local_trust_root_manifest.json",
       "reason": "Local trust root manifest.",
       "required": true,
-      "sha256": "6b74fe308338c3d45ca9b3c67afa8747c8f0a031ef6fc7701681fba1e8c23898",
-      "size_bytes": 22388
+      "sha256": "4020f137834f66fb583e01bae3113ed6ab213743f345ec890e3a13a4838c08cc",
+      "size_bytes": 22465
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -24,8 +24,8 @@
       "path": "outputs/local_execution_environment_trust_envelope.json",
       "reason": "Runtime and verification environment provenance.",
       "required": true,
-      "sha256": "4ca6ad6df26f7642ae5297cb3d01d202d274927ddfa81fce88b3324b64bf0ff1",
-      "size_bytes": 7326
+      "sha256": "79792b909529cf61f4513a209da1ba1624a3a4de3f83be0a7b6a90d06a489fb2",
+      "size_bytes": 7296
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -34,8 +34,8 @@
       "path": "outputs/local_evidence_chain.json",
       "reason": "Report integrity and evidence-chain attestation.",
       "required": true,
-      "sha256": "e9aaac06f705242b1b53792a963817509695f8da35aa37cc4d33c2b5b23c17e2",
-      "size_bytes": 9940
+      "sha256": "6fa064001b11d39a3ab28e91d6a76ff191cf4fbb867dd1f7f3250b3f4651b16c",
+      "size_bytes": 9931
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -44,8 +44,8 @@
       "path": "outputs/local_trust_regression_matrix.json",
       "reason": "Local trust drift regression baseline.",
       "required": true,
-      "sha256": "8d21b332ee53644ca8fe540b52c0443ab723eae49ca51c189935ec8e1e5429ed",
-      "size_bytes": 10638
+      "sha256": "4b7add1e43aa5082b6fc40442f24e41ce267517f154389e4d96900dd7e54e00d",
+      "size_bytes": 10693
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -54,8 +54,8 @@
       "path": "outputs/local_constitutional_gates.json",
       "reason": "Local trust constitutional gate result.",
       "required": true,
-      "sha256": "e7bef0d302295f37ae91052aaa77706243e2b1ca9618bbb4baaa2ebd95ab7d60",
-      "size_bytes": 11763
+      "sha256": "c881f7b17c699eb857cbaef3f3adeb5c3ef6858a86602b0e95a61782f6d66321",
+      "size_bytes": 11748
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -64,8 +64,8 @@
       "path": "outputs/local_toolchain_guard.json",
       "reason": "Dependency and toolchain guard.",
       "required": true,
-      "sha256": "e159eb5192351b2a9e355452fee3d57b8d7867964053290fa1712800d22bdaa9",
-      "size_bytes": 26965
+      "sha256": "8b60cd759c175ccc990e10d52d77632b906930aa57ebf6ef6d20814a319e5933",
+      "size_bytes": 26962
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -74,8 +74,8 @@
       "path": "outputs/local_trust_25_year_capstone.json",
       "reason": "25-year local trust completion lock.",
       "required": true,
-      "sha256": "9dcbb1f1bfc6f3f99150438b80682ad24101918fa77332d5f0ccfa3bc598cc28",
-      "size_bytes": 16227
+      "sha256": "9d32fb549ac0d4d84054d0f2b98f04b69280fdc7378f6f5c47010ab56ee2c558",
+      "size_bytes": 16282
     },
     {
       "artifact_group": "phase_reports",
@@ -351,7 +351,7 @@
       "artifact_group": "release_bundle",
       "artifact_id": "release_verification_commands",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json",
       "reason": "Release verification command index.",
       "required": true,
       "sha256": "ddca6cd04a330de810d7c0fb4cd1d85992ca47534b5754d2540a6871b2f99f40",
@@ -361,7 +361,7 @@
       "artifact_group": "release_bundle",
       "artifact_id": "release_claims_seed",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/CLAIMS_TO_EVIDENCE_SEED.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/CLAIMS_TO_EVIDENCE_SEED.json",
       "reason": "Claims-to-evidence seed mapping.",
       "required": true,
       "sha256": "c112d3ebb91726753ddea64189360e70655fb77a9acd9ef9888b170d4204d4fe",
@@ -371,7 +371,7 @@
       "artifact_group": "release_bundle",
       "artifact_id": "release_boundary_lock",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json",
       "reason": "Boundary and scope lock.",
       "required": true,
       "sha256": "84bdc57752b54d4a543da56c276e40689a568eab279bfae8c564a3aa0f387056",
@@ -381,7 +381,7 @@
       "artifact_group": "release_bundle",
       "artifact_id": "release_readme",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/RELEASE_README.md",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/release_integrity_bundle/RELEASE_README.md",
       "reason": "Review package README.",
       "required": true,
       "sha256": "52584f376d935d015c88371520a60c8eef77a330e18a69ba2eef23da14f4abc7",

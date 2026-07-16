@@ -1,6 +1,6 @@
 {
-  "bound_local_trust_manifest_digest": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
-  "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
+  "bound_local_trust_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+  "bound_local_trust_manifest_path": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
   "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
   "command_results": [
     {
@@ -23,7 +23,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -44,7 +44,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -64,7 +64,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -83,7 +83,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -103,7 +103,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -123,7 +123,7 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     },
     {
       "command_args": [
@@ -143,17 +143,17 @@
       "stderr_excerpt": "",
       "stdout_digest": null,
       "stdout_excerpt": "",
-      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+      "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
     }
   ],
-  "created_at": "2026-07-16T07:11:45+00:00",
-  "envelope_digest": "cbfe7ee2c141592fd0d283f33e7c9b005ef8708669a436ae9ee5d2b69c198f8e",
-  "envelope_payload_digest": "0f8c14340d55669f04216efc2e1c85ad057f4d25af64730578577f40c40af086",
-  "envelope_signature": "34160fd64ba25994884fd04f06fae1c8594fa1f51e528432c61a24519b9b6fec",
+  "created_at": "2026-07-16T07:34:54+00:00",
+  "envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
+  "envelope_payload_digest": "50336c05b67ddfacffdca6c50758a0905b8ee3797de82d0d3f157592775e799c",
+  "envelope_signature": "132b9b4aab390d1b4b5ed82f2e20322475ce0482cfb4dd3547245a77016e5292",
   "envelope_type": "local_execution_environment_trust_envelope",
   "envelope_version": "18.7C",
   "git_branch": "main",
-  "git_commit": "85ae1af085170f48f438fda547a303c5721110ee",
+  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
   "path_digest_or_path_summary": {
     "path_digest": "4c892ad288ebed36f114e5f9baa86c7910f132ee6b210c3e8aa90c70a1bca12f",
     "path_entry_count": 17,
@@ -171,7 +171,7 @@
     "stderr_digest": null,
     "stdout_digest": null
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "runtime_result_summary": {
     "command_status": "COMMAND_NOT_RUN",
     "exit_code": null,
@@ -182,6 +182,6 @@
   "signature_mode": "EXECUTION_ENV_DETERMINISTIC_PLACEHOLDER",
   "validation_failures": [],
   "verification_status": "EXECUTION_ENV_VALID",
-  "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "working_tree_clean": false
 }

@@ -49,9 +49,9 @@
     "path_note": "Manifest records intended verification commands only; it does not execute them.",
     "python_executable_path": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
     "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
   },
-  "created_at": "2026-07-16T07:11:45+00:00",
+  "created_at": "2026-07-16T07:34:53+00:00",
   "critical_file_hashes": [
     {
       "path": "README.md",
@@ -469,16 +469,17 @@
     }
   ],
   "git_branch": "main",
-  "git_commit": "85ae1af085170f48f438fda547a303c5721110ee",
-  "git_status_short": "",
+  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "git_status_short": "M reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "status": "MISSING"
+    "size_bytes": 15935,
+    "status": "PRESENT"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
-  "manifest_payload_digest": "913bd6ea43b7d238cb335120d4b12a09dbc184f7c4db87388bbcfdd693f624f1",
-  "manifest_signature": "d9c073821a35412042d1a9eba56a36ffc8ca1fdcb7f88c3fd527e5d8f20ac52c",
+  "manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+  "manifest_payload_digest": "05bc0958eb48c480a56df052c9e86824d3bfca4b5f14bf7cbee3dac7cfa563dc",
+  "manifest_signature": "a5f947a7526dcbfd9f908becdfee9487336fc1eb4cda3e446a684e62d5d74d95",
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -509,7 +510,7 @@
   "replay_baseline": {
     "latest_verified_replay": "MATCHED_RECORDED_OUTSIDE_LOCAL_TRUST"
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "repository_root_digest_scope": "relative_paths_only",
   "runtime_baseline": {
     "latest_verified_runtime": "RECORDED_OUTSIDE_LOCAL_TRUST"
@@ -620,11 +621,11 @@
     },
     {
       "path": "reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
-      "sha256": "481c0ef8f7481af1ba6d27fa0d8fda32e87f035eaf5ee8f70c03211b9caf937b",
-      "size_bytes": 7959,
+      "sha256": "6befb9e76292a9ff906ea2281ea9669e438f1f4a94d0ad7121cc60595cc2fb48",
+      "size_bytes": 12142,
       "status": "PRESENT"
     }
   ],
   "validation_failures": [],
-  "working_tree_clean": true
+  "working_tree_clean": false
 }

@@ -179,3 +179,96 @@ identity.
 None. R4 is detached and non-authoritative. It introduces no node, cloud
 validation, remote execution, distributed topology, new runtime behavior, or
 constitutional change.
+
+## Historical verification evidence
+
+The earlier R4 Linux archive run is retained as an intermediate historical
+snapshot. It recorded `1,630 collected`, `1,340 passed`, `283 failed`, and
+`7 errors`. Those values are not the current repository state and are not used
+as the canonical Windows result.
+
+The parent evidence-source commit
+`a9d9f57a2a92d1320add5aa3b60935fbd1e1f390` independently collects 1,618
+tests. R4's final commit adds the single 26-test file
+`tests/test_r4_independent_verification_package.py`. The historical 1,630 count
+therefore represents the parent suite plus an intermediate 12-test R4 working
+file. The final 14 tests added to reach 1,644 are:
+
+- `test_unexpected_package_file_rejected`;
+- `test_corrupt_manifest_rejected`;
+- `test_foreign_identity_rejected`;
+- `test_stale_runtime_identity_rejected`;
+- `test_stale_r3_evidence_rejected`;
+- `test_broken_report_link_rejected`;
+- `test_broken_traceability_rejected`;
+- `test_runtime_failure_evidence_rejected`;
+- `test_command_mutation_flag_rejected`;
+- `test_package_contains_no_source_code`;
+- `test_quick_start_is_bounded`;
+- `test_summary_disclaims_certification`;
+- `test_inventory_identifiers_are_deterministic`;
+- `test_all_documents_share_identity`.
+
+No historical test disappeared. The 14-test increase is bounded to R4 negative
+integrity, assessor-document, deterministic-identity, and cross-document
+consistency coverage.
+
+## Corrective Windows work
+
+Canonical Windows pre-flight initially failed closed because the approved R4
+measurement captured mixed working-tree line endings that a fresh checkout
+could not reproduce. Reconciliation proved that the 17 apparent content
+mismatches and 68 CRLF-only mismatches were checkout representation defects,
+not semantic runtime regressions.
+
+The correction:
+
+- adds a repository-owned `.gitattributes` policy;
+- keeps ordinary source and documentation at LF;
+- preserves CRLF only for Windows launchers and Windows-generated hash-bound
+  evidence whose embedded manifests cover those bytes;
+- retains the exact approved CPython 3.12.13 AMD64 executable;
+- refreshes Local Trust, R2, R3, release, dossier, and IVVP evidence through
+  their existing fail-closed builders;
+- retains the prior R4 baseline as retired historical evidence;
+- changes no runtime behavior, provenance rule, branch rule, architecture, or
+  test.
+
+The canonical Windows run used the controlled approved baseline
+`DESKTOP_V1_R4_RECONCILED_FINAL_2026_07_16_19`, measurement digest
+`56d08812faded67aa0a73f391ed0b8c7df0f059d320ff201835df60e23e625b3`,
+and runtime identity
+`23c34e088901d64b86decb98114fd71932c02d60816cf3890e84dc4daf53ec58`.
+The post-report evidence refresh necessarily creates a successor; its exact
+identifier and digest are recorded in the final Windows verification package.
+
+## Canonical Windows verification
+
+Corrective verification commit:
+`2c5f339ccf685cd1b856457029fd3b55de478730`.
+
+The independent `main` clone used CPython 3.12.13 AMD64, pytest 9.1.1,
+pluggy 1.6.0, and cryptography 49.0.0. `PYTEST_ADDOPTS` and `PYTHONPATH`
+were removed, pytest caching was disabled, and every run used a new external
+temporary root.
+
+- Direct measured startup: `MEASURED_STARTUP_APPROVED`.
+- Test collection: 1,644; zero errors; zero deselections.
+- Targeted pre-flight: 921 passed, 3 skipped, zero failures/errors in 277.05s.
+- Complete unselected suite: 1,641 passed, 3 skipped, zero failures/errors in
+  378.94s.
+- R1 skip at line 189: expected Windows `symlink creation unavailable`.
+- R1 skip at line 358: expected Windows `symlink creation unavailable`.
+- R2 skip at line 192: expected Windows `symlink creation unavailable`.
+- Local Trust, Constitutional Gates, Toolchain Guard, Capstone, adversarial
+  harness, Release Integrity, University Dossier, R2, R3, and IVVP all validate.
+
+The detailed logs and hashes are retained in the controlled Windows canonical
+checkout verification package generated after the final evidence commit.
+
+## R4 status
+
+R4 implementation and package work are complete, and canonical
+Windows-checkout verification has passed for the recorded verification commit.
+
+Status: **IMPLEMENTATION COMPLETE — CANONICALLY VERIFIED ON WINDOWS**.

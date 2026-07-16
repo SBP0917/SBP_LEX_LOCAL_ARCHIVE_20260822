@@ -1,11 +1,11 @@
 {
-  "bound_evidence_chain_digest": "ff4c98c8609d6bf4e989522119d461148cddb2290c688d995332c0f2bab6ceb5",
-  "bound_execution_envelope_digest": "cbfe7ee2c141592fd0d283f33e7c9b005ef8708669a436ae9ee5d2b69c198f8e",
-  "bound_manifest_digest": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
-  "bound_regression_matrix_digest": "774ac441718391fa77eec60fd9c83db4bd4c82bbefa116bb3beb558bdec42ce7",
-  "created_at": "2026-07-16T07:11:46+00:00",
-  "gate_digest": "6add25ccf648b4736d8f7cfdf1c15c12df278bde7e5bf13441ccfb09ba10d0ea",
-  "gate_payload_digest": "9ad34aa5577019face9c8abeb923a4c72e0de8cb54dda5b7864cd459e6ebe84c",
+  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
+  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
+  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
+  "created_at": "2026-07-16T07:34:55+00:00",
+  "gate_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
+  "gate_payload_digest": "3ccae498784bcd5043fd0067188380f4188d4d788fc24e1f361384af785f6863",
   "gate_policy_version": "LOCAL_TRUST_CONSTITUTIONAL_GATE_POLICY_V1",
   "gate_result_type": "local_trust_constitutional_enforcement_gates",
   "gate_result_version": "18.7E.2",
@@ -17,7 +17,7 @@
       "gate_name": "Local trust manifest exists",
       "input_artifact": "manifest",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
+      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -39,7 +39,7 @@
       "gate_name": "Execution environment envelope exists",
       "input_artifact": "execution_envelope",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_execution_environment_trust_envelope.json",
+      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_execution_environment_trust_envelope.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -61,7 +61,7 @@
       "gate_name": "Local evidence chain exists",
       "input_artifact": "evidence_chain",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_evidence_chain.json",
+      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_evidence_chain.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -105,7 +105,7 @@
       "gate_name": "Local trust regression matrix exists",
       "input_artifact": "regression_matrix",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_regression_matrix.json",
+      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_regression_matrix.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -137,7 +137,7 @@
       "gate_id": "manifest_digest_binding",
       "gate_name": "Manifest digest matches bound digest",
       "input_artifact": "manifest",
-      "observed_condition": "25cba7c977ade8e9545063d162abf2726ae524aa20bec7b48bd7e44723d2b758",
+      "observed_condition": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -148,7 +148,7 @@
       "gate_id": "execution_envelope_digest_binding",
       "gate_name": "Execution envelope digest matches bound digest",
       "input_artifact": "execution_envelope",
-      "observed_condition": "cbfe7ee2c141592fd0d283f33e7c9b005ef8708669a436ae9ee5d2b69c198f8e",
+      "observed_condition": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -159,7 +159,7 @@
       "gate_id": "evidence_chain_digest_binding",
       "gate_name": "Evidence chain digest matches bound digest",
       "input_artifact": "evidence_chain",
-      "observed_condition": "ff4c98c8609d6bf4e989522119d461148cddb2290c688d995332c0f2bab6ceb5",
+      "observed_condition": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -170,7 +170,7 @@
       "gate_id": "regression_matrix_digest_binding",
       "gate_name": "Regression matrix digest matches bound digest",
       "input_artifact": "regression_matrix",
-      "observed_condition": "774ac441718391fa77eec60fd9c83db4bd4c82bbefa116bb3beb558bdec42ce7",
+      "observed_condition": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -203,7 +203,7 @@
       "gate_id": "commit_recorded",
       "gate_name": "Current commit is recorded",
       "input_artifact": "git",
-      "observed_condition": "85ae1af085170f48f438fda547a303c5721110ee",
+      "observed_condition": "2c5f339ccf685cd1b856457029fd3b55de478730",
       "reason": "git commit provenance",
       "required": true,
       "status": "GATE_PASS"
@@ -275,7 +275,7 @@
       "status": "GATE_PASS"
     }
   ],
-  "gate_signature": "3f988ac6a3cbd00ccb18148f30a0df238209a9453c05ec98d478c1b696aa5174",
+  "gate_signature": "bd29133f9d4c8664ddf37f9814c6ef7c4d1199e432c7b674c469fcee3d462826",
   "gate_status": "CONSTITUTIONAL_GATES_PASS",
   "gate_summary": {
     "all_required_gates_passed": true,
@@ -287,8 +287,8 @@
     "working_tree_clean": false
   },
   "git_branch": "main",
-  "git_commit": "85ae1af085170f48f438fda547a303c5721110ee",
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_BASELINE_VERIFY_20260716T170353+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
   "signature_mode": "CONSTITUTIONAL_GATES_DETERMINISTIC_PLACEHOLDER",
   "validation_failures": []
 }

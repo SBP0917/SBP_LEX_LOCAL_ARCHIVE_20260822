@@ -15,8 +15,8 @@
         "local_trust_manifest_validates"
       ],
       "required": true,
-      "sha256": "6b74fe308338c3d45ca9b3c67afa8747c8f0a031ef6fc7701681fba1e8c23898",
-      "size_bytes": 22388
+      "sha256": "4020f137834f66fb583e01bae3113ed6ab213743f345ec890e3a13a4838c08cc",
+      "size_bytes": 22465
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -30,8 +30,8 @@
         "replay_verification_passes_matched"
       ],
       "required": true,
-      "sha256": "4ca6ad6df26f7642ae5297cb3d01d202d274927ddfa81fce88b3324b64bf0ff1",
-      "size_bytes": 7326
+      "sha256": "79792b909529cf61f4513a209da1ba1624a3a4de3f83be0a7b6a90d06a489fb2",
+      "size_bytes": 7296
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -45,8 +45,8 @@
         "evidence_chain_zero_changed"
       ],
       "required": true,
-      "sha256": "e9aaac06f705242b1b53792a963817509695f8da35aa37cc4d33c2b5b23c17e2",
-      "size_bytes": 9940
+      "sha256": "6fa064001b11d39a3ab28e91d6a76ff191cf4fbb867dd1f7f3250b3f4651b16c",
+      "size_bytes": 9931
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -59,8 +59,8 @@
         "regression_matrix_detects_drift"
       ],
       "required": true,
-      "sha256": "8d21b332ee53644ca8fe540b52c0443ab723eae49ca51c189935ec8e1e5429ed",
-      "size_bytes": 10638
+      "sha256": "4b7add1e43aa5082b6fc40442f24e41ce267517f154389e4d96900dd7e54e00d",
+      "size_bytes": 10693
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -73,8 +73,8 @@
         "constitutional_gates_block_unclean_states"
       ],
       "required": true,
-      "sha256": "e7bef0d302295f37ae91052aaa77706243e2b1ca9618bbb4baaa2ebd95ab7d60",
-      "size_bytes": 11763
+      "sha256": "c881f7b17c699eb857cbaef3f3adeb5c3ef6858a86602b0e95a61782f6d66321",
+      "size_bytes": 11748
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -87,8 +87,8 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "e159eb5192351b2a9e355452fee3d57b8d7867964053290fa1712800d22bdaa9",
-      "size_bytes": 26965
+      "sha256": "8b60cd759c175ccc990e10d52d77632b906930aa57ebf6ef6d20814a319e5933",
+      "size_bytes": 26962
     },
     {
       "artifact_group": "local_trust_artifacts",
@@ -100,8 +100,8 @@
         "local_trust_capstone_passes"
       ],
       "required": true,
-      "sha256": "9dcbb1f1bfc6f3f99150438b80682ad24101918fa77332d5f0ccfa3bc598cc28",
-      "size_bytes": 16227
+      "sha256": "9d32fb549ac0d4d84054d0f2b98f04b69280fdc7378f6f5c47010ab56ee2c558",
+      "size_bytes": 16282
     },
     {
       "artifact_group": "release_integrity_artifacts",
@@ -113,8 +113,8 @@
         "release_integrity_passes"
       ],
       "required": true,
-      "sha256": "82a2fa1f4ac6131275c163fa0f296bce5c3f71675b460ac717ad93e72d5add66",
-      "size_bytes": 6991
+      "sha256": "15f24d0e3e43af7e31ad732352d7f02802c0b77896d77317409fa6fbfefaee9e",
+      "size_bytes": 6581
     },
     {
       "artifact_group": "release_integrity_artifacts",
@@ -126,8 +126,8 @@
         "release_integrity_contains_required_files"
       ],
       "required": true,
-      "sha256": "2b0a8a4627c7a7d83395a59b85da41e8831cbfdfd7e6f4daa4ab8cc6ebb820ff",
-      "size_bytes": 15653
+      "sha256": "687f44291ee3d9ef09788295dd7a61e35d24bcfe133f3177677ef64b4cb02506",
+      "size_bytes": 15641
     },
     {
       "artifact_group": "release_integrity_artifacts",
@@ -192,8 +192,8 @@
         "adversarial_harness_detects_bad_states"
       ],
       "required": true,
-      "sha256": "2453aa59ebc3fd53bc07f4276e479228445cb70cab370d7b143e34428d549975",
-      "size_bytes": 74370
+      "sha256": "7163c828c6554d0c4592d072a78020bf77589367f6fdf944cd0cac9e23bd5908",
+      "size_bytes": 40694
     },
     {
       "artifact_group": "eie_pt_rebuild_artifacts",
@@ -620,7 +620,7 @@
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_claims_index",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
       "reason": "Master claims-to-evidence mapping.",
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
@@ -664,7 +664,7 @@
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_validation_questions",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
       "reason": "Reviewer validation questions.",
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
@@ -708,7 +708,7 @@
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_scope_lock",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
       "reason": "Dossier scope and exclusions lock.",
       "related_claim_ids": [
         "skg_dtn_external_non_authoritative",
@@ -725,7 +725,7 @@
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_reviewer_commands",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
       "reason": "Reviewer verification command index.",
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
@@ -769,7 +769,7 @@
       "artifact_group": "dossier_outputs",
       "artifact_id": "dossier_handoff_readme",
       "exists": true,
-      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_BASELINE_VERIFY_20260716T170353+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
+      "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
       "reason": "Reviewer handoff README.",
       "related_claim_ids": [
         "adversarial_harness_detects_bad_states",
@@ -806,7 +806,7 @@
         "toolchain_guard_records_assumptions"
       ],
       "required": true,
-      "sha256": "3c8966d310029105d6d3e28179b84352516f7b1d2bac733bb3119031018767f9",
+      "sha256": "57027dc69abb5509c1cd6509e07435c2bf8bacd884bc25cf50104d6abafde8ca",
       "size_bytes": 3105
     }
   ],
