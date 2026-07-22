@@ -62,9 +62,10 @@ class AgentConfig:
 
     @classmethod
     def load(cls, path: Path | None = None) -> "AgentConfig":
-        config_path = path or Path(os.environ.get("SBP_EXTERNAL_AGENT_CONFIG", ""))
-        if not str(config_path):
+        env_path = os.environ.get("SBP_EXTERNAL_AGENT_CONFIG")
+        if path is None and not env_path:
             return cls.default()
+        config_path = path or Path(str(env_path))
         payload = json.loads(config_path.read_text(encoding="utf-8"))
         return cls(
             data_dir=Path(payload["data_dir"]).expanduser(),
@@ -94,9 +95,10 @@ class ActionPolicy:
         if action_type == "status":
             return "READ_ONLY", False
         if action_type == "open_path":
-            path = Path(str(parameters.get("path", ""))).expanduser()
-            if not str(path):
+            raw_path = str(parameters.get("path", "")).strip()
+            if not raw_path:
                 raise ValueError("path is required")
+            Path(raw_path).expanduser()
             return "LOW", True
         if action_type == "open_url":
             parsed = urlparse(str(parameters.get("url", "")))
