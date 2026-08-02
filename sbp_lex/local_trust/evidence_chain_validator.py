@@ -4,7 +4,11 @@ import hmac
 from pathlib import Path
 from typing import Any, Mapping
 
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 EVIDENCE_CHAIN_VALID = "EVIDENCE_CHAIN_VALID"
 EVIDENCE_CHAIN_INVALID = "EVIDENCE_CHAIN_INVALID"
@@ -70,9 +74,9 @@ def validate_local_evidence_chain(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.evidence_chain import (
+        EVIDENCE_CHAIN_SIGNATURE_DOMAIN,
         EVIDENCE_CHAIN_SIGNATURE_MODE,
         chain_digest_for,
-        chain_signature_for,
         hash_chain_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -104,11 +108,17 @@ def validate_local_evidence_chain(
     if not hmac.compare_digest(str(chain.get("chain_payload_digest")), expected_payload_digest):
         failures.append("chain_payload_digest_mismatch")
 
-    expected_signature = chain_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(chain.get("chain_signature")), expected_signature):
+    signature = chain.get("chain_signature")
+    if not verify_local_trust_digest(
+        EVIDENCE_CHAIN_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("chain_signature_mismatch")
 
-    expected_chain_digest = chain_digest_for(expected_payload_digest, expected_signature)
+    expected_chain_digest = (
+        chain_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(chain.get("chain_digest")), expected_chain_digest):
         failures.append("chain_digest_mismatch")
 
@@ -122,7 +132,16 @@ def validate_local_evidence_chain(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and chain.get("git_commit") != current_commit:
+        recorded_commit = chain.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"evidence_chain_status": EVIDENCE_CHAIN_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and chain.get("working_tree_clean") is not True:

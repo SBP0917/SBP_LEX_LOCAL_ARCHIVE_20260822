@@ -25,7 +25,7 @@ This phase does not alter SBP-LEX runtime authority or execution behavior.
 - Added Git provenance capture for branch, commit, status, and clean/dirty state.
 - Added Python provenance capture for executable path, version, and executable digest when available.
 - Added command provenance for intended verification commands without executing them.
-- Added deterministic JSON canonicalisation and digest/signature placeholder binding.
+- Added deterministic JSON canonicalisation and digest/ML-DSA-65 signature binding.
 - Added validator statuses:
   - `LOCAL_TRUST_VALID`
   - `LOCAL_TRUST_INVALID`
@@ -36,7 +36,7 @@ This phase does not alter SBP-LEX runtime authority or execution behavior.
 
 ## Manifest Fields
 
-The manifest records manifest identity, created timestamp, repository root, digest scope, Git provenance, Python provenance, command provenance, critical file hashes, trusted report hashes, trusted output hashes, integrity-store status, quarantine-evidence status, test baseline, runtime baseline, replay baseline, phase baseline, local trust status, validation failures, payload digest, manifest digest, signature placeholder, and signature mode.
+The manifest records manifest identity, created timestamp, repository root, digest scope, Git provenance, Python provenance, command provenance, critical file hashes, trusted report hashes, trusted output hashes, integrity-store status, quarantine-evidence status, test baseline, runtime baseline, replay baseline, phase baseline, local trust status, validation failures, payload digest, manifest digest, ML-DSA signature envelope, and signature mode. Verification is pinned to an explicitly configured trusted public key.
 
 ## CLI Behavior
 

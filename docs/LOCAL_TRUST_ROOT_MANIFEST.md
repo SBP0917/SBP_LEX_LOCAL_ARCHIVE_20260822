@@ -29,7 +29,8 @@ The manifest includes:
 - integrity-store and quarantine-evidence presence status
 - test, runtime, replay, and phase baselines
 - local trust status and validation failures
-- payload digest, manifest digest, and deterministic placeholder signature
+- payload digest, manifest digest, and ML-DSA-65 signature bound to the
+  explicitly configured trusted public key
 
 Absolute paths may appear as provenance fields. Digest construction uses stable JSON canonicalisation and repository-relative paths for file evidence.
 

@@ -4,7 +4,11 @@ import hmac
 from pathlib import Path
 from typing import Any, Mapping
 
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 from sbp_lex.local_trust.toolchain_policy import REQUIRED_TOOLCHAIN_CHECK_IDS, TOOLCHAIN_CHECK_STATUSES
 
 TOOLCHAIN_GUARD_PASS = "TOOLCHAIN_GUARD_PASS"
@@ -91,10 +95,10 @@ def validate_toolchain_guard(
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.manifest import canonicalise_manifest
     from sbp_lex.local_trust.toolchain_guard import (
+        TOOLCHAIN_GUARD_SIGNATURE_DOMAIN,
         TOOLCHAIN_GUARD_SIGNATURE_MODE,
         hash_toolchain_payload,
         toolchain_digest_for,
-        toolchain_signature_for,
     )
 
     failures: list[str] = []
@@ -127,11 +131,17 @@ def validate_toolchain_guard(
     if not hmac.compare_digest(str(guard.get("toolchain_payload_digest")), expected_payload_digest):
         failures.append("toolchain_payload_digest_mismatch")
 
-    expected_signature = toolchain_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(guard.get("toolchain_signature")), expected_signature):
+    signature = guard.get("toolchain_signature")
+    if not verify_local_trust_digest(
+        TOOLCHAIN_GUARD_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("toolchain_signature_mismatch")
 
-    expected_digest = toolchain_digest_for(expected_payload_digest, expected_signature)
+    expected_digest = (
+        toolchain_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(guard.get("toolchain_digest")), expected_digest):
         failures.append("toolchain_digest_mismatch")
 
@@ -146,7 +156,16 @@ def validate_toolchain_guard(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and guard.get("git_commit") != current_commit:
+        recorded_commit = guard.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"toolchain_status": TOOLCHAIN_GUARD_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and guard.get("toolchain_summary", {}).get("working_tree_clean") is not True:

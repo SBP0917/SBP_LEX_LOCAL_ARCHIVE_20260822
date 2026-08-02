@@ -20,6 +20,20 @@ DRILL_BASELINE = "DESKTOP_V1_R1_DRILL_BASELINE_01"
 DRILL_RUNTIME_IDENTITY = "2" * 64
 
 
+def _fresh_process_configuration_command() -> tuple[str, ...]:
+    return (
+        sys.executable,
+        "-c",
+        (
+            "import json,os; from pathlib import Path; "
+            "root=Path(os.environ['SBP_LEX_RECOVERY_GENERATION_ROOT']); "
+            "valid=json.loads((root/'configuration/config.json').read_text())"
+            ".get('nodes') is False; "
+            "raise SystemExit(0 if valid else 1)"
+        ),
+    )
+
+
 def _write(path: Path, raw: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(raw)
@@ -104,11 +118,9 @@ def run_recovery_drill(root: Path) -> dict[str, Any]:
         expected_repository_commit=DRILL_COMMIT,
         expected_measured_baseline_identifier=DRILL_BASELINE,
         expected_runtime_identity=DRILL_RUNTIME_IDENTITY,
-        fresh_process_commands=((
-            sys.executable,
-            "-c",
-            "import json,os; from pathlib import Path; root=Path(os.environ['SBP_LEX_RECOVERY_GENERATION_ROOT']); assert json.loads((root/'configuration/config.json').read_text())['nodes'] is False",
-        ),),
+        fresh_process_commands=(
+            _fresh_process_configuration_command(),
+        ),
     )
     corrupt = drill_root / "corrupt_backup"
     shutil.copytree(backup, corrupt)

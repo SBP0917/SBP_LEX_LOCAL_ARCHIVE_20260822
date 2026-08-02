@@ -4,6 +4,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
 RELEASE_BUNDLE_DIR = Path("outputs/release_integrity_bundle")
 RELEASE_MANIFEST_FILE = RELEASE_BUNDLE_DIR / "RELEASE_MANIFEST.json"
@@ -298,8 +299,25 @@ def build_artifact_hash_index(
     specs: Sequence[Mapping[str, Any]] = ARTIFACT_SPECS,
     *,
     bundle_dir: Path | str = RELEASE_BUNDLE_DIR,
+    reference_dir: Path | str | None = None,
 ) -> dict[str, Any]:
-    artifacts = [artifact_record(repository_root, _normalise_bundle_spec(spec, Path(bundle_dir))) for spec in specs]
+    physical_dir = Path(bundle_dir)
+    logical_dir = (
+        Path(reference_dir)
+        if reference_dir is not None
+        else physical_dir
+    )
+    artifacts = [
+        artifact_record(
+            repository_root,
+            _normalise_bundle_spec(
+                spec,
+                physical_dir=physical_dir,
+                logical_dir=logical_dir,
+            ),
+        )
+        for spec in specs
+    ]
     required_artifacts = [artifact for artifact in artifacts if artifact["required"]]
     missing = [artifact for artifact in required_artifacts if not artifact["exists"]]
     return {
@@ -328,8 +346,12 @@ def artifact_record(repository_root: Path, spec: Mapping[str, Any]) -> dict[str,
             "required": bool(spec["required"]),
             "reason": str(spec["reason"]),
         }
-    candidate = Path(relative_path)
-    path = candidate if candidate.is_absolute() else repository_root / candidate
+    physical = spec.get("_physical_path")
+    path = (
+        Path(str(physical)).resolve(strict=False)
+        if physical is not None
+        else resolve_local_trust_path(repository_root, relative_path)
+    )
     if not path.exists() or not path.is_file():
         return {
             "artifact_id": spec["artifact_id"],
@@ -354,11 +376,20 @@ def artifact_record(repository_root: Path, spec: Mapping[str, Any]) -> dict[str,
     }
 
 
-def _normalise_bundle_spec(spec: Mapping[str, Any], bundle_dir: Path) -> dict[str, Any]:
+def _normalise_bundle_spec(
+    spec: Mapping[str, Any],
+    *,
+    physical_dir: Path,
+    logical_dir: Path,
+) -> dict[str, Any]:
     if spec.get("artifact_group") != "release_bundle":
         return dict(spec)
     filename = Path(str(spec["path"])).name
-    return {**spec, "path": (bundle_dir / filename).as_posix()}
+    return {
+        **spec,
+        "path": (logical_dir / filename).as_posix(),
+        "_physical_path": (physical_dir / filename).as_posix(),
+    }
 
 
 def artifact_by_path(index: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:

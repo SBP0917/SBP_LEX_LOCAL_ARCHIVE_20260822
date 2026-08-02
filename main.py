@@ -57,9 +57,20 @@ if __name__ == "__main__":
     elif len(sys.argv) > 1 and sys.argv[1] == "status":
         print(json.dumps(CANONICAL_RUNTIME.status(), indent=2, default=str))
     elif len(sys.argv) > 1 and sys.argv[1] == "replay":
-        print(json.dumps(CANONICAL_RUNTIME.replay(sample_request(), replay_count=2), indent=2, default=str))
+        replay = CANONICAL_RUNTIME.replay(sample_request(), replay_count=2)
+        status = CANONICAL_RUNTIME.status()
+        print(json.dumps({
+            **replay,
+            "measured_startup_status": status["measured_startup_status"],
+            "measured_runtime_identity": status["measured_runtime_identity"],
+            "approved_runtime_baseline": status["approved_runtime_baseline"],
+            "runtime_measurement_digest": status["runtime_measurement_digest"],
+            "startup_attestation_digest": status["startup_attestation_digest"],
+            "measured_startup_sequence": status["measured_startup_sequence"],
+        }, indent=2, default=str))
     else:
         state = main(sample_request())
+        status = CANONICAL_RUNTIME.status()
         summary = {
             "decision": state.get("decision"),
             "execution_result": state.get("execution_result"),
@@ -67,5 +78,11 @@ if __name__ == "__main__":
             "audit_hash": state.get("audit_hash"),
             "convergence_matched": state.get("pipeline_convergence", {}).get("matched"),
             "token_failures": state.get("token_verification_failures", []),
+            "measured_startup_status": status["measured_startup_status"],
+            "measured_runtime_identity": status["measured_runtime_identity"],
+            "approved_runtime_baseline": status["approved_runtime_baseline"],
+            "runtime_measurement_digest": status["runtime_measurement_digest"],
+            "startup_attestation_digest": status["startup_attestation_digest"],
+            "measured_startup_sequence": status["measured_startup_sequence"],
         }
         print(json.dumps(summary, indent=2, default=str))

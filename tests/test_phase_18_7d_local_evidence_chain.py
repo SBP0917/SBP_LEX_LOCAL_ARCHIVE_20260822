@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from sbp_lex.local_trust.evidence_chain import (
+    EVIDENCE_CHAIN_SIGNATURE_DOMAIN,
     build_local_evidence_chain,
     chain_digest_for,
     chain_signature_for,
@@ -13,6 +14,7 @@ from sbp_lex.local_trust.evidence_chain import (
     load_local_evidence_chain,
     write_local_evidence_chain,
 )
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 from sbp_lex.local_trust.evidence_chain_validator import (
     EVIDENCE_CHAIN_DIRTY,
     EVIDENCE_CHAIN_INCOMPLETE,
@@ -111,7 +113,11 @@ def test_chain_digest_validates() -> None:
 
     assert validation == {"evidence_chain_status": EVIDENCE_CHAIN_VALID, "validation_failures": []}
     assert chain["chain_payload_digest"] == hash_chain_payload(chain)
-    assert chain["chain_signature"] == chain_signature_for(chain["chain_payload_digest"])
+    assert verify_local_trust_digest(
+        EVIDENCE_CHAIN_SIGNATURE_DOMAIN,
+        chain["chain_payload_digest"],
+        chain["chain_signature"],
+    )
     assert chain["chain_digest"] == chain_digest_for(chain["chain_payload_digest"], chain["chain_signature"])
 
 

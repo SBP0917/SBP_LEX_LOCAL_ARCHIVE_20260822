@@ -4,7 +4,11 @@ import hmac
 from pathlib import Path
 from typing import Any, Mapping
 
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 EXECUTION_ENV_VALID = "EXECUTION_ENV_VALID"
 EXECUTION_ENV_INVALID = "EXECUTION_ENV_INVALID"
@@ -82,9 +86,9 @@ def validate_execution_envelope(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.execution_envelope import (
+        ENVELOPE_SIGNATURE_DOMAIN,
         ENVELOPE_SIGNATURE_MODE,
         envelope_digest_for,
-        envelope_signature_for,
         hash_envelope_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -116,11 +120,17 @@ def validate_execution_envelope(
     if not hmac.compare_digest(str(envelope.get("envelope_payload_digest")), expected_payload_digest):
         failures.append("envelope_payload_digest_mismatch")
 
-    expected_signature = envelope_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(envelope.get("envelope_signature")), expected_signature):
+    signature = envelope.get("envelope_signature")
+    if not verify_local_trust_digest(
+        ENVELOPE_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("envelope_signature_mismatch")
 
-    expected_envelope_digest = envelope_digest_for(expected_payload_digest, expected_signature)
+    expected_envelope_digest = (
+        envelope_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(envelope.get("envelope_digest")), expected_envelope_digest):
         failures.append("envelope_digest_mismatch")
 
@@ -134,7 +144,16 @@ def validate_execution_envelope(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and envelope.get("git_commit") != current_commit:
+        recorded_commit = envelope.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"verification_status": EXECUTION_ENV_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and envelope.get("working_tree_clean") is not True:

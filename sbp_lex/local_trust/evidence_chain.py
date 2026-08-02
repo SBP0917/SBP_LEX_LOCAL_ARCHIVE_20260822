@@ -22,13 +22,20 @@ from sbp_lex.local_trust.manifest import (
     repository_root_from,
 )
 from sbp_lex.local_trust.manifest_validator import validate_local_trust_manifest
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.report_attestation import (
     collect_evidence_items,
     missing_evidence_items,
     validate_evidence_item_hashes,
 )
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-EVIDENCE_CHAIN_SIGNATURE_MODE = "EVIDENCE_CHAIN_DETERMINISTIC_PLACEHOLDER"
+EVIDENCE_CHAIN_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+EVIDENCE_CHAIN_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_EVIDENCE_CHAIN"
 CHAIN_VERSION = "18.7D"
 DEFAULT_EVIDENCE_CHAIN_OUTPUT_PATH = Path("outputs/local_evidence_chain.json")
 
@@ -89,8 +96,7 @@ def build_local_evidence_chain(
 
 
 def bind_local_trust_manifest(repository_root: Path, manifest_path: Path | str = DEFAULT_MANIFEST_PATH) -> dict[str, Any]:
-    path = Path(manifest_path)
-    resolved = path if path.is_absolute() else repository_root / path
+    resolved = resolve_local_trust_path(repository_root, manifest_path)
     if not resolved.exists():
         return {
             "manifest_digest": "LOCAL_TRUST_MANIFEST_MISSING",
@@ -124,8 +130,7 @@ def bind_execution_envelope(
     envelope_path: Path | str = DEFAULT_ENVELOPE_OUTPUT_PATH,
     manifest_digest: str | None = None,
 ) -> dict[str, Any]:
-    path = Path(envelope_path)
-    resolved = path if path.is_absolute() else repository_root / path
+    resolved = resolve_local_trust_path(repository_root, envelope_path)
     if not resolved.exists():
         return {
             "envelope_digest": "EXECUTION_ENVELOPE_MISSING",
@@ -212,20 +217,14 @@ def hash_chain_payload(chain: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(chain)).encode("utf-8")).hexdigest()
 
 
-def chain_signature_for(payload_digest: str) -> str:
-    return sha256(f"{EVIDENCE_CHAIN_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def chain_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(EVIDENCE_CHAIN_SIGNATURE_DOMAIN, payload_digest)
 
 
-def chain_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "chain_payload_digest": payload_digest,
-                "chain_signature": signature,
-                "signature_mode": EVIDENCE_CHAIN_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def chain_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        EVIDENCE_CHAIN_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_local_evidence_chain(
@@ -235,9 +234,7 @@ def write_local_evidence_chain(
     repository_root: Path | str | None = None,
 ) -> Path:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
-    output = Path(path)
-    if not output.is_absolute():
-        output = root / output
+    output = resolve_local_trust_path(root, path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(chain, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return output
@@ -249,9 +246,7 @@ def load_local_evidence_chain(
     repository_root: Path | str | None = None,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
-    source = Path(path)
-    if not source.is_absolute():
-        source = root / source
+    source = resolve_local_trust_path(root, path)
     with source.open("r", encoding="utf-8") as handle:
         loaded = json.load(handle)
     if not isinstance(loaded, dict):

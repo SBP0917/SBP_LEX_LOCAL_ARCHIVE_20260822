@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import threading
 from copy import deepcopy
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -33,6 +34,10 @@ from sbp_lex.execution.capability_store import (
     CapabilityLifecycleStore,
     CapabilityStoreError,
 )
+from sbp_lex.formal.verifier import (
+    FormalArchitectureVerifier,
+    formalize_runtime_state,
+)
 from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.pipeline.replay_runner import run_replay_check
 from sbp_lex.runtime.canonical_runtime import CanonicalRuntime
@@ -42,9 +47,11 @@ from sbp_lex.security.pqc import generate_digest, sign_payload
 NOW = datetime(2026, 7, 11, 12, 0, 0, tzinfo=timezone.utc)
 MEASUREMENT = {
     "status": "MEASURED_STARTUP_APPROVED",
-    "runtime_identity": "TEST-H8-RUNTIME-IDENTITY",
+    "runtime_identity": "e" * 64,
     "approved_baseline_identifier": "TEST-H8-APPROVED-BASELINE",
     "measurement_digest": "a" * 64,
+    "startup_attestation_digest": "b" * 64,
+    "startup_sequence": 7,
 }
 DEFAULT_PARAMETERS = {"level": 1}
 DEFAULT_ALLOWED_FIELDS = ("level",)
@@ -180,7 +187,20 @@ def _authority(
 ) -> dict[str, Any]:
     started = _runtime_event(
         first_sequence, "traversal_started",
-        {"request_id": request_id, "action": "test_action"},
+        {
+            "request_id": request_id,
+            "action": "test_action",
+            **{
+                field: MEASUREMENT[field]
+                for field in (
+                    "runtime_identity",
+                    "approved_baseline_identifier",
+                    "measurement_digest",
+                    "startup_attestation_digest",
+                    "startup_sequence",
+                )
+            },
+        },
     )
     completed = _runtime_event(
         first_sequence + 1, "traversal_completed",
@@ -192,6 +212,14 @@ def _authority(
             "pipeline_mode": state.get("pipeline_mode"),
             "audit_hash": state.get("audit_hash"),
             "traversal_started_event_hash": started["event_hash"],
+            "replay_ledger_hash": generate_digest({
+                "request_id": request_id,
+                "receipt": "replay",
+            }),
+            "persistence_record_hash": generate_digest({
+                "request_id": request_id,
+                "receipt": "persistence",
+            }),
         },
         previous_hash=started["event_hash"],
     )
@@ -330,13 +358,64 @@ def _complete(harness: H7Harness, capability: Mapping[str, Any]) -> dict[str, An
     )
 
 
+def _resign_capability(value: Mapping[str, Any]) -> dict[str, Any]:
+    capability = deepcopy(dict(value))
+    body = {
+        key: deepcopy(item)
+        for key, item in capability.items()
+        if key not in {"capability_digest", "integrity_binding"}
+    }
+    bound = {
+        "integrity_domain": capability_module.CAPABILITY_DOMAIN,
+        "payload": body,
+    }
+    capability["capability_digest"] = generate_digest(bound)
+    capability["integrity_binding"] = sign_payload(bound)
+    return capability
+
+
+def _resign_attestation(value: Mapping[str, Any]) -> dict[str, Any]:
+    attestation = deepcopy(dict(value))
+    bound = {
+        "integrity_domain": capability_module.ATTESTATION_DOMAIN,
+        "payload": dict(attestation["payload"]),
+    }
+    attestation["attestation_hash"] = generate_digest(bound)
+    attestation["integrity_binding"] = sign_payload(bound)
+    return attestation
+
+
+def _resign_completion_evidence(value: Mapping[str, Any]) -> dict[str, Any]:
+    evidence = deepcopy(dict(value))
+    bound = {
+        "integrity_domain": capability_module.COMPLETION_EVIDENCE_DOMAIN,
+        "payload": dict(evidence["payload"]),
+    }
+    evidence["integrity_binding"] = sign_payload(bound)
+    return evidence
+
+
 def test_capability_and_attestation_schemas_match_implementation() -> None:
     schema_root = Path(capability_module.__file__).parent / "schemas"
     capability_schema = json.loads((schema_root / "execution_capability.schema.json").read_text("utf-8"))
     attestation_schema = json.loads((schema_root / "post_execution_attestation.schema.json").read_text("utf-8"))
+    authority_schema = json.loads(
+        (schema_root / "execution_traversal_authority.schema.json").read_text("utf-8")
+    )
+    completion_schema = json.loads(
+        (schema_root / "adapter_completion_evidence.schema.json").read_text("utf-8")
+    )
     lifecycle_schema = json.loads((schema_root / "capability_lifecycle_record.schema.json").read_text("utf-8"))
     assert set(capability_schema["required"]) == CAPABILITY_FIELDS == STORE_CAPABILITY_FIELDS
     assert set(attestation_schema["properties"]["payload"]["required"]) == ATTESTATION_PAYLOAD_FIELDS
+    assert (
+        set(authority_schema["properties"]["payload"]["required"])
+        == capability_module.TRAVERSAL_AUTHORITY_FIELDS
+    )
+    assert (
+        set(completion_schema["properties"]["payload"]["required"])
+        == capability_module.COMPLETION_EVIDENCE_FIELDS
+    )
     assert lifecycle_schema["properties"]["new_state"]["$ref"] == "#/$defs/state"
 
 
@@ -472,6 +551,8 @@ def test_new_signed_traversal_receipt_is_required_after_ambiguity(h7_factory: An
         ("runtime_identity", "other-runtime"),
         ("approved_baseline_identifier", "other-baseline"),
         ("measurement_digest", "f" * 64),
+        ("startup_attestation_digest", "1" * 64),
+        ("startup_sequence", 8),
         ("execution_adapter_identity", "adapter-2"),
         ("audit_lineage_identifier", "0" * 64),
     ],
@@ -908,20 +989,15 @@ def test_temporal_expiry_start_duration_report_deadline_and_clock_rollback(h7_fa
     assert duration.store.state(duration_capability["capability_id"]) == "FAILED"
 
     report = h7_factory()
-    report_capability = report.issue(
-        activate=True, lifetime_seconds=100, reservation_timeout_seconds=5,
-        execution_start_seconds=10, maximum_execution_seconds=20,
-        completion_report_seconds=10,
-    )
-    report_context = _start(report, report_capability)
-    result = {"status": "DONE"}
-    evidence = capability_module._completion_evidence(report_capability, result=result, now=report.clock())
-    report.clock.advance(10)
-    attestation = report.service.complete(
-        report_capability, context=report_context, completion_classification="COMPLETED",
-        result=result, positive_completion_evidence=evidence,
-    )
-    assert attestation["payload"]["completion_classification"] == "AMBIGUOUS"
+    with pytest.raises(
+        ExecutionIntegrityError, match="capability_temporal_policy_invalid",
+    ):
+        report.issue(
+            activate=True, lifetime_seconds=100,
+            reservation_timeout_seconds=5,
+            execution_start_seconds=10, maximum_execution_seconds=20,
+            completion_report_seconds=10,
+        )
 
     rollback = h7_factory()
     rollback_capability = rollback.issue()
@@ -936,7 +1012,7 @@ def test_expiry_during_execution_transitions_to_failed_with_attestation(h7_facto
     harness = h7_factory()
     capability = harness.issue(
         activate=True, lifetime_seconds=10, reservation_timeout_seconds=1,
-        execution_start_seconds=2, maximum_execution_seconds=10,
+        execution_start_seconds=2, maximum_execution_seconds=8,
         completion_report_seconds=10,
     )
     context = _start(harness, capability)
@@ -955,15 +1031,336 @@ def test_naive_clock_is_rejected(h7_factory: Any) -> None:
         harness.issue()
 
 
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("runtime_identity", "f" * 64),
+        ("approved_baseline_identifier", "changed-baseline"),
+        ("measurement_digest", "c" * 64),
+        ("startup_attestation_digest", "d" * 64),
+        ("startup_sequence", 8),
+    ],
+)
+@pytest.mark.linkage_assurance
 def test_runtime_measurement_change_between_receipt_and_issuance_is_denied(
+    field: str, replacement: Any,
     h7_factory: Any, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     harness = h7_factory()
     authority = harness.new_authority("old-measured-runtime")
-    changed = {**MEASUREMENT, "measurement_digest": "b" * 64}
+    changed = {**MEASUREMENT, field: replacement}
     monkeypatch.setattr(capability_module, "ensure_measured_startup", lambda: deepcopy(changed))
-    with pytest.raises(ExecutionIntegrityError, match="traversal_runtime_binding_changed:measurement_digest"):
+    with pytest.raises(ExecutionIntegrityError, match=f"traversal_runtime_binding_changed:{field}"):
         harness.issue(authority=authority)
+
+
+@pytest.mark.linkage_assurance
+def test_startup_authority_capability_and_terminal_evidence_are_explicitly_linked(
+    h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    authority = harness.new_authority("explicit-startup-linkage")
+    capability = harness.issue(authority=authority, activate=True)
+    context = _start(harness, capability)
+    result = {"status": "DONE"}
+    evidence = capability_module._completion_evidence(
+        capability, result=result, now=harness.clock(),
+    )
+    attestation = harness.service.complete(
+        capability, context=context, completion_classification="COMPLETED",
+        result=result, positive_completion_evidence=evidence,
+    )
+
+    for field in (
+        "runtime_identity",
+        "approved_baseline_identifier",
+        "measurement_digest",
+        "startup_attestation_digest",
+        "startup_sequence",
+    ):
+        assert authority["payload"][field] == MEASUREMENT[field]
+        assert capability[field] == authority["payload"][field]
+        assert evidence["payload"][field] == capability[field]
+        assert attestation["payload"][field] == capability[field]
+
+    for field in (
+        "request_fingerprint", "traversal_authority_digest", "capability_digest",
+        "eie_digest", "canonical_state_hash", "audit_lineage_identifier",
+    ):
+        assert evidence["payload"][field] == capability[field]
+        assert attestation["payload"][field] == capability[field]
+    assert attestation["payload"]["completion_evidence_digest"] == generate_digest(evidence)
+    assert attestation["payload"]["completion_evidence_valid"] is True
+    assert verify_execution_traversal_authority(authority, harness.state)
+    assert verify_capability(capability)
+    assert capability_module._verify_completion_evidence(
+        evidence, capability=capability, result=result, now=harness.clock(),
+    )
+    assert verify_post_execution_attestation(attestation, capability=capability)
+    harness.store.validate()
+
+
+@pytest.mark.linkage_assurance
+def test_formal_terminal_pass_requires_real_h7_capability_and_attestation(
+    h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    capability = harness.issue(activate=True)
+    attestation = _complete(harness, capability)
+    formal = formalize_runtime_state(
+        harness.state,
+        {
+            "measured_runtime_identity": MEASUREMENT["runtime_identity"],
+            "approved_runtime_baseline": MEASUREMENT[
+                "approved_baseline_identifier"
+            ],
+            "runtime_measurement_digest": MEASUREMENT["measurement_digest"],
+            "startup_attestation_digest": MEASUREMENT[
+                "startup_attestation_digest"
+            ],
+            "measured_startup_sequence": MEASUREMENT["startup_sequence"],
+            "measured_startup_status": MEASUREMENT["status"],
+        },
+    )
+    terminal = replace(
+        formal,
+        architectural_state="EXECUTION_COMPLETED",
+        terminal_outcome="COMPLETED",
+        capability_state="COMPLETED",
+        capability_consumed=True,
+        execution_capability=capability,
+        execution_attestation=attestation,
+    )
+    result = FormalArchitectureVerifier().verify(terminal)
+    assert result.valid, result.violations
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "reason"),
+    [
+        ("runtime_identity", None, "measured_startup_binding_missing:runtime_identity"),
+        (
+            "approved_baseline_identifier", "",
+            "measured_startup_binding_missing:approved_baseline_identifier",
+        ),
+        ("measurement_digest", None, "measured_startup_binding_missing:measurement_digest"),
+        (
+            "startup_attestation_digest", "",
+            "measured_startup_binding_missing:startup_attestation_digest",
+        ),
+        ("startup_sequence", 0, "measured_startup_binding_missing:startup_sequence"),
+        ("startup_sequence", True, "measured_startup_binding_missing:startup_sequence"),
+    ],
+)
+@pytest.mark.linkage_assurance
+def test_traversal_authority_requires_complete_measured_startup_binding(
+    field: str, replacement: Any, reason: str,
+    mode2_state: Mapping[str, Any], monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    incomplete = {**MEASUREMENT, field: replacement}
+    monkeypatch.setattr(
+        capability_module, "ensure_measured_startup", lambda: deepcopy(incomplete),
+    )
+    with pytest.raises(ExecutionIntegrityError, match=reason):
+        _authority(mode2_state, request_id="incomplete-measured-startup")
+
+
+@pytest.mark.linkage_assurance
+def test_resigned_version_downgrades_are_rejected_at_every_link(h7_factory: Any) -> None:
+    harness = h7_factory()
+    authority = harness.new_authority("downgrade-denial")
+    downgraded_authority = deepcopy(authority)
+    downgraded_authority["payload"]["authority_version"] = (
+        "H7_EXECUTION_TRAVERSAL_AUTHORITY_V1"
+    )
+    authority_bound = {
+        "integrity_domain": capability_module.TRAVERSAL_AUTHORITY_DOMAIN,
+        "payload": dict(downgraded_authority["payload"]),
+    }
+    downgraded_authority["authority_digest"] = generate_digest(authority_bound)
+    downgraded_authority["integrity_binding"] = sign_payload(authority_bound)
+    assert not verify_execution_traversal_authority(
+        downgraded_authority, harness.state,
+    )
+
+    capability = harness.issue(authority=authority, activate=True)
+    downgraded_capability = deepcopy(capability)
+    downgraded_capability["capability_version"] = "H7_EXECUTION_CAPABILITY_V1"
+    downgraded_capability = _resign_capability(downgraded_capability)
+    assert not verify_capability(downgraded_capability)
+
+    context = _start(harness, capability)
+    result = {"status": "DONE"}
+    evidence = capability_module._completion_evidence(
+        capability, result=result, now=harness.clock(),
+    )
+    downgraded_evidence = deepcopy(evidence)
+    downgraded_evidence["payload"]["evidence_version"] = (
+        "H7_ADAPTER_COMPLETION_EVIDENCE_V1"
+    )
+    downgraded_evidence = _resign_completion_evidence(downgraded_evidence)
+    assert not capability_module._verify_completion_evidence(
+        downgraded_evidence, capability=capability,
+        result=result, now=harness.clock(),
+    )
+
+    attestation = harness.service.complete(
+        capability, context=context, completion_classification="COMPLETED",
+        result=result, positive_completion_evidence=evidence,
+    )
+    downgraded_attestation = deepcopy(attestation)
+    downgraded_attestation["payload"]["attestation_version"] = (
+        "H7_POST_EXECUTION_ATTESTATION_V1"
+    )
+    downgraded_attestation = _resign_attestation(downgraded_attestation)
+    assert not verify_post_execution_attestation(
+        downgraded_attestation, capability=capability,
+    )
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("request_fingerprint", "0" * 64),
+        ("traversal_authority_digest", "1" * 64),
+        ("capability_digest", "2" * 64),
+        ("measurement_digest", "3" * 64),
+        ("startup_attestation_digest", "4" * 64),
+        ("startup_sequence", 8),
+        ("audit_lineage_identifier", "5" * 64),
+    ],
+)
+@pytest.mark.linkage_assurance
+def test_resigned_completion_evidence_substitution_is_rejected(
+    field: str, replacement: Any, h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    capability = harness.issue()
+    result = {"status": "DONE"}
+    evidence = capability_module._completion_evidence(
+        capability, result=result, now=harness.clock(),
+    )
+    substituted = deepcopy(evidence)
+    substituted["payload"][field] = replacement
+    substituted = _resign_completion_evidence(substituted)
+    assert not capability_module._verify_completion_evidence(
+        substituted, capability=capability,
+        result=result, now=harness.clock(),
+    )
+
+
+@pytest.mark.linkage_assurance
+def test_resigned_malformed_linkage_artifacts_fail_structural_verification(
+    h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    capability = harness.issue(activate=True)
+    malformed_capability = deepcopy(capability)
+    malformed_capability["startup_sequence"] = True
+    malformed_capability = _resign_capability(malformed_capability)
+    assert not verify_capability(malformed_capability)
+
+    attestation = _complete(harness, capability)
+    malformed_attestation = deepcopy(attestation)
+    malformed_attestation["payload"]["startup_attestation_digest"] = "not-a-digest"
+    malformed_attestation = _resign_attestation(malformed_attestation)
+    assert not verify_post_execution_attestation(
+        malformed_attestation, capability=capability,
+    )
+
+    unsupported_success = deepcopy(attestation)
+    unsupported_success["payload"]["completion_evidence_valid"] = False
+    unsupported_success = _resign_attestation(unsupported_success)
+    assert not verify_post_execution_attestation(
+        unsupported_success, capability=capability,
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "constraint_digest",
+        "target_identity",
+        "pipeline_b_mode",
+        "completion_before_start",
+        "issuance_authority_key",
+        "capability_id",
+        "request_whitespace",
+    ],
+)
+@pytest.mark.linkage_assurance
+def test_resigned_structurally_invalid_capabilities_are_rejected(
+    mutation: str, h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    capability = deepcopy(harness.issue())
+    if mutation == "constraint_digest":
+        capability["constraint_digest"] = "0" * 64
+    elif mutation == "target_identity":
+        capability["target_identity"] = "*"
+    elif mutation == "pipeline_b_mode":
+        capability["pipeline_b_result_digest"] = None
+    elif mutation == "completion_before_start":
+        capability["completion_report_deadline"] = capability[
+            "execution_start_deadline"
+        ]
+        capability["maximum_execution_seconds"] = 1
+    elif mutation == "issuance_authority_key":
+        capability["issuance_authority_key"] = "1" * 64
+    elif mutation == "capability_id":
+        capability["capability_id"] = "2" * 64
+    elif mutation == "request_whitespace":
+        capability["request_id"] = " padded-request "
+    malformed = _resign_capability(capability)
+    assert not verify_capability(malformed)
+
+
+@pytest.mark.linkage_assurance
+def test_lifecycle_store_uses_the_full_capability_verifier(
+    h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    malformed = deepcopy(harness.issue())
+    malformed["constraint_digest"] = "0" * 64
+    malformed = _resign_capability(malformed)
+    with pytest.raises(
+        CapabilityStoreError, match="capability_issuance_evidence_invalid",
+    ):
+        harness.store.append_transition(
+            capability_id=malformed["capability_id"],
+            capability_digest=malformed["capability_digest"],
+            event_type="CAPABILITY_ISSUED",
+            expected_state=None,
+            new_state="PENDING",
+            occurred_at=malformed["issued_at"],
+            details={"capability": malformed},
+        )
+
+
+@pytest.mark.linkage_assurance
+def test_attestation_embeds_and_independently_verifies_completion_evidence(
+    h7_factory: Any,
+) -> None:
+    harness = h7_factory()
+    capability = harness.issue(activate=True)
+    attestation = _complete(harness, capability)
+    embedded = attestation["payload"]["completion_evidence"]
+    assert isinstance(embedded, Mapping)
+    assert attestation["payload"]["completion_evidence_digest"] == generate_digest(
+        embedded
+    )
+    assert verify_post_execution_attestation(attestation, capability=capability)
+
+    substituted = deepcopy(attestation)
+    evidence = deepcopy(dict(substituted["payload"]["completion_evidence"]))
+    evidence["payload"]["target_identity"] = "target-2"
+    evidence = _resign_completion_evidence(evidence)
+    substituted["payload"]["completion_evidence"] = evidence
+    substituted["payload"]["completion_evidence_digest"] = generate_digest(evidence)
+    substituted = _resign_attestation(substituted)
+    assert not verify_post_execution_attestation(
+        substituted, capability=capability,
+    )
 
 
 @pytest.mark.parametrize(
@@ -972,9 +1369,11 @@ def test_runtime_measurement_change_between_receipt_and_issuance_is_denied(
         "request_fingerprint", "eie_digest", "canonical_state_hash", "pipeline_mode",
         "convergence_result", "governance_token", "grc_token", "domain_token",
         "aurion_result", "target_identity", "constraint_digest",
-        "runtime_identity", "measurement_digest", "execution_adapter_identity",
+        "runtime_identity", "approved_baseline_identifier", "measurement_digest",
+        "startup_attestation_digest", "startup_sequence", "execution_adapter_identity",
     ],
 )
+@pytest.mark.linkage_assurance
 def test_mid_execution_binding_change_stops_before_later_step(field: str, h7_factory: Any) -> None:
     harness = h7_factory()
     capability = harness.issue(activate=True)
@@ -993,15 +1392,27 @@ def test_mid_execution_binding_change_stops_before_later_step(field: str, h7_fac
     assert any(item["new_state"] == "FAILED" for item in harness.store.history(capability["capability_id"]))
 
 
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("runtime_identity", "f" * 64),
+        ("approved_baseline_identifier", "changed-baseline"),
+        ("measurement_digest", "c" * 64),
+        ("startup_attestation_digest", "d" * 64),
+        ("startup_sequence", 8),
+    ],
+)
+@pytest.mark.linkage_assurance
 def test_measured_state_drift_during_execution_fails_and_cannot_complete(
+    field: str, replacement: Any,
     h7_factory: Any, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     harness = h7_factory()
     capability = harness.issue(activate=True)
     context = _start(harness, capability)
-    drifted = {**MEASUREMENT, "measurement_digest": "b" * 64}
+    drifted = {**MEASUREMENT, field: replacement}
     monkeypatch.setattr(capability_module, "ensure_measured_startup", lambda: deepcopy(drifted))
-    with pytest.raises(ExecutionIntegrityError, match="measured_runtime_binding_changed:measurement_digest"):
+    with pytest.raises(ExecutionIntegrityError, match=f"measured_runtime_binding_changed:{field}"):
         harness.service.record_checkpoint(capability, context=context)
     assert harness.store.state(capability["capability_id"]) == "FAILED"
     with pytest.raises(ExecutionIntegrityError, match="capability_not_executing"):
@@ -1097,12 +1508,22 @@ def test_adapter_identity_and_safe_cancellation_policy_are_enforced_before_execu
     [
         (("attestation_hash",), "0" * 64),
         (("payload", "capability_id"), "0" * 64),
+        (("payload", "request_fingerprint"), "4" * 64),
+        (("payload", "traversal_authority_digest"), "5" * 64),
+        (("payload", "capability_digest"), "6" * 64),
         (("payload", "target_identity"), "target-2"),
         (("payload", "result_digest"), "1" * 64),
+        (("payload", "completion_evidence_digest"), "7" * 64),
+        (("payload", "completion_evidence_valid"), False),
         (("payload", "completion_classification"), "FAILED"),
         (("payload", "adapter_identity"), "adapter-2"),
+        (("payload", "approved_baseline_identifier"), "other-baseline"),
+        (("payload", "measurement_digest"), "2" * 64),
+        (("payload", "startup_attestation_digest"), "3" * 64),
+        (("payload", "startup_sequence"), 8),
     ],
 )
+@pytest.mark.linkage_assurance
 def test_attestation_tampering_is_detected(
     path: tuple[str, ...], replacement: Any, h7_factory: Any,
 ) -> None:
@@ -1395,7 +1816,24 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
     tampered = deepcopy(authority)
     tampered["payload"]["request_id"] = "substituted"
     assert not verify_execution_traversal_authority(tampered, mode2_state)
-    started = _runtime_event(1, "traversal_started", {"request_id": "expected", "action": "test_action"})
+    started = _runtime_event(
+        1,
+        "traversal_started",
+        {
+            "request_id": "expected",
+            "action": "test_action",
+            **{
+                field: MEASUREMENT[field]
+                for field in (
+                    "runtime_identity",
+                    "approved_baseline_identifier",
+                    "measurement_digest",
+                    "startup_attestation_digest",
+                    "startup_sequence",
+                )
+            },
+        },
+    )
     completed = _runtime_event(
         2, "traversal_completed", {"request_id": "other"},
         previous_hash=started["event_hash"],
@@ -1415,6 +1853,14 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
             "pipeline_mode": mode2_state["pipeline_mode"],
             "audit_hash": mode2_state["audit_hash"],
             "traversal_started_event_hash": started["event_hash"],
+            "replay_ledger_hash": generate_digest({
+                "request_id": "expected",
+                "receipt": "replay",
+            }),
+            "persistence_record_hash": generate_digest({
+                "request_id": "expected",
+                "receipt": "persistence",
+            }),
         },
         previous_hash=started["event_hash"],
     )
@@ -1422,6 +1868,66 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
         build_execution_traversal_authority(
             mode2_state, runtime_id="ATTACKER_RUNTIME", request_id="expected",
             traversal_started_event=started, traversal_completed_event=valid_completed,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("measurement_digest", None),
+        ("startup_attestation_digest", "0" * 64),
+        ("startup_sequence", 8),
+        ("action", "other_action"),
+    ],
+)
+@pytest.mark.linkage_assurance
+def test_traversal_start_receipt_is_exactly_bound_to_startup_and_action(
+    field: str, replacement: Any, mode2_state: Mapping[str, Any],
+) -> None:
+    start_payload = {
+        "request_id": "start-binding",
+        "action": "test_action",
+        **{
+            name: MEASUREMENT[name]
+            for name in capability_module.MEASURED_STARTUP_BINDING_FIELDS
+        },
+    }
+    if replacement is None:
+        start_payload.pop(field)
+    else:
+        start_payload[field] = replacement
+    started = _runtime_event(1, "traversal_started", start_payload)
+    completed = _runtime_event(
+        2,
+        "traversal_completed",
+        {
+            "request_id": "start-binding",
+            "request_fingerprint": mode2_state["request_fingerprint"],
+            "decision": mode2_state["decision"],
+            "execution_result": mode2_state["execution_result"],
+            "pipeline_mode": mode2_state["pipeline_mode"],
+            "audit_hash": mode2_state["audit_hash"],
+            "traversal_started_event_hash": started["event_hash"],
+            "replay_ledger_hash": generate_digest({
+                "request_id": "start-binding",
+                "receipt": "replay",
+            }),
+            "persistence_record_hash": generate_digest({
+                "request_id": "start-binding",
+                "receipt": "persistence",
+            }),
+        },
+        previous_hash=started["event_hash"],
+    )
+    with pytest.raises(
+        ExecutionIntegrityError, match="traversal_started_evidence_invalid",
+    ):
+        build_execution_traversal_authority(
+            mode2_state,
+            runtime_id="SBP_LEX_V1_CANONICAL_RUNTIME",
+            request_id="start-binding",
+            traversal_started_event=started,
+            traversal_completed_event=completed,
         )
 
 
@@ -1572,3 +2078,47 @@ def test_capability_integrity_mutation_and_regeneration_are_denied(h7_factory: A
             event_type="CAPABILITY_ACTIVATED", expected_state="ACTIVE", new_state="ACTIVE",
             occurred_at=NOW.isoformat().replace("+00:00", "Z"),
         )
+
+
+@pytest.mark.linkage_assurance
+@pytest.mark.parametrize(
+    ("relative", "required_tokens"),
+    [
+        (
+            "scripts/run_tests.sh",
+            (
+                "unset PYTHONPATH",
+                "PYTHONNOUSERSITE=1",
+                "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1",
+                '"$PYTHON" -m pytest',
+            ),
+        ),
+        (
+            "scripts/run_tests.bat",
+            (
+                'set "PYTHONPATH="',
+                'set "PYTHONNOUSERSITE=1"',
+                'set "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1"',
+                "-m pytest",
+            ),
+        ),
+    ],
+)
+def test_assurance_runner_sanitizes_python_and_pytest_injection_surfaces(
+    relative: str,
+    required_tokens: tuple[str, ...],
+) -> None:
+    root = Path(__file__).resolve().parents[1]
+    text = (root / relative).read_text("utf-8")
+    assert all(token in text for token in required_tokens)
+
+
+@pytest.mark.linkage_assurance
+def test_linkage_wrappers_delegate_to_hardened_test_runner() -> None:
+    root = Path(__file__).resolve().parents[1]
+    shell = (root / "scripts/run_linkage_assurance.sh").read_text("utf-8")
+    batch = (root / "scripts/run_linkage_assurance.bat").read_text("utf-8")
+    assert 'sh "$SCRIPT_DIR/run_tests.sh"' in shell
+    assert 'call "%~dp0run_tests.bat"' in batch
+    assert "status --porcelain=v1 --untracked-files=all" in shell
+    assert "status --porcelain^=v1 --untracked-files^=all" in batch

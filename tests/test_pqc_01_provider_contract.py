@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import inspect
+from base64 import b64decode, b64encode
 
 import pytest
 
@@ -18,6 +20,7 @@ from sbp_lex.security.pqc_policy import (
 )
 from sbp_lex.security.pqc_provider import (
     PQCProviderUnavailable,
+    generate_signing_keypair,
     provider_available,
     provider_name,
     sign,
@@ -108,6 +111,10 @@ def test_pqc_signature_envelope_is_real_provider_metadata() -> None:
     assert signature["policy"] == "NIST_FIPS_203_204_205"
     assert signature["provider"] == "cryptography.mldsa"
     assert signature["provider_available"] is True
+    assert signature["signature_version"] == "PQC_01_PROVIDER_SIGNATURE_V2"
+    assert signature["key_fingerprint"] == hashlib.sha256(
+        b64decode(signature["public_key"])
+    ).hexdigest()
     assert "public_key" in signature
     assert "signature" in signature
     assert verify_signature(payload, signature) is True
@@ -122,6 +129,104 @@ def test_randomized_provider_proof_does_not_break_canonical_digest() -> None:
     assert generate_digest(first) == generate_digest(second)
     assert verify_signature(payload, first["signature"]) is True
     assert verify_signature(payload, second["signature"]) is True
+
+
+@pytest.mark.linkage_assurance
+def test_self_supplied_unauthorised_signing_key_is_rejected() -> None:
+    payload = {"message": "unauthorised self-supplied key"}
+    digest = generate_digest(payload)
+    private_key, public_key = generate_signing_keypair("ML-DSA")
+    forged = {
+        "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+        "algorithm": "ML-DSA",
+        "policy": "NIST_FIPS_203_204_205",
+        "provider": provider_name(),
+        "provider_available": True,
+        "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2",
+        "key_fingerprint": hashlib.sha256(public_key).hexdigest(),
+        "digest": digest,
+        "signature": b64encode(
+            sign(digest.encode("utf-8"), private_key, "ML-DSA")
+        ).decode("ascii"),
+        "public_key": b64encode(public_key).decode("ascii"),
+    }
+
+    assert verify_signature(payload, forged) is False
+
+
+@pytest.mark.linkage_assurance
+def test_signing_fails_closed_without_configured_trust_root(monkeypatch) -> None:
+    monkeypatch.delenv("SBP_LEX_SIGNING_SECRET", raising=False)
+    monkeypatch.delenv("SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY", raising=False)
+
+    with pytest.raises(PQCProviderUnavailable, match="missing or invalid"):
+        sign_payload({"message": "no trusted signer"})
+
+
+@pytest.mark.linkage_assurance
+def test_signing_seed_cannot_self_declare_its_public_trust_root(
+    monkeypatch,
+) -> None:
+    monkeypatch.delenv(
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY", raising=False,
+    )
+
+    with pytest.raises(PQCProviderUnavailable, match="does not match"):
+        sign_payload({"message": "seed without out-of-band public key"})
+
+
+@pytest.mark.linkage_assurance
+def test_public_key_only_verifier_accepts_only_pinned_signer(monkeypatch) -> None:
+    payload = {"message": "independent verifier"}
+    signature = sign_payload(payload)
+    monkeypatch.setenv(
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY", signature["public_key"],
+    )
+    monkeypatch.delenv("SBP_LEX_SIGNING_SECRET", raising=False)
+
+    assert verify_signature(payload, signature) is True
+
+
+@pytest.mark.linkage_assurance
+def test_mismatched_explicit_trust_anchor_blocks_signing(monkeypatch) -> None:
+    _, unrelated_public_key = generate_signing_keypair("ML-DSA")
+    monkeypatch.setenv(
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+        b64encode(unrelated_public_key).decode("ascii"),
+    )
+
+    with pytest.raises(PQCProviderUnavailable, match="does not match"):
+        sign_payload({"message": "mismatched trust anchor"})
+
+
+@pytest.mark.linkage_assurance
+def test_signing_identity_cannot_rotate_inside_active_process(monkeypatch) -> None:
+    sign_payload({"message": "establish active identity"})
+    monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", "0" * 64)
+
+    with pytest.raises(PQCProviderUnavailable, match="changed during"):
+        sign_payload({"message": "identity rotation attempt"})
+
+
+@pytest.mark.linkage_assurance
+def test_legacy_self_supplied_signature_envelope_is_rejected() -> None:
+    payload = {"message": "legacy envelope"}
+    signature = sign_payload(payload)
+    signature["signature_version"] = "PQC_01_PROVIDER_SIGNATURE_V1"
+    signature.pop("key_fingerprint")
+
+    assert verify_signature(payload, signature) is False
+
+
+def test_canonical_digest_masks_random_proof_but_binds_signer_identity() -> None:
+    payload = {"message": "signer identity binding"}
+    signature = sign_payload(payload)
+    altered = dict(signature)
+    altered["key_fingerprint"] = "0" * 64
+
+    assert generate_digest({"signature": signature}) != generate_digest({
+        "signature": altered,
+    })
 
 
 def test_no_homemade_pqc_algorithm_implementation_exists() -> None:

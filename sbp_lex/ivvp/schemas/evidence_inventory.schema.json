@@ -1,1 +1,76 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R4 evidence inventory","type":"object","required":["inventory_version","evidence","evidence_inventory_digest"],"additionalProperties":true}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:r4:evidence-inventory:v1",
+  "title": "Desktop V1 R4 evidence inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "inventory_version",
+    "repository_commit",
+    "measured_baseline_identifier",
+    "runtime_identity",
+    "evidence",
+    "evidence_inventory_digest"
+  ],
+  "properties": {
+    "inventory_version": {"const": "R4_DESKTOP_V1_IVVP_V1"},
+    "repository_commit": {"$ref": "#/$defs/sha1"},
+    "measured_baseline_identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "runtime_identity": {"$ref": "#/$defs/sha256"},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/evidenceRecord"}
+    },
+    "evidence_inventory_digest": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$)).+$"
+    },
+    "evidenceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_identifier",
+        "source_path",
+        "package_path",
+        "sha256",
+        "size_bytes",
+        "status"
+      ],
+      "properties": {
+        "evidence_identifier": {
+          "type": "string",
+          "pattern": "^FILE_[A-Z0-9_]+$"
+        },
+        "source_path": {"$ref": "#/$defs/portablePath"},
+        "package_path": {
+          "allOf": [
+            {"$ref": "#/$defs/portablePath"},
+            {"pattern": "^evidence/"}
+          ]
+        },
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "status": {"const": "PRESENT"}
+      }
+    }
+  }
+}

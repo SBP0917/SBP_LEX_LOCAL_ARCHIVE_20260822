@@ -14,6 +14,7 @@ from sbp_lex.local_trust.local_trust_capstone import (
     load_local_trust_capstone,
 )
 from sbp_lex.local_trust.capstone_validator import validate_local_trust_capstone
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -257,7 +258,7 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
 
 
 def _load_json(path: str) -> dict:
-    return json.loads((REPOSITORY_ROOT / path).read_text(encoding="utf-8"))
+    return json.loads(resolve_local_trust_path(REPOSITORY_ROOT, path).read_text(encoding="utf-8"))
 
 
 def _refresh_capstone(capstone: dict) -> None:

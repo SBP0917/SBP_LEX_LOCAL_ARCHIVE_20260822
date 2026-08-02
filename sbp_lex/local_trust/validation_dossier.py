@@ -25,6 +25,7 @@ from sbp_lex.local_trust.dossier_manifest import (
 )
 from sbp_lex.local_trust.dossier_validator import validate_dossier_manifest
 from sbp_lex.local_trust.manifest import repository_root_from
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_integrity import load_json
 from sbp_lex.local_trust.release_manifest import collect_release_git_status
 from sbp_lex.local_trust.validation_questions import validation_questions_index
@@ -37,6 +38,7 @@ def build_validation_dossier(
     clean_required: bool = False,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
+    reference_dir = Path(output_dir)
     dossier_dir = _resolve(root, output_dir)
     dossier_dir.mkdir(parents=True, exist_ok=True)
 
@@ -55,7 +57,11 @@ def build_validation_dossier(
         encoding="utf-8",
     )
 
-    artifact_index = build_evidence_artifact_index(root, output_dir=dossier_dir)
+    artifact_index = build_evidence_artifact_index(
+        root,
+        output_dir=dossier_dir,
+        reference_dir=reference_dir,
+    )
     _write_json(artifact_index, dossier_dir / EVIDENCE_ARTIFACT_INDEX_FILE.name)
 
     manifest = build_dossier_manifest(
@@ -66,6 +72,7 @@ def build_validation_dossier(
         scope_lock=scope_lock,
         reviewer_commands=commands,
         output_dir=dossier_dir,
+        output_reference_dir=reference_dir,
     )
     validation = validate_dossier_manifest(
         manifest,
@@ -136,8 +143,7 @@ def _write_json(value: Mapping[str, Any], path: Path) -> None:
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

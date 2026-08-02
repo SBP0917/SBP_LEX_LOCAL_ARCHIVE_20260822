@@ -27,8 +27,15 @@ from sbp_lex.local_trust.manifest import (
 )
 from sbp_lex.local_trust.manifest_validator import validate_local_trust_manifest
 from sbp_lex.local_trust.regression_runner import run_regression_cases, skipped_regression_cases
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
-REGRESSION_MATRIX_SIGNATURE_MODE = "REGRESSION_MATRIX_DETERMINISTIC_PLACEHOLDER"
+REGRESSION_MATRIX_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+REGRESSION_MATRIX_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_TRUST_REGRESSION_MATRIX"
 REGRESSION_MATRIX_VERSION = "18.7E.1"
 DEFAULT_REGRESSION_MATRIX_OUTPUT_PATH = Path("outputs/local_trust_regression_matrix.json")
 
@@ -167,20 +174,14 @@ def hash_matrix_payload(matrix: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(matrix)).encode("utf-8")).hexdigest()
 
 
-def matrix_signature_for(payload_digest: str) -> str:
-    return sha256(f"{REGRESSION_MATRIX_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def matrix_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(REGRESSION_MATRIX_SIGNATURE_DOMAIN, payload_digest)
 
 
-def matrix_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "matrix_payload_digest": payload_digest,
-                "matrix_signature": signature,
-                "signature_mode": REGRESSION_MATRIX_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def matrix_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        REGRESSION_MATRIX_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_local_trust_regression_matrix(
@@ -217,8 +218,7 @@ def validate_local_trust_regression_matrix(*args: Any, **kwargs: Any) -> dict[st
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

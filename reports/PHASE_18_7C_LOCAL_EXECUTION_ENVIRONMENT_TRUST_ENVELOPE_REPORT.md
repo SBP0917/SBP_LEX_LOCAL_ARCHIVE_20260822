@@ -35,12 +35,12 @@ This phase does not alter SBP-LEX runtime authority or execution behavior.
   - `EXECUTION_ENV_STALE`
   - `EXECUTION_ENV_DIRTY`
 - Added runtime and replay evidence summaries without authority effects.
-- Added envelope digest/signature placeholder binding.
+- Added envelope digest/ML-DSA-65 signature binding.
 - Added manifest binding to the 18.7B Local Trust Root Manifest.
 
 ## Envelope Fields
 
-The envelope records envelope identity, version, created timestamp, repository root, Git commit, Git branch, working-tree state, bound local trust manifest digest/path/status, Python executable, Python version, working directory, shell type, PATH digest/summary, command results, runtime result summary, replay result summary, verification status, validation failures, payload digest, envelope digest, signature placeholder, and signature mode.
+The envelope records envelope identity, version, created timestamp, repository root, Git commit, Git branch, working-tree state, bound local trust manifest digest/path/status, Python executable, Python version, working directory, shell type, PATH digest/summary, command results, runtime result summary, replay result summary, verification status, validation failures, payload digest, envelope digest, ML-DSA signature envelope, and signature mode. Verification is pinned to an explicitly configured trusted public key.
 
 ## Manifest Binding Behavior
 

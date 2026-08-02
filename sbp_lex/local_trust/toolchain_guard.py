@@ -31,8 +31,15 @@ from sbp_lex.local_trust.toolchain_policy import (
     TOOLCHAIN_CHECK_SPECS,
     ToolchainCheckSpec,
 )
+from sbp_lex.local_trust.paths import resolve_local_trust_path
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-TOOLCHAIN_GUARD_SIGNATURE_MODE = "TOOLCHAIN_GUARD_DETERMINISTIC_PLACEHOLDER"
+TOOLCHAIN_GUARD_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+TOOLCHAIN_GUARD_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_TOOLCHAIN_GUARD"
 TOOLCHAIN_GUARD_VERSION = "18.7E.3"
 DEFAULT_TOOLCHAIN_GUARD_OUTPUT_PATH = Path("outputs/local_toolchain_guard.json")
 
@@ -349,20 +356,14 @@ def hash_toolchain_payload(guard: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(guard)).encode("utf-8")).hexdigest()
 
 
-def toolchain_signature_for(payload_digest: str) -> str:
-    return sha256(f"{TOOLCHAIN_GUARD_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def toolchain_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(TOOLCHAIN_GUARD_SIGNATURE_DOMAIN, payload_digest)
 
 
-def toolchain_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "toolchain_payload_digest": payload_digest,
-                "toolchain_signature": signature,
-                "signature_mode": TOOLCHAIN_GUARD_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def toolchain_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        TOOLCHAIN_GUARD_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_toolchain_guard(
@@ -399,8 +400,7 @@ def validate_toolchain_guard(*args: Any, **kwargs: Any) -> dict[str, Any]:
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

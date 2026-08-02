@@ -33,6 +33,7 @@ from sbp_lex.local_trust.evidence_registry import REQUIRED_EVIDENCE_SPECS
 from sbp_lex.local_trust.execution_envelope_validator import validate_execution_envelope
 from sbp_lex.local_trust.gate_validator import validate_constitutional_gate_result
 from sbp_lex.local_trust.manifest_validator import validate_local_trust_manifest
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.regression_matrix import (
     hash_matrix_payload,
     matrix_digest_for,
@@ -122,12 +123,14 @@ def run_adversarial_cases(repository_root: Path) -> list[dict[str, Any]]:
 def copy_baseline_artifacts(repository_root: Path, workspace: Path) -> None:
     workspace.mkdir(parents=True, exist_ok=True)
     for relative_path in LOCAL_TRUST_ARTIFACTS.values():
-        source = repository_root / relative_path
+        source = resolve_local_trust_path(repository_root, relative_path)
         target = workspace / relative_path
         if source.exists():
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
-    release_source = repository_root / DEFAULT_RELEASE_BUNDLE_DIR
+    release_source = resolve_local_trust_path(
+        repository_root, DEFAULT_RELEASE_BUNDLE_DIR,
+    )
     release_target = workspace / DEFAULT_RELEASE_BUNDLE_DIR
     if release_source.exists():
         shutil.copytree(release_source, release_target, dirs_exist_ok=True)

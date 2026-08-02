@@ -1,12 +1,17 @@
 from __future__ import annotations
 
+import base64
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 from sbp_lex.local_trust.file_digest import collect_file_hashes
 from sbp_lex.local_trust.manifest import (
+    LOCAL_TRUST_SIGNATURE_DOMAIN,
     build_local_trust_manifest,
     hash_manifest_payload,
     load_local_trust_manifest,
@@ -14,6 +19,9 @@ from sbp_lex.local_trust.manifest import (
     manifest_signature_for,
     write_local_trust_manifest,
 )
+from sbp_lex.local_trust.signing import verify_local_trust_digest
+from sbp_lex.security.pqc import reset_signing_identity_for_tests
+from sbp_lex.security.pqc_provider import derive_signing_keypair
 from sbp_lex.local_trust.manifest_validator import (
     LOCAL_TRUST_DIRTY,
     LOCAL_TRUST_INCOMPLETE,
@@ -22,6 +30,7 @@ from sbp_lex.local_trust.manifest_validator import (
     LOCAL_TRUST_VALID,
     validate_local_trust_manifest,
 )
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +96,18 @@ def test_missing_critical_files_are_recorded_deterministically(tmp_path: Path) -
     ]
 
 
+def test_local_trust_path_rejects_symlink_alias(tmp_path: Path) -> None:
+    target = tmp_path / "target.json"
+    target.write_text("{}", encoding="utf-8")
+    alias = tmp_path / "alias.json"
+    try:
+        alias.symlink_to(target)
+    except OSError:
+        pytest.skip("symlink creation unavailable")
+    with pytest.raises(ValueError, match="local_trust_absolute_path_symlink"):
+        resolve_local_trust_path(tmp_path, alias)
+
+
 def test_manifest_hashes_trusted_reports_when_present() -> None:
     manifest = build_local_trust_manifest(REPOSITORY_ROOT)
     records = {record["path"]: record for record in manifest["trusted_report_hashes"]}
@@ -110,7 +131,11 @@ def test_manifest_digest_validates() -> None:
 
     assert validation == {"local_trust_status": LOCAL_TRUST_VALID, "validation_failures": []}
     assert manifest["manifest_payload_digest"] == hash_manifest_payload(manifest)
-    assert manifest["manifest_signature"] == manifest_signature_for(manifest["manifest_payload_digest"])
+    assert verify_local_trust_digest(
+        LOCAL_TRUST_SIGNATURE_DOMAIN,
+        manifest["manifest_payload_digest"],
+        manifest["manifest_signature"],
+    )
     assert manifest["manifest_digest"] == manifest_digest_for(
         manifest["manifest_payload_digest"],
         manifest["manifest_signature"],
@@ -125,6 +150,51 @@ def test_manifest_tampering_is_detected() -> None:
 
     assert validation["local_trust_status"] == LOCAL_TRUST_INVALID
     assert "manifest_payload_digest_mismatch" in validation["validation_failures"]
+
+
+def test_manifest_rejects_signature_from_unauthorised_mldsa_key(
+    monkeypatch,
+) -> None:
+    manifest = build_local_trust_manifest(REPOSITORY_ROOT)
+    trusted_seed = os.environ["SBP_LEX_SIGNING_SECRET"]
+    trusted_public_key = os.environ[
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY"
+    ]
+    attacker_seed = "a1" * 32
+    _, attacker_public_key = derive_signing_keypair(
+        bytes.fromhex(attacker_seed),
+        "ML-DSA",
+    )
+    try:
+        reset_signing_identity_for_tests()
+        monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", attacker_seed)
+        monkeypatch.setenv(
+            "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+            base64.b64encode(attacker_public_key).decode("ascii"),
+        )
+        payload_digest = hash_manifest_payload(manifest)
+        manifest["manifest_signature"] = manifest_signature_for(payload_digest)
+        manifest["manifest_digest"] = manifest_digest_for(
+            payload_digest, manifest["manifest_signature"],
+        )
+
+        reset_signing_identity_for_tests()
+        monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", trusted_seed)
+        monkeypatch.setenv(
+            "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+            trusted_public_key,
+        )
+        validation = validate_local_trust_manifest(manifest)
+    finally:
+        reset_signing_identity_for_tests()
+        monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", trusted_seed)
+        monkeypatch.setenv(
+            "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+            trusted_public_key,
+        )
+
+    assert validation["local_trust_status"] == LOCAL_TRUST_INVALID
+    assert "manifest_signature_mismatch" in validation["validation_failures"]
 
 
 def test_dirty_working_tree_can_produce_dirty_status_when_required() -> None:

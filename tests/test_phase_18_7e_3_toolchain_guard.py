@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from sbp_lex.local_trust.command_policy import required_command_ids
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.toolchain_guard import (
     build_toolchain_guard,
     hash_toolchain_payload,
@@ -271,7 +272,7 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
 
 
 def _load_json(path: str) -> dict:
-    return json.loads((REPOSITORY_ROOT / path).read_text(encoding="utf-8"))
+    return json.loads(resolve_local_trust_path(REPOSITORY_ROOT, path).read_text(encoding="utf-8"))
 
 
 def _check(guard: dict, check_id: str) -> dict:

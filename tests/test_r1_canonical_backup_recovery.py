@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
+import subprocess
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -12,7 +14,10 @@ from sbp_lex.recovery.backup import create_backup, validate_backup_package
 from sbp_lex.recovery.common import RecoveryError, bound_payload
 from sbp_lex.recovery.inventory import ArtifactSpec, build_inventory, validate_inventory
 from sbp_lex.recovery.manifest import create_manifest, validate_manifest
-from sbp_lex.recovery.recovery_drill import run_recovery_drill
+from sbp_lex.recovery.recovery_drill import (
+    _fresh_process_configuration_command,
+    run_recovery_drill,
+)
 from sbp_lex.recovery.restore import (
     preflight_restore,
     restore_backup,
@@ -29,6 +34,34 @@ TIMESTAMP = "2026-01-01T00:00:00+00:00"
 def write(path: Path, raw: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(raw)
+
+
+@pytest.mark.linkage_assurance
+@pytest.mark.parametrize(("nodes", "expected_returncode"), [
+    (False, 0),
+    (True, 1),
+])
+def test_recovery_fresh_process_check_survives_python_optimization(
+    tmp_path: Path,
+    nodes: bool,
+    expected_returncode: int,
+) -> None:
+    configuration = tmp_path / "configuration/config.json"
+    write(
+        configuration,
+        (json.dumps({"nodes": nodes}) + "\n").encode("utf-8"),
+    )
+    environment = dict(os.environ)
+    environment["SBP_LEX_RECOVERY_GENERATION_ROOT"] = str(tmp_path)
+    environment["PYTHONOPTIMIZE"] = "2"
+    result = subprocess.run(
+        _fresh_process_configuration_command(),
+        capture_output=True,
+        text=True,
+        env=environment,
+        check=False,
+    )
+    assert result.returncode == expected_returncode
 
 
 def ledger(sequences=(1, 2), *, broken_link=False) -> bytes:

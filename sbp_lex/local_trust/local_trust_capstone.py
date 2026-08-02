@@ -31,9 +31,16 @@ from sbp_lex.local_trust.regression_matrix import (
     DEFAULT_REGRESSION_MATRIX_OUTPUT_PATH,
     load_local_trust_regression_matrix,
 )
+from sbp_lex.local_trust.paths import resolve_local_trust_path
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 from sbp_lex.local_trust.toolchain_guard import DEFAULT_TOOLCHAIN_GUARD_OUTPUT_PATH, load_toolchain_guard
 
-CAPSTONE_SIGNATURE_MODE = "LOCAL_TRUST_CAPSTONE_DETERMINISTIC_PLACEHOLDER"
+CAPSTONE_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+CAPSTONE_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_TRUST_CAPSTONE"
 CAPSTONE_VERSION = "18.7E.4"
 DEFAULT_CAPSTONE_OUTPUT_PATH = Path("outputs/local_trust_25_year_capstone.json")
 
@@ -369,20 +376,14 @@ def hash_capstone_payload(capstone: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(capstone)).encode("utf-8")).hexdigest()
 
 
-def capstone_signature_for(payload_digest: str) -> str:
-    return sha256(f"{CAPSTONE_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def capstone_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(CAPSTONE_SIGNATURE_DOMAIN, payload_digest)
 
 
-def capstone_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "capstone_payload_digest": payload_digest,
-                "capstone_signature": signature,
-                "signature_mode": CAPSTONE_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def capstone_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        CAPSTONE_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_local_trust_capstone(
@@ -473,8 +474,7 @@ def _compare_evidence_chain(repository_root: Path, path: Path | str) -> dict[str
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def _origin_remote(repository_root: Path) -> str:

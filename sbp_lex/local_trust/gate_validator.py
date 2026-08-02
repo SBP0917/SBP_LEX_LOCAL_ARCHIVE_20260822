@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from sbp_lex.local_trust.gate_policy import GATE_STATUSES, REQUIRED_GATE_IDS
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 CONSTITUTIONAL_GATES_PASS = "CONSTITUTIONAL_GATES_PASS"
 CONSTITUTIONAL_GATES_FAIL = "CONSTITUTIONAL_GATES_FAIL"
@@ -75,9 +79,9 @@ def validate_constitutional_gate_result(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.constitutional_gates import (
+        CONSTITUTIONAL_GATE_SIGNATURE_DOMAIN,
         CONSTITUTIONAL_GATE_SIGNATURE_MODE,
         gate_digest_for,
-        gate_signature_for,
         hash_gate_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -112,11 +116,17 @@ def validate_constitutional_gate_result(
     if not hmac.compare_digest(str(gate_result.get("gate_payload_digest")), expected_payload_digest):
         failures.append("gate_payload_digest_mismatch")
 
-    expected_signature = gate_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(gate_result.get("gate_signature")), expected_signature):
+    signature = gate_result.get("gate_signature")
+    if not verify_local_trust_digest(
+        CONSTITUTIONAL_GATE_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("gate_signature_mismatch")
 
-    expected_gate_digest = gate_digest_for(expected_payload_digest, expected_signature)
+    expected_gate_digest = (
+        gate_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(gate_result.get("gate_digest")), expected_gate_digest):
         failures.append("gate_digest_mismatch")
 
@@ -131,7 +141,16 @@ def validate_constitutional_gate_result(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and gate_result.get("git_commit") != current_commit:
+        recorded_commit = gate_result.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"gate_status": CONSTITUTIONAL_GATES_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and gate_result.get("gate_summary", {}).get("working_tree_clean") is not True:

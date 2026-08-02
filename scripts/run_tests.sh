@@ -5,6 +5,12 @@ SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 ROOT_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 cd "$ROOT_DIR"
 
+# Remove interpreter and pytest injection surfaces before Python starts.
+unset PYTHONPATH PYTHONHOME PYTHONSTARTUP PYTHONINSPECT PYTHONOPTIMIZE
+unset PYTHONCASEOK PYTHONUSERBASE PYTEST_ADDOPTS PYTEST_PLUGINS
+export PYTHONNOUSERSITE=1
+export PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+
 if command -v python3 >/dev/null 2>&1; then
     PYTHON=${PYTHON:-python3}
 elif command -v python >/dev/null 2>&1; then
@@ -14,15 +20,16 @@ else
     exit 1
 fi
 
-if ! "$PYTHON" -c "import sys; assert sys.version_info >= (3, 10), 'Python 3.10 or newer is required'; import pytest; assert int(pytest.__version__.split('.')[0]) >= 8, 'pytest 8 or newer is required'"; then
+if ! "$PYTHON" -c "import sys, pytest; raise SystemExit(0 if sys.version_info >= (3, 10) and int(pytest.__version__.split('.')[0]) >= 8 else 1)"; then
     echo "[FAIL] pytest 8 or newer is required."
     echo "Run: $PYTHON -m pip install -r requirements.txt"
     exit 1
 fi
 
+echo "[INFO] Assurance environment: isolated user site; pytest plugin autoload disabled."
 echo "[INFO] Running: $PYTHON -m pytest $*"
 if "$PYTHON" -m pytest "$@"; then
-    echo "[PASS] Full test suite passed."
+    echo "[PASS] Requested test run passed."
 else
     echo "[FAIL] Test suite failed."
     exit 1

@@ -11,10 +11,17 @@ from typing import Any, Mapping, Sequence
 from sbp_lex.local_trust.adversarial_runner import adversarial_summary, run_adversarial_cases
 from sbp_lex.local_trust.adversarial_validator import validate_adversarial_harness
 from sbp_lex.local_trust.manifest import canonical_json, repository_root_from
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_integrity import DEFAULT_RELEASE_BUNDLE_DIR, load_json
 from sbp_lex.local_trust.release_manifest import collect_release_git_status
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-ADVERSARIAL_HARNESS_SIGNATURE_MODE = "ADVERSARIAL_NEGATIVE_HARNESS_DETERMINISTIC_PLACEHOLDER"
+ADVERSARIAL_HARNESS_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+ADVERSARIAL_HARNESS_SIGNATURE_DOMAIN = "SBP_LEX_ADVERSARIAL_NEGATIVE_HARNESS"
 ADVERSARIAL_HARNESS_VERSION = "18.7G"
 DEFAULT_ADVERSARIAL_OUTPUT_PATH = Path("outputs/adversarial_local_trust_negative_harness.json")
 
@@ -78,19 +85,19 @@ def build_adversarial_harness(
 
 def collect_bound_digests(repository_root: Path) -> dict[str, str]:
     return {
-        "manifest": str(load_json(repository_root / "outputs/local_trust_root_manifest.json").get("manifest_digest")),
+        "manifest": str(load_json(_resolve(repository_root, "outputs/local_trust_root_manifest.json")).get("manifest_digest")),
         "execution_envelope": str(
-            load_json(repository_root / "outputs/local_execution_environment_trust_envelope.json").get("envelope_digest")
+            load_json(_resolve(repository_root, "outputs/local_execution_environment_trust_envelope.json")).get("envelope_digest")
         ),
-        "evidence_chain": str(load_json(repository_root / "outputs/local_evidence_chain.json").get("chain_digest")),
+        "evidence_chain": str(load_json(_resolve(repository_root, "outputs/local_evidence_chain.json")).get("chain_digest")),
         "regression_matrix": str(
-            load_json(repository_root / "outputs/local_trust_regression_matrix.json").get("matrix_digest")
+            load_json(_resolve(repository_root, "outputs/local_trust_regression_matrix.json")).get("matrix_digest")
         ),
-        "constitutional_gates": str(load_json(repository_root / "outputs/local_constitutional_gates.json").get("gate_digest")),
-        "toolchain_guard": str(load_json(repository_root / "outputs/local_toolchain_guard.json").get("toolchain_digest")),
-        "capstone": str(load_json(repository_root / "outputs/local_trust_25_year_capstone.json").get("capstone_digest")),
+        "constitutional_gates": str(load_json(_resolve(repository_root, "outputs/local_constitutional_gates.json")).get("gate_digest")),
+        "toolchain_guard": str(load_json(_resolve(repository_root, "outputs/local_toolchain_guard.json")).get("toolchain_digest")),
+        "capstone": str(load_json(_resolve(repository_root, "outputs/local_trust_25_year_capstone.json")).get("capstone_digest")),
         "release_integrity": str(
-            load_json(repository_root / DEFAULT_RELEASE_BUNDLE_DIR / "RELEASE_MANIFEST.json").get("release_digest")
+            load_json(_resolve(repository_root, DEFAULT_RELEASE_BUNDLE_DIR) / "RELEASE_MANIFEST.json").get("release_digest")
         ),
     }
 
@@ -129,20 +136,14 @@ def hash_adversarial_payload(harness: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(harness)).encode("utf-8")).hexdigest()
 
 
-def adversarial_signature_for(payload_digest: str) -> str:
-    return sha256(f"{ADVERSARIAL_HARNESS_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def adversarial_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(ADVERSARIAL_HARNESS_SIGNATURE_DOMAIN, payload_digest)
 
 
-def adversarial_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "adversarial_payload_digest": payload_digest,
-                "adversarial_signature": signature,
-                "signature_mode": ADVERSARIAL_HARNESS_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def adversarial_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        ADVERSARIAL_HARNESS_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_adversarial_harness(
@@ -205,8 +206,7 @@ def _origin_remote(repository_root: Path) -> str:
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

@@ -12,6 +12,7 @@ from sbp_lex.local_trust.claims_seed import (
     verification_commands_index,
 )
 from sbp_lex.local_trust.manifest import repository_root_from
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_hash_index import (
     ARTIFACT_HASH_INDEX_FILE,
     BOUNDARY_AND_SCOPE_LOCK_FILE,
@@ -35,6 +36,7 @@ def build_release_integrity_bundle(
     clean_required: bool = False,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
+    reference_dir = Path(output_dir)
     bundle_dir = _resolve(root, output_dir)
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
@@ -46,7 +48,11 @@ def build_release_integrity_bundle(
     _write_json(boundary, bundle_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name)
     (bundle_dir / RELEASE_README_FILE.name).write_text(release_readme_text(), encoding="utf-8")
 
-    artifact_index = build_artifact_hash_index(root, bundle_dir=bundle_dir)
+    artifact_index = build_artifact_hash_index(
+        root,
+        bundle_dir=bundle_dir,
+        reference_dir=reference_dir,
+    )
     _write_json(artifact_index, bundle_dir / ARTIFACT_HASH_INDEX_FILE.name)
 
     manifest = build_release_manifest(
@@ -56,6 +62,7 @@ def build_release_integrity_bundle(
         claims_to_evidence_seed=claims,
         boundary_lock=boundary,
         bundle_dir=bundle_dir,
+        bundle_reference_dir=reference_dir,
     )
     validation = validate_release_manifest(
         manifest,
@@ -130,8 +137,7 @@ def _write_json(value: Mapping[str, Any], path: Path) -> None:
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

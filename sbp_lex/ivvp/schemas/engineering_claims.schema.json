@@ -1,1 +1,81 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R4 engineering claims register","type":"object","required":["register_version","claims","claims_digest"],"additionalProperties":true}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:r4:engineering-claims:v1",
+  "title": "Desktop V1 R4 engineering claims register",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "register_version",
+    "repository_commit",
+    "measured_baseline_identifier",
+    "runtime_identity",
+    "claims",
+    "claims_digest"
+  ],
+  "properties": {
+    "register_version": {"const": "R4_DESKTOP_V1_IVVP_V1"},
+    "repository_commit": {"$ref": "#/$defs/sha1"},
+    "measured_baseline_identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "runtime_identity": {"$ref": "#/$defs/sha256"},
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "claims_digest": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonempty": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192
+    },
+    "nonemptyList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/nonempty"}
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_identifier",
+        "engineering_claim",
+        "implementation_reference",
+        "verification_source",
+        "supporting_reports",
+        "supporting_tests",
+        "evidence_status"
+      ],
+      "properties": {
+        "claim_identifier": {
+          "type": "string",
+          "pattern": "^CLAIM_[A-Z0-9_]{1,120}$"
+        },
+        "engineering_claim": {"$ref": "#/$defs/nonempty"},
+        "implementation_reference": {"$ref": "#/$defs/nonempty"},
+        "verification_source": {"$ref": "#/$defs/nonempty"},
+        "supporting_reports": {"$ref": "#/$defs/nonemptyList"},
+        "supporting_tests": {"$ref": "#/$defs/nonemptyList"},
+        "evidence_status": {
+          "enum": ["SUPPORTED", "UNSUPPORTED"]
+        }
+      }
+    }
+  }
+}

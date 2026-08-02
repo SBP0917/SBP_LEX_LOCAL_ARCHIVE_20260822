@@ -4,7 +4,11 @@ import hmac
 from pathlib import Path
 from typing import Any, Mapping
 
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 LOCAL_TRUST_VALID = "LOCAL_TRUST_VALID"
 LOCAL_TRUST_INVALID = "LOCAL_TRUST_INVALID"
@@ -61,11 +65,11 @@ def validate_local_trust_manifest(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.manifest import (
+        LOCAL_TRUST_SIGNATURE_DOMAIN,
         LOCAL_TRUST_SIGNATURE_MODE,
         canonicalise_manifest,
         hash_manifest_payload,
         manifest_digest_for,
-        manifest_signature_for,
     )
 
     failures: list[str] = []
@@ -91,11 +95,17 @@ def validate_local_trust_manifest(
     if not hmac.compare_digest(str(manifest.get("manifest_payload_digest")), expected_payload_digest):
         failures.append("manifest_payload_digest_mismatch")
 
-    expected_signature = manifest_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(manifest.get("manifest_signature")), expected_signature):
+    signature = manifest.get("manifest_signature")
+    if not verify_local_trust_digest(
+        LOCAL_TRUST_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("manifest_signature_mismatch")
 
-    expected_manifest_digest = manifest_digest_for(expected_payload_digest, expected_signature)
+    expected_manifest_digest = (
+        manifest_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(manifest.get("manifest_digest")), expected_manifest_digest):
         failures.append("manifest_digest_mismatch")
 
@@ -106,7 +116,16 @@ def validate_local_trust_manifest(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and manifest.get("git_commit") != current_commit:
+        recorded_commit = manifest.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"local_trust_status": LOCAL_TRUST_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and manifest.get("working_tree_clean") is not True:

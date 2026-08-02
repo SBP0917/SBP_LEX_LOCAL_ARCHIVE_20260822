@@ -3,6 +3,19 @@ setlocal EnableExtensions
 
 cd /d "%~dp0\.."
 
+rem Remove interpreter and pytest injection surfaces before Python starts.
+set "PYTHONPATH="
+set "PYTHONHOME="
+set "PYTHONSTARTUP="
+set "PYTHONINSPECT="
+set "PYTHONOPTIMIZE="
+set "PYTHONCASEOK="
+set "PYTHONUSERBASE="
+set "PYTEST_ADDOPTS="
+set "PYTEST_PLUGINS="
+set "PYTHONNOUSERSITE=1"
+set "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1"
+
 set "PYTHON_EXE=python"
 set "PYTHON_ARGS="
 "%PYTHON_EXE%" %PYTHON_ARGS% -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" >nul 2>&1
@@ -29,13 +42,14 @@ exit /b 1
 
 :python_found
 
-"%PYTHON_EXE%" %PYTHON_ARGS% -c "import pytest; assert int(pytest.__version__.split('.')[0]) >= 8, 'pytest 8 or newer is required'"
+"%PYTHON_EXE%" %PYTHON_ARGS% -c "import pytest; raise SystemExit(0 if int(pytest.__version__.split('.')[0]) >= 8 else 1)"
 if errorlevel 1 (
     echo [FAIL] pytest 8 or newer is required.
     echo Run: "%PYTHON_EXE%" %PYTHON_ARGS% -m pip install -r requirements.txt
     exit /b 1
 )
 
+echo [INFO] Assurance environment: isolated user site; pytest plugin autoload disabled.
 echo [INFO] Running: "%PYTHON_EXE%" %PYTHON_ARGS% -m pytest %*
 "%PYTHON_EXE%" %PYTHON_ARGS% -m pytest %*
 if errorlevel 1 (
@@ -43,5 +57,5 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [PASS] Full test suite passed.
+echo [PASS] Requested test run passed.
 exit /b 0

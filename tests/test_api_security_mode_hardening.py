@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import hashlib
+from base64 import b64encode
+
 import pytest
 
 from sbp_lex.api import access_control
 from sbp_lex.api.server import run_server
 from sbp_lex.config.environment import environment_security_report
+from sbp_lex.security.pqc_provider import derive_signing_keypair
 
 
 @pytest.mark.parametrize("mode", ["unknown", " local-private ", "", "DISABLED "])
@@ -68,3 +72,35 @@ def test_valid_modes_preserve_existing_access_boundaries(monkeypatch) -> None:
         client_host="203.0.113.8",
         headers={"Authorization": "Bearer a-secure-private-token-value"},
     ).allowed
+
+
+def test_environment_report_validates_signing_seed_and_optional_public_key(
+    monkeypatch,
+) -> None:
+    seed = "1" * 64
+    _, public_key = derive_signing_keypair(bytes.fromhex(seed), "ML-DSA")
+    monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", seed)
+    monkeypatch.setenv(
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+        b64encode(public_key).decode("ascii"),
+    )
+    monkeypatch.setenv(
+        "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT",
+        hashlib.sha256(public_key).hexdigest(),
+    )
+    report = environment_security_report()
+    assert report["signing_secret_configured"] is True
+    assert report["trusted_signing_public_key_configured"] is True
+    assert report["trusted_signing_public_key_valid"] is True
+    assert report["expected_signer_fingerprint_valid"] is True
+    assert seed not in str(report)
+
+    monkeypatch.setenv(
+        "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY", "not-base64!",
+    )
+    report = environment_security_report()
+    assert report["valid"] is False
+    assert (
+        "trusted_signing_public_key_invalid_or_mismatched"
+        in report["warnings"]
+    )

@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
 
+import sbp_lex.supply_chain.provenance as provenance_module
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.supply_chain.assurance import (
     build_bundle,
@@ -16,6 +19,7 @@ from sbp_lex.supply_chain.assurance import (
 from sbp_lex.supply_chain.common import SupplyChainError, seal, unseal
 from sbp_lex.supply_chain.provenance import (
     EXPECTED_REPOSITORY_IDENTITY,
+    PRODUCTION_TRUSTED_REPOSITORY_ANCHOR_COMMIT,
     _distribution,
     artifact_records,
     collect_build_provenance,
@@ -60,6 +64,46 @@ def test_bundle_builds_and_validates_offline(evidence):
     assert validate_bundle(ROOT, **paths)["status"] == "R2_SUPPLY_CHAIN_ASSURANCE_PASS"
 
 
+def test_r2_contract_schemas_are_closed_and_match_generated_evidence(
+    evidence,
+):
+    target, _, _ = evidence
+    sbom = json.loads((target / "sbom.json").read_text("utf-8"))
+    manifest = unseal(
+        json.loads((target / "manifest.json").read_text("utf-8")),
+        label="r2_manifest",
+    )
+    sbom_schema = json.loads(
+        (
+            ROOT
+            / "sbp_lex/supply_chain/schemas/r2_sbom.schema.json"
+        ).read_text("utf-8")
+    )
+    manifest_schema = json.loads(
+        (
+            ROOT
+            / "sbp_lex/supply_chain/schemas/r2_build_manifest.schema.json"
+        ).read_text("utf-8")
+    )
+    assert sbom_schema["additionalProperties"] is False
+    assert set(sbom) == set(sbom_schema["required"])
+    assert set(sbom["dependencies"][0]) == set(
+        sbom_schema["$defs"]["dependency"]["required"]
+    )
+    payload_schema = manifest_schema["properties"]["payload"]
+    assert payload_schema["additionalProperties"] is False
+    assert set(manifest) == set(payload_schema["required"])
+    assert set(manifest["repository_provenance"]) == set(
+        manifest_schema["$defs"]["repository"]["required"]
+    )
+    assert set(manifest["build_provenance"]) == set(
+        manifest_schema["$defs"]["build"]["required"]
+    )
+    assert set(manifest["artefact_inventory"][0]) == set(
+        manifest_schema["$defs"]["artefact"]["required"]
+    )
+
+
 def test_repository_identity_normalization():
     assert normalize_repository_identity("https://github.com/SBP0917/SBP_LEX_DUAL_V6.git") == EXPECTED_REPOSITORY_IDENTITY
     assert normalize_repository_identity("git@github.com:SBP0917/SBP_LEX_DUAL_V6.git") == EXPECTED_REPOSITORY_IDENTITY
@@ -73,6 +117,153 @@ def test_repository_provenance_is_valid():
 
 def test_repository_provenance_is_deterministic():
     assert repository_record() == repository_record()
+
+
+@pytest.mark.parametrize("bounded", [True, False])
+def test_repository_provenance_requires_bounded_evidence_recording_lineage(
+    tmp_path,
+    monkeypatch,
+    bounded,
+):
+    source_commit = "a" * 40
+    current_commit = "b" * 40
+    repository_tree = "c" * 40
+    anchor_tree = "d" * 40
+    anchor = provenance_module.TRUSTED_REPOSITORY_ANCHOR_COMMIT
+    record = {
+        "provenance_version": provenance_module.R2_VERSION,
+        "desktop_scope": provenance_module.DESKTOP_SCOPE,
+        "repository_identity": EXPECTED_REPOSITORY_IDENTITY,
+        "canonical_branch": "main",
+        "repository_commit": source_commit,
+        "repository_tree": repository_tree,
+        "parent_lineage": [source_commit],
+        "lineage_depth_recorded": 1,
+        "trusted_repository_anchor_commit": anchor,
+        "trusted_repository_anchor_tree": anchor_tree,
+        "upstream_reference": provenance_module.CANONICAL_UPSTREAM,
+        "tracked_working_tree_clean": True,
+        "untracked_files_checked": True,
+        "origin_kind": "canonical_origin",
+    }
+    record["repository_digest"] = generate_digest(record)
+
+    responses = {
+        ("remote", "get-url", "origin"):
+            "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
+        ("branch", "--show-current"): "main",
+        (
+            "status",
+            "--porcelain=v1",
+            "--untracked-files=all",
+        ): "",
+        (
+            "rev-parse",
+            "--abbrev-ref",
+            "--symbolic-full-name",
+            "@{upstream}",
+        ): provenance_module.CANONICAL_UPSTREAM,
+        (
+            "merge-base",
+            "--is-ancestor",
+            anchor,
+            source_commit,
+        ): "",
+        ("rev-parse", f"{anchor}^{{tree}}"): anchor_tree,
+        (
+            "merge-base",
+            "--is-ancestor",
+            source_commit,
+            "HEAD",
+        ): "",
+        ("rev-parse", "HEAD"): current_commit,
+        ("rev-parse", f"{source_commit}^{{tree}}"): repository_tree,
+    }
+    monkeypatch.setattr(
+        provenance_module,
+        "_git",
+        lambda root, *args: responses[args],
+    )
+    calls = []
+    monkeypatch.setattr(
+        provenance_module,
+        "generated_evidence_lineage_is_bounded",
+        lambda root, recorded, *, current_commit: (
+            calls.append((root, recorded, current_commit)) or bounded
+        ),
+    )
+
+    if bounded:
+        validate_repository_provenance(record, tmp_path)
+    else:
+        with pytest.raises(
+            SupplyChainError,
+            match="repository_head_mismatch",
+        ):
+            validate_repository_provenance(record, tmp_path)
+    assert calls == [(tmp_path, source_commit, current_commit)]
+
+
+def test_production_repository_anchor_is_explicit_and_fixed():
+    assert PRODUCTION_TRUSTED_REPOSITORY_ANCHOR_COMMIT == (
+        "1f6d63422aeab848a8d4f26a6f8a46e3125c780a"
+    )
+
+
+def test_repository_provenance_rejects_untracked_execution_surface(
+    tmp_path, monkeypatch,
+):
+    anchor = provenance_module.TRUSTED_REPOSITORY_ANCHOR_COMMIT
+    calls = []
+
+    def fake_git(root, *args):
+        del root
+        calls.append(args)
+        responses = {
+            ("rev-parse", "HEAD"): "a" * 40,
+            ("branch", "--show-current"): "main",
+            ("remote", "get-url", "origin"):
+                "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
+            ("rev-parse", "HEAD^{tree}"): "b" * 40,
+            ("rev-parse", f"{anchor}^{{tree}}"): "c" * 40,
+            (
+                "rev-parse",
+                "--abbrev-ref",
+                "--symbolic-full-name",
+                "@{upstream}",
+            ): "origin/main",
+            (
+                "status",
+                "--porcelain=v1",
+                "--untracked-files=all",
+            ): "?? sitecustomize.py",
+        }
+        return responses[args]
+
+    monkeypatch.setattr(provenance_module, "_git", fake_git)
+    with pytest.raises(
+        SupplyChainError, match="tracked_working_tree_dirty",
+    ):
+        collect_repository_provenance(tmp_path)
+    assert (
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all",
+    ) in calls
+
+
+def test_repository_provenance_requires_untracked_file_check():
+    record = repository_record()
+    record.pop("untracked_files_checked")
+    record["repository_digest"] = generate_digest({
+        key: value
+        for key, value in record.items()
+        if key != "repository_digest"
+    })
+    with pytest.raises(
+        SupplyChainError, match="repository_provenance_schema_invalid",
+    ):
+        validate_repository_provenance(record, ROOT)
 
 
 @pytest.mark.parametrize("field,value,reason", [
@@ -96,9 +287,11 @@ def test_repository_provenance_rejects_digest_corruption():
 
 def test_sbom_contains_direct_and_transitive_dependencies():
     sbom = collect_dependency_provenance(ROOT)
-    assert sbom["direct_dependency_count"] == 2
+    assert sbom["direct_dependency_count"] == 3
     assert sbom["transitive_dependency_count"] >= 1
-    assert {item["normalized_name"] for item in sbom["dependencies"]} >= {"pytest", "cryptography", "cffi"}
+    assert {
+        item["normalized_name"] for item in sbom["dependencies"]
+    } >= {"pytest", "cryptography", "packaging", "cffi"}
 
 
 def test_sbom_is_deterministic():
@@ -119,9 +312,30 @@ def test_dependency_digest_tamper_rejected():
         validate_dependency_provenance(sbom, verify_installed=False)
 
 
+def test_dependency_unknown_field_rejected():
+    sbom = collect_dependency_provenance(ROOT)
+    sbom["dependencies"][0]["undeclared_semantics"] = True
+    sbom["dependency_digest"] = generate_digest({
+        key: value
+        for key, value in sbom.items()
+        if key != "dependency_digest"
+    })
+    with pytest.raises(
+        SupplyChainError, match="dependency_record_schema_invalid",
+    ):
+        validate_dependency_provenance(sbom, verify_installed=False)
+
+
 def test_duplicate_dependency_identity_rejected():
     sbom = collect_dependency_provenance(ROOT)
     sbom["dependencies"].append(copy.deepcopy(sbom["dependencies"][0]))
+    sbom["dependency_count"] += 1
+    count_field = (
+        "direct_dependency_count"
+        if sbom["dependencies"][0]["relationship"] == "DIRECT"
+        else "transitive_dependency_count"
+    )
+    sbom[count_field] += 1
     core = {k: v for k, v in sbom.items() if k != "dependency_digest"}; sbom["dependency_digest"] = generate_digest(core)
     with pytest.raises(SupplyChainError, match="duplicate_dependency_identity"):
         validate_dependency_provenance(sbom, verify_installed=False)
@@ -164,10 +378,43 @@ def test_artifact_records_hash_and_validate(tmp_path):
     validate_artifact_records(records, tmp_path)
 
 
+def test_tracked_artifact_binds_checkout_and_git_blob_bytes():
+    record = artifact_records(
+        ROOT,
+        ["main.py"],
+        require_repository_tracking=True,
+    )[0]
+    checkout = (ROOT / "main.py").read_bytes()
+    blob = subprocess.run(
+        ["git", "cat-file", "blob", record["repository_blob"]],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+    assert record["sha256"] == sha256(checkout).hexdigest()
+    assert record["size_bytes"] == len(checkout)
+    assert record["repository_blob_sha256"] == sha256(blob).hexdigest()
+    assert record["repository_blob_size_bytes"] == len(blob)
+    validate_artifact_records(
+        [record],
+        ROOT,
+        require_repository_tracking=True,
+    )
+
+
 def test_artifact_substitution_rejected(tmp_path):
     path = tmp_path / "a.txt"; path.write_text("approved\n", encoding="utf-8")
     records = artifact_records(tmp_path, ["a.txt"]); path.write_text("substituted\n", encoding="utf-8")
     with pytest.raises(SupplyChainError, match="artifact_substitution"):
+        validate_artifact_records(records, tmp_path)
+
+
+def test_artifact_unknown_field_rejected(tmp_path):
+    path = tmp_path / "a.txt"
+    path.write_text("approved\n", encoding="utf-8")
+    records = artifact_records(tmp_path, ["a.txt"])
+    records[0]["undeclared_semantics"] = True
+    with pytest.raises(SupplyChainError, match="artifact_record_invalid"):
         validate_artifact_records(records, tmp_path)
 
 
@@ -192,6 +439,36 @@ def test_artifact_symlink_rejected(tmp_path):
         pytest.skip("symlink creation unavailable")
     with pytest.raises(SupplyChainError, match="symlink"):
         artifact_records(tmp_path, ["link"])
+
+
+def test_artifact_symlink_escape_rejected_as_symlink(tmp_path):
+    root = tmp_path / "repository"
+    root.mkdir()
+    target = tmp_path / "foreign"
+    target.write_text("x", encoding="utf-8")
+    link = root / "link"
+    try:
+        link.symlink_to(target)
+    except OSError:
+        pytest.skip("symlink creation unavailable")
+    with pytest.raises(SupplyChainError, match="artifact_symlink"):
+        artifact_records(root, ["link"])
+
+
+def test_artifact_override_symlink_rejected(tmp_path):
+    target = tmp_path / "target"
+    target.write_text("x", encoding="utf-8")
+    link = tmp_path / "override-link"
+    try:
+        link.symlink_to(target)
+    except OSError:
+        pytest.skip("symlink creation unavailable")
+    with pytest.raises(SupplyChainError, match="symlink"):
+        artifact_records(
+            tmp_path,
+            ["outputs/generated.json"],
+            artifact_sources={"outputs/generated.json": link},
+        )
 
 
 def test_manifest_payload_is_deterministic():
@@ -235,6 +512,25 @@ def test_manifest_rejects_validation_identity_tamper(evidence):
     payload["validation_identity"] = "0" * 64; payload = resigned(payload)
     with pytest.raises(SupplyChainError, match="validation_identity_mismatch"):
         validate_manifest_payload(payload, sbom, ROOT, verify_installed=False)
+
+
+def test_manifest_rejects_unknown_signed_semantics():
+    payload = build_manifest_payload(
+        ROOT, collect_dependency_provenance(ROOT),
+    )
+    payload["undeclared_semantics"] = True
+    payload["supply_chain_identity"] = generate_digest({
+        key: value
+        for key, value in payload.items()
+        if key != "supply_chain_identity"
+    })
+    with pytest.raises(SupplyChainError, match="manifest_schema_invalid"):
+        validate_manifest_payload(
+            payload,
+            collect_dependency_provenance(ROOT),
+            ROOT,
+            verify_installed=False,
+        )
 
 
 def test_manifest_contains_no_timestamp():

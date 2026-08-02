@@ -13,11 +13,18 @@ from sbp_lex.local_trust.claims_to_evidence import (
     required_claim_ids,
 )
 from sbp_lex.local_trust.manifest import canonical_json, repository_root_from
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_hash_index import file_sha256
 from sbp_lex.local_trust.release_integrity import DEFAULT_RELEASE_BUNDLE_DIR, load_json
 from sbp_lex.local_trust.release_manifest import collect_release_git_status
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-DOSSIER_SIGNATURE_MODE = "UNIVERSITY_VALIDATION_DOSSIER_DETERMINISTIC_PLACEHOLDER"
+DOSSIER_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+DOSSIER_SIGNATURE_DOMAIN = "SBP_LEX_UNIVERSITY_VALIDATION_DOSSIER"
 DOSSIER_MANIFEST_VERSION = "18.8"
 DEFAULT_DOSSIER_DIR = Path("outputs/university_validation_dossier")
 DOSSIER_MANIFEST_FILE = DEFAULT_DOSSIER_DIR / "DOSSIER_MANIFEST.json"
@@ -46,12 +53,18 @@ def build_dossier_manifest(
     scope_lock: Mapping[str, Any],
     reviewer_commands: Mapping[str, Any],
     output_dir: Path | str = DEFAULT_DOSSIER_DIR,
+    output_reference_dir: Path | str | None = None,
     created_at: str | None = None,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.dossier_validator import validate_dossier_manifest
 
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
     dossier_dir = _resolve(root, output_dir)
+    reference_dir = (
+        Path(output_reference_dir)
+        if output_reference_dir is not None
+        else Path(output_dir)
+    )
     git = collect_release_git_status(root)
     bindings = collect_bound_digests(root)
     manifest: dict[str, Any] = {
@@ -74,12 +87,36 @@ def build_dossier_manifest(
         "bound_capstone_digest": bindings["capstone"],
         "bound_release_integrity_digest": bindings["release_integrity"],
         "bound_adversarial_harness_digest": bindings["adversarial_harness"],
-        "claims_to_evidence_reference": file_reference(root, dossier_dir / MASTER_CLAIMS_FILE.name),
-        "validation_questions_reference": file_reference(root, dossier_dir / VALIDATION_QUESTIONS_FILE.name),
-        "evidence_artifact_index_reference": file_reference(root, dossier_dir / EVIDENCE_ARTIFACT_INDEX_FILE.name),
-        "scope_and_exclusions_reference": file_reference(root, dossier_dir / SCOPE_AND_EXCLUSIONS_FILE.name),
-        "reviewer_commands_reference": file_reference(root, dossier_dir / REVIEWER_COMMANDS_FILE.name),
-        "handoff_readme_reference": file_reference(root, dossier_dir / UNIVERSITY_HANDOFF_README_FILE.name),
+        "claims_to_evidence_reference": file_reference(
+            root,
+            dossier_dir / MASTER_CLAIMS_FILE.name,
+            reference_dir / MASTER_CLAIMS_FILE.name,
+        ),
+        "validation_questions_reference": file_reference(
+            root,
+            dossier_dir / VALIDATION_QUESTIONS_FILE.name,
+            reference_dir / VALIDATION_QUESTIONS_FILE.name,
+        ),
+        "evidence_artifact_index_reference": file_reference(
+            root,
+            dossier_dir / EVIDENCE_ARTIFACT_INDEX_FILE.name,
+            reference_dir / EVIDENCE_ARTIFACT_INDEX_FILE.name,
+        ),
+        "scope_and_exclusions_reference": file_reference(
+            root,
+            dossier_dir / SCOPE_AND_EXCLUSIONS_FILE.name,
+            reference_dir / SCOPE_AND_EXCLUSIONS_FILE.name,
+        ),
+        "reviewer_commands_reference": file_reference(
+            root,
+            dossier_dir / REVIEWER_COMMANDS_FILE.name,
+            reference_dir / REVIEWER_COMMANDS_FILE.name,
+        ),
+        "handoff_readme_reference": file_reference(
+            root,
+            dossier_dir / UNIVERSITY_HANDOFF_README_FILE.name,
+            reference_dir / UNIVERSITY_HANDOFF_README_FILE.name,
+        ),
         "dossier_summary": {
             "claim_count": len(claims_index.get("claims", [])),
             "validation_question_count": len(validation_questions.get("questions", [])),
@@ -118,11 +155,27 @@ def build_evidence_artifact_index(
     *,
     specs: Sequence[Mapping[str, Any]] = (),
     output_dir: Path | str = DEFAULT_DOSSIER_DIR,
+    reference_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
     dossier_dir = _resolve(root, output_dir)
+    logical_dir = (
+        Path(reference_dir)
+        if reference_dir is not None
+        else Path(output_dir)
+    )
     artifact_specs = specs or EVIDENCE_ARTIFACT_SPECS
-    artifacts = [artifact_record(root, _normalise_dossier_spec(spec, dossier_dir)) for spec in artifact_specs]
+    artifacts = [
+        artifact_record(
+            root,
+            _normalise_dossier_spec(
+                spec,
+                physical_dir=dossier_dir,
+                logical_dir=logical_dir,
+            ),
+        )
+        for spec in artifact_specs
+    ]
     required = [artifact for artifact in artifacts if artifact["required"] is True]
     missing = [artifact for artifact in required if artifact["exists"] is not True]
     return {
@@ -147,8 +200,12 @@ def build_evidence_artifact_index(
 
 def artifact_record(repository_root: Path, spec: Mapping[str, Any]) -> dict[str, Any]:
     relative_path = str(spec["path"]).replace("\\", "/")
-    candidate = Path(relative_path)
-    path = candidate if candidate.is_absolute() else repository_root / candidate
+    physical = spec.get("_physical_path")
+    path = (
+        Path(str(physical)).resolve(strict=False)
+        if physical is not None
+        else resolve_local_trust_path(repository_root, relative_path)
+    )
     exists = path.exists() and path.is_file()
     return {
         "artifact_id": spec["artifact_id"],
@@ -165,21 +222,21 @@ def artifact_record(repository_root: Path, spec: Mapping[str, Any]) -> dict[str,
 
 def collect_bound_digests(repository_root: Path) -> dict[str, str]:
     return {
-        "manifest": str(load_json(repository_root / "outputs/local_trust_root_manifest.json").get("manifest_digest")),
+        "manifest": str(load_json(_resolve(repository_root, "outputs/local_trust_root_manifest.json")).get("manifest_digest")),
         "execution_envelope": str(
-            load_json(repository_root / "outputs/local_execution_environment_trust_envelope.json").get("envelope_digest")
+            load_json(_resolve(repository_root, "outputs/local_execution_environment_trust_envelope.json")).get("envelope_digest")
         ),
-        "evidence_chain": str(load_json(repository_root / "outputs/local_evidence_chain.json").get("chain_digest")),
+        "evidence_chain": str(load_json(_resolve(repository_root, "outputs/local_evidence_chain.json")).get("chain_digest")),
         "regression_matrix": str(
-            load_json(repository_root / "outputs/local_trust_regression_matrix.json").get("matrix_digest")
+            load_json(_resolve(repository_root, "outputs/local_trust_regression_matrix.json")).get("matrix_digest")
         ),
-        "constitutional_gates": str(load_json(repository_root / "outputs/local_constitutional_gates.json").get("gate_digest")),
-        "toolchain_guard": str(load_json(repository_root / "outputs/local_toolchain_guard.json").get("toolchain_digest")),
-        "capstone": str(load_json(repository_root / "outputs/local_trust_25_year_capstone.json").get("capstone_digest")),
+        "constitutional_gates": str(load_json(_resolve(repository_root, "outputs/local_constitutional_gates.json")).get("gate_digest")),
+        "toolchain_guard": str(load_json(_resolve(repository_root, "outputs/local_toolchain_guard.json")).get("toolchain_digest")),
+        "capstone": str(load_json(_resolve(repository_root, "outputs/local_trust_25_year_capstone.json")).get("capstone_digest")),
         "release_integrity": str(
-            load_json(repository_root / DEFAULT_RELEASE_BUNDLE_DIR / "RELEASE_MANIFEST.json").get("release_digest")
+            load_json(_resolve(repository_root, DEFAULT_RELEASE_BUNDLE_DIR) / "RELEASE_MANIFEST.json").get("release_digest")
         ),
-        "adversarial_harness": str(load_json(repository_root / DEFAULT_ADVERSARIAL_OUTPUT_PATH).get("adversarial_digest")),
+        "adversarial_harness": str(load_json(_resolve(repository_root, DEFAULT_ADVERSARIAL_OUTPUT_PATH)).get("adversarial_digest")),
     }
 
 
@@ -199,11 +256,16 @@ def dossier_scope() -> dict[str, Any]:
     }
 
 
-def file_reference(repository_root: Path, path: Path) -> dict[str, Any]:
+def file_reference(
+    repository_root: Path,
+    path: Path,
+    reference_path: Path | None = None,
+) -> dict[str, Any]:
     resolved = path if path.is_absolute() else repository_root / path
+    logical = reference_path or path
     exists = resolved.exists() and resolved.is_file()
     return {
-        "path": path.as_posix(),
+        "path": logical.as_posix(),
         "exists": exists,
         "size_bytes": resolved.stat().st_size if exists else 0,
         "sha256": file_sha256(resolved) if exists else "MISSING",
@@ -218,32 +280,34 @@ def hash_dossier_payload(manifest: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(manifest)).encode("utf-8")).hexdigest()
 
 
-def dossier_signature_for(payload_digest: str) -> str:
-    return sha256(f"{DOSSIER_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def dossier_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(DOSSIER_SIGNATURE_DOMAIN, payload_digest)
 
 
-def dossier_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "dossier_payload_digest": payload_digest,
-                "dossier_signature": signature,
-                "signature_mode": DOSSIER_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def dossier_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        DOSSIER_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
-def _normalise_dossier_spec(spec: Mapping[str, Any], dossier_dir: Path) -> dict[str, Any]:
+def _normalise_dossier_spec(
+    spec: Mapping[str, Any],
+    *,
+    physical_dir: Path,
+    logical_dir: Path,
+) -> dict[str, Any]:
     if spec.get("artifact_group") != "dossier_outputs":
         return dict(spec)
     filename = Path(str(spec["path"])).name
-    return {**spec, "path": (dossier_dir / filename).as_posix()}
+    return {
+        **spec,
+        "path": (logical_dir / filename).as_posix(),
+        "_physical_path": (physical_dir / filename).as_posix(),
+    }
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def _origin_remote(repository_root: Path) -> str:

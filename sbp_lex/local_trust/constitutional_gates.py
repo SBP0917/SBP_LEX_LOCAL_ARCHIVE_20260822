@@ -18,8 +18,15 @@ from sbp_lex.local_trust.manifest import (
     repository_root_from,
 )
 from sbp_lex.local_trust.regression_matrix import DEFAULT_REGRESSION_MATRIX_OUTPUT_PATH
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
-CONSTITUTIONAL_GATE_SIGNATURE_MODE = "CONSTITUTIONAL_GATES_DETERMINISTIC_PLACEHOLDER"
+CONSTITUTIONAL_GATE_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+CONSTITUTIONAL_GATE_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_CONSTITUTIONAL_GATES"
 CONSTITUTIONAL_GATE_VERSION = "18.7E.2"
 DEFAULT_CONSTITUTIONAL_GATES_OUTPUT_PATH = Path("outputs/local_constitutional_gates.json")
 
@@ -109,20 +116,14 @@ def hash_gate_payload(gate_result: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(gate_result)).encode("utf-8")).hexdigest()
 
 
-def gate_signature_for(payload_digest: str) -> str:
-    return sha256(f"{CONSTITUTIONAL_GATE_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def gate_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(CONSTITUTIONAL_GATE_SIGNATURE_DOMAIN, payload_digest)
 
 
-def gate_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "gate_payload_digest": payload_digest,
-                "gate_signature": signature,
-                "signature_mode": CONSTITUTIONAL_GATE_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def gate_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        CONSTITUTIONAL_GATE_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_constitutional_gate_result(
@@ -159,8 +160,7 @@ def validate_constitutional_gate_result(*args: Any, **kwargs: Any) -> dict[str, 
 
 
 def _resolve(repository_root: Path, path: Path | str) -> Path:
-    candidate = Path(path)
-    return candidate if candidate.is_absolute() else repository_root / candidate
+    return resolve_local_trust_path(repository_root, path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

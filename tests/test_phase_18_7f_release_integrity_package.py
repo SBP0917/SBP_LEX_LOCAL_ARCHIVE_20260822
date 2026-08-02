@@ -14,6 +14,7 @@ from sbp_lex.local_trust.release_integrity import (
     validate_release_integrity_bundle,
 )
 from sbp_lex.local_trust.release_manifest import release_digest_for, release_signature_for, hash_release_payload
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_validator import (
     RELEASE_INTEGRITY_FAIL,
     RELEASE_INTEGRITY_INCOMPLETE,
@@ -358,7 +359,7 @@ def _bundle_inputs(bundle: Path) -> tuple[dict, dict, dict, dict]:
 
 
 def _load_repo_json(path: str) -> dict:
-    return json.loads((REPOSITORY_ROOT / path).read_text(encoding="utf-8"))
+    return json.loads(resolve_local_trust_path(REPOSITORY_ROOT, path).read_text(encoding="utf-8"))
 
 
 def _refresh_manifest(manifest: dict) -> None:

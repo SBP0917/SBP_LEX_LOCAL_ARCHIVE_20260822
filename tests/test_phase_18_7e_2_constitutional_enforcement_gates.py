@@ -20,6 +20,7 @@ from sbp_lex.local_trust.gate_validator import (
     validate_constitutional_gate_result,
 )
 from sbp_lex.local_trust.manifest import hash_manifest_payload, manifest_digest_for, manifest_signature_for
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.regression_matrix import hash_matrix_payload, matrix_digest_for, matrix_signature_for
 
 
@@ -324,7 +325,7 @@ def test_no_sbp_lex_runtime_authority_files_are_modified() -> None:
 
 
 def _load_json(path: str) -> dict:
-    return json.loads((REPOSITORY_ROOT / path).read_text(encoding="utf-8"))
+    return json.loads(resolve_local_trust_path(REPOSITORY_ROOT, path).read_text(encoding="utf-8"))
 
 
 def _write_json(path: Path, value: dict) -> Path:

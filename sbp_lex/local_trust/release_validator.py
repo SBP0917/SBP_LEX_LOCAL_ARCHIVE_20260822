@@ -5,8 +5,13 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from sbp_lex.local_trust.claims_seed import required_claim_ids, required_command_ids
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_hash_index import artifact_by_path, file_sha256
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 RELEASE_INTEGRITY_PASS = "RELEASE_INTEGRITY_PASS"
 RELEASE_INTEGRITY_FAIL = "RELEASE_INTEGRITY_FAIL"
@@ -69,10 +74,10 @@ def validate_release_manifest(
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.manifest import canonicalise_manifest
     from sbp_lex.local_trust.release_manifest import (
+        RELEASE_INTEGRITY_SIGNATURE_DOMAIN,
         RELEASE_INTEGRITY_SIGNATURE_MODE,
         hash_release_payload,
         release_digest_for,
-        release_signature_for,
     )
 
     failures: list[str] = []
@@ -112,11 +117,17 @@ def validate_release_manifest(
     if not hmac.compare_digest(str(manifest.get("release_payload_digest")), expected_payload_digest):
         failures.append("release_payload_digest_mismatch")
 
-    expected_signature = release_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(manifest.get("release_signature")), expected_signature):
+    signature = manifest.get("release_signature")
+    if not verify_local_trust_digest(
+        RELEASE_INTEGRITY_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("release_signature_mismatch")
 
-    expected_digest = release_digest_for(expected_payload_digest, expected_signature)
+    expected_digest = (
+        release_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(manifest.get("release_digest")), expected_digest):
         failures.append("release_digest_mismatch")
 
@@ -138,7 +149,16 @@ def validate_release_manifest(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and manifest.get("git_commit") != current_commit:
+        recorded_commit = manifest.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"release_status": RELEASE_INTEGRITY_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and manifest.get("github_sync_status", {}).get("tracked_working_tree_clean") is not True:
@@ -193,8 +213,7 @@ def _release_artifact_reference_failures(manifest: Mapping[str, Any], repository
             failures.append("bundle_reference_not_mapping")
             continue
         path_text = str(reference.get("path"))
-        candidate = Path(path_text)
-        path = candidate if candidate.is_absolute() else repository_root / candidate
+        path = resolve_local_trust_path(repository_root, path_text)
         if not path.exists() or not path.is_file():
             failures.append(f"bundle_reference_missing:{path_text}")
             continue
@@ -235,8 +254,7 @@ def _artifact_hash_index_failures(index: Mapping[str, Any] | None, repository_ro
             failures.append(f"artifact_missing:{artifact_id}")
         if repository_root is not None and artifact.get("exists") is True:
             path_text = str(artifact.get("path"))
-            candidate = Path(path_text)
-            path = candidate if candidate.is_absolute() else repository_root / candidate
+            path = resolve_local_trust_path(repository_root, path_text)
             if not path.exists() or not path.is_file():
                 failures.append(f"artifact_missing_on_disk:{artifact_id}")
             else:

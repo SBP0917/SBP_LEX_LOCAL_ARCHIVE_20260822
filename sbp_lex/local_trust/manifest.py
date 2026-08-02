@@ -19,9 +19,15 @@ from sbp_lex.local_trust.critical_paths import (
 )
 from sbp_lex.local_trust.file_digest import collect_file_hashes
 from sbp_lex.local_trust.git_provenance import collect_git_provenance
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.python_provenance import collect_python_provenance
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-LOCAL_TRUST_SIGNATURE_MODE = "LOCAL_TRUST_DETERMINISTIC_PLACEHOLDER"
+LOCAL_TRUST_SIGNATURE_DOMAIN = "SBP_LEX_LOCAL_TRUST_ROOT_MANIFEST"
 MANIFEST_VERSION = "18.7B"
 DEFAULT_OUTPUT_PATH = Path("outputs/local_trust_root_manifest.json")
 
@@ -72,7 +78,10 @@ def build_local_trust_manifest(
         "trusted_output_hashes": collect_trusted_output_hashes(root),
         "integrity_store_status_if_available": _artifact_status(root, "runtime_artifacts/integrity_store.jsonl"),
         "quarantine_evidence_status_if_available": _directory_status(root, "runtime_artifacts/quarantine"),
-        "test_baseline": {"expected_suite": "pytest", "latest_verified_count": 243},
+        "test_baseline": {
+            "expected_suite": "pytest",
+            "latest_verified_count": 1785,
+        },
         "runtime_baseline": {"latest_verified_runtime": "RECORDED_OUTSIDE_LOCAL_TRUST"},
         "replay_baseline": {"latest_verified_replay": "MATCHED_RECORDED_OUTSIDE_LOCAL_TRUST"},
         "phase_baseline": list(PHASE_BASELINE),
@@ -156,20 +165,14 @@ def hash_manifest_payload(manifest: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(manifest)).encode("utf-8")).hexdigest()
 
 
-def manifest_signature_for(payload_digest: str) -> str:
-    return sha256(f"{LOCAL_TRUST_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def manifest_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(LOCAL_TRUST_SIGNATURE_DOMAIN, payload_digest)
 
 
-def manifest_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "manifest_payload_digest": payload_digest,
-                "manifest_signature": signature,
-                "signature_mode": LOCAL_TRUST_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def manifest_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        LOCAL_TRUST_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def write_local_trust_manifest(
@@ -179,9 +182,7 @@ def write_local_trust_manifest(
     repository_root: Path | str | None = None,
 ) -> Path:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
-    output = Path(path)
-    if not output.is_absolute():
-        output = root / output
+    output = resolve_local_trust_path(root, path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return output
@@ -189,9 +190,7 @@ def write_local_trust_manifest(
 
 def load_local_trust_manifest(path: Path | str = DEFAULT_OUTPUT_PATH, *, repository_root: Path | str | None = None) -> dict[str, Any]:
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
-    source = Path(path)
-    if not source.is_absolute():
-        source = root / source
+    source = resolve_local_trust_path(root, path)
     with source.open("r", encoding="utf-8") as handle:
         loaded = json.load(handle)
     if not isinstance(loaded, dict):

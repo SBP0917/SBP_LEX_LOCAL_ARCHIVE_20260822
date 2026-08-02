@@ -9,7 +9,11 @@ from sbp_lex.local_trust.adversarial_cases import (
     ADVERSARIAL_CASE_PASS,
     required_adversarial_case_ids,
 )
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 ADVERSARIAL_NEGATIVE_HARNESS_PASS = "ADVERSARIAL_NEGATIVE_HARNESS_PASS"
 ADVERSARIAL_NEGATIVE_HARNESS_FAIL = "ADVERSARIAL_NEGATIVE_HARNESS_FAIL"
@@ -90,9 +94,9 @@ def validate_adversarial_harness(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.adversarial_negative_harness import (
+        ADVERSARIAL_HARNESS_SIGNATURE_DOMAIN,
         ADVERSARIAL_HARNESS_SIGNATURE_MODE,
         adversarial_digest_for,
-        adversarial_signature_for,
         hash_adversarial_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -133,11 +137,17 @@ def validate_adversarial_harness(
     if not hmac.compare_digest(str(harness.get("adversarial_payload_digest")), expected_payload):
         failures.append("adversarial_payload_digest_mismatch")
 
-    expected_signature = adversarial_signature_for(expected_payload)
-    if not hmac.compare_digest(str(harness.get("adversarial_signature")), expected_signature):
+    signature = harness.get("adversarial_signature")
+    if not verify_local_trust_digest(
+        ADVERSARIAL_HARNESS_SIGNATURE_DOMAIN, expected_payload, signature,
+    ):
         failures.append("adversarial_signature_mismatch")
 
-    expected_digest = adversarial_digest_for(expected_payload, expected_signature)
+    expected_digest = (
+        adversarial_digest_for(expected_payload, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(harness.get("adversarial_digest")), expected_digest):
         failures.append("adversarial_digest_mismatch")
 
@@ -152,7 +162,16 @@ def validate_adversarial_harness(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and harness.get("git_commit") != current_commit:
+        recorded_commit = harness.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"adversarial_status": ADVERSARIAL_NEGATIVE_HARNESS_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and harness.get("github_sync_status", {}).get("tracked_working_tree_clean") is not True:
@@ -274,4 +293,3 @@ def _forbidden_failures(value: Any, path: str = "$") -> list[str]:
         for index, item in enumerate(value):
             failures.extend(_forbidden_failures(item, f"{path}[{index}]"))
     return failures
-

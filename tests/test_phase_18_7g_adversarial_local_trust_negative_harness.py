@@ -21,6 +21,7 @@ from sbp_lex.local_trust.adversarial_validator import (
     ADVERSARIAL_NEGATIVE_HARNESS_PASS,
     validate_adversarial_harness,
 )
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -351,7 +352,7 @@ def _case_by_id(case_id: str) -> dict:
 
 
 def _load_repo_json(path: str) -> dict:
-    return json.loads((REPOSITORY_ROOT / path).read_text(encoding="utf-8"))
+    return json.loads(resolve_local_trust_path(REPOSITORY_ROOT, path).read_text(encoding="utf-8"))
 
 
 def _sha256(path: Path) -> str:

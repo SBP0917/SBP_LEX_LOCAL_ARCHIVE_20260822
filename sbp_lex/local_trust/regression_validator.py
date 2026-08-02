@@ -4,8 +4,12 @@ import hmac
 from pathlib import Path
 from typing import Any, Mapping
 
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
 from sbp_lex.local_trust.regression_cases import REGRESSION_CASE_STATUSES, REQUIRED_REGRESSION_CASE_IDS
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 REGRESSION_MATRIX_VALID = "REGRESSION_MATRIX_VALID"
 REGRESSION_MATRIX_INVALID = "REGRESSION_MATRIX_INVALID"
@@ -78,10 +82,10 @@ def validate_local_trust_regression_matrix(
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.manifest import canonicalise_manifest
     from sbp_lex.local_trust.regression_matrix import (
+        REGRESSION_MATRIX_SIGNATURE_DOMAIN,
         REGRESSION_MATRIX_SIGNATURE_MODE,
         hash_matrix_payload,
         matrix_digest_for,
-        matrix_signature_for,
     )
 
     failures: list[str] = []
@@ -114,11 +118,17 @@ def validate_local_trust_regression_matrix(
     if not hmac.compare_digest(str(matrix.get("matrix_payload_digest")), expected_payload_digest):
         failures.append("matrix_payload_digest_mismatch")
 
-    expected_signature = matrix_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(matrix.get("matrix_signature")), expected_signature):
+    signature = matrix.get("matrix_signature")
+    if not verify_local_trust_digest(
+        REGRESSION_MATRIX_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("matrix_signature_mismatch")
 
-    expected_matrix_digest = matrix_digest_for(expected_payload_digest, expected_signature)
+    expected_matrix_digest = (
+        matrix_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(matrix.get("matrix_digest")), expected_matrix_digest):
         failures.append("matrix_digest_mismatch")
 
@@ -138,7 +148,16 @@ def validate_local_trust_regression_matrix(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and matrix.get("git_commit") != current_commit:
+        recorded_commit = matrix.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"matrix_status": REGRESSION_MATRIX_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and matrix.get("working_tree_clean") is not True:

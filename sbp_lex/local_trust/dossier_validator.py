@@ -9,8 +9,13 @@ from sbp_lex.local_trust.claims_to_evidence import (
     required_claim_ids,
     required_reviewer_command_ids,
 )
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 from sbp_lex.local_trust.release_hash_index import file_sha256
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 from sbp_lex.local_trust.validation_questions import required_validation_question_ids
 
 VALIDATION_DOSSIER_READY = "VALIDATION_DOSSIER_READY"
@@ -151,9 +156,9 @@ def validate_dossier_manifest(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.dossier_manifest import (
+        DOSSIER_SIGNATURE_DOMAIN,
         DOSSIER_SIGNATURE_MODE,
         dossier_digest_for,
-        dossier_signature_for,
         hash_dossier_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -196,11 +201,17 @@ def validate_dossier_manifest(
     if not hmac.compare_digest(str(manifest.get("dossier_payload_digest")), expected_payload):
         failures.append("dossier_payload_digest_mismatch")
 
-    expected_signature = dossier_signature_for(expected_payload)
-    if not hmac.compare_digest(str(manifest.get("dossier_signature")), expected_signature):
+    signature = manifest.get("dossier_signature")
+    if not verify_local_trust_digest(
+        DOSSIER_SIGNATURE_DOMAIN, expected_payload, signature,
+    ):
         failures.append("dossier_signature_mismatch")
 
-    expected_digest = dossier_digest_for(expected_payload, expected_signature)
+    expected_digest = (
+        dossier_digest_for(expected_payload, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(manifest.get("dossier_digest")), expected_digest):
         failures.append("dossier_digest_mismatch")
 
@@ -223,7 +234,16 @@ def validate_dossier_manifest(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and manifest.get("git_commit") != current_commit:
+        recorded_commit = manifest.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"dossier_status": VALIDATION_DOSSIER_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and manifest.get("github_sync_status", {}).get("tracked_working_tree_clean") is not True:
@@ -269,8 +289,7 @@ def _file_reference_failures(manifest: Mapping[str, Any], repository_root: Path 
             failures.append(f"dossier_reference_not_mapping:{key}")
             continue
         path_text = str(reference.get("path"))
-        candidate = Path(path_text)
-        path = candidate if candidate.is_absolute() else repository_root / candidate
+        path = resolve_local_trust_path(repository_root, path_text)
         if not path.exists() or not path.is_file():
             failures.append(f"dossier_reference_missing:{key}")
             continue
@@ -369,8 +388,7 @@ def _artifact_index_failures(index: Mapping[str, Any] | None, repository_root: P
         if artifact.get("required") is True and artifact.get("exists") is not True:
             failures.append(f"artifact_missing:{artifact.get('artifact_id')}")
         if repository_root is not None and artifact.get("exists") is True:
-            candidate = Path(path_text)
-            path = candidate if candidate.is_absolute() else repository_root / candidate
+            path = resolve_local_trust_path(repository_root, path_text)
             if not path.exists() or not path.is_file():
                 failures.append(f"artifact_missing_on_disk:{artifact.get('artifact_id')}")
             else:

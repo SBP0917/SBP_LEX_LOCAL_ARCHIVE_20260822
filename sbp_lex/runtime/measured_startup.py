@@ -13,7 +13,7 @@ from collections import deque
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from hashlib import sha256
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Mapping, Sequence
 
 from sbp_lex.api.schema_validation import loads_strict_json
@@ -22,8 +22,9 @@ from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 MEASUREMENT_VERSION = "H8_DESKTOP_V1_MEASUREMENT_V1"
 BASELINE_STORE_VERSION = "H8_DESKTOP_V1_BASELINE_STORE_V1"
 BASELINE_RECORD_VERSION = "H8_DESKTOP_V1_BASELINE_RECORD_V1"
-STARTUP_ATTESTATION_VERSION = "H8_DESKTOP_V1_STARTUP_ATTESTATION_V1"
-ANCHOR_VERSION = "H8_DESKTOP_V1_MEASUREMENT_ANCHOR_V1"
+STARTUP_ATTESTATION_VERSION = "H8_DESKTOP_V1_STARTUP_ATTESTATION_V2"
+ANCHOR_VERSION = "H8_DESKTOP_V1_MEASUREMENT_ANCHOR_V2"
+RUNTIME_IDENTITY_VERSION = "H8_DESKTOP_V1_RUNTIME_IDENTITY_V2"
 MEASUREMENT_DOMAIN = "SBP_LEX_DESKTOP_V1_MEASURED_STARTUP"
 BASELINE_STATUSES = frozenset({"PENDING", "APPROVED", "RETIRED"})
 DRIFT_CLASSES = frozenset({"approved", "warning", "critical", "unknown"})
@@ -35,6 +36,15 @@ MAX_BASELINE_BYTES = 4_194_304
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASELINE_PATH = Path(__file__).with_name("approved_runtime_baselines.json")
 DEFAULT_STATE_ROOT = (REPOSITORY_ROOT / "runtime_artifacts" / "measured_startup").resolve()
+STARTUP_ATTESTATION_FIELDS = frozenset({
+    "attestation_version", "startup_sequence", "startup_timestamp_evidence",
+    "approved_baseline_identifier", "baseline_store_digest", "runtime_identity",
+    "measurement_digest",
+})
+ANCHOR_FIELDS = frozenset({
+    "anchor_version", "baseline_generation", "baseline_store_digest",
+    "approved_baseline_identifier", "startup_sequence", "last_attestation_digest",
+})
 
 PUBLIC_ENVIRONMENT_NAMES = (
     "SBP_LEX_API_SECURITY_MODE", "SBP_LEX_REQUIRE_API_TOKEN",
@@ -60,10 +70,29 @@ PUBLIC_ENVIRONMENT_NAMES = (
     "SBP_LEX_ADMISSION_RETENTION_SECONDS",
     "SBP_LEX_ADMISSION_COOLDOWN_SECONDS",
     "SBP_LEX_ADMISSION_WINDOW_SECONDS",
+    "SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH",
+    "SBP_LEX_MEASURED_STARTUP_STATE_ROOT",
+    "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
+    "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT",
+    "PYTHONPATH", "PYTHONHOME", "PYTHONSTARTUP", "PYTHONINSPECT",
+    "PYTHONOPTIMIZE", "PYTHONCASEOK", "PYTHONUSERBASE",
+    "PYTHONNOUSERSITE", "PYTHONSAFEPATH",
+    "PYTEST_ADDOPTS", "PYTEST_PLUGINS",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD",
 )
 SECRET_ENVIRONMENT_NAMES = (
     "SBP_LEX_API_TOKEN", "SBP_LEX_SIGNING_SECRET", "SBP_LEX_API_PRINCIPALS",
 )
+
+
+def configured_baseline_path() -> Path:
+    """Return the active baseline store without freezing an import-time path."""
+    return Path(
+        os.environ.get(
+            "SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH",
+            str(DEFAULT_BASELINE_PATH),
+        )
+    ).resolve(strict=False)
 
 
 class MeasuredStartupError(RuntimeError):
@@ -105,26 +134,64 @@ DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
             "sbp_lex/api/schema_validation.py",
         ),
         "trust_store": (
-            "outputs/local_trust_root_manifest.json",
-            "outputs/local_execution_environment_trust_envelope.json",
-            "outputs/local_evidence_chain.json",
-            "outputs/local_trust_regression_matrix.json",
-            "outputs/local_constitutional_gates.json",
-            "outputs/local_toolchain_guard.json",
-            "outputs/local_trust_25_year_capstone.json",
+            "sbp_lex/security/pqc.py",
+            "sbp_lex/security/pqc_provider.py",
+            "sbp_lex/security/pqc_policy.py",
+            "sbp_lex/local_trust/signing.py",
+            "sbp_lex/local_trust/paths.py",
+            "sbp_lex/supply_chain/provenance.py",
+            "sbp_lex/ivvp/verifier.py",
         ),
         "documentation": (
             "BASELINE_LOCK.md", "DESKTOP_V1_OPERATOR_RELEASE_LOCK.md",
             "DEPLOYMENT_SECURITY.md", "docs/LOCAL_TRUST_ROOT_MANIFEST.md",
             "docs/LOCAL_EXECUTION_ENVIRONMENT_TRUST_ENVELOPE.md",
-            "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
-            "outputs/recovery_critical_inventory.json",
-            "outputs/r1_recovery_drill.json",
+            "docs/STARTUP_EXECUTION_LINKAGE_ASSURANCE.md",
+            "docs/DOUBLE_TRIPLE_HANDOVER_ASSURANCE.md",
+            "docs/UNIVERSITY_HANDOVER_REGENERATION.md",
+        ),
+        "assurance": (
+            "scripts/run_tests.bat", "scripts/run_tests.sh",
+            "scripts/run_linkage_assurance.bat",
+            "scripts/run_linkage_assurance.sh",
+            "scripts/run_double_triple_assurance.bat",
+            "scripts/run_double_triple_assurance.sh",
+            "scripts/finalize_university_handover.bat",
+            "scripts/finalize_university_handover.ps1",
+            "sbp_lex/assurance/__init__.py",
+            "sbp_lex/assurance/double_triple.py",
+            "sbp_lex/assurance/handover_regeneration.py",
+            "tests/test_double_triple_assurance.py",
+            "tests/test_university_handover_regeneration.py",
+            "tests/test_h7_deterministic_execution_integrity.py",
+            "tests/test_h8_measured_startup_runtime_identity.py",
+            "tests/test_phq_formal_deterministic_architecture.py",
+            "tests/test_r1_canonical_backup_recovery.py",
+            "tests/test_r2_supply_chain_build_provenance.py",
+            "tests/test_r3_external_custody_recovery.py",
+            "tests/test_r4_independent_verification_package.py",
+            "tests/test_phase_18_7b_local_trust_manifest.py",
         ),
     },
     required_paths=(
         "main.py", "requirements.txt", "pytest.ini", "VERSION",
+        "scripts/run_tests.bat", "scripts/run_tests.sh",
+        "scripts/run_linkage_assurance.bat",
+        "scripts/run_linkage_assurance.sh",
+        "scripts/run_double_triple_assurance.bat",
+        "scripts/run_double_triple_assurance.sh",
+        "scripts/finalize_university_handover.bat",
+        "scripts/finalize_university_handover.ps1",
+        "docs/STARTUP_EXECUTION_LINKAGE_ASSURANCE.md",
+        "docs/DOUBLE_TRIPLE_HANDOVER_ASSURANCE.md",
+        "docs/UNIVERSITY_HANDOVER_REGENERATION.md",
+        "sbp_lex/assurance/__init__.py",
+        "sbp_lex/assurance/double_triple.py",
+        "sbp_lex/assurance/handover_regeneration.py",
         "sbp_lex/runtime/canonical_runtime.py", "sbp_lex/runtime/measured_startup.py",
+        "sbp_lex/runtime/schemas/startup_attestation.schema.json",
+        "sbp_lex/security/pqc.py", "sbp_lex/security/pqc_provider.py",
+        "sbp_lex/security/pqc_policy.py", "sbp_lex/config/environment.py",
         "external_substrates/shared/external_boundary.py",
         "external_substrates/shared/source_crypto.py",
         "external_substrates/shared/source_trust_store.py",
@@ -133,9 +200,17 @@ DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
         "sbp_lex/execution/execution_gate.py", "sbp_lex/execution/capability.py",
         "sbp_lex/execution/capability_store.py",
         "sbp_lex/execution/schemas/execution_capability.schema.json",
+        "sbp_lex/execution/schemas/execution_traversal_authority.schema.json",
+        "sbp_lex/execution/schemas/adapter_completion_evidence.schema.json",
         "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
         "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
         "sbp_lex/pipeline/dual_runner.py",
+        "sbp_lex/formal/assurance.py", "sbp_lex/formal/verifier.py",
+        "sbp_lex/formal/schemas/formal_state.schema.json",
+        "sbp_lex/formal/schemas/lineage_node.schema.json",
+        "sbp_lex/formal/schemas/transition_record.schema.json",
+        "sbp_lex/local_trust/signing.py", "sbp_lex/local_trust/paths.py",
+        "sbp_lex/supply_chain/provenance.py", "sbp_lex/ivvp/verifier.py",
         "sbp_lex/recovery/__init__.py",
         "sbp_lex/recovery/common.py",
         "sbp_lex/recovery/inventory.py",
@@ -145,13 +220,16 @@ DEFAULT_MEASUREMENT_POLICY = MeasurementPolicy(
         "sbp_lex/recovery/recovery_drill.py",
         "sbp_lex/recovery/schemas/recovery_inventory.schema.json",
         "sbp_lex/recovery/schemas/sealed_backup_manifest.schema.json",
+        "tests/test_h7_deterministic_execution_integrity.py",
+        "tests/test_h8_measured_startup_runtime_identity.py",
+        "tests/test_phq_formal_deterministic_architecture.py",
         "tests/test_r1_canonical_backup_recovery.py",
-        "outputs/recovery_critical_inventory.json",
-        "outputs/r1_recovery_drill.json",
-        "reports/R1_CANONICAL_BACKUP_RECOVERY_RESTORE_INTEGRITY_REPORT.md",
-        "outputs/local_trust_root_manifest.json",
-        "outputs/local_execution_environment_trust_envelope.json",
-        "outputs/local_evidence_chain.json",
+        "tests/test_r2_supply_chain_build_provenance.py",
+        "tests/test_r3_external_custody_recovery.py",
+        "tests/test_r4_independent_verification_package.py",
+        "tests/test_phase_18_7b_local_trust_manifest.py",
+        "tests/test_double_triple_assurance.py",
+        "tests/test_university_handover_regeneration.py",
     ),
 )
 
@@ -264,6 +342,8 @@ _REQUIREMENT_NAME = re.compile(r"^([A-Za-z0-9_.-]+)")
 
 def _dependency_records(root: Path, policy: MeasurementPolicy) -> list[dict[str, Any]]:
     path = root / policy.dependency_file
+    if path.is_symlink():
+        raise MeasuredStartupError("dependency_file_symlink", "unknown")
     if not path.is_file():
         raise MeasuredStartupError("dependency_file_missing", "unknown")
     records: list[dict[str, Any]] = []
@@ -305,13 +385,30 @@ def measure_runtime(
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve()
     for required in policy.required_paths:
-        path = (root / required).resolve(strict=False)
-        if not path.is_relative_to(root) or not path.is_file():
+        candidate = root / required
+        path = candidate.resolve(strict=False)
+        if (
+            candidate.is_symlink()
+            or not path.is_relative_to(root)
+            or not path.is_file()
+        ):
             raise MeasuredStartupError(f"required_measurement_missing:{required}", "unknown")
     categories = {
         category: _collect_category(root, patterns)
         for category, patterns in sorted(policy.category_patterns.items())
     }
+    scoped_paths = {
+        str(record["path"])
+        for records in categories.values()
+        for record in records
+    }
+    scoped_paths.add(policy.dependency_file)
+    unscoped = sorted(set(policy.required_paths) - scoped_paths)
+    if unscoped:
+        raise MeasuredStartupError(
+            f"required_measurement_unscoped:{unscoped[0]}",
+            "unknown",
+        )
     environment = _environment_records(os.environ if environ is None else environ, policy)
     dependencies = _dependency_records(root, policy)
     executable = _executable_record()
@@ -334,21 +431,273 @@ def measure_runtime(
 
 def runtime_identity_for(measurement: Mapping[str, Any], baseline_identifier: str) -> str:
     digests = measurement.get("category_digests")
-    if not isinstance(digests, Mapping):
+    if (
+        not isinstance(digests, Mapping)
+        or not digests
+        or any(
+            not isinstance(name, str) or not _is_digest(digest)
+            for name, digest in digests.items()
+        )
+    ):
         raise MeasuredStartupError("measurement_category_digests_invalid", "unknown")
+    bound_digests = {
+        str(name): digest
+        for name, digest in sorted(digests.items())
+    }
     return generate_digest({
-        "identity_version": "H8_DESKTOP_V1_RUNTIME_IDENTITY_V1",
+        "identity_version": RUNTIME_IDENTITY_VERSION,
         "approved_baseline_identifier": baseline_identifier,
-        "configuration_digest": digests.get("configuration"),
-        "environment_digest": digests.get("environment"),
-        "dependency_digest": digests.get("dependencies"),
-        "policy_digest": digests.get("policy"),
-        "schema_digest": digests.get("schema"),
-        "software_measurement": digests.get("software"),
-        "trust_store_digest": digests.get("trust_store"),
-        "documentation_digest": digests.get("documentation"),
-        "executable_digest": digests.get("executable"),
+        "category_digests": bound_digests,
     })
+
+
+def _is_digest(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+    )
+
+
+def _parse_aware_timestamp(value: Any) -> datetime | None:
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.astimezone(timezone.utc) if parsed.tzinfo is not None else None
+
+
+def _validate_measurement_contract(measurement: Mapping[str, Any]) -> None:
+    if set(measurement) != {
+        "measurement_version", "categories", "environment", "dependencies",
+        "executable", "category_digests", "measurement_digest",
+    }:
+        raise MeasuredStartupError(
+            "baseline_measurement_schema_invalid", "unknown",
+        )
+    if measurement.get("measurement_version") != MEASUREMENT_VERSION:
+        raise MeasuredStartupError(
+            "baseline_measurement_version_invalid", "unknown",
+        )
+    categories = measurement.get("categories")
+    category_digests = measurement.get("category_digests")
+    if (
+        not isinstance(categories, Mapping)
+        or not categories
+        or any(
+            not isinstance(name, str) or not isinstance(records, list)
+            for name, records in categories.items()
+        )
+        or not isinstance(measurement.get("environment"), list)
+        or not isinstance(measurement.get("dependencies"), list)
+        or not isinstance(measurement.get("executable"), Mapping)
+        or not isinstance(category_digests, Mapping)
+        or not category_digests
+        or any(
+            not isinstance(name, str) or not _is_digest(digest)
+            for name, digest in category_digests.items()
+        )
+        or not _is_digest(measurement.get("measurement_digest"))
+    ):
+        raise MeasuredStartupError(
+            "baseline_measurement_structure_invalid", "unknown",
+        )
+    expected_digest_names = set(categories) | {
+        "environment", "dependencies", "executable",
+    }
+    if set(category_digests) != expected_digest_names:
+        raise MeasuredStartupError(
+            "baseline_category_digest_contract_invalid", "unknown",
+        )
+    total_files = 0
+    for category, records in categories.items():
+        if re.fullmatch(r"[a-z][a-z0-9_]{0,63}", category) is None:
+            raise MeasuredStartupError(
+                "baseline_category_name_invalid", "unknown",
+            )
+        paths: list[str] = []
+        for record in records:
+            if not isinstance(record, Mapping) or set(record) != {
+                "path", "sha256", "size_bytes",
+            }:
+                raise MeasuredStartupError(
+                    "baseline_file_measurement_invalid", "unknown",
+                )
+            path = record.get("path")
+            size = record.get("size_bytes")
+            if (
+                not isinstance(path, str)
+                or not path
+                or "\\" in path
+                or PurePosixPath(path).is_absolute()
+                or ".." in PurePosixPath(path).parts
+                or PurePosixPath(path).as_posix() != path
+                or not _is_digest(record.get("sha256"))
+                or not isinstance(size, int)
+                or isinstance(size, bool)
+                or size < 0
+            ):
+                raise MeasuredStartupError(
+                    "baseline_file_measurement_invalid", "unknown",
+                )
+            paths.append(path)
+        if paths != sorted(paths) or len(paths) != len(set(paths)):
+            raise MeasuredStartupError(
+                "baseline_file_measurement_order_invalid", "unknown",
+            )
+        total_files += len(records)
+    if total_files > MAX_MEASURED_FILES:
+        raise MeasuredStartupError(
+            "baseline_file_measurement_cardinality_invalid", "unknown",
+        )
+    environment = measurement["environment"]
+    environment_names: list[str] = []
+    public_environment_names: list[str] = []
+    secret_environment_names: list[str] = []
+    sensitive_block_started = False
+    for record in environment:
+        if not isinstance(record, Mapping):
+            raise MeasuredStartupError(
+                "baseline_environment_measurement_invalid", "unknown",
+            )
+        name = record.get("name")
+        state = record.get("state")
+        sensitive = record.get("sensitive")
+        if (
+            not isinstance(name, str)
+            or not name
+            or state not in {"ABSENT", "PRESENT"}
+            or not isinstance(sensitive, bool)
+        ):
+            raise MeasuredStartupError(
+                "baseline_environment_measurement_invalid", "unknown",
+            )
+        if sensitive is False:
+            if sensitive_block_started:
+                raise MeasuredStartupError(
+                    "baseline_environment_measurement_order_invalid",
+                    "unknown",
+                )
+            if (
+                set(record) != {"name", "state", "value", "sensitive"}
+                or (
+                    state == "ABSENT"
+                    and record.get("value") is not None
+                )
+                or (
+                    state == "PRESENT"
+                    and not isinstance(record.get("value"), str)
+                )
+            ):
+                raise MeasuredStartupError(
+                    "baseline_environment_measurement_invalid", "unknown",
+                )
+            public_environment_names.append(name)
+        else:
+            sensitive_block_started = True
+            length = record.get("value_length")
+            digest = record.get("value_digest")
+            if (
+                set(record) != {
+                    "name", "state", "value_digest",
+                    "value_length", "sensitive",
+                }
+                or not isinstance(length, int)
+                or isinstance(length, bool)
+                or length < 0
+                or (
+                    state == "ABSENT"
+                    and (digest is not None or length != 0)
+                )
+                or (
+                    state == "PRESENT"
+                    and (not _is_digest(digest))
+                )
+            ):
+                raise MeasuredStartupError(
+                    "baseline_environment_measurement_invalid", "unknown",
+                )
+            secret_environment_names.append(name)
+        environment_names.append(name)
+    if (
+        public_environment_names != sorted(public_environment_names)
+        or secret_environment_names != sorted(secret_environment_names)
+        or len(environment_names) != len(set(environment_names))
+    ):
+        raise MeasuredStartupError(
+            "baseline_environment_measurement_order_invalid", "unknown",
+        )
+    dependency_names: list[str] = []
+    for record in measurement["dependencies"]:
+        if (
+            not isinstance(record, Mapping)
+            or set(record) != {"name", "declared", "installed_version"}
+            or not isinstance(record.get("name"), str)
+            or re.fullmatch(
+                r"[a-z0-9][a-z0-9_.-]{0,127}",
+                str(record.get("name", "")),
+            ) is None
+            or not isinstance(record.get("declared"), str)
+            or not record.get("declared")
+            or not isinstance(record.get("installed_version"), str)
+            or not record.get("installed_version")
+        ):
+            raise MeasuredStartupError(
+                "baseline_dependency_measurement_invalid", "unknown",
+            )
+        dependency_names.append(str(record["name"]))
+    if (
+        dependency_names != sorted(dependency_names)
+        or len(dependency_names) != len(set(dependency_names))
+    ):
+        raise MeasuredStartupError(
+            "baseline_dependency_measurement_order_invalid", "unknown",
+        )
+    executable = measurement["executable"]
+    if (
+        set(executable) != {
+            "path", "sha256", "python_version",
+            "implementation", "architecture",
+        }
+        or not isinstance(executable.get("path"), str)
+        or not executable.get("path")
+        or not _is_digest(executable.get("sha256"))
+        or any(
+            not isinstance(executable.get(field), str)
+            or not executable.get(field)
+            for field in (
+                "python_version", "implementation", "architecture",
+            )
+        )
+    ):
+        raise MeasuredStartupError(
+            "baseline_executable_measurement_invalid", "unknown",
+        )
+    expected_category_digests = {
+        name: generate_digest(records)
+        for name, records in categories.items()
+    }
+    expected_category_digests.update({
+        "environment": generate_digest(measurement["environment"]),
+        "dependencies": generate_digest(measurement["dependencies"]),
+        "executable": generate_digest(measurement["executable"]),
+    })
+    if dict(category_digests) != expected_category_digests:
+        raise MeasuredStartupError(
+            "baseline_category_digest_mismatch", "unknown",
+        )
+    measurement_payload = {
+        key: value
+        for key, value in measurement.items()
+        if key != "measurement_digest"
+    }
+    if measurement["measurement_digest"] != generate_digest(
+        measurement_payload
+    ):
+        raise MeasuredStartupError(
+            "baseline_measurement_corrupted", "unknown",
+        )
 
 
 def baseline_record(
@@ -359,17 +708,45 @@ def baseline_record(
 ) -> dict[str, Any]:
     if not re.fullmatch(r"[A-Z0-9][A-Z0-9_.-]{7,127}", identifier):
         raise MeasuredStartupError("baseline_identifier_invalid", "unknown")
-    if status not in BASELINE_STATUSES or sequence <= 0:
+    if (
+        status not in BASELINE_STATUSES
+        or not isinstance(sequence, int)
+        or isinstance(sequence, bool)
+        or sequence <= 0
+    ):
         raise MeasuredStartupError("baseline_record_invalid", "unknown")
-    if status == "APPROVED" and not approval_reference:
+    if status == "APPROVED" and (
+        not isinstance(approval_reference, str) or not approval_reference.strip()
+    ):
         raise MeasuredStartupError("approved_baseline_missing_approval", "unknown")
+    if approval_reference is not None and (
+        not isinstance(approval_reference, str) or not approval_reference.strip()
+    ):
+        raise MeasuredStartupError("baseline_approval_reference_invalid", "unknown")
+    if prior_baseline_identifier is not None and (
+        not isinstance(prior_baseline_identifier, str)
+        or re.fullmatch(
+            r"[A-Z0-9][A-Z0-9_.-]{7,127}", prior_baseline_identifier,
+        ) is None
+    ):
+        raise MeasuredStartupError("prior_baseline_identifier_invalid", "unknown")
+    timestamp = created_at or datetime.now(timezone.utc).replace(
+        microsecond=0
+    ).isoformat()
+    if _parse_aware_timestamp(timestamp) is None:
+        raise MeasuredStartupError("baseline_created_at_invalid", "unknown")
+    if not isinstance(measurement, Mapping):
+        raise MeasuredStartupError(
+            "baseline_measurement_schema_invalid", "unknown",
+        )
+    _validate_measurement_contract(measurement)
     measured = json.loads(json.dumps(measurement))
     return {
         "baseline_record_version": BASELINE_RECORD_VERSION,
         "baseline_identifier": identifier,
         "sequence": sequence,
         "status": status,
-        "created_at": created_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "created_at": timestamp,
         "approval_reference": approval_reference,
         "prior_baseline_identifier": prior_baseline_identifier,
         "measurement": measured,
@@ -411,13 +788,19 @@ def validate_baseline_store(store: Mapping[str, Any]) -> dict[str, Any]:
         raise MeasuredStartupError("baseline_store_integrity_invalid", "unknown")
     generation = payload.get("generation")
     baselines = payload.get("baselines")
-    if not isinstance(generation, int) or generation <= 0 or not isinstance(baselines, list):
+    if (
+        not isinstance(generation, int)
+        or isinstance(generation, bool)
+        or generation <= 0
+        or not isinstance(baselines, list)
+    ):
         raise MeasuredStartupError("baseline_store_generation_invalid", "unknown")
     if not baselines or len(baselines) > MAX_BASELINES:
         raise MeasuredStartupError("baseline_store_cardinality_invalid", "unknown")
     identifiers: set[str] = set()
     approved = 0
     previous_sequence = 0
+    previous_created_at: datetime | None = None
     for record in baselines:
         if not isinstance(record, Mapping) or set(record) != {
             "baseline_record_version", "baseline_identifier", "sequence", "status",
@@ -429,25 +812,88 @@ def validate_baseline_store(store: Mapping[str, Any]) -> dict[str, Any]:
         sequence = record.get("sequence")
         status = record.get("status")
         measurement = record.get("measurement")
-        if not isinstance(identifier, str) or identifier in identifiers:
+        if (
+            record.get("baseline_record_version") != BASELINE_RECORD_VERSION
+            or not isinstance(identifier, str)
+            or re.fullmatch(
+                r"[A-Z0-9][A-Z0-9_.-]{7,127}", identifier,
+            ) is None
+        ):
+            raise MeasuredStartupError(
+                "baseline_identifier_invalid", "unknown",
+            )
+        if identifier in identifiers:
             raise MeasuredStartupError("duplicate_baseline_identifier", "unknown")
-        if not isinstance(sequence, int) or sequence <= previous_sequence:
+        if (
+            not isinstance(sequence, int)
+            or isinstance(sequence, bool)
+            or sequence <= previous_sequence
+        ):
             raise MeasuredStartupError("baseline_sequence_invalid", "unknown")
-        if status not in BASELINE_STATUSES or not isinstance(measurement, Mapping):
+        if (
+            not isinstance(status, str)
+            or status not in BASELINE_STATUSES
+            or not isinstance(measurement, Mapping)
+        ):
             raise MeasuredStartupError("baseline_record_state_invalid", "unknown")
+        created_at = _parse_aware_timestamp(record.get("created_at"))
+        if (
+            created_at is None
+            or (
+                previous_created_at is not None
+                and created_at < previous_created_at
+            )
+        ):
+            raise MeasuredStartupError("baseline_created_at_invalid", "unknown")
+        approval_reference = record.get("approval_reference")
+        if (
+            approval_reference is not None
+            and (
+                not isinstance(approval_reference, str)
+                or not approval_reference.strip()
+            )
+        ):
+            raise MeasuredStartupError(
+                "baseline_approval_reference_invalid", "unknown",
+            )
+        prior_identifier = record.get("prior_baseline_identifier")
+        if prior_identifier is not None and (
+            not isinstance(prior_identifier, str)
+            or prior_identifier not in identifiers
+        ):
+            raise MeasuredStartupError(
+                "baseline_prior_lineage_invalid", "unknown",
+            )
+        if (
+            status == "APPROVED"
+            and sequence > 1
+            and prior_identifier is None
+        ):
+            raise MeasuredStartupError(
+                "approved_baseline_prior_lineage_missing", "unknown",
+            )
         if record.get("measurement_digest") != measurement.get("measurement_digest"):
             raise MeasuredStartupError("baseline_measurement_digest_mismatch", "unknown")
+        _validate_measurement_contract(measurement)
         measurement_payload = {key: value for key, value in measurement.items() if key != "measurement_digest"}
         if measurement.get("measurement_digest") != generate_digest(measurement_payload):
             raise MeasuredStartupError("baseline_measurement_corrupted", "unknown")
-        if record.get("runtime_identity") != runtime_identity_for(measurement, identifier):
+        if (
+            not _is_digest(record.get("runtime_identity"))
+            or record.get("runtime_identity")
+            != runtime_identity_for(measurement, identifier)
+        ):
             raise MeasuredStartupError("baseline_runtime_identity_mismatch", "unknown")
         if status == "APPROVED":
             approved += 1
-            if not record.get("approval_reference"):
+            if (
+                not isinstance(approval_reference, str)
+                or not approval_reference.strip()
+            ):
                 raise MeasuredStartupError("approved_baseline_missing_approval", "unknown")
         identifiers.add(identifier)
         previous_sequence = sequence
+        previous_created_at = created_at
     if approved != 1:
         raise MeasuredStartupError("approved_baseline_cardinality_invalid", "unknown")
     if generation < previous_sequence:
@@ -479,7 +925,10 @@ def approve_pending_baseline(
     store: Mapping[str, Any], identifier: str, *, approval_reference: str,
     retire_approved_identifier: str,
 ) -> dict[str, Any]:
-    if not approval_reference.strip():
+    if (
+        not isinstance(approval_reference, str)
+        or not approval_reference.strip()
+    ):
         raise MeasuredStartupError("explicit_baseline_approval_required", "critical")
     payload = validate_baseline_store(store)
     records = payload["baselines"]
@@ -612,7 +1061,26 @@ def _validate_anchor(anchor: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(anchor, Mapping) or set(anchor) != {"payload", "payload_digest", "integrity_signature"}:
         raise MeasuredStartupError("measurement_anchor_schema_invalid", "unknown")
     payload = anchor.get("payload")
-    if not isinstance(payload, Mapping) or payload.get("anchor_version") != ANCHOR_VERSION:
+    if (
+        not isinstance(payload, Mapping)
+        or set(payload) != ANCHOR_FIELDS
+        or payload.get("anchor_version") != ANCHOR_VERSION
+        or not isinstance(payload.get("baseline_generation"), int)
+        or isinstance(payload.get("baseline_generation"), bool)
+        or payload.get("baseline_generation", 0) <= 0
+        or not isinstance(payload.get("startup_sequence"), int)
+        or isinstance(payload.get("startup_sequence"), bool)
+        or payload.get("startup_sequence", 0) <= 0
+        or any(
+            not isinstance(payload.get(field), str)
+            or re.fullmatch(r"[0-9a-f]{64}", payload[field]) is None
+            for field in (
+                "baseline_store_digest", "last_attestation_digest",
+            )
+        )
+        or not isinstance(payload.get("approved_baseline_identifier"), str)
+        or not payload.get("approved_baseline_identifier")
+    ):
         raise MeasuredStartupError("measurement_anchor_invalid", "unknown")
     if anchor.get("payload_digest") != generate_digest(payload) or not verify_signature(
         {"integrity_domain": MEASUREMENT_DOMAIN, "payload": dict(payload)},
@@ -630,29 +1098,69 @@ def verify_startup_attestation(
     }:
         return False
     payload = attestation.get("payload")
-    if not isinstance(payload, Mapping) or payload.get("attestation_version") != STARTUP_ATTESTATION_VERSION:
+    if (
+        not isinstance(payload, Mapping)
+        or set(payload) != STARTUP_ATTESTATION_FIELDS
+        or payload.get("attestation_version") != STARTUP_ATTESTATION_VERSION
+        or not isinstance(payload.get("startup_sequence"), int)
+        or isinstance(payload.get("startup_sequence"), bool)
+        or payload.get("startup_sequence", 0) <= 0
+        or not isinstance(payload.get("approved_baseline_identifier"), str)
+        or not payload.get("approved_baseline_identifier")
+        or any(
+            not isinstance(payload.get(field), str)
+            or re.fullmatch(r"[0-9a-f]{64}", payload[field]) is None
+            for field in (
+                "baseline_store_digest", "runtime_identity", "measurement_digest",
+            )
+        )
+    ):
+        return False
+    if _parse_aware_timestamp(
+        payload.get("startup_timestamp_evidence")
+    ) is None:
         return False
     if attestation.get("payload_digest") != generate_digest(payload) or not verify_signature(
         {"integrity_domain": MEASUREMENT_DOMAIN, "payload": dict(payload)},
         attestation.get("integrity_signature", {}),
     ):
         return False
-    if anchor_payload is not None and int(payload.get("startup_sequence", 0)) <= int(anchor_payload.get("startup_sequence", 0)):
-        return False
+    if anchor_payload is not None:
+        anchor_sequence = anchor_payload.get("startup_sequence")
+        if (
+            not isinstance(anchor_sequence, int)
+            or isinstance(anchor_sequence, bool)
+            or anchor_sequence < 0
+            or payload["startup_sequence"] <= anchor_sequence
+        ):
+            return False
     return True
 
 
 class MeasuredStartupService:
     def __init__(
         self, *, repository_root: Path = REPOSITORY_ROOT,
-        baseline_path: Path = DEFAULT_BASELINE_PATH,
-        state_root: Path = DEFAULT_STATE_ROOT,
+        baseline_path: Path | None = None,
+        state_root: Path | None = None,
         policy: MeasurementPolicy = DEFAULT_MEASUREMENT_POLICY,
         environ: Mapping[str, str] | None = None,
     ) -> None:
         self.repository_root = repository_root.resolve()
-        self.baseline_path = baseline_path.resolve(strict=False)
-        self.state_root = state_root.resolve(strict=False)
+        runtime_environment = os.environ if environ is None else environ
+        selected_baseline_path = baseline_path or Path(
+            runtime_environment.get(
+                "SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH",
+                str(DEFAULT_BASELINE_PATH),
+            )
+        )
+        selected_state_root = state_root or Path(
+            runtime_environment.get(
+                "SBP_LEX_MEASURED_STARTUP_STATE_ROOT",
+                str(DEFAULT_STATE_ROOT),
+            )
+        )
+        self.baseline_path = selected_baseline_path.resolve(strict=False)
+        self.state_root = selected_state_root.resolve(strict=False)
         self.policy = policy
         self.environ = environ
         self.anchor_path = self.state_root / "measurement.anchor.json"
@@ -663,11 +1171,63 @@ class MeasuredStartupService:
         self._runtime_identity: str | None = None
         self._baseline_identifier: str | None = None
         self._measurement_digest: str | None = None
+        self._startup_attestation_digest: str | None = None
+        self._startup_sequence: int | None = None
+
+    def _invalidate_runtime_binding(self) -> None:
+        self._validated = False
+        self._runtime_identity = None
+        self._baseline_identifier = None
+        self._measurement_digest = None
+        self._startup_attestation_digest = None
+        self._startup_sequence = None
 
     def _anchor(self) -> dict[str, Any] | None:
         if not self.anchor_path.exists():
             return None
         return _validate_anchor(_load_json(self.anchor_path))
+
+    def _persisted_attestation(
+        self, anchor: Mapping[str, Any] | None,
+    ) -> dict[str, Any] | None:
+        attestation_exists = self.attestation_path.exists()
+        if anchor is None:
+            if attestation_exists:
+                raise MeasuredStartupError(
+                    "startup_attestation_orphaned", "unknown",
+                )
+            return None
+        if not attestation_exists:
+            raise MeasuredStartupError(
+                "startup_attestation_missing", "unknown",
+            )
+        attestation = _load_json(self.attestation_path)
+        if not verify_startup_attestation(attestation):
+            raise MeasuredStartupError(
+                "startup_attestation_integrity_invalid", "unknown",
+            )
+        if generate_digest(attestation) != anchor.get(
+            "last_attestation_digest"
+        ):
+            raise MeasuredStartupError(
+                "startup_attestation_anchor_mismatch", "critical",
+            )
+        payload = attestation["payload"]
+        expected = {
+            "startup_sequence": anchor.get("startup_sequence"),
+            "approved_baseline_identifier": anchor.get(
+                "approved_baseline_identifier"
+            ),
+            "baseline_store_digest": anchor.get("baseline_store_digest"),
+        }
+        if any(
+            payload.get(field) != value
+            for field, value in expected.items()
+        ):
+            raise MeasuredStartupError(
+                "startup_attestation_anchor_binding_invalid", "critical",
+            )
+        return attestation
 
     def _failure(self, error: MeasuredStartupError, findings: Sequence[DriftFinding] = ()) -> None:
         payload = {
@@ -693,6 +1253,9 @@ class MeasuredStartupService:
                 )
                 baseline = approved_baseline(payload, requested)
                 anchor = self._anchor() if persist else None
+                prior_attestation = (
+                    self._persisted_attestation(anchor) if persist else None
+                )
                 if anchor is not None:
                     generation = int(payload["generation"])
                     anchor_generation = int(anchor.get("baseline_generation", 0))
@@ -700,10 +1263,42 @@ class MeasuredStartupService:
                         raise MeasuredStartupError("baseline_measurement_rollback", "critical")
                     if generation == anchor_generation and store["payload_digest"] != anchor.get("baseline_store_digest"):
                         raise MeasuredStartupError("baseline_measurement_replacement", "critical")
+                    if (
+                        generation == anchor_generation
+                        and baseline["baseline_identifier"]
+                        != anchor.get("approved_baseline_identifier")
+                    ):
+                        raise MeasuredStartupError(
+                            "approved_baseline_anchor_replacement", "critical",
+                        )
                     if generation > anchor_generation and not _baseline_descends_from(
                         payload, baseline, str(anchor.get("approved_baseline_identifier", "")),
                     ):
                         raise MeasuredStartupError("baseline_update_lineage_invalid", "critical")
+                    anchored_baseline = next(
+                        (
+                            item
+                            for item in payload["baselines"]
+                            if item["baseline_identifier"]
+                            == anchor.get("approved_baseline_identifier")
+                        ),
+                        None,
+                    )
+                    if anchored_baseline is None or prior_attestation is None:
+                        raise MeasuredStartupError(
+                            "anchored_baseline_evidence_missing", "critical",
+                        )
+                    prior_payload = prior_attestation["payload"]
+                    if (
+                        prior_payload.get("runtime_identity")
+                        != anchored_baseline.get("runtime_identity")
+                        or prior_payload.get("measurement_digest")
+                        != anchored_baseline.get("measurement_digest")
+                    ):
+                        raise MeasuredStartupError(
+                            "startup_attestation_baseline_binding_invalid",
+                            "critical",
+                        )
                 current = measure_runtime(
                     self.repository_root, policy=self.policy, environ=self.environ,
                 )
@@ -715,7 +1310,37 @@ class MeasuredStartupService:
                 if identity != baseline["runtime_identity"]:
                     raise MeasuredStartupError("runtime_identity_mismatch", "critical")
                 startup_sequence = int(anchor.get("startup_sequence", 0)) + 1 if anchor else 1
-                timestamp = (startup_time or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0).isoformat()
+                timestamp_source = startup_time or datetime.now(timezone.utc)
+                if (
+                    not isinstance(timestamp_source, datetime)
+                    or timestamp_source.tzinfo is None
+                ):
+                    raise MeasuredStartupError(
+                        "startup_attestation_timestamp_invalid", "unknown",
+                    )
+                timestamp = timestamp_source.astimezone(timezone.utc).replace(
+                    microsecond=0
+                ).isoformat()
+                prior_timestamp = (
+                    _parse_aware_timestamp(
+                        prior_attestation["payload"].get(
+                            "startup_timestamp_evidence"
+                        )
+                    )
+                    if prior_attestation is not None
+                    else None
+                )
+                current_timestamp = _parse_aware_timestamp(timestamp)
+                if (
+                    current_timestamp is None
+                    or (
+                        prior_timestamp is not None
+                        and current_timestamp < prior_timestamp
+                    )
+                ):
+                    raise MeasuredStartupError(
+                        "startup_attestation_clock_rollback", "critical",
+                    )
                 attestation_payload = {
                     "attestation_version": STARTUP_ATTESTATION_VERSION,
                     "startup_sequence": startup_sequence,
@@ -728,6 +1353,7 @@ class MeasuredStartupService:
                 attestation = _store_wrapper(attestation_payload)
                 if not verify_startup_attestation(attestation, anchor):
                     raise MeasuredStartupError("startup_attestation_replay", "critical")
+                attestation_digest = generate_digest(attestation)
                 if persist:
                     _atomic_write(self.attestation_path, attestation)
                     anchor_payload = {
@@ -736,7 +1362,7 @@ class MeasuredStartupService:
                         "baseline_store_digest": store["payload_digest"],
                         "approved_baseline_identifier": baseline["baseline_identifier"],
                         "startup_sequence": startup_sequence,
-                        "last_attestation_digest": attestation["payload_digest"],
+                        "last_attestation_digest": attestation_digest,
                     }
                     _atomic_write(self.anchor_path, _anchor_wrapper(anchor_payload))
                     self.failure_path.unlink(missing_ok=True)
@@ -744,10 +1370,12 @@ class MeasuredStartupService:
                 self._runtime_identity = identity
                 self._baseline_identifier = baseline["baseline_identifier"]
                 self._measurement_digest = current["measurement_digest"]
+                self._startup_attestation_digest = attestation_digest
+                self._startup_sequence = startup_sequence
                 MEASUREMENT_EVENTS.record("measured_startup_approved", {
                     "runtime_identity": identity,
                     "baseline_identifier": baseline["baseline_identifier"],
-                    "attestation_digest": attestation["payload_digest"],
+                    "attestation_digest": attestation_digest,
                 })
                 return {
                     "status": "MEASURED_STARTUP_APPROVED",
@@ -755,11 +1383,11 @@ class MeasuredStartupService:
                     "runtime_identity": identity,
                     "approved_baseline_identifier": baseline["baseline_identifier"],
                     "measurement_digest": current["measurement_digest"],
-                    "startup_attestation_digest": attestation["payload_digest"],
+                    "startup_attestation_digest": attestation_digest,
                     "startup_sequence": startup_sequence,
                 }
             except MeasuredStartupError as exc:
-                self._validated = False
+                self._invalidate_runtime_binding()
                 self._failure(exc, findings)
                 raise
 
@@ -770,7 +1398,7 @@ class MeasuredStartupService:
             try:
                 return self._check_runtime_drift_locked()
             except MeasuredStartupError as exc:
-                self._validated = False
+                self._invalidate_runtime_binding()
                 self._failure(exc)
                 raise
 
@@ -781,11 +1409,41 @@ class MeasuredStartupService:
         anchor = self._anchor()
         if anchor is None:
             raise MeasuredStartupError("measurement_anchor_missing", "unknown")
+        attestation = self._persisted_attestation(anchor)
+        if attestation is None:
+            raise MeasuredStartupError(
+                "startup_attestation_missing", "unknown",
+            )
         if (
             int(payload["generation"]) != int(anchor.get("baseline_generation", 0))
             or store["payload_digest"] != anchor.get("baseline_store_digest")
         ):
             raise MeasuredStartupError("baseline_changed_during_runtime", "critical")
+        if (
+            anchor.get("approved_baseline_identifier")
+            != self._baseline_identifier
+            or anchor.get("startup_sequence") != self._startup_sequence
+            or anchor.get("last_attestation_digest")
+            != self._startup_attestation_digest
+        ):
+            raise MeasuredStartupError(
+                "startup_anchor_changed_during_runtime", "critical",
+            )
+        attestation_payload = attestation["payload"]
+        expected_attestation = {
+            "startup_sequence": self._startup_sequence,
+            "approved_baseline_identifier": self._baseline_identifier,
+            "baseline_store_digest": store["payload_digest"],
+            "runtime_identity": self._runtime_identity,
+            "measurement_digest": self._measurement_digest,
+        }
+        if any(
+            attestation_payload.get(field) != value
+            for field, value in expected_attestation.items()
+        ):
+            raise MeasuredStartupError(
+                "startup_attestation_changed_during_runtime", "critical",
+            )
         current = measure_runtime(
             self.repository_root, policy=self.policy, environ=self.environ,
         )
@@ -801,32 +1459,44 @@ class MeasuredStartupService:
         return self.status()
 
     def status(self) -> dict[str, Any]:
-        return {
-            "status": "MEASURED_STARTUP_APPROVED" if self._validated else "MEASURED_STARTUP_NOT_VALIDATED",
-            "runtime_identity": self._runtime_identity,
-            "approved_baseline_identifier": self._baseline_identifier,
-            "measurement_digest": self._measurement_digest,
-        }
+        with self._lock:
+            return {
+                "status": (
+                    "MEASURED_STARTUP_APPROVED"
+                    if self._validated
+                    else "MEASURED_STARTUP_NOT_VALIDATED"
+                ),
+                "runtime_identity": self._runtime_identity,
+                "approved_baseline_identifier": self._baseline_identifier,
+                "measurement_digest": self._measurement_digest,
+                "startup_attestation_digest": (
+                    self._startup_attestation_digest
+                ),
+                "startup_sequence": self._startup_sequence,
+            }
 
 
 _DEFAULT_SERVICE: MeasuredStartupService | None = None
+_DEFAULT_SERVICE_LOCK = threading.Lock()
 
 
 def default_measured_startup_service() -> MeasuredStartupService:
     global _DEFAULT_SERVICE
     if _DEFAULT_SERVICE is None:
-        _DEFAULT_SERVICE = MeasuredStartupService()
+        with _DEFAULT_SERVICE_LOCK:
+            if _DEFAULT_SERVICE is None:
+                _DEFAULT_SERVICE = MeasuredStartupService()
     return _DEFAULT_SERVICE
 
 
 def ensure_measured_startup() -> dict[str, Any]:
-    service = default_measured_startup_service()
-    return service.check_runtime_drift() if service.status()["status"] == "MEASURED_STARTUP_APPROVED" else service.validate_startup()
+    return default_measured_startup_service().check_runtime_drift()
 
 
 def reset_measured_startup_for_tests() -> None:
     global _DEFAULT_SERVICE
-    _DEFAULT_SERVICE = None
+    with _DEFAULT_SERVICE_LOCK:
+        _DEFAULT_SERVICE = None
 
 
 def main(argv: Sequence[str] | None = None) -> int:

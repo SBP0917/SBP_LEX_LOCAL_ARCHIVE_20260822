@@ -8,6 +8,7 @@ from typing import Any, Iterable, Mapping
 from sbp_lex.local_trust.evidence_registry import REQUIRED_EVIDENCE_SPECS
 from sbp_lex.local_trust.file_digest import sha256_file
 from sbp_lex.local_trust.manifest import canonical_json
+from sbp_lex.local_trust.paths import resolve_local_trust_path
 
 
 def collect_evidence_items(
@@ -19,7 +20,7 @@ def collect_evidence_items(
 
 def build_evidence_item(repository_root: Path, spec: Mapping[str, Any]) -> dict[str, Any]:
     relative_path = normalise_evidence_path(str(spec["path"]))
-    path = repository_root / relative_path
+    path = resolve_local_trust_path(repository_root, relative_path)
     base = {
         "evidence_id": str(spec["evidence_id"]),
         "path": relative_path,

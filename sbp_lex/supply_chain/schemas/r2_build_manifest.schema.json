@@ -1,1 +1,316 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Desktop V1 R2 deterministic build manifest","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:r2:build-manifest:v1",
+  "title": "Desktop V1 R2 deterministic build manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "payload_digest", "integrity_signature"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_version",
+        "assurance_version",
+        "desktop_scope",
+        "repository_provenance",
+        "dependency_digest",
+        "dependency_count",
+        "build_provenance",
+        "artefact_inventory",
+        "artefact_inventory_digest",
+        "validation_evidence_bindings",
+        "validation_identity",
+        "network_required_for_verification",
+        "canonical_payload_contains_timestamp",
+        "manifest_status",
+        "supply_chain_identity"
+      ],
+      "properties": {
+        "manifest_version": {
+          "const": "R2_DESKTOP_V1_DETERMINISTIC_BUILD_MANIFEST_V1"
+        },
+        "assurance_version": {"const": "R2_DESKTOP_V1_SUPPLY_CHAIN_V1"},
+        "desktop_scope": {
+          "const": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_PRIVATE_SINGLE_HOST_NO_NODE"
+        },
+        "repository_provenance": {"$ref": "#/$defs/repository"},
+        "dependency_digest": {"$ref": "#/$defs/sha256"},
+        "dependency_count": {"type": "integer", "minimum": 1},
+        "build_provenance": {"$ref": "#/$defs/build"},
+        "artefact_inventory": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4096,
+          "items": {"$ref": "#/$defs/artefact"}
+        },
+        "artefact_inventory_digest": {"$ref": "#/$defs/sha256"},
+        "validation_evidence_bindings": {
+          "type": "object",
+          "propertyNames": {"$ref": "#/$defs/portablePath"},
+          "additionalProperties": {"$ref": "#/$defs/sha256"}
+        },
+        "validation_identity": {"$ref": "#/$defs/sha256"},
+        "network_required_for_verification": {"const": false},
+        "canonical_payload_contains_timestamp": {"const": false},
+        "manifest_status": {
+          "const": "SUPPLY_CHAIN_PROVENANCE_APPROVED"
+        },
+        "supply_chain_identity": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "payload_digest": {"$ref": "#/$defs/sha256"},
+    "integrity_signature": {"$ref": "#/$defs/signature"}
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonempty": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$)).+$"
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provenance_version",
+        "desktop_scope",
+        "repository_identity",
+        "canonical_branch",
+        "repository_commit",
+        "repository_tree",
+        "parent_lineage",
+        "lineage_depth_recorded",
+        "trusted_repository_anchor_commit",
+        "trusted_repository_anchor_tree",
+        "upstream_reference",
+        "tracked_working_tree_clean",
+        "untracked_files_checked",
+        "origin_kind",
+        "repository_digest"
+      ],
+      "properties": {
+        "provenance_version": {"const": "R2_DESKTOP_V1_SUPPLY_CHAIN_V1"},
+        "desktop_scope": {
+          "const": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_PRIVATE_SINGLE_HOST_NO_NODE"
+        },
+        "repository_identity": {
+          "const": "github.com/SBP0917/SBP_LEX_DUAL_V6"
+        },
+        "canonical_branch": {"const": "main"},
+        "repository_commit": {"$ref": "#/$defs/sha1"},
+        "repository_tree": {"$ref": "#/$defs/sha1"},
+        "parent_lineage": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/sha1"}
+        },
+        "lineage_depth_recorded": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "trusted_repository_anchor_commit": {"$ref": "#/$defs/sha1"},
+        "trusted_repository_anchor_tree": {"$ref": "#/$defs/sha1"},
+        "upstream_reference": {"const": "origin/main"},
+        "tracked_working_tree_clean": {"const": true},
+        "untracked_files_checked": {"const": true},
+        "origin_kind": {"const": "canonical_origin"},
+        "repository_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_provenance_version",
+        "desktop_scope",
+        "repository_commit",
+        "measured_baseline_identifier",
+        "measured_baseline_sequence",
+        "measurement_digest",
+        "runtime_identity",
+        "python",
+        "operating_system",
+        "toolchain_guard_sha256",
+        "pqc_provider",
+        "cryptographic_provider",
+        "environment_policy",
+        "build_identity"
+      ],
+      "properties": {
+        "build_provenance_version": {
+          "const": "R2_DESKTOP_V1_SUPPLY_CHAIN_V1"
+        },
+        "desktop_scope": {
+          "const": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_PRIVATE_SINGLE_HOST_NO_NODE"
+        },
+        "repository_commit": {"$ref": "#/$defs/sha1"},
+        "measured_baseline_identifier": {"$ref": "#/$defs/nonempty"},
+        "measured_baseline_sequence": {"type": "integer", "minimum": 1},
+        "measurement_digest": {"$ref": "#/$defs/sha256"},
+        "runtime_identity": {"$ref": "#/$defs/sha256"},
+        "python": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "implementation",
+            "version",
+            "architecture",
+            "executable_name",
+            "executable_sha256"
+          ],
+          "properties": {
+            "implementation": {"$ref": "#/$defs/nonempty"},
+            "version": {"$ref": "#/$defs/nonempty"},
+            "architecture": {"type": "string"},
+            "executable_name": {"$ref": "#/$defs/nonempty"},
+            "executable_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "operating_system": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["system", "release", "machine"],
+          "properties": {
+            "system": {"type": "string"},
+            "release": {"type": "string"},
+            "machine": {"type": "string"}
+          }
+        },
+        "toolchain_guard_sha256": {"$ref": "#/$defs/sha256"},
+        "pqc_provider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "policy",
+            "signature_algorithm",
+            "provider",
+            "provider_available",
+            "trusted_signing_key_available",
+            "trusted_signing_key_fingerprint",
+            "fail_closed"
+          ],
+          "properties": {
+            "policy": {"const": "NIST_FIPS_203_204_205"},
+            "signature_algorithm": {"const": "ML-DSA"},
+            "provider": {"const": "cryptography.mldsa"},
+            "provider_available": {"const": true},
+            "trusted_signing_key_available": {"const": true},
+            "trusted_signing_key_fingerprint": {"$ref": "#/$defs/sha256"},
+            "fail_closed": {"const": true}
+          }
+        },
+        "cryptographic_provider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version"],
+          "properties": {
+            "package": {"const": "cryptography"},
+            "version": {"$ref": "#/$defs/nonempty"}
+          }
+        },
+        "environment_policy": {
+          "const": "LOCAL_OFFLINE_APPROVED_TOOLCHAIN_ONLY"
+        },
+        "build_identity": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artefact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logical_identity",
+        "path",
+        "sha256",
+        "size_bytes",
+        "repository_origin",
+        "repository_blob",
+        "repository_blob_sha256",
+        "repository_blob_size_bytes",
+        "tracked_at_repository_commit",
+        "creation_relationship",
+        "artefact_type"
+      ],
+      "properties": {
+        "logical_identity": {"$ref": "#/$defs/nonempty"},
+        "path": {"$ref": "#/$defs/portablePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "repository_origin": {
+          "const": "github.com/SBP0917/SBP_LEX_DUAL_V6"
+        },
+        "repository_blob": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha1"},
+            {"type": "null"}
+          ]
+        },
+        "repository_blob_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "repository_blob_size_bytes": {
+          "oneOf": [
+            {"type": "integer", "minimum": 0},
+            {"type": "null"}
+          ]
+        },
+        "tracked_at_repository_commit": {"type": "boolean"},
+        "creation_relationship": {
+          "enum": [
+            "GENERATED_EVIDENCE",
+            "PROTECTED_REPORT",
+            "REPOSITORY_SOURCE"
+          ]
+        },
+        "artefact_type": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuer",
+        "algorithm",
+        "policy",
+        "provider",
+        "provider_available",
+        "signature_version",
+        "key_fingerprint",
+        "digest",
+        "signature",
+        "public_key"
+      ],
+      "properties": {
+        "issuer": {"const": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE"},
+        "algorithm": {"const": "ML-DSA"},
+        "policy": {"const": "NIST_FIPS_203_204_205"},
+        "provider": {"const": "cryptography.mldsa"},
+        "provider_available": {"const": true},
+        "signature_version": {"const": "PQC_01_PROVIDER_SIGNATURE_V2"},
+        "key_fingerprint": {"$ref": "#/$defs/sha256"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "signature": {"type": "string", "minLength": 1},
+        "public_key": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

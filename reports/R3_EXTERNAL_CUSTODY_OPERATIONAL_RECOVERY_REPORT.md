@@ -118,7 +118,7 @@ software and not delegated execution authority.
 
 ## Adversarial testing
 
-The targeted R3 suite passes `35/35`. It covers modified, substituted, stale,
+The current targeted R3 suite passes `35/35`. It covers modified, substituted, stale,
 replayed, corrupted, foreign, and unexpected-member packages; repository,
 baseline, and runtime mismatch; broken chains; unknown custody identifiers;
 incorrect receipts; duplicate or improperly separated keys; insufficient dual
@@ -126,8 +126,9 @@ control; revoked keys; mismatched signing responses; corrupted or over-duplicate
 media; invalid lifecycle transitions; missing media; incomplete custody chains;
 and failed post-restore assurance.
 
-The pre-approval focused R3, R2, R1, H4A, H6GHI, H7, and PHQ integration
-suite passes `552/552`, with three expected Windows symlink skips.
+The earlier pre-approval focused R3, R2, R1, H4A, H6GHI, H7, and PHQ
+integration result of `552/552`, with three expected Windows symlink skips,
+remains historical evidence for its recorded commit.
 
 ## Measured baseline and runtime linkage
 
@@ -165,3 +166,16 @@ outcome after the explicit measured-baseline transition.
 There is no canonical runtime or authority change. R3 is detached,
 non-authoritative operational assurance. It introduces no node, quorum, remote
 execution, cloud service, or distributed topology.
+
+## Current hardening reconciliation
+
+The current source audit passed `1785/1785`, with the linkage suite passing
+`141/141` in three separate fresh processes. R3 remains fail-closed and its
+targeted `35/35` tests pass within that complete run.
+
+The uploaded R3 operational profile still contains legacy signature material.
+It is historical evidence only and cannot be included in a current university
+handover. It must be regenerated after the canonical Windows successor baseline,
+final R2 evidence, and controlled production trust identity are established.
+The default Double Triple handover command must then pass without a partial-mode
+substitution.

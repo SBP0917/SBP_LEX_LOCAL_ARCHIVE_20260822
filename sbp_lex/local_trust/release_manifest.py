@@ -17,8 +17,14 @@ from sbp_lex.local_trust.release_hash_index import (
     VERIFICATION_COMMANDS_FILE,
     file_sha256,
 )
+from sbp_lex.local_trust.signing import (
+    LOCAL_TRUST_SIGNATURE_MODE,
+    local_trust_binding_digest,
+    sign_local_trust_digest,
+)
 
-RELEASE_INTEGRITY_SIGNATURE_MODE = "RELEASE_INTEGRITY_DETERMINISTIC_PLACEHOLDER"
+RELEASE_INTEGRITY_SIGNATURE_MODE = LOCAL_TRUST_SIGNATURE_MODE
+RELEASE_INTEGRITY_SIGNATURE_DOMAIN = "SBP_LEX_RELEASE_INTEGRITY"
 RELEASE_MANIFEST_VERSION = "18.7F"
 
 _DIGEST_EXCLUDED_FIELDS = {
@@ -39,12 +45,18 @@ def build_release_manifest(
     boundary_lock: Mapping[str, Any],
     capstone_path: Path | str = DEFAULT_CAPSTONE_OUTPUT_PATH,
     bundle_dir: Path | str | None = None,
+    bundle_reference_dir: Path | str | None = None,
     created_at: str | None = None,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.release_validator import validate_release_manifest
 
     root = Path(repository_root).resolve() if repository_root is not None else repository_root_from()
     output_dir = Path(bundle_dir) if bundle_dir is not None else ARTIFACT_HASH_INDEX_FILE.parent
+    reference_dir = (
+        Path(bundle_reference_dir)
+        if bundle_reference_dir is not None
+        else output_dir
+    )
     capstone = load_local_trust_capstone(capstone_path, repository_root=root)
     git = collect_release_git_status(root)
     manifest: dict[str, Any] = {
@@ -70,11 +82,29 @@ def build_release_manifest(
         "bound_constitutional_gates_digest": capstone.get("bound_constitutional_gates_digest"),
         "bound_toolchain_guard_digest": capstone.get("bound_toolchain_guard_digest"),
         "bound_capstone_digest": capstone.get("capstone_digest"),
-        "release_artifacts": release_artifact_references(root, output_dir),
-        "verification_commands_reference": bundle_file_reference(root, output_dir / VERIFICATION_COMMANDS_FILE.name),
-        "claims_to_evidence_seed_reference": bundle_file_reference(root, output_dir / CLAIMS_TO_EVIDENCE_SEED_FILE.name),
-        "boundary_lock_reference": bundle_file_reference(root, output_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name),
-        "artifact_hash_index_reference": bundle_file_reference(root, output_dir / ARTIFACT_HASH_INDEX_FILE.name),
+        "release_artifacts": release_artifact_references(
+            root, output_dir, reference_dir,
+        ),
+        "verification_commands_reference": bundle_file_reference(
+            root,
+            output_dir / VERIFICATION_COMMANDS_FILE.name,
+            reference_dir / VERIFICATION_COMMANDS_FILE.name,
+        ),
+        "claims_to_evidence_seed_reference": bundle_file_reference(
+            root,
+            output_dir / CLAIMS_TO_EVIDENCE_SEED_FILE.name,
+            reference_dir / CLAIMS_TO_EVIDENCE_SEED_FILE.name,
+        ),
+        "boundary_lock_reference": bundle_file_reference(
+            root,
+            output_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name,
+            reference_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name,
+        ),
+        "artifact_hash_index_reference": bundle_file_reference(
+            root,
+            output_dir / ARTIFACT_HASH_INDEX_FILE.name,
+            reference_dir / ARTIFACT_HASH_INDEX_FILE.name,
+        ),
         "artifact_hash_index_summary": artifact_hash_index.get("artifact_summary", {}),
         "verification_command_summary": {
             "verification_command_count": len(verification_commands.get("commands", [])),
@@ -126,21 +156,55 @@ def release_scope() -> dict[str, Any]:
     }
 
 
-def release_artifact_references(repository_root: Path, output_dir: Path) -> list[dict[str, Any]]:
+def release_artifact_references(
+    repository_root: Path,
+    output_dir: Path,
+    reference_dir: Path | None = None,
+) -> list[dict[str, Any]]:
+    logical = reference_dir or output_dir
     return [
-        bundle_file_reference(repository_root, output_dir / ARTIFACT_HASH_INDEX_FILE.name),
-        bundle_file_reference(repository_root, output_dir / VERIFICATION_COMMANDS_FILE.name),
-        bundle_file_reference(repository_root, output_dir / CLAIMS_TO_EVIDENCE_SEED_FILE.name),
-        bundle_file_reference(repository_root, output_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name),
-        bundle_file_reference(repository_root, output_dir / RELEASE_README_FILE.name),
+        bundle_file_reference(
+            repository_root,
+            output_dir / ARTIFACT_HASH_INDEX_FILE.name,
+            logical / ARTIFACT_HASH_INDEX_FILE.name,
+        ),
+        bundle_file_reference(
+            repository_root,
+            output_dir / VERIFICATION_COMMANDS_FILE.name,
+            logical / VERIFICATION_COMMANDS_FILE.name,
+        ),
+        bundle_file_reference(
+            repository_root,
+            output_dir / CLAIMS_TO_EVIDENCE_SEED_FILE.name,
+            logical / CLAIMS_TO_EVIDENCE_SEED_FILE.name,
+        ),
+        bundle_file_reference(
+            repository_root,
+            output_dir / BOUNDARY_AND_SCOPE_LOCK_FILE.name,
+            logical / BOUNDARY_AND_SCOPE_LOCK_FILE.name,
+        ),
+        bundle_file_reference(
+            repository_root,
+            output_dir / RELEASE_README_FILE.name,
+            logical / RELEASE_README_FILE.name,
+        ),
     ]
 
 
-def bundle_file_reference(repository_root: Path, relative_path: Path) -> dict[str, Any]:
-    path = relative_path if relative_path.is_absolute() else repository_root / relative_path
+def bundle_file_reference(
+    repository_root: Path,
+    physical_path: Path,
+    reference_path: Path | None = None,
+) -> dict[str, Any]:
+    path = (
+        physical_path
+        if physical_path.is_absolute()
+        else repository_root / physical_path
+    )
+    logical = reference_path or physical_path
     exists = path.exists() and path.is_file()
     return {
-        "path": relative_path.as_posix(),
+        "path": logical.as_posix(),
         "exists": exists,
         "size_bytes": path.stat().st_size if exists else 0,
         "sha256": file_sha256(path) if exists else "MISSING",
@@ -177,20 +241,14 @@ def hash_release_payload(manifest: Mapping[str, Any]) -> str:
     return sha256(canonical_json(payload_for_digest(manifest)).encode("utf-8")).hexdigest()
 
 
-def release_signature_for(payload_digest: str) -> str:
-    return sha256(f"{RELEASE_INTEGRITY_SIGNATURE_MODE}:{payload_digest}".encode("utf-8")).hexdigest()
+def release_signature_for(payload_digest: str) -> dict[str, Any]:
+    return sign_local_trust_digest(RELEASE_INTEGRITY_SIGNATURE_DOMAIN, payload_digest)
 
 
-def release_digest_for(payload_digest: str, signature: str) -> str:
-    return sha256(
-        canonical_json(
-            {
-                "release_payload_digest": payload_digest,
-                "release_signature": signature,
-                "signature_mode": RELEASE_INTEGRITY_SIGNATURE_MODE,
-            }
-        ).encode("utf-8")
-    ).hexdigest()
+def release_digest_for(payload_digest: str, signature: Mapping[str, Any]) -> str:
+    return local_trust_binding_digest(
+        RELEASE_INTEGRITY_SIGNATURE_DOMAIN, payload_digest, signature,
+    )
 
 
 def _origin_remote(repository_root: Path) -> str:

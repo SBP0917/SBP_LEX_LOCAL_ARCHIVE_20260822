@@ -118,24 +118,35 @@ def test_boundary_checker_confirms_detachment() -> None:
 
 
 def test_cli_build_verify_and_report(tmp_path) -> None:
+    runtime_root = tmp_path / "runtime"
+    reports = runtime_root / "reports"
+    dossier = runtime_root / "outputs/university_validation_dossier"
+    reports.mkdir(parents=True)
+    dossier.mkdir(parents=True)
+    (reports / "assurance.md").write_text(
+        "# Isolated assurance\n", encoding="utf-8",
+    )
+    (dossier / "evidence.json").write_text(
+        '{"status":"READY"}\n', encoding="utf-8",
+    )
     bundle = tmp_path / "proof_bundle.json"
     report = tmp_path / "proof_report.md"
     build = subprocess.run(
-        [sys.executable, "-m", "sbp_pvpl.cli", "--build-bundle", "--runtime-root", ".", "--out", str(bundle)],
+        [sys.executable, "-m", "sbp_pvpl.cli", "--build-bundle", "--runtime-root", str(runtime_root), "--out", str(bundle)],
         check=False,
         capture_output=True,
         text=True,
         timeout=60,
     )
     verify = subprocess.run(
-        [sys.executable, "-m", "sbp_pvpl.cli", "--verify-bundle", "--runtime-root", ".", "--bundle", str(bundle)],
+        [sys.executable, "-m", "sbp_pvpl.cli", "--verify-bundle", "--runtime-root", str(runtime_root), "--bundle", str(bundle)],
         check=False,
         capture_output=True,
         text=True,
         timeout=60,
     )
     write = subprocess.run(
-        [sys.executable, "-m", "sbp_pvpl.cli", "--write-report", "--runtime-root", ".", "--bundle", str(bundle), "--out", str(report)],
+        [sys.executable, "-m", "sbp_pvpl.cli", "--write-report", "--runtime-root", str(runtime_root), "--bundle", str(bundle), "--out", str(report)],
         check=False,
         capture_output=True,
         text=True,
@@ -144,6 +155,7 @@ def test_cli_build_verify_and_report(tmp_path) -> None:
 
     assert build.returncode == 0
     assert bundle.exists()
-    assert json.loads(verify.stdout)["status"] in {PVPLStatus.PROOF_OK, PVPLStatus.PROOF_INCOMPLETE}
+    assert verify.returncode == 0, verify.stderr
+    assert json.loads(verify.stdout)["status"] == PVPLStatus.PROOF_OK
     assert write.returncode == 0
     assert report.exists()

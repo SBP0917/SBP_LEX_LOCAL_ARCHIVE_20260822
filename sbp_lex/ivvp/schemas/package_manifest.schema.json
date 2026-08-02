@@ -1,1 +1,121 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"R4 IVVP package manifest","type":"object","required":["payload","payload_digest","integrity_signature"],"additionalProperties":false}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:r4:package-manifest:v1",
+  "title": "Desktop V1 R4 independent-verification package manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "payload_digest", "integrity_signature"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_version",
+        "desktop_scope",
+        "repository_identity",
+        "repository_commit",
+        "git_tree_identity",
+        "trusted_repository_anchor_commit",
+        "trusted_repository_anchor_tree",
+        "trusted_signing_key_fingerprint",
+        "measured_baseline_identifier",
+        "runtime_identity",
+        "identity_digest",
+        "claims_digest",
+        "traceability_digest",
+        "evidence_inventory_digest",
+        "package_files",
+        "package_status",
+        "package_identity"
+      ],
+      "properties": {
+        "manifest_version": {"const": "R4_DESKTOP_V1_IVVP_V1"},
+        "desktop_scope": {
+          "const": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_PRIVATE_SINGLE_HOST_NO_NODE"
+        },
+        "repository_identity": {
+          "const": "github.com/SBP0917/SBP_LEX_DUAL_V6"
+        },
+        "repository_commit": {"$ref": "#/$defs/sha1"},
+        "git_tree_identity": {"$ref": "#/$defs/sha1"},
+        "trusted_repository_anchor_commit": {"$ref": "#/$defs/sha1"},
+        "trusted_repository_anchor_tree": {"$ref": "#/$defs/sha1"},
+        "trusted_signing_key_fingerprint": {"$ref": "#/$defs/sha256"},
+        "measured_baseline_identifier": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "runtime_identity": {"$ref": "#/$defs/sha256"},
+        "identity_digest": {"$ref": "#/$defs/sha256"},
+        "claims_digest": {"$ref": "#/$defs/sha256"},
+        "traceability_digest": {"$ref": "#/$defs/sha256"},
+        "evidence_inventory_digest": {"$ref": "#/$defs/sha256"},
+        "package_files": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {"$ref": "#/$defs/file"}
+        },
+        "package_status": {"const": "R4_IVVP_READY"},
+        "package_identity": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "payload_digest": {"$ref": "#/$defs/sha256"},
+    "integrity_signature": {"$ref": "#/$defs/signature"}
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$)).+$"
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {
+        "path": {"$ref": "#/$defs/portablePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuer",
+        "algorithm",
+        "policy",
+        "provider",
+        "provider_available",
+        "signature_version",
+        "key_fingerprint",
+        "digest",
+        "signature",
+        "public_key"
+      ],
+      "properties": {
+        "issuer": {"const": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE"},
+        "algorithm": {"const": "ML-DSA"},
+        "policy": {"const": "NIST_FIPS_203_204_205"},
+        "provider": {"const": "cryptography.mldsa"},
+        "provider_available": {"const": true},
+        "signature_version": {"const": "PQC_01_PROVIDER_SIGNATURE_V2"},
+        "key_fingerprint": {"$ref": "#/$defs/sha256"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "signature": {"type": "string", "minLength": 1},
+        "public_key": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

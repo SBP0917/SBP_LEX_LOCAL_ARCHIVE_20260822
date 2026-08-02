@@ -181,13 +181,18 @@ def build_inventory(
     specs: Sequence[ArtifactSpec] = DEFAULT_ARTIFACT_SPECS,
     *,
     expected_required: Iterable[str] | None = None,
+    source_overrides: Mapping[str, Path] | None = None,
 ) -> dict[str, Any]:
     root = source_root.resolve()
     records: list[dict[str, Any]] = []
     for spec in specs:
         portable_path(spec.source_path, label="source_path")
         portable_path(spec.relative_recovery_path, label="recovery_path")
-        source = resolve_beneath(root, spec.source_path, label="source_path")
+        source = _source_path(
+            root,
+            spec.source_path,
+            source_overrides=source_overrides,
+        )
         if not source.is_file():
             if spec.required_status == "OPTIONAL":
                 continue
@@ -224,6 +229,26 @@ def build_inventory(
     }
     payload["aggregate_digest"] = generate_digest(payload)
     return validate_inventory(payload, expected_required=expected_required)
+
+
+def _source_path(
+    root: Path,
+    relative: str,
+    *,
+    source_overrides: Mapping[str, Path] | None,
+) -> Path:
+    override = source_overrides.get(relative) if source_overrides else None
+    if override is None:
+        return resolve_beneath(root, relative, label="source_path")
+    candidate = Path(override)
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    cursor = candidate
+    while cursor != cursor.parent:
+        if cursor.exists() and cursor.is_symlink():
+            raise RecoveryError("source_path_symlink")
+        cursor = cursor.parent
+    return candidate.resolve(strict=False)
 
 
 def validate_inventory(

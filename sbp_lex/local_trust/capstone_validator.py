@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from sbp_lex.local_trust.capstone_report import required_capstone_command_ids
-from sbp_lex.local_trust.git_provenance import current_git_commit
+from sbp_lex.local_trust.git_provenance import (
+    current_git_commit,
+    generated_evidence_lineage_is_bounded,
+)
+from sbp_lex.local_trust.signing import verify_local_trust_digest
 
 LOCAL_TRUST_CAPSTONE_PASS = "LOCAL_TRUST_CAPSTONE_PASS"
 LOCAL_TRUST_CAPSTONE_FAIL = "LOCAL_TRUST_CAPSTONE_FAIL"
@@ -82,9 +86,9 @@ def validate_local_trust_capstone(
     current_validation: bool = False,
 ) -> dict[str, Any]:
     from sbp_lex.local_trust.local_trust_capstone import (
+        CAPSTONE_SIGNATURE_DOMAIN,
         CAPSTONE_SIGNATURE_MODE,
         capstone_digest_for,
-        capstone_signature_for,
         hash_capstone_payload,
     )
     from sbp_lex.local_trust.manifest import canonicalise_manifest
@@ -124,11 +128,17 @@ def validate_local_trust_capstone(
     if not hmac.compare_digest(str(capstone.get("capstone_payload_digest")), expected_payload_digest):
         failures.append("capstone_payload_digest_mismatch")
 
-    expected_signature = capstone_signature_for(expected_payload_digest)
-    if not hmac.compare_digest(str(capstone.get("capstone_signature")), expected_signature):
+    signature = capstone.get("capstone_signature")
+    if not verify_local_trust_digest(
+        CAPSTONE_SIGNATURE_DOMAIN, expected_payload_digest, signature,
+    ):
         failures.append("capstone_signature_mismatch")
 
-    expected_digest = capstone_digest_for(expected_payload_digest, expected_signature)
+    expected_digest = (
+        capstone_digest_for(expected_payload_digest, signature)
+        if isinstance(signature, Mapping)
+        else ""
+    )
     if not hmac.compare_digest(str(capstone.get("capstone_digest")), expected_digest):
         failures.append("capstone_digest_mismatch")
 
@@ -149,7 +159,16 @@ def validate_local_trust_capstone(
 
     if current_validation and repository_root is not None:
         current_commit = current_git_commit(repository_root)
-        if current_commit and capstone.get("git_commit") != current_commit:
+        recorded_commit = capstone.get("git_commit")
+        if (
+            current_commit
+            and recorded_commit != current_commit
+            and not generated_evidence_lineage_is_bounded(
+                repository_root,
+                str(recorded_commit),
+                current_commit=current_commit,
+            )
+        ):
             return {"capstone_status": LOCAL_TRUST_CAPSTONE_STALE, "validation_failures": ["git_commit_stale"]}
 
     if clean_required and capstone.get("github_sync_status", {}).get("tracked_working_tree_clean") is not True:

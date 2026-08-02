@@ -51,8 +51,9 @@ own hash inside itself is intentionally avoided as a cryptographic self-referenc
 ## Engineering claims register
 
 The deterministic register contains bounded engineering claims for H7, PHQ, R1,
-R2, R3, Local Trust, Constitutional Gates, Toolchain Guard, Release Integrity,
-Capstone, runtime, and replay. Every claim has:
+R2, R3, the Double Triple pre-handover gate, Local Trust, Constitutional Gates,
+Toolchain Guard, Release Integrity, Capstone, runtime, and replay. Every claim
+has:
 
 - a stable claim identifier;
 - restrained engineering language;
@@ -73,10 +74,10 @@ inventory records deterministic identifiers, original repository-relative path,
 package-relative path, SHA-256, byte size, and presence status.
 
 Curated evidence includes H7 and PHQ reports, R1 recovery inventory/drill, R2
-SBOM/build/offline verification, R3 custody profile, measured-baseline store,
-Local Trust root and evidence chain, Constitutional Gates, Toolchain Guard,
-Release Integrity, Capstone, formal assurance, adversarial evidence, and protected
-baseline documentation.
+SBOM/build/offline verification, R3 custody profile, the Double Triple report,
+the measured-baseline store, Local Trust root and evidence chain, Constitutional
+Gates, Toolchain Guard, Release Integrity, Capstone, formal assurance,
+adversarial evidence, and protected baseline documentation.
 
 Missing, stale, substituted, unexpected, foreign, or internally inconsistent
 evidence fails closed.
@@ -103,8 +104,10 @@ needed for optional reproduction of the established validation commands.
 The command pack contains only supported validation commands. It covers IVVP,
 measured startup, Local Trust, evidence comparison, Constitutional Gates,
 Toolchain Guard, Release Integrity, Capstone, R2 offline verification, and R3
-custody validation. Every command is marked as non-mutating to tracked repository
-state and includes an expected output.
+custody validation. It also contains exactly one approved Windows launcher for
+the terminal Double Triple handover gate. Any renamed or substituted batch
+launcher is rejected. Every command is marked as non-mutating to tracked
+repository state and includes an expected output.
 
 Runtime and replay are represented by freshly collected deterministic evidence
 inside the signed package. This permits read-only independent verification; live
@@ -116,6 +119,7 @@ the established ignored runtime-artifact area.
 The verifier checks:
 
 - package signature and package identity;
+- explicit agreement with an out-of-band trusted signer fingerprint;
 - exact package file set and every file hash/size;
 - common repository, baseline, and runtime identities;
 - claims and traceability digests and links;
@@ -124,11 +128,16 @@ The verifier checks:
 - R2 and R3 signatures and baseline/runtime linkage;
 - recorded runtime PASS and replay PASS with zero mismatches;
 - command-pack digest and non-mutation flags;
-- optional source-commit ancestry and Git-tree identity.
+- checkout-byte and canonical Git-blob identities for tracked evidence;
+- optional source-commit ancestry and Git-tree identity;
+- when repository access is supplied, either the exact evidence-source commit
+  or one direct child whose changes are confined to `validation_package/`.
 
 The package rejects stale measured identity, stale R2/R3 evidence, broken report
 links, broken traceability, corrupt signatures, duplicate records, unexpected
-files, and failed runtime/replay evidence.
+files, failed runtime/replay evidence, legacy/placeholder assurance material,
+false Git-blob claims, arbitrary descendant handoff commits, and unapproved
+verification launchers.
 
 ## Validation summaries
 
@@ -139,16 +148,15 @@ claims of mathematical proof beyond the implemented formal verification.
 
 ## Tests
 
-The targeted R4 suite passes `26/26`. Tests cover repository identity,
-deterministic claims and traceability, package determinism, required documents,
-missing/substituted/unexpected evidence, corrupt manifests, foreign identity,
-stale runtime identity, stale R3 evidence, broken report links, broken
-traceability, failed runtime evidence, command mutation flags, source exclusion,
-quick-start bounds, certification disclaimer, deterministic identifiers, and
-cross-document identity consistency.
+The current targeted R4 suite passes `42/42`. In addition to the original
+coverage, it now tests out-of-band signer fingerprints, exact package
+replacement recognition, nested evidence tampering after outer re-signing,
+legacy evidence after outer re-signing, portable paths, working-copy/Git-blob
+identity attacks, direct package-only handoff commits, arbitrary descendant
+rejection, and exact authorization of the measured Double Triple launcher.
 
-The pre-approval focused R4, R3, R2, R1, H4A, H6GHI, H7, and PHQ integration
-suite passes `578/578`, with three expected Windows symlink skips.
+The earlier `26/26` and focused `578/578` results remain historical evidence
+for their recorded commits; they are not the current repository totals.
 
 ## Measured baseline linkage
 
@@ -266,9 +274,27 @@ temporary root.
 The detailed logs and hashes are retained in the controlled Windows canonical
 checkout verification package generated after the final evidence commit.
 
-## R4 status
+## Current post-hardening status
 
-R4 implementation and package work are complete, and canonical
-Windows-checkout verification has passed for the recorded verification commit.
+The historical Windows verification above remains evidence for corrective
+commit `2c5f339ccf685cd1b856457029fd3b55de478730` only. It does not validate
+later protected hardening changes or later generated evidence.
 
-Status: **IMPLEMENTATION COMPLETE — CANONICALLY VERIFIED ON WINDOWS**.
+The current source audit passed:
+
+- complete suite: `1785/1785`;
+- targeted R4 suite: `42/42`;
+- startup-to-terminal linkage: `141/141` in each of three fresh processes;
+- strict tracked JSON schemas: 50;
+- statically parsed production Python files: 377;
+- dependency, bytecode, Git diff, and Git object checks: pass.
+
+The current uploaded package is not a university-ready IVVP. The pre-handover
+gate found 28 bounded historical artefacts containing legacy V1 or placeholder
+proof material across the source evidence, copied package evidence, package
+manifest, and approved-baseline store. Those files must be regenerated on the
+canonical Windows host with the controlled production trust identity after
+explicit successor baseline approval.
+
+Status: **IMPLEMENTATION HARDENED — CURRENT HANDOVER BLOCKED PENDING FRESH
+CANONICAL WINDOWS EVIDENCE AND A FULL DOUBLE TRIPLE HANDOVER PASS**.

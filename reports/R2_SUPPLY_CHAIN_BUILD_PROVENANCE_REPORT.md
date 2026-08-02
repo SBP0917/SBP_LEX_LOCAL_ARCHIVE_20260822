@@ -91,8 +91,10 @@ identity substitution fail closed.
 The build manifest deterministically inventories the protected canonical source,
 schemas, tests, reports, documentation, and generated validation evidence already
 registered by Local Trust. Each record contains a logical identity, portable
-repository-relative path, SHA-256, byte size, repository origin, artefact type,
-and creation relationship.
+repository-relative path, checkout-byte SHA-256 and size, canonical Git-blob
+identity, Git-blob-byte SHA-256 and size, repository origin, artefact type, and
+creation relationship. Keeping checkout and Git-blob identities separate avoids
+false equivalence across LF/CRLF checkout representations.
 
 Duplicate logical identities, duplicate paths, absolute or escaping paths,
 symlinks, missing files, foreign origin, hash mismatch, and size mismatch are
@@ -132,7 +134,11 @@ using only:
 - local protected repository artefacts;
 - the local measured-baseline store;
 - existing Local Trust evidence;
-- the embedded PQC public verification material.
+- the trusted ML-DSA public verification key and expected SHA-256 fingerprint
+  provisioned through a separate authenticated channel.
+
+The verifier does not establish trust from public-key material copied only from
+the evidence under review.
 
 No network request, cloud service, package download, distributed builder, node,
 or public deployment is required or introduced.
@@ -147,11 +153,14 @@ symlink rejection, substitution, duplicate identities, manifest corruption,
 SBOM mismatch, stale artefacts, unknown provenance, validation-identity mismatch,
 offline-result staleness, and deterministic generation.
 
-The targeted R2 suite passes `37/37`; one Windows symlink test is skipped when
-the host account lacks symlink-creation privilege. The pre-approval focused R2,
-R1, H4A, H6GHI, H7, and PHQ integration suite passes `517/517`, with three
-expected Windows symlink skips. The complete repository total is reported in
-the mission return after the approved R2 measured-baseline transition.
+The current targeted R2 suite passes `48/48`. It covers closed record schemas,
+all untracked-file rejection, explicit direct and transitive dependencies,
+installed-distribution hashes, working-copy and Git-blob identity separation,
+false Git-blob claims, internal and escaping symlinks, artifact overrides,
+repository lineage, deterministic ordering, and signed offline linkage.
+
+The earlier `37/37` and `517/517` results remain historical evidence for their
+recorded commits; they are not presented as the current repository total.
 
 ## Measured baseline and runtime linkage
 
@@ -186,6 +195,7 @@ python -m sbp_lex.local_trust.release_integrity validate
 python -m sbp_lex.local_trust.local_trust_capstone validate
 python -m sbp_lex.supply_chain.assurance validate
 python -m sbp_lex.supply_chain.offline_verify
+scripts\run_double_triple_assurance.bat
 python main.py
 python main.py replay
 git diff --check
@@ -210,3 +220,17 @@ engineering assurance. Desktop V1 remains local, private, single-host, and
 no-node. Push is permitted only after the full verification chain passes, the
 final measured baseline is explicitly approved, the one local commit is clean,
 and post-commit checks succeed.
+
+## Current hardening reconciliation
+
+The current source audit passed the complete suite `1785/1785` and the
+startup-to-terminal linkage suite `141/141` in each of three fresh processes.
+The R2 targeted suite passed `48/48`.
+
+Those source results do not validate the uploaded generated evidence. The
+pre-handover evidence gate found 28 bounded historical artefacts containing
+legacy V1 or placeholder proof material. R2 production evidence must therefore
+be regenerated from a clean canonical Windows commit after explicit successor
+baseline approval and with the controlled production trust identity. Until the
+default Double Triple handover command passes, the current handover package is
+blocked.
