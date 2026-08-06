@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
@@ -23,6 +24,7 @@ from sbp_lex.recovery.restore import (
     restore_backup,
     validate_authoritative_restore,
 )
+from sbp_lex.persistence.integrity_store import IntegrityStore
 from sbp_lex.security.pqc import generate_digest
 
 COMMIT = "a" * 40
@@ -182,6 +184,93 @@ def test_missing_required_artefact_fails_closed(tmp_path, missing):
     (src / missing).unlink()
     with pytest.raises(RecoveryError, match="required_artefact_missing"):
         build_inventory(src, specs())
+
+
+def _runtime_integrity_spec() -> ArtifactSpec:
+    return ArtifactSpec(
+        "security.integrity_ledger",
+        "audit_attestations",
+        "runtime_artifacts/integrity_store.jsonl",
+        "audit/integrity_store.jsonl",
+        "REQUIRED",
+        "PROTECTED_PRIVATE",
+        "jsonl",
+        1,
+        None,
+        500,
+        "integrity_store",
+        "runtime_integrity_store",
+    )
+
+
+def _valid_runtime_integrity_store(root: Path) -> Path:
+    artifact_root = root / "runtime_artifacts"
+    store_path = artifact_root / "integrity_store.jsonl"
+    store = IntegrityStore(store_path, allowed_root=artifact_root)
+    store.append_state_summary({
+        "request_fingerprint": "a" * 64,
+        "state_hash": "b" * 64,
+        "decision": "ALLOW",
+        "execution_result": "EXECUTE",
+        "audit_hash": "c" * 64,
+        "pipeline_convergence": {"convergence_hash": "d" * 64},
+    })
+    return store_path
+
+
+def test_missing_runtime_integrity_ledger_fails_closed(tmp_path: Path) -> None:
+    root = tmp_path / "source"
+    root.mkdir()
+    with pytest.raises(
+        RecoveryError,
+        match="required_artefact_missing:security.integrity_ledger",
+    ):
+        build_inventory(root, (_runtime_integrity_spec(),))
+
+
+def test_malformed_runtime_integrity_ledger_fails_closed(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "source"
+    ledger_path = root / "runtime_artifacts/integrity_store.jsonl"
+    write(ledger_path, b'{"sequence":1\n')
+    with pytest.raises(
+        RecoveryError,
+        match="jsonl_record_json_invalid",
+    ):
+        build_inventory(root, (_runtime_integrity_spec(),))
+
+
+def test_tampered_runtime_integrity_ledger_fails_closed(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "source"
+    ledger_path = _valid_runtime_integrity_store(root)
+    record = json.loads(ledger_path.read_text(encoding="utf-8"))
+    record["decision"] = "DENY"
+    ledger_path.write_text(
+        json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(
+        RecoveryError,
+        match="integrity_store_invalid:persistence_hash_mismatch",
+    ):
+        build_inventory(root, (_runtime_integrity_spec(),))
+
+
+def test_valid_runtime_integrity_ledger_is_hash_bound(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "source"
+    ledger_path = _valid_runtime_integrity_store(root)
+    inventory = build_inventory(root, (_runtime_integrity_spec(),))
+    record = inventory["artefacts"][0]
+    assert record["logical_name"] == "security.integrity_ledger"
+    assert record["validation_method"] == "integrity_store"
+    assert record["current_digest"] == hashlib.sha256(
+        ledger_path.read_bytes(),
+    ).hexdigest()
 
 
 def test_unknown_required_artefact_is_rejected(tmp_path):

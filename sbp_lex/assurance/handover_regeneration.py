@@ -406,6 +406,7 @@ def _require_portable_handover_environment() -> None:
         name
         for name in (
             "SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH",
+            "SBP_LEX_INTEGRITY_STORE",
             "SBP_LEX_MEASURED_STARTUP_STATE_ROOT",
             "SBP_LEX_LOCAL_TRUST_EVIDENCE_ROOT",
         )
@@ -827,6 +828,21 @@ def validate_stage(
     return manifest
 
 
+def _build_runtime_seeded_evidence(
+    root: Path,
+    stage: Path,
+) -> dict[str, Path]:
+    """Create runtime evidence before recovery inventory construction.
+
+    ``build_package`` performs the canonical runtime traversal that writes the
+    signed integrity ledger and its checkpoint.  Recovery inventory generation
+    must follow that producer; reversing this order fails closed because the
+    required ``security.integrity_ledger`` artefact does not yet exist.
+    """
+    build_package(root, stage / "validation_package")
+    return _generate_current_evidence(root, stage)
+
+
 def generate_handover_stage(
     stage_root: Path,
     expected_fingerprint: str,
@@ -866,13 +882,8 @@ def generate_handover_stage(
         )
         state_service.validate_startup(persist=True)
 
-        _generate_current_evidence(root, stage)
+        artifact_sources = _build_runtime_seeded_evidence(root, stage)
         workspace = stage / "r1_recovery_drill_workspace"
-        if workspace.exists():
-            shutil.rmtree(workspace)
-
-        build_package(root, stage / "validation_package")
-        artifact_sources = _generate_current_evidence(root, stage)
         if workspace.exists():
             shutil.rmtree(workspace)
 

@@ -85,18 +85,59 @@ def test_stage_root_must_be_absolute_and_outside_repository(
         )
 
 
+@pytest.mark.parametrize("variable", (
+    "SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH",
+    "SBP_LEX_INTEGRITY_STORE",
+    "SBP_LEX_MEASURED_STARTUP_STATE_ROOT",
+    "SBP_LEX_LOCAL_TRUST_EVIDENCE_ROOT",
+))
 def test_nonportable_handover_environment_is_rejected(
     monkeypatch: pytest.MonkeyPatch,
+    variable: str,
 ) -> None:
-    monkeypatch.setenv(
-        "SBP_LEX_LOCAL_TRUST_EVIDENCE_ROOT",
-        "/tmp/stale-evidence-root",
-    )
+    monkeypatch.setenv(variable, "/tmp/nonportable-override")
     with pytest.raises(
         handover.HandoverRegenerationError,
         match="nonportable_handover_environment",
     ):
         handover._require_portable_handover_environment()
+
+
+def test_complete_evidence_stage_seeds_runtime_before_inventory(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    events: list[str] = []
+    expected = {"outputs/recovery_critical_inventory.json": tmp_path / "inventory"}
+
+    def build_runtime_package(root: Path, destination: Path) -> None:
+        assert root == tmp_path / "repository"
+        assert destination == tmp_path / "stage/validation_package"
+        events.append("runtime_integrity_ledger_produced")
+
+    def generate_recovery_inventory(root: Path, stage: Path):
+        assert root == tmp_path / "repository"
+        assert stage == tmp_path / "stage"
+        events.append("recovery_inventory_validated")
+        return expected
+
+    monkeypatch.setattr(handover, "build_package", build_runtime_package)
+    monkeypatch.setattr(
+        handover,
+        "_generate_current_evidence",
+        generate_recovery_inventory,
+    )
+
+    result = handover._build_runtime_seeded_evidence(
+        tmp_path / "repository",
+        tmp_path / "stage",
+    )
+
+    assert result == expected
+    assert events == [
+        "runtime_integrity_ledger_produced",
+        "recovery_inventory_validated",
+    ]
 
 
 def test_archive_extraction_rejects_path_traversal(
