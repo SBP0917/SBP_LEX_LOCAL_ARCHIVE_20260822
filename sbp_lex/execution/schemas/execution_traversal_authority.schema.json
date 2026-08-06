@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:h7:execution-traversal-authority:v2",
+  "title": "Desktop V1 H7 Execution Traversal Authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "authority_digest", "integrity_binding"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_version", "runtime_id", "request_id",
+        "request_fingerprint", "eie_identifier", "eie_digest",
+        "canonical_state_hash", "pipeline_mode", "convergence_result",
+        "audit_lineage_identifier", "runtime_identity",
+        "approved_baseline_identifier", "measurement_digest",
+        "startup_attestation_digest", "startup_sequence",
+        "traversal_started_event_hash", "traversal_started_sequence",
+        "traversal_completed_event_hash", "traversal_completed_sequence"
+      ],
+      "properties": {
+        "authority_version": {"const": "H7_EXECUTION_TRAVERSAL_AUTHORITY_V2"},
+        "runtime_id": {"const": "SBP_LEX_V1_CANONICAL_RUNTIME"},
+        "request_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "request_fingerprint": {"$ref": "#/$defs/digest"},
+        "eie_identifier": {"type": "string", "minLength": 1, "maxLength": 256},
+        "eie_digest": {"$ref": "#/$defs/digest"},
+        "canonical_state_hash": {"$ref": "#/$defs/digest"},
+        "pipeline_mode": {"$ref": "#/$defs/pipelineMode"},
+        "convergence_result": {"$ref": "#/$defs/digest"},
+        "audit_lineage_identifier": {"$ref": "#/$defs/digest"},
+        "runtime_identity": {"$ref": "#/$defs/digest"},
+        "approved_baseline_identifier": {"type": "string", "minLength": 1, "maxLength": 128},
+        "measurement_digest": {"$ref": "#/$defs/digest"},
+        "startup_attestation_digest": {"$ref": "#/$defs/digest"},
+        "startup_sequence": {"type": "integer", "minimum": 1},
+        "traversal_started_event_hash": {"$ref": "#/$defs/digest"},
+        "traversal_started_sequence": {"type": "integer", "minimum": 1},
+        "traversal_completed_event_hash": {"$ref": "#/$defs/digest"},
+        "traversal_completed_sequence": {"type": "integer", "minimum": 2}
+      }
+    },
+    "authority_digest": {"$ref": "#/$defs/digest"},
+    "integrity_binding": {"type": "object", "minProperties": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pipelineMode": {"enum": ["MODE_1_FULL_MIRRORED", "MODE_2_SPLIT_VALIDATOR", "MODE_3_SINGLE_CONSTRAINED"]}
+  }
+}

@@ -36,6 +36,28 @@ def test_required_stage_paths_are_evidence_only() -> None:
     )
 
 
+def test_git_helper_preserves_leading_porcelain_status(
+    tmp_path: Path,
+) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    handover._git(repository, "init", "--quiet")
+    handover._git(repository, "config", "user.name", "SBP-LEX Test")
+    handover._git(
+        repository, "config", "user.email", "sbp-lex-test@example.invalid",
+    )
+    handover._git(repository, "config", "core.autocrlf", "false")
+    tracked = repository / "tracked.txt"
+    tracked.write_text("first\n", encoding="utf-8", newline="\n")
+    handover._git(repository, "add", "--", tracked.name)
+    handover._git(repository, "commit", "--quiet", "-m", "fixture")
+    tracked.write_text("second\n", encoding="utf-8", newline="\n")
+
+    assert handover._git(
+        repository, "status", "--porcelain=v1", "--untracked-files=all",
+    ) == " M tracked.txt"
+
+
 def test_stage_root_must_be_absolute_and_outside_repository(
     tmp_path: Path,
 ) -> None:

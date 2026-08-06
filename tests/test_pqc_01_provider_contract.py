@@ -6,6 +6,7 @@ from base64 import b64decode, b64encode
 
 import pytest
 
+import sbp_lex.security.pqc_provider as provider_module
 from sbp_lex.config.security_config import build_pqc_config
 from sbp_lex.security import pqc
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
@@ -20,6 +21,7 @@ from sbp_lex.security.pqc_policy import (
 )
 from sbp_lex.security.pqc_provider import (
     PQCProviderUnavailable,
+    derive_signing_keypair,
     generate_signing_keypair,
     provider_available,
     provider_name,
@@ -58,6 +60,49 @@ def test_provider_availability_is_explicit() -> None:
     assert provider_name() == "cryptography.mldsa"
     assert provider_available() is True
     assert supported_algorithms() == ("ML-DSA",)
+
+
+def test_provider_derives_stable_mldsa_identity_from_seed() -> None:
+    seed = bytes(range(32))
+
+    first = derive_signing_keypair(seed, "ML-DSA")
+    second = derive_signing_keypair(seed, "ML-DSA")
+
+    assert first == second
+    assert first[0] == seed
+    signature = sign(b"derived-provider-contract", first[0], "ML-DSA")
+    assert verify(
+        b"derived-provider-contract", signature, first[1], "ML-DSA"
+    ) is True
+
+
+def test_provider_derivation_binds_public_identity_to_seed() -> None:
+    _, first_public_key = derive_signing_keypair(bytes(range(32)), "ML-DSA")
+    _, second_public_key = derive_signing_keypair(
+        bytes(reversed(range(32))), "ML-DSA"
+    )
+
+    assert first_public_key != second_public_key
+
+
+@pytest.mark.parametrize("seed_length", (0, 31, 33))
+def test_provider_derivation_rejects_invalid_seed_lengths(
+    seed_length: int,
+) -> None:
+    with pytest.raises(PQCProviderUnavailable, match="exactly 32 bytes"):
+        derive_signing_keypair(b"\x00" * seed_length, "ML-DSA")
+
+
+def test_provider_derivation_rejects_unsupported_algorithm() -> None:
+    with pytest.raises(PQCProviderUnavailable, match="algorithm not available"):
+        derive_signing_keypair(b"\x00" * 32, "SLH-DSA")
+
+
+def test_provider_derivation_fails_closed_without_provider(monkeypatch) -> None:
+    monkeypatch.setattr(provider_module, "_mldsa_module", lambda: None)
+
+    with pytest.raises(PQCProviderUnavailable, match="provider unavailable"):
+        derive_signing_keypair(b"\x00" * 32, "ML-DSA")
 
 
 def test_real_provider_sign_verify_round_trip_when_available() -> None:
@@ -230,8 +275,6 @@ def test_canonical_digest_masks_random_proof_but_binds_signer_identity() -> None
 
 
 def test_no_homemade_pqc_algorithm_implementation_exists() -> None:
-    import sbp_lex.security.pqc_provider as provider_module
-
     source = inspect.getsource(provider_module)
     assert "from cryptography.hazmat.primitives.asymmetric import mldsa" in source
     assert "hmac" not in source.lower()

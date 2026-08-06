@@ -7,7 +7,11 @@ from typing import Any, Dict, Mapping
 from sbp_lex.api.access_control import security_mode
 from sbp_lex.audit.pipeline_replay_ledger import PIPELINE_REPLAY_LEDGER
 from sbp_lex.connector.recovery import CONNECTOR_RECOVERY
-from sbp_lex.execution.capability import CANONICAL_RUNTIME_ID, build_execution_traversal_authority
+from sbp_lex.execution.capability import (
+    CANONICAL_RUNTIME_ID,
+    MEASURED_STARTUP_BINDING_FIELDS,
+    build_execution_traversal_authority,
+)
 from sbp_lex.persistence.integrity_store import RUNTIME_INTEGRITY_STORE
 from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.pipeline.replay_runner import run_replay_check
@@ -57,6 +61,10 @@ class CanonicalRuntime:
             "measured_runtime_identity": measurement["runtime_identity"],
             "approved_runtime_baseline": measurement["approved_baseline_identifier"],
             "runtime_measurement_digest": measurement["measurement_digest"],
+            "startup_attestation_digest": measurement[
+                "startup_attestation_digest"
+            ],
+            "measured_startup_sequence": measurement["startup_sequence"],
             "last_decision": self.last_result.get("decision") if self.last_result else None,
             "last_execution_result": self.last_result.get("execution_result") if self.last_result else None,
             "last_audit_hash": self.last_result.get("audit_hash") if self.last_result else None,
@@ -69,10 +77,18 @@ class CanonicalRuntime:
         request_id: str | None = None,
         pre_context_signals: Mapping[str, Any] | None = None,
     ) -> Dict[str, Any]:
-        ensure_measured_startup()
+        measurement = ensure_measured_startup()
         runtime_request_id = request_id or generate_digest({"action": request.get("action"), "payload": request.get("payload", {})})[:24]
         traversal_started_event = RUNTIME_EVENTS.emit(
-            "traversal_started", {"request_id": runtime_request_id, "action": request.get("action")},
+            "traversal_started",
+            {
+                "request_id": runtime_request_id,
+                "action": request.get("action"),
+                **{
+                    field: measurement[field]
+                    for field in MEASURED_STARTUP_BINDING_FIELDS
+                },
+            },
         )
         state = run_dual_pipeline(deepcopy(dict(request)), deepcopy(dict(pre_context_signals)) if pre_context_signals else None)
         with self._authority_lock:

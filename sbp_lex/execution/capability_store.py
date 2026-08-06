@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import threading
 import time
 import uuid
 from contextlib import contextmanager
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterator, Mapping, Sequence
 
@@ -16,9 +17,13 @@ from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 DOMAIN = "SBP_LEX_DESKTOP_V1_EXECUTION_CAPABILITY_STATE"
 ATTESTATION_DOMAIN = "SBP_LEX_DESKTOP_V1_POST_EXECUTION_ATTESTATION"
+COMPLETION_EVIDENCE_DOMAIN = (
+    "SBP_LEX_DESKTOP_V1_ADAPTER_COMPLETION_EVIDENCE"
+)
 CAPABILITY_DOMAIN = "SBP_LEX_DESKTOP_V1_SINGLE_USE_EXECUTION_CAPABILITY"
-CAPABILITY_VERSION = "H7_EXECUTION_CAPABILITY_V1"
-ATTESTATION_VERSION = "H7_POST_EXECUTION_ATTESTATION_V1"
+CAPABILITY_VERSION = "H7_EXECUTION_CAPABILITY_V2"
+ATTESTATION_VERSION = "H7_POST_EXECUTION_ATTESTATION_V2"
+COMPLETION_EVIDENCE_VERSION = "H7_ADAPTER_COMPLETION_EVIDENCE_V2"
 RECORD_VERSION = "H7_EXECUTION_CAPABILITY_RECORD_V1"
 CHECKPOINT_VERSION = "H7_EXECUTION_CAPABILITY_CHECKPOINT_V1"
 ANCHOR_VERSION = "H7_EXECUTION_CAPABILITY_ANCHOR_V1"
@@ -40,6 +45,7 @@ CAPABILITY_FIELDS = frozenset({
     "completion_report_deadline", "maximum_attempts", "consumption_state",
     "cancellation_state", "safe_cancellation_supported", "issuer_identity",
     "runtime_identity", "approved_baseline_identifier", "measurement_digest",
+    "startup_attestation_digest", "startup_sequence",
     "execution_adapter_identity", "execution_consumer_identity", "audit_lineage_identifier",
     "capability_digest", "integrity_binding",
 })
@@ -82,20 +88,62 @@ EVENT_TRANSITIONS = {
 }
 ATTESTATION_PAYLOAD_FIELDS = frozenset({
     "attestation_version", "attestation_id", "capability_id", "request_id",
+    "request_fingerprint", "traversal_authority_digest", "capability_digest",
     "eie_digest", "canonical_state_hash", "target_identity", "operation_identity",
     "parameter_digest", "constraint_digest", "pipeline_mode", "convergence_digest",
     "execution_start", "execution_finish", "completion_classification", "result_digest",
-    "adapter_identity", "runtime_identity", "audit_lineage_identifier",
+    "adapter_identity", "runtime_identity", "approved_baseline_identifier",
+    "measurement_digest", "startup_attestation_digest", "startup_sequence",
+    "audit_lineage_identifier", "completion_evidence", "completion_evidence_digest",
+    "completion_evidence_valid",
     "previous_attestation_hash",
+})
+COMPLETION_EVIDENCE_FIELDS = frozenset({
+    "evidence_version", "capability_id", "request_fingerprint",
+    "traversal_authority_digest", "capability_digest", "eie_digest",
+    "canonical_state_hash", "target_identity", "operation_identity",
+    "parameter_digest", "result_digest", "adapter_identity", "observed_at",
+    "runtime_identity", "approved_baseline_identifier", "measurement_digest",
+    "startup_attestation_digest", "startup_sequence", "audit_lineage_identifier",
+    "completion_status",
 })
 ATTESTATION_CAPABILITY_FIELDS = {
     "capability_id": "capability_id", "request_id": "request_id",
+    "request_fingerprint": "request_fingerprint",
+    "traversal_authority_digest": "traversal_authority_digest",
+    "capability_digest": "capability_digest",
     "eie_digest": "eie_digest", "canonical_state_hash": "canonical_state_hash",
     "target_identity": "target_identity", "operation_identity": "operation_identity",
     "parameter_digest": "canonical_parameter_digest", "pipeline_mode": "pipeline_mode",
     "convergence_digest": "convergence_result", "adapter_identity": "execution_adapter_identity",
-    "runtime_identity": "runtime_identity", "audit_lineage_identifier": "audit_lineage_identifier",
+    "runtime_identity": "runtime_identity",
+    "approved_baseline_identifier": "approved_baseline_identifier",
+    "measurement_digest": "measurement_digest",
+    "startup_attestation_digest": "startup_attestation_digest",
+    "startup_sequence": "startup_sequence",
+    "audit_lineage_identifier": "audit_lineage_identifier",
 }
+PIPELINE_MODES = frozenset({
+    "MODE_1_FULL_MIRRORED",
+    "MODE_2_SPLIT_VALIDATOR",
+    "MODE_3_SINGLE_CONSTRAINED",
+})
+ISSUER = "SBP_LEX_DESKTOP_V1_EXECUTION_INTEGRITY"
+LOCAL_EXECUTION_CONSUMER_ID = (
+    "SBP_LEX_DESKTOP_V1_LOCAL_EXECUTION_SERVICE"
+)
+_IDENTITY = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
+_CONTEXT_FIELDS = (
+    "request_id", "request_fingerprint", "eie_identifier", "eie_digest",
+    "canonical_state_hash", "pipeline_mode", "pipeline_a_result_digest",
+    "pipeline_b_result_digest", "convergence_result", "procedural_truth_token",
+    "classification_token", "licensing_token", "governance_token", "grc_token",
+    "domain_token", "aurion_result", "target_identity", "target_type",
+    "operation_identity", "canonical_parameter_digest", "constraint_digest",
+    "constraint_snapshot", "runtime_identity", "approved_baseline_identifier",
+    "measurement_digest", "startup_attestation_digest", "startup_sequence",
+    "execution_adapter_identity", "audit_lineage_identifier",
+)
 
 
 class CapabilityStoreError(RuntimeError):
@@ -110,6 +158,31 @@ def _parse_time(value: Any) -> datetime | None:
     except ValueError:
         return None
     return parsed.astimezone(timezone.utc) if parsed.tzinfo else None
+
+
+def _is_digest(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+    )
+
+
+def _valid_request_id(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and bool(value)
+        and value == value.strip()
+        and len(value) <= 256
+    )
+
+
+def _valid_baseline_identifier(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and bool(value)
+        and value == value.strip()
+        and len(value) <= 128
+    )
 
 
 def _resolve(path: Path, root: Path) -> Path:
@@ -158,14 +231,139 @@ def _verify_embedded_capability(
 ) -> bool:
     if not isinstance(capability, Mapping):
         return False
+    if set(capability) != CAPABILITY_FIELDS:
+        return False
     if (
-        set(capability) != CAPABILITY_FIELDS
-        or capability.get("capability_version") != CAPABILITY_VERSION
+        capability.get("capability_version") != CAPABILITY_VERSION
         or capability.get("capability_id") != capability_id
         or capability.get("capability_digest") != capability_digest
-        or not isinstance(capability.get("issuance_authority_key"), str)
-        or not capability.get("issuance_authority_key")
+        or capability.get("issuer_identity") != ISSUER
+        or capability.get("execution_consumer_identity")
+        != LOCAL_EXECUTION_CONSUMER_ID
+        or capability.get("maximum_attempts") != 1
+        or capability.get("consumption_state") != "UNCONSUMED"
+        or capability.get("cancellation_state") != "NOT_CANCELLED"
+        or not isinstance(capability.get("safe_cancellation_supported"), bool)
+        or not _valid_request_id(capability.get("request_id"))
+        or not isinstance(capability.get("eie_identifier"), str)
+        or not capability.get("eie_identifier")
+        or capability.get("eie_identifier")
+        != capability.get("eie_identifier").strip()
+        or capability.get("pipeline_mode") not in PIPELINE_MODES
+        or not _valid_baseline_identifier(
+            capability.get("approved_baseline_identifier")
+        )
+        or not isinstance(capability.get("startup_sequence"), int)
+        or isinstance(capability.get("startup_sequence"), bool)
+        or capability.get("startup_sequence", 0) <= 0
     ):
+        return False
+    identity_fields = (
+        "target_identity", "target_type", "operation_identity",
+        "execution_specification_id", "execution_adapter_identity",
+        "execution_consumer_identity", "issuer_identity",
+    )
+    if any(
+        not isinstance(capability.get(field), str)
+        or _IDENTITY.fullmatch(str(capability[field])) is None
+        for field in identity_fields
+    ):
+        return False
+    digest_fields = (
+        "capability_id", "request_fingerprint", "traversal_authority_digest",
+        "issuance_authority_key", "eie_digest", "canonical_state_hash",
+        "pipeline_a_result_digest", "convergence_result",
+        "procedural_truth_token", "classification_token", "licensing_token",
+        "governance_token", "grc_token", "domain_token", "aurion_result",
+        "canonical_parameter_digest", "execution_specification_digest",
+        "constraint_digest", "runtime_identity", "measurement_digest",
+        "startup_attestation_digest", "audit_lineage_identifier",
+        "capability_digest",
+    )
+    if any(not _is_digest(capability.get(field)) for field in digest_fields):
+        return False
+    pipeline_b = capability.get("pipeline_b_result_digest")
+    if (
+        capability.get("pipeline_mode") == "MODE_3_SINGLE_CONSTRAINED"
+        and pipeline_b is not None
+    ) or (
+        capability.get("pipeline_mode") != "MODE_3_SINGLE_CONSTRAINED"
+        and not _is_digest(pipeline_b)
+    ):
+        return False
+    constraints = capability.get("constraint_snapshot")
+    if (
+        not isinstance(constraints, Mapping)
+        or not constraints
+        or capability.get("constraint_digest")
+        != generate_digest(dict(constraints))
+    ):
+        return False
+    temporal_integer_fields = (
+        "reservation_timeout_seconds", "maximum_execution_seconds",
+    )
+    if any(
+        not isinstance(capability.get(field), int)
+        or isinstance(capability.get(field), bool)
+        or capability.get(field, 0) <= 0
+        for field in temporal_integer_fields
+    ):
+        return False
+    issued = _parse_time(capability.get("issued_at"))
+    not_before = _parse_time(capability.get("not_before"))
+    expires = _parse_time(capability.get("expires_at"))
+    start_deadline = _parse_time(capability.get("execution_start_deadline"))
+    completion_deadline = _parse_time(
+        capability.get("completion_report_deadline")
+    )
+    if (
+        issued is None
+        or not_before is None
+        or expires is None
+        or start_deadline is None
+        or completion_deadline is None
+        or not_before != issued
+        or start_deadline <= issued
+        or completion_deadline > expires
+        or completion_deadline
+        < start_deadline
+        + timedelta(seconds=int(capability["maximum_execution_seconds"]))
+        or int(capability["reservation_timeout_seconds"])
+        > int((start_deadline - issued).total_seconds())
+    ):
+        return False
+    expected_authority_key = generate_digest({
+        "domain": "H7_SINGLE_CAPABILITY_PER_CANONICAL_TRAVERSAL",
+        "traversal_authority_digest": capability[
+            "traversal_authority_digest"
+        ],
+    })
+    if capability.get("issuance_authority_key") != expected_authority_key:
+        return False
+    seed = {
+        **{
+            key: deepcopy(capability[key])
+            for key in _CONTEXT_FIELDS
+        },
+        "traversal_authority_digest": capability[
+            "traversal_authority_digest"
+        ],
+        "issuance_authority_key": capability["issuance_authority_key"],
+        "execution_specification_id": capability[
+            "execution_specification_id"
+        ],
+        "execution_specification_digest": capability[
+            "execution_specification_digest"
+        ],
+        "issued_at": capability["issued_at"],
+        "audit_lineage_identifier": capability[
+            "audit_lineage_identifier"
+        ],
+    }
+    if capability.get("capability_id") != generate_digest({
+        "domain": CAPABILITY_DOMAIN,
+        "seed": seed,
+    }):
         return False
     body = {
         key: deepcopy(value)
@@ -185,6 +383,82 @@ def _verify_attestation_payload(
 ) -> bool:
     started = _parse_time(payload.get("execution_start"))
     finished = _parse_time(payload.get("execution_finish"))
+    evidence = payload.get("completion_evidence")
+    evidence_valid = payload.get("completion_evidence_valid")
+    if not isinstance(evidence, Mapping) or not isinstance(
+        evidence_valid, bool
+    ):
+        return False
+    evidence_copy = dict(evidence)
+    if (
+        payload.get("completion_evidence_digest")
+        != generate_digest(evidence_copy)
+        or (
+            classification == "COMPLETED"
+            and evidence_valid is not True
+        )
+        or (evidence_valid is False and bool(evidence_copy))
+        or payload.get("attestation_id") != generate_digest({
+            "capability_id": payload.get("capability_id"),
+            "finish": payload.get("execution_finish"),
+            "classification": payload.get("completion_classification"),
+            "completion_evidence_digest": payload.get(
+                "completion_evidence_digest"
+            ),
+        })
+    ):
+        return False
+    if evidence_valid:
+        evidence_payload = evidence_copy.get("payload")
+        if (
+            set(evidence_copy) != {"payload", "integrity_binding"}
+            or not isinstance(evidence_payload, Mapping)
+            or set(evidence_payload) != COMPLETION_EVIDENCE_FIELDS
+            or evidence_payload.get("evidence_version")
+            != COMPLETION_EVIDENCE_VERSION
+            or evidence_payload.get("completion_status") != "POSITIVE"
+            or evidence_payload.get("result_digest")
+            != payload.get("result_digest")
+            or _parse_time(evidence_payload.get("observed_at")) is None
+            or finished is None
+            or _parse_time(evidence_payload.get("observed_at")) > finished
+        ):
+            return False
+        evidence_pairs = {
+            "capability_id": "capability_id",
+            "request_fingerprint": "request_fingerprint",
+            "traversal_authority_digest": "traversal_authority_digest",
+            "capability_digest": "capability_digest",
+            "eie_digest": "eie_digest",
+            "canonical_state_hash": "canonical_state_hash",
+            "target_identity": "target_identity",
+            "operation_identity": "operation_identity",
+            "parameter_digest": "canonical_parameter_digest",
+            "adapter_identity": "execution_adapter_identity",
+            "runtime_identity": "runtime_identity",
+            "approved_baseline_identifier": (
+                "approved_baseline_identifier"
+            ),
+            "measurement_digest": "measurement_digest",
+            "startup_attestation_digest": "startup_attestation_digest",
+            "startup_sequence": "startup_sequence",
+            "audit_lineage_identifier": "audit_lineage_identifier",
+        }
+        evidence_bound = {
+            "integrity_domain": COMPLETION_EVIDENCE_DOMAIN,
+            "payload": dict(evidence_payload),
+        }
+        if (
+            any(
+                evidence_payload.get(left) != capability.get(right)
+                for left, right in evidence_pairs.items()
+            )
+            or not verify_signature(
+                evidence_bound,
+                evidence_copy.get("integrity_binding", {}),
+            )
+        ):
+            return False
     return (
         set(payload) == ATTESTATION_PAYLOAD_FIELDS
         and payload.get("attestation_version") == ATTESTATION_VERSION
@@ -194,6 +468,24 @@ def _verify_attestation_payload(
         and started is not None
         and finished is not None
         and finished >= started
+        and isinstance(payload.get("startup_sequence"), int)
+        and not isinstance(payload.get("startup_sequence"), bool)
+        and payload.get("startup_sequence", 0) > 0
+        and _valid_baseline_identifier(
+            payload.get("approved_baseline_identifier")
+        )
+        and all(
+            _is_digest(payload.get(field))
+            for field in (
+                "attestation_id", "capability_id", "request_fingerprint",
+                "traversal_authority_digest", "capability_digest",
+                "eie_digest", "canonical_state_hash", "parameter_digest",
+                "constraint_digest", "convergence_digest", "result_digest",
+                "runtime_identity", "measurement_digest",
+                "startup_attestation_digest", "audit_lineage_identifier",
+                "completion_evidence_digest",
+            )
+        )
         and all(
             payload.get(attestation_field) == capability.get(capability_field)
             for attestation_field, capability_field in ATTESTATION_CAPABILITY_FIELDS.items()

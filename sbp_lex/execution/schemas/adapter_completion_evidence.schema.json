@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:h7:adapter-completion-evidence:v2",
+  "title": "Desktop V1 H7 Adapter Completion Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "integrity_binding"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_version", "capability_id", "request_fingerprint",
+        "traversal_authority_digest", "capability_digest", "eie_digest",
+        "canonical_state_hash", "target_identity", "operation_identity",
+        "parameter_digest", "result_digest", "adapter_identity",
+        "runtime_identity", "approved_baseline_identifier",
+        "measurement_digest", "startup_attestation_digest",
+        "startup_sequence", "audit_lineage_identifier", "observed_at",
+        "completion_status"
+      ],
+      "properties": {
+        "evidence_version": {"const": "H7_ADAPTER_COMPLETION_EVIDENCE_V2"},
+        "capability_id": {"$ref": "#/$defs/digest"},
+        "request_fingerprint": {"$ref": "#/$defs/digest"},
+        "traversal_authority_digest": {"$ref": "#/$defs/digest"},
+        "capability_digest": {"$ref": "#/$defs/digest"},
+        "eie_digest": {"$ref": "#/$defs/digest"},
+        "canonical_state_hash": {"$ref": "#/$defs/digest"},
+        "target_identity": {"$ref": "#/$defs/identity"},
+        "operation_identity": {"$ref": "#/$defs/identity"},
+        "parameter_digest": {"$ref": "#/$defs/digest"},
+        "result_digest": {"$ref": "#/$defs/digest"},
+        "adapter_identity": {"$ref": "#/$defs/identity"},
+        "runtime_identity": {"$ref": "#/$defs/digest"},
+        "approved_baseline_identifier": {"type": "string", "minLength": 1, "maxLength": 128},
+        "measurement_digest": {"$ref": "#/$defs/digest"},
+        "startup_attestation_digest": {"$ref": "#/$defs/digest"},
+        "startup_sequence": {"type": "integer", "minimum": 1},
+        "audit_lineage_identifier": {"$ref": "#/$defs/digest"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "completion_status": {"const": "POSITIVE"}
+      }
+    },
+    "integrity_binding": {"type": "object", "minProperties": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"}
+  }
+}

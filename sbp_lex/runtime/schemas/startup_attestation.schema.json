@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:h8:startup-attestation:v2",
+  "title": "Desktop V1 H8 Measured Startup Attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "payload_digest", "integrity_signature"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attestation_version", "startup_sequence",
+        "startup_timestamp_evidence", "approved_baseline_identifier",
+        "baseline_store_digest", "runtime_identity", "measurement_digest"
+      ],
+      "properties": {
+        "attestation_version": {"const": "H8_DESKTOP_V1_STARTUP_ATTESTATION_V2"},
+        "startup_sequence": {"type": "integer", "minimum": 1},
+        "startup_timestamp_evidence": {"type": "string", "format": "date-time"},
+        "approved_baseline_identifier": {"type": "string", "minLength": 1, "maxLength": 128},
+        "baseline_store_digest": {"$ref": "#/$defs/digest"},
+        "runtime_identity": {"$ref": "#/$defs/digest"},
+        "measurement_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "payload_digest": {"$ref": "#/$defs/digest"},
+    "integrity_signature": {"type": "object", "minProperties": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -337,7 +337,7 @@ def _git(
         raise HandoverRegenerationError(
             f"git_failed:{arguments[0]}:{detail}",
         )
-    return completed.stdout.strip()
+    return completed.stdout.rstrip()
 
 
 def _require_clean_synced_repository(root: Path) -> str:

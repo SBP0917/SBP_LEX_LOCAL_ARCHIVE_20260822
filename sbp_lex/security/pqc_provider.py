@@ -22,6 +22,13 @@ class PQCProvider(Protocol):
     def generate_signing_keypair(self, algorithm: str = PQC_SIGNATURE_PRIMARY) -> tuple[bytes, bytes]:
         ...
 
+    def derive_signing_keypair(
+        self,
+        seed: bytes,
+        algorithm: str = PQC_SIGNATURE_PRIMARY,
+    ) -> tuple[bytes, bytes]:
+        ...
+
     def sign(self, message: bytes, private_key: bytes, algorithm: str = PQC_SIGNATURE_PRIMARY) -> bytes:
         ...
 
@@ -52,6 +59,35 @@ class CryptographyMLDSAProvider:
             raise PQCProviderUnavailable("PQC provider unavailable: cryptography ML-DSA support not installed.")
         private_key = mldsa.MLDSA65PrivateKey.generate()
         return private_key.private_bytes_raw(), private_key.public_key().public_bytes_raw()
+
+    def derive_signing_keypair(
+        self,
+        seed: bytes,
+        algorithm: str = PQC_SIGNATURE_PRIMARY,
+    ) -> tuple[bytes, bytes]:
+        self._ensure_algorithm_available(algorithm)
+        mldsa = _mldsa_module()
+        if mldsa is None:
+            raise PQCProviderUnavailable(
+                "PQC provider unavailable: cryptography ML-DSA support not installed."
+            )
+        if not isinstance(seed, bytes) or len(seed) != 32:
+            raise PQCProviderUnavailable(
+                "PQC ML-DSA signing seed must be exactly 32 bytes."
+            )
+        try:
+            private_key = mldsa.MLDSA65PrivateKey.from_seed_bytes(seed)
+            private_bytes = private_key.private_bytes_raw()
+            public_bytes = private_key.public_key().public_bytes_raw()
+        except Exception as exc:
+            raise PQCProviderUnavailable(
+                "PQC ML-DSA signing key derivation failed."
+            ) from exc
+        if private_bytes != seed or not public_bytes:
+            raise PQCProviderUnavailable(
+                "PQC ML-DSA signing key derivation returned an invalid keypair."
+            )
+        return private_bytes, public_bytes
 
     def sign(self, message: bytes, private_key: bytes, algorithm: str = PQC_SIGNATURE_PRIMARY) -> bytes:
         self._ensure_algorithm_available(algorithm)
@@ -107,6 +143,13 @@ def supported_algorithms() -> tuple[str, ...]:
 
 def generate_signing_keypair(algorithm: str = PQC_SIGNATURE_PRIMARY) -> tuple[bytes, bytes]:
     return DEFAULT_PQC_PROVIDER.generate_signing_keypair(algorithm)
+
+
+def derive_signing_keypair(
+    seed: bytes,
+    algorithm: str = PQC_SIGNATURE_PRIMARY,
+) -> tuple[bytes, bytes]:
+    return DEFAULT_PQC_PROVIDER.derive_signing_keypair(seed, algorithm)
 
 
 def sign(message: bytes, private_key: bytes, algorithm: str = PQC_SIGNATURE_PRIMARY) -> bytes:
