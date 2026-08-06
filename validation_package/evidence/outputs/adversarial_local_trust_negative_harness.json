@@ -318,7 +318,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release digest replaced in memory",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,release_digest_mismatch",
+      "reason": "release_digest_mismatch",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     },
@@ -346,7 +346,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "first artifact hash replaced in copied index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard",
+      "reason": "artifact_hash_mismatch:local_trust_root_manifest",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json"
     },
@@ -360,7 +360,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "first required artifact marked missing in copied index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:toolchain_guard,artifact_missing:local_trust_root_manifest,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:toolchain_guard",
+      "reason": "artifact_missing:local_trust_root_manifest",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json"
     },
@@ -374,7 +374,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "verification command index omitted from validation inputs",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_build,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_validate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_evaluate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:capstone_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:execution_envelope_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:manifest_validate,claim_seed_unknown_command:evidence_chain_zero_changed:evidence_chain_compare,claim_seed_unknown_command:evidence_chain_zero_missing:evidence_chain_validate,claim_seed_unknown_command:future_surfaces_absent:release_integrity_validate,claim_seed_unknown_command:phase_19_not_started:release_integrity_validate,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_show,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_validate,claim_seed_unknown_command:replay_verification_passes:runtime_replay,claim_seed_unknown_command:runtime_verification_passes:runtime_main,claim_seed_unknown_command:skg_dtn_external_non_authoritative:release_integrity_validate,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_build,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_validate,verification_commands_not_mapping",
+      "reason": "claim_seed_unknown_command:capstone_binds_artifact_set:capstone_build,claim_seed_unknown_command:capstone_binds_artifact_set:capstone_validate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_evaluate,claim_seed_unknown_command:constitutional_gates_block_unclean_states:constitutional_gates_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:capstone_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:execution_envelope_validate,claim_seed_unknown_command:desktop_v1_local_trust_artifacts_validate:manifest_validate,claim_seed_unknown_command:evidence_chain_zero_changed:evidence_chain_compare,claim_seed_unknown_command:evidence_chain_zero_missing:evidence_chain_validate,claim_seed_unknown_command:future_surfaces_absent:release_integrity_validate,claim_seed_unknown_command:phase_19_not_started:release_integrity_validate,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_show,claim_seed_unknown_command:regression_matrix_detects_drift:regression_matrix_validate,claim_seed_unknown_command:replay_verification_passes:runtime_replay,claim_seed_unknown_command:runtime_verification_passes:runtime_main,claim_seed_unknown_command:skg_dtn_external_non_authoritative:release_integrity_validate,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_build,claim_seed_unknown_command:toolchain_guard_records_environment:toolchain_guard_validate,verification_commands_not_mapping",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json"
     },
@@ -388,7 +388,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "required command removed from copied command index",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,missing_required_command:compileall",
+      "reason": "missing_required_command:compileall",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/VERIFICATION_COMMANDS.json"
     },
@@ -416,7 +416,7 @@
       "expected_detection": "RELEASE_INTEGRITY_INCOMPLETE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "required claim removed from copied seed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,missing_required_claim:desktop_v1_local_trust_artifacts_validate",
+      "reason": "missing_required_claim:desktop_v1_local_trust_artifacts_validate",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/CLAIMS_TO_EVIDENCE_SEED.json"
     },
@@ -430,7 +430,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "boundary lock omitted from validation inputs",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_mapping",
+      "reason": "boundary_lock_not_mapping",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -444,7 +444,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "external validation exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_true:not_university_validation_result",
+      "reason": "boundary_lock_not_true:not_university_validation_result",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -458,7 +458,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "certification exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_true:not_security_certification",
+      "reason": "boundary_lock_not_true:not_security_certification",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -472,7 +472,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "Phase 19 boundary fields flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_true:not_phase_19,boundary_lock_not_true:phase_19_not_started",
+      "reason": "boundary_lock_not_true:not_phase_19,boundary_lock_not_true:phase_19_not_started",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -486,7 +486,7 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "runtime activation exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_true:notRuntimeActivation",
+      "reason": "boundary_lock_not_true:notRuntimeActivation",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
@@ -514,13 +514,13 @@
       "expected_detection": "RELEASE_INTEGRITY_FAIL",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "future surface exclusion flipped false",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard,boundary_lock_not_true:not_future_distributed_or_mobile_runtime_implementation",
+      "reason": "boundary_lock_not_true:not_future_distributed_or_mobile_runtime_implementation",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/BOUNDARY_AND_SCOPE_LOCK.json"
     },
     {
-      "actual_detection": "RELEASE_INTEGRITY_FAIL",
-      "actual_result": "RELEASE_INTEGRITY_FAIL",
+      "actual_detection": "RELEASE_INTEGRITY_DIRTY",
+      "actual_result": "RELEASE_INTEGRITY_DIRTY",
       "attack_type": "dirty_state_simulation",
       "case_category": "provenance_drift",
       "case_id": "dirty_working_tree_simulated",
@@ -528,13 +528,13 @@
       "expected_detection": "RELEASE_INTEGRITY_DIRTY",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release manifest clean flag flipped and re-signed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard",
+      "reason": "working_tree_dirty",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     },
     {
-      "actual_detection": "RELEASE_INTEGRITY_FAIL",
-      "actual_result": "RELEASE_INTEGRITY_FAIL",
+      "actual_detection": "RELEASE_INTEGRITY_STALE",
+      "actual_result": "RELEASE_INTEGRITY_STALE",
       "attack_type": "stale_commit_simulation",
       "case_category": "provenance_drift",
       "case_id": "stale_commit_reference_simulated",
@@ -542,16 +542,27 @@
       "expected_detection": "RELEASE_INTEGRITY_STALE",
       "expected_result": "DETECTED_OR_REJECTED",
       "mutation_method": "release manifest commit changed and re-signed",
-      "reason": "artifact_hash_mismatch:constitutional_gates,artifact_hash_mismatch:execution_environment_trust_envelope,artifact_hash_mismatch:local_evidence_chain,artifact_hash_mismatch:local_trust_capstone,artifact_hash_mismatch:local_trust_regression_matrix,artifact_hash_mismatch:local_trust_root_manifest,artifact_hash_mismatch:toolchain_guard,artifact_size_mismatch:constitutional_gates,artifact_size_mismatch:execution_environment_trust_envelope,artifact_size_mismatch:local_evidence_chain,artifact_size_mismatch:local_trust_capstone,artifact_size_mismatch:local_trust_regression_matrix,artifact_size_mismatch:local_trust_root_manifest,artifact_size_mismatch:toolchain_guard",
+      "reason": "git_commit_stale",
       "status": "ADVERSARIAL_CASE_PASS",
       "target_artifact": "outputs/release_integrity_bundle/RELEASE_MANIFEST.json"
     }
   ],
-  "adversarial_digest": "dde4d1c67370c6e55c0f8ebac623dab6b968526c8b5fbfc12071ee7a88bf4375",
+  "adversarial_digest": "b2c57bafe28b04fe380c3e165f7274d1e306075adc55b56968f0db36642bd1a3",
   "adversarial_harness_type": "adversarial_local_trust_negative_test_harness",
   "adversarial_harness_version": "18.7G",
-  "adversarial_payload_digest": "fe313cacf26ea6c7ad27d7d790dc7055986ea33a9ac578df5a37522ca76befdc",
-  "adversarial_signature": "0d4e57764cb688fe7b94ad49454ea43ee2d46e88bee54ff062aaae69c8735d13",
+  "adversarial_payload_digest": "d96c3c6090351944416ed20aaa7538883718e9f30d1dfc68e5da7b3844897e53",
+  "adversarial_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "bd9de4f137c88254e44316e71cab7a0b715c7a8aaad9558b4366c2beeb9f5f68",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "adversarial_status": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
   "adversarial_summary": {
     "all_required_cases_passed": true,
@@ -568,14 +579,14 @@
     "toolchain_drift_cases": 3,
     "total_cases": 39
   },
-  "bound_capstone_digest": "2032ed8f7db411703e20d9e84df86cdf8eb010fdfbf07073796fc45d458beaa8",
-  "bound_constitutional_gates_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
-  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
-  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
-  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
-  "bound_release_integrity_digest": "d8c9001b49da5cf2ac88cd0d03899d522005040444781e9870534cd777c71430",
-  "bound_toolchain_guard_digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+  "bound_capstone_digest": "913e98580b7425418fb9ff3944919253e4d34593472303dc835111ad8f7cb25f",
+  "bound_constitutional_gates_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
+  "bound_evidence_chain_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
+  "bound_execution_envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "bound_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_regression_matrix_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
+  "bound_release_integrity_digest": "9cc92f43322352ad395f9f1dc0fba3737c71f1ff748c23eac8859a243bf37f4e",
+  "bound_toolchain_guard_digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
   "boundary_confirmation_summary": {
     "certificationClaimed": false,
     "executionGateBehaviorChanged": false,
@@ -590,19 +601,19 @@
     "skgDtnAuthorityAdded": false,
     "skgDtnExternalNonAuthoritative": true
   },
-  "created_at": "2026-07-16T07:35:09+00:00",
+  "created_at": "2026-08-06T06:17:45+00:00",
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md\n M sbp_lex/runtime/approved_runtime_baselines.json",
+    "branch_status_short": "## main...origin/main",
     "git_branch": "main",
-    "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+    "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
     "synced_to_origin_branch": true,
-    "tracked_working_tree_clean": false,
-    "working_tree_clean": false
+    "tracked_working_tree_clean": true,
+    "working_tree_clean": true
   },
   "next_phase_readiness": {
     "implemented_in_this_phase": false,
@@ -610,8 +621,8 @@
     "phase_name": "Master Claims-to-Evidence Index / University Validation Dossier",
     "readiness_marker_only": true
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
-  "signature_mode": "ADVERSARIAL_NEGATIVE_HARNESS_DETERMINISTIC_PLACEHOLDER",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "source_phase": "18.7G",
   "validation_failures": []
 }

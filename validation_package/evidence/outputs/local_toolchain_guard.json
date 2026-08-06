@@ -1,15 +1,15 @@
 {
-  "bound_constitutional_gates_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
-  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
-  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
-  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
-  "created_at": "2026-07-16T07:34:55+00:00",
+  "bound_constitutional_gates_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
+  "bound_evidence_chain_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
+  "bound_execution_envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "bound_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_regression_matrix_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
+  "created_at": "2026-08-06T06:17:43+00:00",
   "dependency_file_digests": [
     {
       "path": "requirements.txt",
-      "sha256": "c4fa1e7633f0e8b8937cbea0097f0e310895065682ef5a2825fc8c8541bf1dc0",
-      "size_bytes": 35,
+      "sha256": "648ace9f6bbe448c82687bed75a062c513c53c10da0ce981d7ca915e1e298bb9",
+      "size_bytes": 51,
       "status": "PRESENT"
     },
     {
@@ -53,7 +53,7 @@
     "requirements.txt"
   ],
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
   "ignored_output_paths": [
     "outputs",
     "outputs/local_trust_temp"
@@ -66,23 +66,11 @@
     "*.pyc"
   ],
   "installed_package_snapshot": {
-    "package_count": 38,
+    "package_count": 10,
     "packages": [
-      {
-        "name": "annotated-types",
-        "version": "0.7.0"
-      },
-      {
-        "name": "artifact_tool_v2",
-        "version": "2.8.23"
-      },
       {
         "name": "cffi",
         "version": "2.1.0"
-      },
-      {
-        "name": "charset-normalizer",
-        "version": "3.4.9"
       },
       {
         "name": "colorama",
@@ -93,52 +81,16 @@
         "version": "49.0.0"
       },
       {
-        "name": "et_xmlfile",
-        "version": "2.0.0"
-      },
-      {
         "name": "iniconfig",
         "version": "2.3.0"
-      },
-      {
-        "name": "lxml",
-        "version": "6.0.2"
-      },
-      {
-        "name": "numpy",
-        "version": "2.3.5"
-      },
-      {
-        "name": "openpyxl",
-        "version": "3.1.5"
       },
       {
         "name": "packaging",
         "version": "26.2"
       },
       {
-        "name": "pandas",
-        "version": "3.0.1"
-      },
-      {
-        "name": "pdf2image",
-        "version": "1.17.0"
-      },
-      {
-        "name": "pdfminer.six",
-        "version": "20251230"
-      },
-      {
-        "name": "pdfplumber",
-        "version": "0.11.9"
-      },
-      {
-        "name": "pillow",
-        "version": "12.2.0"
-      },
-      {
         "name": "pip",
-        "version": "26.0.1"
+        "version": "26.1.2"
       },
       {
         "name": "pluggy",
@@ -149,81 +101,17 @@
         "version": "3.0"
       },
       {
-        "name": "pydantic",
-        "version": "2.13.4"
-      },
-      {
-        "name": "pydantic_core",
-        "version": "2.46.4"
-      },
-      {
         "name": "Pygments",
         "version": "2.20.0"
       },
       {
-        "name": "pyhumps",
-        "version": "3.8.0"
-      },
-      {
-        "name": "pypdf",
-        "version": "6.10.0"
-      },
-      {
-        "name": "pypdfium2",
-        "version": "5.11.0"
-      },
-      {
         "name": "pytest",
         "version": "9.1.1"
-      },
-      {
-        "name": "python-dateutil",
-        "version": "2.9.0.post0"
-      },
-      {
-        "name": "python-docx",
-        "version": "1.2.0"
-      },
-      {
-        "name": "python-pptx",
-        "version": "1.0.2"
-      },
-      {
-        "name": "reportlab",
-        "version": "4.4.9"
-      },
-      {
-        "name": "setuptools",
-        "version": "83.0.0"
-      },
-      {
-        "name": "six",
-        "version": "1.17.0"
-      },
-      {
-        "name": "typing-inspection",
-        "version": "0.4.2"
-      },
-      {
-        "name": "typing_extensions",
-        "version": "4.16.0"
-      },
-      {
-        "name": "tzdata",
-        "version": "2026.2"
-      },
-      {
-        "name": "wheel",
-        "version": "0.47.0"
-      },
-      {
-        "name": "xlsxwriter",
-        "version": "3.2.9"
       }
     ],
     "snapshot_mode": "installed_distributions_name_version_only"
   },
-  "pip_version_if_available": "26.0.1",
+  "pip_version_if_available": "26.1.2",
   "platform": "Windows-11-10.0.26200-SP0",
   "pytest_collection_policy": {
     "policy_version": "LOCAL_TRUST_PYTEST_COLLECTION_POLICY_V1",
@@ -237,19 +125,19 @@
     ]
   },
   "pytest_version": "9.1.1",
-  "python_base_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
-  "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-  "python_prefix": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python",
-  "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
-  "signature_mode": "TOOLCHAIN_GUARD_DETERMINISTIC_PLACEHOLDER",
+  "python_base_prefix": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64",
+  "python_executable": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python_prefix": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64",
+  "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "toolchain_checks": [
     {
       "check_category": "python",
       "check_id": "python_executable_recorded",
       "check_name": "Python executable recorded",
       "expected_condition": "python_executable_present",
-      "observed_condition": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "observed_condition": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
       "reason": "python executable provenance",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -259,7 +147,7 @@
       "check_id": "python_version_recorded",
       "check_name": "Python version recorded",
       "expected_condition": "python_version_present",
-      "observed_condition": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+      "observed_condition": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
       "reason": "python version provenance",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -279,7 +167,7 @@
       "check_id": "python_version_parseable",
       "check_name": "Python version is parseable",
       "expected_condition": "python_version_parseable",
-      "observed_condition": "(3, 12, 13)",
+      "observed_condition": "(3, 14, 6)",
       "reason": "major/minor/patch parse",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -309,7 +197,7 @@
       "check_id": "pip_version_recorded",
       "check_name": "pip version recorded if available",
       "expected_condition": "pip_version_recorded_or_unavailable",
-      "observed_condition": "26.0.1",
+      "observed_condition": "26.1.2",
       "reason": "pip is optional but state is explicit",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -519,7 +407,7 @@
       "check_id": "binds_manifest_digest",
       "check_name": "Toolchain binds manifest digest",
       "expected_condition": "manifest_digest_bound",
-      "observed_condition": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+      "observed_condition": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
       "reason": "bound_manifest_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -529,7 +417,7 @@
       "check_id": "binds_execution_envelope_digest",
       "check_name": "Toolchain binds execution envelope digest",
       "expected_condition": "execution_envelope_digest_bound",
-      "observed_condition": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
+      "observed_condition": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
       "reason": "bound_execution_envelope_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -539,7 +427,7 @@
       "check_id": "binds_evidence_chain_digest",
       "check_name": "Toolchain binds evidence chain digest",
       "expected_condition": "evidence_chain_digest_bound",
-      "observed_condition": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
+      "observed_condition": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
       "reason": "bound_evidence_chain_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -549,7 +437,7 @@
       "check_id": "binds_regression_matrix_digest",
       "check_name": "Toolchain binds regression matrix digest",
       "expected_condition": "regression_matrix_digest_bound",
-      "observed_condition": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
+      "observed_condition": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
       "reason": "bound_regression_matrix_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -559,7 +447,7 @@
       "check_id": "binds_constitutional_gates_digest",
       "check_name": "Toolchain binds constitutional gates digest",
       "expected_condition": "constitutional_gates_digest_bound",
-      "observed_condition": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
+      "observed_condition": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
       "reason": "bound_constitutional_gates_digest",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -569,7 +457,7 @@
       "check_id": "working_tree_policy_recorded",
       "check_name": "Working tree policy recorded",
       "expected_condition": "working_tree_policy_recorded",
-      "observed_condition": "working_tree_clean=False",
+      "observed_condition": "working_tree_clean=True",
       "reason": "working tree state recorded",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -589,7 +477,7 @@
       "check_id": "commit_recorded",
       "check_name": "Current commit recorded",
       "expected_condition": "commit_recorded",
-      "observed_condition": "2c5f339ccf685cd1b856457029fd3b55de478730",
+      "observed_condition": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
       "reason": "git commit recorded",
       "required": true,
       "status": "TOOLCHAIN_CHECK_PASS"
@@ -635,11 +523,22 @@
       "status": "TOOLCHAIN_CHECK_PASS"
     }
   ],
-  "toolchain_digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+  "toolchain_digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
   "toolchain_guard_type": "local_trust_dependency_toolchain_guard",
   "toolchain_guard_version": "18.7E.3",
-  "toolchain_payload_digest": "7558fc322bd6ad5b1bfef7395d2e26bccbd3eca579219634847999dea0600c52",
-  "toolchain_signature": "123f6d1b08ef03c8e56fa1799045564687b31396e7d81ac00353296a501756f1",
+  "toolchain_payload_digest": "5b4016b3e60f9848c0dc5c170f9179428506958ffd788e2e43cd5cdcca0f6d6d",
+  "toolchain_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "0fe93fe2f510913df74b39f73aea0eef154e76225842f1d0bb5e6525496557a8",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "toolchain_status": "TOOLCHAIN_GUARD_PASS",
   "toolchain_summary": {
     "all_required_checks_passed": true,
@@ -648,7 +547,7 @@
     "passed_checks": 39,
     "skipped_checks": 0,
     "total_checks": 39,
-    "working_tree_clean": false
+    "working_tree_clean": true
   },
   "validation_failures": [],
   "verification_command_policy": {

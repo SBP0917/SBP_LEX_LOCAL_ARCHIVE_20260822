@@ -2,83 +2,83 @@
   "artifact_index": [
     {
       "artifact_id": "manifest",
-      "digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+      "digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
       "digest_field": "manifest_digest",
       "expected_status": "LOCAL_TRUST_VALID",
       "path": "outputs\\local_trust_root_manifest.json",
       "presence_status": "PRESENT",
-      "size_bytes": 22465,
+      "size_bytes": 36752,
       "status_field": "local_trust_status",
       "validation_failures": [],
       "validation_status": "LOCAL_TRUST_VALID"
     },
     {
       "artifact_id": "execution_envelope",
-      "digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
+      "digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
       "digest_field": "envelope_digest",
       "expected_status": "EXECUTION_ENV_VALID",
       "path": "outputs\\local_execution_environment_trust_envelope.json",
       "presence_status": "PRESENT",
-      "size_bytes": 7296,
+      "size_bytes": 13833,
       "status_field": "verification_status",
       "validation_failures": [],
       "validation_status": "EXECUTION_ENV_VALID"
     },
     {
       "artifact_id": "evidence_chain",
-      "digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
+      "digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
       "digest_field": "chain_digest",
       "expected_status": "EVIDENCE_CHAIN_VALID",
       "path": "outputs\\local_evidence_chain.json",
       "presence_status": "PRESENT",
-      "size_bytes": 9931,
+      "size_bytes": 17135,
       "status_field": "evidence_chain_status",
       "validation_failures": [],
       "validation_status": "EVIDENCE_CHAIN_VALID"
     },
     {
       "artifact_id": "regression_matrix",
-      "digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
+      "digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
       "digest_field": "matrix_digest",
       "expected_status": "REGRESSION_MATRIX_VALID",
       "path": "outputs\\local_trust_regression_matrix.json",
       "presence_status": "PRESENT",
-      "size_bytes": 10693,
+      "size_bytes": 17584,
       "status_field": "matrix_status",
       "validation_failures": [],
       "validation_status": "REGRESSION_MATRIX_VALID"
     },
     {
       "artifact_id": "constitutional_gates",
-      "digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
+      "digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
       "digest_field": "gate_digest",
       "expected_status": "CONSTITUTIONAL_GATES_PASS",
       "path": "outputs\\local_constitutional_gates.json",
       "presence_status": "PRESENT",
-      "size_bytes": 11748,
+      "size_bytes": 18807,
       "status_field": "gate_status",
       "validation_failures": [],
       "validation_status": "CONSTITUTIONAL_GATES_PASS"
     },
     {
       "artifact_id": "toolchain_guard",
-      "digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+      "digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
       "digest_field": "toolchain_digest",
       "expected_status": "TOOLCHAIN_GUARD_PASS",
       "path": "outputs\\local_toolchain_guard.json",
       "presence_status": "PRESENT",
-      "size_bytes": 26962,
+      "size_bytes": 32031,
       "status_field": "toolchain_status",
       "validation_failures": [],
       "validation_status": "TOOLCHAIN_GUARD_PASS"
     }
   ],
-  "bound_constitutional_gates_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
-  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
-  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
-  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
-  "bound_toolchain_guard_digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+  "bound_constitutional_gates_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
+  "bound_evidence_chain_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
+  "bound_execution_envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "bound_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_regression_matrix_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
+  "bound_toolchain_guard_digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
   "boundary_confirmation_summary": {
     "activeBoundaryScanMatches": [],
     "authorizedRebuildRuntimePathChanges": [],
@@ -95,9 +95,20 @@
     "skgDtnRemainExternalNonAuthoritative": true,
     "unauthorizedProtectedRuntimePathChanges": []
   },
-  "capstone_digest": "2032ed8f7db411703e20d9e84df86cdf8eb010fdfbf07073796fc45d458beaa8",
-  "capstone_payload_digest": "a55bd5ac0b96fe9e000c474d9a277e59f906a577eb12aa217129e3396f3e864d",
-  "capstone_signature": "95564279ba1a1eaaf799b868d55632c54f3949738b8423a259093328e6cb3c87",
+  "capstone_digest": "913e98580b7425418fb9ff3944919253e4d34593472303dc835111ad8f7cb25f",
+  "capstone_payload_digest": "1e3d253eb2fb84da44dd0aa4cf3924ca6a62d9549f5bf2e1c8b5ef8d01d1435c",
+  "capstone_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "e68f93b472be34a025cf5d0545bb712fba8913af563b2fc74ad0c05a920eaa5c",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "capstone_status": "LOCAL_TRUST_CAPSTONE_PASS",
   "capstone_type": "local_trust_25_year_completion_lock",
   "capstone_version": "18.7E.4",
@@ -108,7 +119,7 @@
       "phase_id": "18.7D.1",
       "phase_name": "Evidence Chain Zero-Missing Cleanup",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
+      "primary_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
       "primary_outputs": [
         "reports/PHASE_18_7D_1_ZERO_MISSING_EVIDENCE_CLEANUP_REPORT.md",
         "outputs/local_evidence_chain.json"
@@ -122,7 +133,7 @@
       "phase_id": "18.7E.1",
       "phase_name": "Local Trust Regression Matrix",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
+      "primary_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
       "primary_outputs": [
         "docs/LOCAL_TRUST_REGRESSION_MATRIX.md",
         "reports/PHASE_18_7E_1_LOCAL_TRUST_REGRESSION_MATRIX_REPORT.md",
@@ -137,7 +148,7 @@
       "phase_id": "18.7E.2",
       "phase_name": "Constitutional Enforcement Gates",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
+      "primary_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
       "primary_outputs": [
         "docs/LOCAL_TRUST_CONSTITUTIONAL_ENFORCEMENT_GATES.md",
         "reports/PHASE_18_7E_2_CONSTITUTIONAL_ENFORCEMENT_GATES_REPORT.md",
@@ -152,7 +163,7 @@
       "phase_id": "18.7E.3",
       "phase_name": "Dependency / Toolchain Guard",
       "phase_status": "DONE_COMMITTED_PUSHED",
-      "primary_digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+      "primary_digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
       "primary_outputs": [
         "docs/LOCAL_TRUST_TOOLCHAIN_GUARD.md",
         "reports/PHASE_18_7E_3_TOOLCHAIN_GUARD_REPORT.md",
@@ -177,18 +188,18 @@
       "verification_summary": "Capstone build/validate/show records local trust completion."
     }
   ],
-  "created_at": "2026-07-16T07:34:56+00:00",
+  "created_at": "2026-08-06T06:17:43+00:00",
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
-    "current_working_tree_clean": false,
+    "branch_status_short": "## main...origin/main",
+    "current_working_tree_clean": true,
     "pre_phase_clean_sync_requirement": "VERIFIED_BEFORE_18_7E_4_IMPLEMENTATION",
     "synced_to_origin_branch": true,
-    "tracked_working_tree_clean": false
+    "tracked_working_tree_clean": true
   },
   "local_trust_completion_summary": {
     "all_bound_artifacts_valid": true,
@@ -236,8 +247,8 @@
     "phase_name": "25-Year Local Trust Capstone Report / Local Trust Completion Lock",
     "starts_from_commit": "eedb30cc5cd4ea7e6bc9be29d06e1c276e28a6d4"
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
-  "signature_mode": "LOCAL_TRUST_CAPSTONE_DETERMINISTIC_PLACEHOLDER",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "validation_failures": [],
   "verification_command_index": {
     "commands": [

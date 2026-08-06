@@ -1,0 +1,391 @@
+{
+  "command_summary": {
+    "required_command_count": 36,
+    "reviewer_command_count": 36
+  },
+  "commands": [
+    {
+      "command": "python -m compileall -q .",
+      "command_id": "compileall",
+      "expected_result": "PASS",
+      "purpose": "Compile Python files.",
+      "related_claim_ids": [
+        "runtime_authority_unchanged"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest --basetemp runtime_artifacts\\pytest_tmp",
+      "command_id": "pytest",
+      "expected_result": "PASS",
+      "purpose": "Run full pytest suite.",
+      "related_claim_ids": [
+        "runtime_verification_passes_current_scenario",
+        "replay_verification_passes_matched",
+        "phase_18_8b_repository_hardening_controls"
+      ],
+      "required": true
+    },
+    {
+      "command": "scripts\\run_tests.bat",
+      "command_id": "run_tests_bat",
+      "expected_result": "PASS",
+      "purpose": "Run Windows verification wrapper.",
+      "related_claim_ids": [
+        "runtime_verification_passes_current_scenario"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.manifest validate",
+      "command_id": "manifest_validate",
+      "expected_result": "LOCAL_TRUST_VALID",
+      "purpose": "Validate local trust manifest.",
+      "related_claim_ids": [
+        "local_trust_manifest_validates"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.execution_envelope validate",
+      "command_id": "execution_envelope_validate",
+      "expected_result": "EXECUTION_ENV_VALID",
+      "purpose": "Validate execution envelope.",
+      "related_claim_ids": [
+        "execution_envelope_validates"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.evidence_chain validate",
+      "command_id": "evidence_chain_validate",
+      "expected_result": "EVIDENCE_CHAIN_VALID",
+      "purpose": "Validate evidence chain.",
+      "related_claim_ids": [
+        "evidence_chain_validates",
+        "evidence_chain_zero_missing"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.evidence_chain compare",
+      "command_id": "evidence_chain_compare",
+      "expected_result": "EVIDENCE_CHAIN_VALID changed_evidence_items=0",
+      "purpose": "Compare evidence chain to current files.",
+      "related_claim_ids": [
+        "evidence_chain_zero_changed"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.regression_matrix validate",
+      "command_id": "regression_matrix_validate",
+      "expected_result": "REGRESSION_MATRIX_VALID",
+      "purpose": "Validate regression matrix.",
+      "related_claim_ids": [
+        "regression_matrix_validates"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.regression_matrix show",
+      "command_id": "regression_matrix_show",
+      "expected_result": "REGRESSION_MATRIX_VALID",
+      "purpose": "Show regression matrix summary.",
+      "related_claim_ids": [
+        "regression_matrix_detects_drift"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates evaluate",
+      "command_id": "constitutional_gates_evaluate",
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Evaluate constitutional gates.",
+      "related_claim_ids": [
+        "constitutional_gates_block_unclean_states"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates validate",
+      "command_id": "constitutional_gates_validate",
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Validate constitutional gates.",
+      "related_claim_ids": [
+        "constitutional_gates_pass"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates show",
+      "command_id": "constitutional_gates_show",
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Show constitutional gate summary.",
+      "related_claim_ids": [
+        "constitutional_gates_pass"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard build",
+      "command_id": "toolchain_guard_build",
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Build toolchain guard.",
+      "related_claim_ids": [
+        "toolchain_guard_records_assumptions"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard validate",
+      "command_id": "toolchain_guard_validate",
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Validate toolchain guard.",
+      "related_claim_ids": [
+        "toolchain_guard_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard show",
+      "command_id": "toolchain_guard_show",
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Show toolchain summary.",
+      "related_claim_ids": [
+        "toolchain_guard_records_assumptions"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone build",
+      "command_id": "capstone_build",
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Build local trust capstone.",
+      "related_claim_ids": [
+        "local_trust_capstone_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone validate",
+      "command_id": "capstone_validate",
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Validate local trust capstone.",
+      "related_claim_ids": [
+        "local_trust_capstone_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone show",
+      "command_id": "capstone_show",
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Show local trust capstone summary.",
+      "related_claim_ids": [
+        "local_trust_capstone_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity build",
+      "command_id": "release_integrity_build",
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Build release integrity bundle.",
+      "related_claim_ids": [
+        "release_integrity_passes",
+        "release_integrity_contains_required_files"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity validate",
+      "command_id": "release_integrity_validate",
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Validate release integrity bundle.",
+      "related_claim_ids": [
+        "release_integrity_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity show",
+      "command_id": "release_integrity_show",
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Show release integrity summary.",
+      "related_claim_ids": [
+        "release_integrity_contains_required_files"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.adversarial_negative_harness run",
+      "command_id": "adversarial_harness_run",
+      "expected_result": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
+      "purpose": "Run adversarial negative-test harness.",
+      "related_claim_ids": [
+        "adversarial_harness_passes",
+        "adversarial_harness_detects_bad_states"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.adversarial_negative_harness validate",
+      "command_id": "adversarial_harness_validate",
+      "expected_result": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
+      "purpose": "Validate adversarial harness output.",
+      "related_claim_ids": [
+        "adversarial_harness_passes"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.adversarial_negative_harness show",
+      "command_id": "adversarial_harness_show",
+      "expected_result": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
+      "purpose": "Show adversarial harness summary.",
+      "related_claim_ids": [
+        "adversarial_harness_detects_bad_states"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.validation_dossier build",
+      "command_id": "validation_dossier_build",
+      "expected_result": "VALIDATION_DOSSIER_READY",
+      "purpose": "Build university validation dossier.",
+      "related_claim_ids": [
+        "phase_19_not_started",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.validation_dossier validate",
+      "command_id": "validation_dossier_validate",
+      "expected_result": "VALIDATION_DOSSIER_READY",
+      "purpose": "Validate university validation dossier.",
+      "related_claim_ids": [
+        "phase_19_not_started",
+        "future_surfaces_absent",
+        "runtime_authority_unchanged",
+        "governance_truth_gates_unchanged",
+        "canonical_blueprint_series_current",
+        "external_production_readiness_gaps_reported"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.validation_dossier show",
+      "command_id": "validation_dossier_show",
+      "expected_result": "VALIDATION_DOSSIER_READY",
+      "purpose": "Show dossier summary.",
+      "related_claim_ids": [
+        "phase_19_not_started"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_eie_pt_sufficiency_rebuild.py",
+      "command_id": "pytest_eie_pt_rebuild",
+      "expected_result": "PASS",
+      "purpose": "Verify EIE/PT/SKG/DTN rebuild behavior.",
+      "related_claim_ids": [
+        "eie_canonical_traversal_state",
+        "procedural_truth_evidentiary_sufficiency_certifies",
+        "root_of_trust_anchorage_binds_eie_truth_foundations",
+        "execution_gate_enforces_pt_certification",
+        "skg_dtn_external_non_authoritative"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_8b_repository_hardening.py --basetemp runtime_artifacts\\pytest_tmp",
+      "command_id": "pytest_phase18_8b_repository_hardening",
+      "expected_result": "PASS",
+      "purpose": "Verify Phase 18.8B focused negative hardening cases.",
+      "related_claim_ids": [
+        "phase_18_8b_repository_hardening_controls",
+        "execution_gate_enforces_pt_certification",
+        "canonical_blueprint_series_current"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_procedural_truth_binding.py",
+      "command_id": "pytest_phase18_pt_binding",
+      "expected_result": "PASS",
+      "purpose": "Verify existing Phase 18 PT binding regression behavior.",
+      "related_claim_ids": [
+        "procedural_truth_evidentiary_sufficiency_certifies"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_execution_gate_strictness.py",
+      "command_id": "pytest_execution_gate_strictness",
+      "expected_result": "PASS",
+      "purpose": "Verify strict Execution Gate enforcement.",
+      "related_claim_ids": [
+        "execution_gate_enforces_pt_certification"
+      ],
+      "required": true
+    },
+    {
+      "command": "python -m pytest tests\\test_phase_18_6_historical_audit_mutation.py",
+      "command_id": "pytest_historical_integrity",
+      "expected_result": "PASS",
+      "purpose": "Verify expanded Root of Trust and audit lineage integrity.",
+      "related_claim_ids": [
+        "root_of_trust_anchorage_binds_eie_truth_foundations"
+      ],
+      "required": true
+    },
+    {
+      "command": "python main.py",
+      "command_id": "runtime_main",
+      "expected_result": "PASS decision=ALLOW execution_result=EXECUTE",
+      "purpose": "Run current runtime verification scenario.",
+      "related_claim_ids": [
+        "runtime_verification_passes_current_scenario",
+        "dual_adaptive_deterministic_pipelines_preserved"
+      ],
+      "required": true
+    },
+    {
+      "command": "python main.py replay",
+      "command_id": "runtime_replay",
+      "expected_result": "PASS matched=true mismatches=[]",
+      "purpose": "Run deterministic replay verification.",
+      "related_claim_ids": [
+        "replay_verification_passes_matched",
+        "dual_adaptive_deterministic_pipelines_preserved"
+      ],
+      "required": true
+    },
+    {
+      "command": "git diff --check",
+      "command_id": "git_diff_check",
+      "expected_result": "PASS",
+      "purpose": "Check diff whitespace integrity.",
+      "related_claim_ids": [
+        "runtime_authority_unchanged",
+        "governance_truth_gates_unchanged"
+      ],
+      "required": true
+    },
+    {
+      "command": "git status --short --branch --untracked-files=no",
+      "command_id": "git_status_short_branch",
+      "expected_result": "main branch status reported",
+      "purpose": "Show tracked branch/worktree status.",
+      "related_claim_ids": [
+        "phase_19_not_started"
+      ],
+      "required": true
+    }
+  ],
+  "execution_note": "This index records commands for reviewers; the dossier CLI does not execute them.",
+  "reviewer_commands_type": "university_validation_reviewer_verification_commands",
+  "reviewer_commands_version": "18.8"
+}

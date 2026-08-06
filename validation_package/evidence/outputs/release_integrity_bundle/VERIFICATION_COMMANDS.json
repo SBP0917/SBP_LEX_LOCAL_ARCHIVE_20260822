@@ -1,0 +1,207 @@
+{
+  "commands": [
+    {
+      "command": "python -m compileall -q .",
+      "command_id": "compileall",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS",
+      "purpose": "Compile all Python sources for syntax and import readiness.",
+      "required": true
+    },
+    {
+      "command": "python -m pytest -q",
+      "command_id": "pytest",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS",
+      "purpose": "Run the repository test suite.",
+      "required": true
+    },
+    {
+      "command": "scripts\\run_tests.bat",
+      "command_id": "run_tests_bat",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS",
+      "purpose": "Run the Windows test wrapper.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.manifest validate",
+      "command_id": "manifest_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "LOCAL_TRUST_VALID",
+      "purpose": "Validate the local trust root manifest.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.execution_envelope validate",
+      "command_id": "execution_envelope_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "EXECUTION_ENV_VALID",
+      "purpose": "Validate the local execution environment trust envelope.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.evidence_chain validate",
+      "command_id": "evidence_chain_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "EVIDENCE_CHAIN_VALID",
+      "purpose": "Validate the local evidence chain.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.evidence_chain compare",
+      "command_id": "evidence_chain_compare",
+      "executed_by_release_integrity": false,
+      "expected_result": "EVIDENCE_CHAIN_VALID changed_evidence_items=0",
+      "purpose": "Compare evidence-chain hashes against current files.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.regression_matrix validate",
+      "command_id": "regression_matrix_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "REGRESSION_MATRIX_VALID",
+      "purpose": "Validate the local trust regression matrix.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.regression_matrix show",
+      "command_id": "regression_matrix_show",
+      "executed_by_release_integrity": false,
+      "expected_result": "REGRESSION_MATRIX_VALID",
+      "purpose": "Show the regression matrix summary.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates evaluate",
+      "command_id": "constitutional_gates_evaluate",
+      "executed_by_release_integrity": false,
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Evaluate local trust constitutional gates.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates validate",
+      "command_id": "constitutional_gates_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Validate constitutional gate output.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.constitutional_gates show",
+      "command_id": "constitutional_gates_show",
+      "executed_by_release_integrity": false,
+      "expected_result": "CONSTITUTIONAL_GATES_PASS",
+      "purpose": "Show constitutional gate summary.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard build",
+      "command_id": "toolchain_guard_build",
+      "executed_by_release_integrity": false,
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Build the local toolchain guard.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard validate",
+      "command_id": "toolchain_guard_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Validate the local toolchain guard.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.toolchain_guard show",
+      "command_id": "toolchain_guard_show",
+      "executed_by_release_integrity": false,
+      "expected_result": "TOOLCHAIN_GUARD_PASS",
+      "purpose": "Show local toolchain guard summary.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone build",
+      "command_id": "capstone_build",
+      "executed_by_release_integrity": false,
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Build the 25-year local trust capstone.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone validate",
+      "command_id": "capstone_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Validate the 25-year local trust capstone.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.local_trust_capstone show",
+      "command_id": "capstone_show",
+      "executed_by_release_integrity": false,
+      "expected_result": "LOCAL_TRUST_CAPSTONE_PASS",
+      "purpose": "Show 25-year capstone summary.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity build",
+      "command_id": "release_integrity_build",
+      "executed_by_release_integrity": false,
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Build the release integrity bundle.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity validate",
+      "command_id": "release_integrity_validate",
+      "executed_by_release_integrity": false,
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Validate the release integrity bundle.",
+      "required": true
+    },
+    {
+      "command": "python -m sbp_lex.local_trust.release_integrity show",
+      "command_id": "release_integrity_show",
+      "executed_by_release_integrity": false,
+      "expected_result": "RELEASE_INTEGRITY_PASS",
+      "purpose": "Show release integrity bundle summary.",
+      "required": true
+    },
+    {
+      "command": "python main.py",
+      "command_id": "runtime_main",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS decision=ALLOW execution_result=EXECUTE",
+      "purpose": "Run canonical runtime verification.",
+      "required": true
+    },
+    {
+      "command": "python main.py replay",
+      "command_id": "runtime_replay",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS matched=true mismatches=[]",
+      "purpose": "Run deterministic replay verification.",
+      "required": true
+    },
+    {
+      "command": "git diff --check",
+      "command_id": "git_diff_check",
+      "executed_by_release_integrity": false,
+      "expected_result": "PASS",
+      "purpose": "Check whitespace safety.",
+      "required": true
+    },
+    {
+      "command": "git status --short --branch --untracked-files=no",
+      "command_id": "git_status_branch",
+      "executed_by_release_integrity": false,
+      "expected_result": "tracked changes limited to phase scope before commit",
+      "purpose": "Record tracked branch status.",
+      "required": true
+    }
+  ],
+  "execution_note": "Release integrity records this command sequence only; it does not execute commands.",
+  "verification_commands_type": "release_integrity_verification_commands",
+  "verification_commands_version": "18.7F"
+}

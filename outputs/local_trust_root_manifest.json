@@ -14,6 +14,10 @@
         "executed_by_manifest": false
       },
       {
+        "command": "scripts\\run_double_triple_assurance.bat",
+        "executed_by_manifest": false
+      },
+      {
         "command": "python main.py",
         "executed_by_manifest": false
       },
@@ -47,34 +51,112 @@
       }
     ],
     "path_note": "Manifest records intended verification commands only; it does not execute them.",
-    "python_executable_path": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-    "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
-    "working_directory": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1"
+    "python_executable_path": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
   },
-  "created_at": "2026-07-16T07:34:53+00:00",
+  "created_at": "2026-08-06T06:17:41+00:00",
   "critical_file_hashes": [
     {
       "path": "README.md",
-      "sha256": "badd4dbcad388d2b4cbe70cf98fded186fa5cc67e74b08b7632830d4121da13a",
-      "size_bytes": 7179,
+      "sha256": "750997c2732909dadfc71b67666d921ad91188af757372c893de3f7fd56e90fd",
+      "size_bytes": 7813,
       "status": "PRESENT"
     },
     {
       "path": "main.py",
-      "sha256": "c991542b8e011b0e006a22378ef09a82ff36f86c28465692f98b81bff924d06a",
-      "size_bytes": 2987,
+      "sha256": "3abee6d736aa6c0cb0bba613fd915cbf34dfec5f1e029f2bd6cb0277873d3342",
+      "size_bytes": 4062,
       "status": "PRESENT"
     },
     {
       "path": "scripts/run_tests.bat",
-      "sha256": "691ad283d78105bf05b56ecf1ae86c1e9cd7823ff1d89ccd2c5a01b3bd9b70fb",
-      "size_bytes": 1444,
+      "sha256": "77eb80159892393e765d5ae5910f41f47e2e2f55267eef866c8f932105362ef1",
+      "size_bytes": 1865,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_tests.sh",
+      "sha256": "64f349a4d0d2d9a07851fddb5bdb61ab7ae1b75fede7e271ee77cf1df2359053",
+      "size_bytes": 1189,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_linkage_assurance.bat",
+      "sha256": "36656436b42555e22038b8b031d6251ea8c744352fd7cacc4b08e2268b01212e",
+      "size_bytes": 1048,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_linkage_assurance.sh",
+      "sha256": "95d4a0411f64fc40412b0c96a60a319da308cff7be9a0d4861ee1ec49cb5c922",
+      "size_bytes": 599,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_double_triple_assurance.bat",
+      "sha256": "a05431e1a88d7e97f52b0fa468a801a39cae5ab5dfe66b7875244918b65e19e7",
+      "size_bytes": 1360,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/run_double_triple_assurance.sh",
+      "sha256": "ef86077cca976ecb22034954c98230cc9b066c4c37c187f03740cb1cdc4e560d",
+      "size_bytes": 864,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/finalize_university_handover.bat",
+      "sha256": "997b68f9e33e26c43a7500c01e6f261346f7193ead357e266778452338a3213b",
+      "size_bytes": 368,
+      "status": "PRESENT"
+    },
+    {
+      "path": "scripts/finalize_university_handover.ps1",
+      "sha256": "8128be9db647bf4728dc51fea21f417dfef02e34a93456827da6974f1c07fc5a",
+      "size_bytes": 10787,
+      "status": "PRESENT"
+    },
+    {
+      "path": "docs/STARTUP_EXECUTION_LINKAGE_ASSURANCE.md",
+      "sha256": "00bf6f8de7fc4c658704fb27e64e4ef324320accc44f795e0bf20094081d3ea0",
+      "size_bytes": 1968,
+      "status": "PRESENT"
+    },
+    {
+      "path": "docs/DOUBLE_TRIPLE_HANDOVER_ASSURANCE.md",
+      "sha256": "71776742222514aed35a8d81e7ce3c4af7aa9631bd1f1d6a6714d71d18036fed",
+      "size_bytes": 2908,
+      "status": "PRESENT"
+    },
+    {
+      "path": "docs/UNIVERSITY_HANDOVER_REGENERATION.md",
+      "sha256": "9b33276802aeaa0263f9be8e025db46460d375616887586a3d84401bbbf379f5",
+      "size_bytes": 7913,
       "status": "PRESENT"
     },
     {
       "path": "pytest.ini",
-      "sha256": "fe7dd7849b155044cd759231cf872cb5a5433e7dcad12c85c6f0e59185c9cc19",
-      "size_bytes": 163,
+      "sha256": "c6be0eb04c6ae850b2f1175f5eee2892370266a344c7b391e7ac48ab56bdbeef",
+      "size_bytes": 345,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/assurance/__init__.py",
+      "sha256": "46c1439c84339fed84a07a7f7d18ff1100b19f3bc932a58c2fd8b7f3e9f1f2cc",
+      "size_bytes": 51,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/assurance/double_triple.py",
+      "sha256": "2612a5ca5a738398d40e736256879c3433a3a0ad576c721264ca14f5efe7f89b",
+      "size_bytes": 20193,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/assurance/handover_regeneration.py",
+      "sha256": "ae3ce1b3ac9ccd09b33944a98e5243c678a49df96362b173ba126dde30efc162",
+      "size_bytes": 61440,
       "status": "PRESENT"
     },
     {
@@ -91,32 +173,38 @@
     },
     {
       "path": "sbp_lex/execution/capability.py",
-      "sha256": "74b7a8b5d8d67d0a3d4a10e6b25f42efd5608786ca6ad8b827e163bc6db11993",
-      "size_bytes": 72818,
+      "sha256": "2177af770e75a21190c64b7e6de68ce5226ce5d656e58d429b8edae307c2599f",
+      "size_bytes": 90544,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/execution/capability_store.py",
-      "sha256": "b249a42d5e0e3fbc4fba8f437f942ec2a3b41bb95c4996daffda082f648e2e5a",
-      "size_bytes": 36230,
+      "sha256": "b83c0682db63e9fdc222b6061333f256b875bb66c881d3cdd9204f8cf90834fc",
+      "size_bytes": 48221,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/execution/schemas/execution_capability.schema.json",
-      "sha256": "8cea6e09e78236e918494ce08eec7f339461d5d164760590104d68da824d28e1",
-      "size_bytes": 4530,
+      "sha256": "f1c24d907147f8c0e37f4e59040958ef2450fb189910fbb36fabc418520f97d2",
+      "size_bytes": 4715,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/execution/schemas/post_execution_attestation.schema.json",
-      "sha256": "29410058f978e32a38bc88ff0c66c43d0b9335e6591e0ecfa22232d4d6dc6f53",
-      "size_bytes": 2568,
+      "sha256": "0543586db8b139755759cbd87b939872efa41f72c0e414d293c803b8f276f11c",
+      "size_bytes": 6480,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/execution/schemas/capability_lifecycle_record.schema.json",
       "sha256": "351c3c4f7530ea18234cc71b728030248a4b52661d1763a5adab0da8d37e4cb7",
       "size_bytes": 1479,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_h7_deterministic_execution_integrity.py",
+      "sha256": "cd62877250db7e6de8545e8798b8b5703261a87481c8b590ec690a4b452f4244",
+      "size_bytes": 88087,
       "status": "PRESENT"
     },
     {
@@ -159,6 +247,12 @@
       "path": "sbp_lex/formal/schemas/lineage_node.schema.json",
       "sha256": "f14a15fd73e643076d82e7f0edd84fcb17a66bccd16ad7459afe2e2d7a2e8b84",
       "size_bytes": 1395,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phq_formal_deterministic_architecture.py",
+      "sha256": "3eab6749bb861a6ffd7e6479b6b31a6ce2502b8c0c05ba679546191efb761b4b",
+      "size_bytes": 25139,
       "status": "PRESENT"
     },
     {
@@ -205,8 +299,8 @@
     },
     {
       "path": "sbp_lex/runtime/canonical_runtime.py",
-      "sha256": "49eaf525c36b8e29798f609bfe0dd1f066ef0ecf45b013035962aa6d5afbb84a",
-      "size_bytes": 7589,
+      "sha256": "c4bdd3c4c79a36cb1846f7890a748b8f4a01584d9e14ab7f7fb376f4b5903357",
+      "size_bytes": 8051,
       "status": "PRESENT"
     },
     {
@@ -223,8 +317,8 @@
     },
     {
       "path": "sbp_lex/recovery/inventory.py",
-      "sha256": "55499be5d8080c3331c518a161ce81dfbcb920cced13cf721ffa339cefe0dcd1",
-      "size_bytes": 18082,
+      "sha256": "7639d8cbd806905ea43fba58cc9dcb903912cf5e39e21f78a806e3f502193f26",
+      "size_bytes": 18830,
       "status": "PRESENT"
     },
     {
@@ -247,8 +341,8 @@
     },
     {
       "path": "sbp_lex/recovery/recovery_drill.py",
-      "sha256": "4544514e524ed5ecde41996c2dd2660c32672fb91fd90a5c83005ccc21712903",
-      "size_bytes": 7841,
+      "sha256": "2de4a72ac8968453ab43938116dc6264f78a5bdcc6687b817d34d831cabbcc10",
+      "size_bytes": 8086,
       "status": "PRESENT"
     },
     {
@@ -265,20 +359,8 @@
     },
     {
       "path": "tests/test_r1_canonical_backup_recovery.py",
-      "sha256": "fa57e3cd9207265c9bb406d5d394c185778b4a927685fa19fb82e6120de5cce4",
-      "size_bytes": 26276,
-      "status": "PRESENT"
-    },
-    {
-      "path": "outputs/recovery_critical_inventory.json",
-      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
-      "size_bytes": 10214,
-      "status": "PRESENT"
-    },
-    {
-      "path": "outputs/r1_recovery_drill.json",
-      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
-      "size_bytes": 559,
+      "sha256": "c72cda9eed1406f9f71f61a798605f282b547bef9bf263c2a0cc9f94b6bb3d26",
+      "size_bytes": 29975,
       "status": "PRESENT"
     },
     {
@@ -295,14 +377,14 @@
     },
     {
       "path": "sbp_lex/supply_chain/provenance.py",
-      "sha256": "e4208f98936fe61cb729c65d9b3884dad285824277141d0166f7293a8ecbd705",
-      "size_bytes": 16104,
+      "sha256": "54da63eced548448c97df39049c6e085d8cab8a6327bbb83b7c4bf07e8caf28f",
+      "size_bytes": 32327,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/supply_chain/assurance.py",
-      "sha256": "23e57e15d1d8155ab137f40fcb96ed5049d80e2af0fc9bc0f36d8da6f6db804e",
-      "size_bytes": 9808,
+      "sha256": "61e165751ce54c175b808f98367060cf86dedfddff4890e4436b8d5d54df2c50",
+      "size_bytes": 11362,
       "status": "PRESENT"
     },
     {
@@ -313,20 +395,20 @@
     },
     {
       "path": "sbp_lex/supply_chain/schemas/r2_sbom.schema.json",
-      "sha256": "81463a2deb1f8d53516ac9e8bff1925ffc2d44be926f7d7414dbb7a8a48f69c9",
-      "size_bytes": 244,
+      "sha256": "521376e73fc255fe02598146b021613c8ed1d3a68cfbf94065f3c29a4e95d241",
+      "size_bytes": 3143,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/supply_chain/schemas/r2_build_manifest.schema.json",
-      "sha256": "c486cfe9d0a8b4dfba17a8fd8aed3f22d8ed44f314813663494be26ccb038db1",
-      "size_bytes": 219,
+      "sha256": "6bbcc8dabb933a89408c369e1d0f93d3ec86f412e423ac07d8df15718d68c127",
+      "size_bytes": 10431,
       "status": "PRESENT"
     },
     {
       "path": "tests/test_r2_supply_chain_build_provenance.py",
-      "sha256": "350a521dace346023c30817fef0c93928daaf58bae48310de7886278d15c1233",
-      "size_bytes": 12583,
+      "sha256": "d3829bb739c4aa103b4a7815022f41f9230f1dcd7474a8758727b0b759fe2dde",
+      "size_bytes": 22146,
       "status": "PRESENT"
     },
     {
@@ -373,8 +455,8 @@
     },
     {
       "path": "sbp_lex/custody/assurance.py",
-      "sha256": "d439543d6a4ed08d5c6cb5101c1e3737206702d52fffca1a684bad5b059fd3fa",
-      "size_bytes": 3969,
+      "sha256": "c5854540afb736a6b47e4e1cb436b048b5cb9e7b3994e4b1df4e1a844d9b183d",
+      "size_bytes": 5120,
       "status": "PRESENT"
     },
     {
@@ -427,59 +509,153 @@
     },
     {
       "path": "sbp_lex/ivvp/common.py",
-      "sha256": "98d22475e69da049e31231213c75c45c139626c95dc505fc48170def6aaab1ad",
-      "size_bytes": 2688,
+      "sha256": "1f9f2f44f4a06bc6808ed603b495983d5445274ef0ad725dcabe41b0490ca84d",
+      "size_bytes": 5761,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/ivvp/package.py",
-      "sha256": "770ba7df112b8f20d274da58287c82acc23d016ffb305f14eefb9e0a8f01b7a0",
-      "size_bytes": 16816,
+      "sha256": "ff7baca04126615017102676562793f37fb531886649759d222b5e8e4eea49c8",
+      "size_bytes": 29190,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/ivvp/verifier.py",
-      "sha256": "c43f6ea2d5aabcbe2abb6b13981fe15a0764f07f06cc0f69b7cd9c895301d912",
-      "size_bytes": 10236,
+      "sha256": "928031e5829b1fa5499fba6869ea7ee8472a7eee443cfb11acc7522683d60701",
+      "size_bytes": 64699,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/ivvp/schemas/package_manifest.schema.json",
-      "sha256": "15691d232e60f8df47acd4099000ed10432392f334de07e5d520ee352b82aba2",
-      "size_bytes": 201,
+      "sha256": "d50d03378789db29f8d690bbed5e50c538415902db454033086281af862c4edc",
+      "size_bytes": 4031,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/ivvp/schemas/engineering_claims.schema.json",
-      "sha256": "035e6fbffa5578116e4d6df5568f0623fe89532a2657579839b3b94030bbeff3",
-      "size_bytes": 201,
+      "sha256": "e354be36ba93c553c8cf4dd81ab6c3db12f08d4053c152d036d75daf38f383cc",
+      "size_bytes": 2178,
       "status": "PRESENT"
     },
     {
       "path": "sbp_lex/ivvp/schemas/evidence_inventory.schema.json",
-      "sha256": "575e11b041f90ce3525934db9249885dc201cec60cc2a4f90f966dd41599cd1f",
-      "size_bytes": 207,
+      "sha256": "c0e2f63cc58da54562722af5a6b96043c77ca8e424210121a55c2c953526f0b0",
+      "size_bytes": 2036,
       "status": "PRESENT"
     },
     {
       "path": "tests/test_r4_independent_verification_package.py",
-      "sha256": "d3e6184f3a29ba1f87a1141998b4740a341e02e98a90b2077e8a178bf845e56c",
-      "size_bytes": 11660,
+      "sha256": "20d5d12c37dd2a11a7869c663d36492704ea654f4145f293866185653f260f1e",
+      "size_bytes": 24500,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_double_triple_assurance.py",
+      "sha256": "b364c4df70944ff30bc493768cadf7a769348b6f11db82c9eee6d47e72d8b00f",
+      "size_bytes": 6640,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_university_handover_regeneration.py",
+      "sha256": "a4eb299e28e54783a0383f8f4520812cc5319a23fe84473646f32476da7a5344",
+      "size_bytes": 10777,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/local_trust/evidence_chain_validator.py",
+      "sha256": "5e5ff529be96b70f6812a9699360d651c9917d1a00e43a90827d26c912fa3de1",
+      "size_bytes": 6649,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7b_local_trust_manifest.py",
+      "sha256": "65d4d058c99de9f22555385d171333a376b0b9a8204862e46fedf040dec9a9ba",
+      "size_bytes": 12740,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7d_local_evidence_chain.py",
+      "sha256": "b73d0b8a6cad256d1d336eebf127cb28acee94907aecaf7036e76ca4d17d79d5",
+      "size_bytes": 13710,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/local_trust/constitutional_gates.py",
+      "sha256": "ac2b33008f4062b67fffe2ded61e8edca89ef7384bcc8a30d6a90f44302ef019",
+      "size_bytes": 10803,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7e_2_constitutional_enforcement_gates.py",
+      "sha256": "46119f5c025377de9dcfc3ea7a17432ec2f2d72ce803bf7ed399e16b6ac86cba",
+      "size_bytes": 15887,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/local_trust/toolchain_guard.py",
+      "sha256": "a1850de62c26e3deeb865bb85ed4812bb0be985b1709a8bf8119160ac443163a",
+      "size_bytes": 22974,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7e_3_toolchain_guard.py",
+      "sha256": "03122e3b359ae3f6242214544e1210f53a90a87727492832b3cec88e10be70b3",
+      "size_bytes": 11410,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/local_trust/release_integrity.py",
+      "sha256": "c0761c10e899035ecf982d80badd8d29e1b3fa4ce4208c0347848500e849a703",
+      "size_bytes": 7767,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7f_release_integrity_package.py",
+      "sha256": "b47fdcd9890b1fa3bc3b4ef3be2cd8867a100a31aefbc9885107c43e225735c7",
+      "size_bytes": 13312,
+      "status": "PRESENT"
+    },
+    {
+      "path": "sbp_lex/local_trust/local_trust_capstone.py",
+      "sha256": "6b8ba17853be53d9f61596dab765191876ad16922100e8b3b9b0cce4c06d62f6",
+      "size_bytes": 25808,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_phase_18_7e_4_local_trust_capstone.py",
+      "sha256": "f03a54ec5b53fd27a0c581665a160915a3402601e5cd32ce5b9a5e69fdf70c7a",
+      "size_bytes": 10203,
+      "status": "PRESENT"
+    },
+    {
+      "path": "tests/test_adversarial_runtime.py",
+      "sha256": "7112afbaa2aed60995e4bcfd4308aa858636bd3669992e2b11f4a9f7223e1aff",
+      "size_bytes": 3994,
       "status": "PRESENT"
     }
   ],
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
-  "git_status_short": "M reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
+  "git_status_short": "",
   "integrity_store_status_if_available": {
     "path": "runtime_artifacts/integrity_store.jsonl",
-    "size_bytes": 15935,
-    "status": "PRESENT"
+    "status": "MISSING"
   },
   "local_trust_status": "LOCAL_TRUST_VALID",
-  "manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "manifest_payload_digest": "05bc0958eb48c480a56df052c9e86824d3bfca4b5f14bf7cbee3dac7cfa563dc",
-  "manifest_signature": "a5f947a7526dcbfd9f908becdfee9487336fc1eb4cda3e446a684e62d5d74d95",
+  "manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "manifest_payload_digest": "56c4708f5b06727ee48af3a0a3aff4513faec713d1c0b6741738c80efb2b6c27",
+  "manifest_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "b9394f147d806dbe8a3b57b103f45efeb97d93609f43d3b7fd631c3995ad8d06",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "manifest_type": "local_trust_root_manifest",
   "manifest_version": "18.7B",
   "phase_baseline": [
@@ -500,9 +676,9 @@
     "SBP Operator Assistant V1 complete",
     "Phase 19 not started"
   ],
-  "python_executable": "C:\\Users\\LeighMC\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-  "python_runtime_digest_if_available": "3c6a206b7d93cca823934a83732220dcffd413fd1036d9fb82eebb64599cf7f3",
-  "python_version": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]",
+  "python_executable": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python_runtime_digest_if_available": "03168c01b7b7491423350e82c26fee71f35b43694d1319d3c668bda6903a0c38",
+  "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
   "quarantine_evidence_status_if_available": {
     "path": "runtime_artifacts/quarantine",
     "status": "MISSING"
@@ -510,15 +686,15 @@
   "replay_baseline": {
     "latest_verified_replay": "MATCHED_RECORDED_OUTSIDE_LOCAL_TRUST"
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
   "repository_root_digest_scope": "relative_paths_only",
   "runtime_baseline": {
     "latest_verified_runtime": "RECORDED_OUTSIDE_LOCAL_TRUST"
   },
-  "signature_mode": "LOCAL_TRUST_DETERMINISTIC_PLACEHOLDER",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "test_baseline": {
     "expected_suite": "pytest",
-    "latest_verified_count": 243
+    "latest_verified_count": 1785
   },
   "trusted_output_hashes": [
     {
@@ -531,18 +707,6 @@
       "path": "outputs/phq_formal_architecture_assurance.json",
       "sha256": "6e668c383e4515ab23e1683c6727586290d38d99167a22c35143eaa263e3e9ca",
       "size_bytes": 113320,
-      "status": "PRESENT"
-    },
-    {
-      "path": "outputs/recovery_critical_inventory.json",
-      "sha256": "994ba4c00cbb1da82c09b43e8da5d969aa5d6fed4a532b1cc7d64e41e3b3296d",
-      "size_bytes": 10214,
-      "status": "PRESENT"
-    },
-    {
-      "path": "outputs/r1_recovery_drill.json",
-      "sha256": "a0613f5d45451964179111e6e214d0b975b5292efc53e98bdad051ebc4469dd4",
-      "size_bytes": 559,
       "status": "PRESENT"
     }
   ],
@@ -609,23 +773,65 @@
     },
     {
       "path": "reports/R2_SUPPLY_CHAIN_BUILD_PROVENANCE_REPORT.md",
-      "sha256": "19362e6522bfed80d1847d1c5efb485b81e5e149990207b8400f5406b9f76109",
-      "size_bytes": 9157,
+      "sha256": "9b4dd3ce8c4f93b92c3b751557c5ef0a6bfe806f4919a98044a6eb758bffa139",
+      "size_bytes": 10430,
       "status": "PRESENT"
     },
     {
       "path": "reports/R3_EXTERNAL_CUSTODY_OPERATIONAL_RECOVERY_REPORT.md",
-      "sha256": "12320795b6c18e69b746355ffb7c9c300021b76b6001527678d3588a95bcb1af",
-      "size_bytes": 7175,
+      "sha256": "61fdeb6b0226980fc2a31c04738c15c0251a1e44f561fe020270a2b23d760717",
+      "size_bytes": 7895,
       "status": "PRESENT"
     },
     {
       "path": "reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md",
-      "sha256": "6befb9e76292a9ff906ea2281ea9669e438f1f4a94d0ad7121cc60595cc2fb48",
-      "size_bytes": 12142,
+      "sha256": "7b0dc56afcd79900e8764e134d9e53c2d823dcd14aa44a980070e0e70ddcaeee",
+      "size_bytes": 13661,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/DOUBLE_TRIPLE_PRE_HANDOVER_ASSURANCE_REPORT.md",
+      "sha256": "0e8afd5ed4a9097f2f230c32be09bddf29d09173abacfadb307d755e18a74057",
+      "size_bytes": 3523,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/H7_DETERMINISTIC_EXECUTION_INTEGRITY_REPORT.md",
+      "sha256": "21edc26783b06ff5c3f4fd5c55f3c43a7fda901682f6557d311bb5def882d933",
+      "size_bytes": 9739,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_7D_LOCAL_EVIDENCE_CHAIN_REPORT.md",
+      "sha256": "78208c1d0cf5b55050fcb1c6b6bbffec1c9a9d12b327af7d84125757457083fa",
+      "size_bytes": 7586,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_7E_2_CONSTITUTIONAL_ENFORCEMENT_GATES_REPORT.md",
+      "sha256": "745d3e218209e317ff146d2f9bcf8449f702a5d3d15ff851c7d89b7a1a65b846",
+      "size_bytes": 5165,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_7E_3_TOOLCHAIN_GUARD_REPORT.md",
+      "sha256": "b1ab8d7f4d31021fbf2a21c138ed9246cc34357a433f0e40958a20d3d5524a90",
+      "size_bytes": 6331,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_7E_4_25_YEAR_LOCAL_TRUST_CAPSTONE_REPORT.md",
+      "sha256": "ccac683c46ada0890433ac72abb8adb82b6ea14c7af87ae2e77ded8f1ab02755",
+      "size_bytes": 5742,
+      "status": "PRESENT"
+    },
+    {
+      "path": "reports/PHASE_18_7F_RELEASE_INTEGRITY_PACKAGE_REPORT.md",
+      "sha256": "8fb856cb660801ebb8555f71ea77e71ef616dc8d1abee90924ed1e8e3e7ad3d3",
+      "size_bytes": 4417,
       "status": "PRESENT"
     }
   ],
   "validation_failures": [],
-  "working_tree_clean": false
+  "working_tree_clean": true
 }

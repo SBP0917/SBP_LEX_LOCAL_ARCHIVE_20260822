@@ -1,0 +1,198 @@
+{
+  "bound_local_trust_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_local_trust_manifest_path": "C:\\SBPT\\v1215-fcdff7246f8d\\stage\\outputs\\local_trust_root_manifest.json",
+  "bound_local_trust_manifest_status": "LOCAL_TRUST_MANIFEST_BOUND",
+  "command_results": [
+    {
+      "command_args": [
+        "python",
+        "-m",
+        "compileall",
+        "-q",
+        "."
+      ],
+      "command_id": "compileall",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "python -m compileall -q .",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "command_id": "pytest",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "python -m pytest -q",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "cmd",
+        "/c",
+        "scripts\\run_tests.bat"
+      ],
+      "command_id": "run_tests_bat",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "scripts\\run_tests.bat",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": null,
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "python",
+        "main.py"
+      ],
+      "command_id": "runtime_main",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "python main.py",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "python",
+        "main.py",
+        "replay"
+      ],
+      "command_id": "runtime_replay",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "python main.py replay",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "command_id": "git_diff_check",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "git diff --check",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": null,
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    },
+    {
+      "command_args": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "command_id": "git_status_short",
+      "command_status": "COMMAND_NOT_RUN",
+      "command_text": "git status --short",
+      "duration_ms": null,
+      "exit_code": null,
+      "finished_at": null,
+      "python_executable_if_python_command": null,
+      "started_at": null,
+      "stderr_digest": null,
+      "stderr_excerpt": "",
+      "stdout_digest": null,
+      "stdout_excerpt": "",
+      "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo"
+    }
+  ],
+  "created_at": "2026-08-06T06:17:41+00:00",
+  "envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "envelope_payload_digest": "029a98fe43ef620c6de163483e8955c251a5806562086869fb846d18704426ce",
+  "envelope_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "7b8abbb1d21433077b74a7cd8e32c3bae90dc40504691903e04ab1bbea10bb3c",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
+  "envelope_type": "local_execution_environment_trust_envelope",
+  "envelope_version": "18.7C",
+  "git_branch": "main",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
+  "path_digest_or_path_summary": {
+    "path_digest": "cb30f2a88a73c789355c956645a9fda208469b853dfea6d6337482ebeaf18b04",
+    "path_entry_count": 15,
+    "path_first_entries": [
+      "C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe",
+      "C:\\WINDOWS\\system32",
+      "C:\\WINDOWS"
+    ]
+  },
+  "python_executable": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "replay_result_summary": {
+    "command_status": "COMMAND_NOT_RUN",
+    "exit_code": null,
+    "stderr_digest": null,
+    "stdout_digest": null
+  },
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "runtime_result_summary": {
+    "command_status": "COMMAND_NOT_RUN",
+    "exit_code": null,
+    "stderr_digest": null,
+    "stdout_digest": null
+  },
+  "shell_type_if_available": "C:\\WINDOWS\\system32\\cmd.exe",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
+  "validation_failures": [],
+  "verification_status": "EXECUTION_ENV_VALID",
+  "working_directory": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "working_tree_clean": true
+}

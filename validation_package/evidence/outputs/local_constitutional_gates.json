@@ -1,11 +1,11 @@
 {
-  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
-  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
-  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
-  "created_at": "2026-07-16T07:34:55+00:00",
-  "gate_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
-  "gate_payload_digest": "3ccae498784bcd5043fd0067188380f4188d4d788fc24e1f361384af785f6863",
+  "bound_evidence_chain_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
+  "bound_execution_envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "bound_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_regression_matrix_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
+  "created_at": "2026-08-06T06:17:43+00:00",
+  "gate_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
+  "gate_payload_digest": "f5bc2298c42c6cb3f3b052ee54a9076e002850be32458483bc19427473233fe6",
   "gate_policy_version": "LOCAL_TRUST_CONSTITUTIONAL_GATE_POLICY_V1",
   "gate_result_type": "local_trust_constitutional_enforcement_gates",
   "gate_result_version": "18.7E.2",
@@ -17,7 +17,7 @@
       "gate_name": "Local trust manifest exists",
       "input_artifact": "manifest",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_root_manifest.json",
+      "reason": "C:\\SBPT\\v1215-fcdff7246f8d\\stage\\outputs\\local_trust_root_manifest.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -39,7 +39,7 @@
       "gate_name": "Execution environment envelope exists",
       "input_artifact": "execution_envelope",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_execution_environment_trust_envelope.json",
+      "reason": "C:\\SBPT\\v1215-fcdff7246f8d\\stage\\outputs\\local_execution_environment_trust_envelope.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -61,7 +61,7 @@
       "gate_name": "Local evidence chain exists",
       "input_artifact": "evidence_chain",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_evidence_chain.json",
+      "reason": "C:\\SBPT\\v1215-fcdff7246f8d\\stage\\outputs\\local_evidence_chain.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -105,7 +105,7 @@
       "gate_name": "Local trust regression matrix exists",
       "input_artifact": "regression_matrix",
       "observed_condition": "PRESENT",
-      "reason": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1\\outputs\\local_trust_regression_matrix.json",
+      "reason": "C:\\SBPT\\v1215-fcdff7246f8d\\stage\\outputs\\local_trust_regression_matrix.json",
       "required": true,
       "status": "GATE_PASS"
     },
@@ -137,7 +137,7 @@
       "gate_id": "manifest_digest_binding",
       "gate_name": "Manifest digest matches bound digest",
       "input_artifact": "manifest",
-      "observed_condition": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
+      "observed_condition": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -148,7 +148,7 @@
       "gate_id": "execution_envelope_digest_binding",
       "gate_name": "Execution envelope digest matches bound digest",
       "input_artifact": "execution_envelope",
-      "observed_condition": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
+      "observed_condition": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -159,7 +159,7 @@
       "gate_id": "evidence_chain_digest_binding",
       "gate_name": "Evidence chain digest matches bound digest",
       "input_artifact": "evidence_chain",
-      "observed_condition": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
+      "observed_condition": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -170,7 +170,7 @@
       "gate_id": "regression_matrix_digest_binding",
       "gate_name": "Regression matrix digest matches bound digest",
       "input_artifact": "regression_matrix",
-      "observed_condition": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
+      "observed_condition": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
       "reason": "all bound digests must match",
       "required": true,
       "status": "GATE_PASS"
@@ -181,7 +181,7 @@
       "gate_id": "working_tree_policy",
       "gate_name": "Working tree policy is satisfied",
       "input_artifact": "git",
-      "observed_condition": "working_tree_clean=False",
+      "observed_condition": "working_tree_clean=True",
       "reason": "dirty state is recorded; strict enforcement uses --clean-required",
       "required": true,
       "status": "GATE_PASS"
@@ -203,7 +203,7 @@
       "gate_id": "commit_recorded",
       "gate_name": "Current commit is recorded",
       "input_artifact": "git",
-      "observed_condition": "2c5f339ccf685cd1b856457029fd3b55de478730",
+      "observed_condition": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
       "reason": "git commit provenance",
       "required": true,
       "status": "GATE_PASS"
@@ -236,7 +236,7 @@
       "gate_id": "phase_19_boundary_preserved",
       "gate_name": "Phase 19 not-started boundary preserved",
       "input_artifact": "repository_evidence",
-      "observed_condition": "REGRESSION_CASE_PASS",
+      "observed_condition": "REGRESSION_CASE_SKIPPED",
       "reason": "regression matrix phase boundary case",
       "required": true,
       "status": "GATE_PASS"
@@ -275,7 +275,18 @@
       "status": "GATE_PASS"
     }
   ],
-  "gate_signature": "bd29133f9d4c8664ddf37f9814c6ef7c4d1199e432c7b674c469fcee3d462826",
+  "gate_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "1be38da830af5dfade4d3d1fc9254b759375a5eeae66605127f7b7377eea1dbd",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "gate_status": "CONSTITUTIONAL_GATES_PASS",
   "gate_summary": {
     "all_required_gates_passed": true,
@@ -284,11 +295,11 @@
     "passed_gates": 24,
     "skipped_gates": 0,
     "total_gates": 24,
-    "working_tree_clean": false
+    "working_tree_clean": true
   },
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
-  "signature_mode": "CONSTITUTIONAL_GATES_DETERMINISTIC_PLACEHOLDER",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "validation_failures": []
 }

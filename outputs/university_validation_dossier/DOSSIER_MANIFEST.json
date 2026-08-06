@@ -1,24 +1,24 @@
 {
-  "bound_adversarial_harness_digest": "dde4d1c67370c6e55c0f8ebac623dab6b968526c8b5fbfc12071ee7a88bf4375",
-  "bound_capstone_digest": "2032ed8f7db411703e20d9e84df86cdf8eb010fdfbf07073796fc45d458beaa8",
-  "bound_constitutional_gates_digest": "8b0f2f647c9cd34c812fdda9c44d60a3fbb3bdbbe0114dc9a10de1804856e65e",
-  "bound_evidence_chain_digest": "21792385ad90ad95772915b0487ce8ab44f51625711388bf9b12f2dd97038bcb",
-  "bound_execution_envelope_digest": "33c96f5199fced91ec773f7ef076da596d65846a201d3c4e9031760d625db461",
-  "bound_manifest_digest": "1ce294efbee7f193aa80326639b6300ab78c3b13adaef7f4c9d1e1b1b5ce8937",
-  "bound_regression_matrix_digest": "c87079f6a9f6707c500c2e0f3878c8acdbe9012c2943066faed9a4c9a5245a67",
-  "bound_release_integrity_digest": "e558dc76eec34e317515b1b5eef2911ce592b36f14594c2b99aaf0af26b702cf",
-  "bound_toolchain_guard_digest": "56c2a6eba1b4bc31c60c1b3ba0a167a173ed455fbd538e6189125dbd76e6fdc0",
+  "bound_adversarial_harness_digest": "b2c57bafe28b04fe380c3e165f7274d1e306075adc55b56968f0db36642bd1a3",
+  "bound_capstone_digest": "913e98580b7425418fb9ff3944919253e4d34593472303dc835111ad8f7cb25f",
+  "bound_constitutional_gates_digest": "84683804d399285a05b3267f4f403a5b1e537ed952e18e4f49b7ebe4291d46a2",
+  "bound_evidence_chain_digest": "1feb078b89dee7a841c0ea61b70d548b1767221836f476014d6e7f33ffd95fe9",
+  "bound_execution_envelope_digest": "00034e83da924a506750b1674de4d8d21dcce5b97c04c3849ebdb204806cb466",
+  "bound_manifest_digest": "29a61bb68bb8cd804c774d7be4e3090d57813b70d2e572a36f34b255e66d3f03",
+  "bound_regression_matrix_digest": "bd28ad67c3adcf89c81002c1734f4e9874db6473b9d2cb01cce9cfa8f78cda98",
+  "bound_release_integrity_digest": "9cc92f43322352ad395f9f1dc0fba3737c71f1ff748c23eac8859a243bf37f4e",
+  "bound_toolchain_guard_digest": "aaaec1a463f8b8e9142d059adc1c6f5f3998367ec5e036eaa68ff5f6578282ff",
   "claims_to_evidence_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
+    "path": "outputs/university_validation_dossier/MASTER_CLAIMS_TO_EVIDENCE_INDEX.json",
     "sha256": "75aad4a11b8c75101c2c343ce02703b0c698a77c46c9dd367d87a3f2de05373c",
     "size_bytes": 41533
   },
-  "created_at": "2026-07-16T07:35:10+00:00",
-  "dossier_digest": "2ff2bf85496c51ebeb42af9f54bbc361b943ad41277f1286f2dfd2e3c6cc3dcc",
+  "created_at": "2026-08-06T06:17:46+00:00",
+  "dossier_digest": "5db8d81808af7139ef5fbeeca2afbd95800a9cc812c4bcf016d88e53cc2e8dfc",
   "dossier_manifest_type": "university_validation_dossier_manifest",
   "dossier_manifest_version": "18.8",
-  "dossier_payload_digest": "70210f8eaa969deddcfb7a4666ad6b65e257b3a6723ee9bf616275a632db48bd",
+  "dossier_payload_digest": "bb3206ad4216457456aacabeb05c7eaf5fee84576e25bdb40e69d702e11bcb4d",
   "dossier_scope": {
     "bounded_validation_questions_only": true,
     "next_phase": "18.9",
@@ -32,7 +32,18 @@
     "purpose": "Reviewer-facing bounded claims-to-evidence handoff package.",
     "review_readiness_only": true
   },
-  "dossier_signature": "8bf26917d6e973d4fcb75436cd16974bddedf4c8804e68aa28d0eac045d63ee3",
+  "dossier_signature": {
+    "algorithm": "ML-DSA",
+    "digest": "296a6919588af385b012e3999a58b7048b5e184ab0765b606b6eea90b553b675",
+    "issuer": "SBP_LEX_V6_INTERNAL_CONTROL_PLANE",
+    "key_fingerprint": "cef95d11d78a54749bb07f0926e29a6f8704dc276825d0a318d1e15f6ef1f077",
+    "policy": "NIST_FIPS_203_204_205",
+    "provider": "cryptography.mldsa",
+    "provider_available": true,
+    "public_key": "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",
+    "signature": "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",
+    "signature_version": "PQC_01_PROVIDER_SIGNATURE_V2"
+  },
   "dossier_status": "VALIDATION_DOSSIER_READY",
   "dossier_summary": {
     "claim_count": 32,
@@ -44,48 +55,48 @@
   },
   "evidence_artifact_index_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
-    "sha256": "833941c9f7e7171f05419de9326391b644221a4ab85f34a0927c648324ae4b73",
-    "size_bytes": 34608
+    "path": "outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json",
+    "sha256": "fb02f0fbbaf3912298a0058a02321a32e1951e5d9c56a950f9cce4b03294d9ed",
+    "size_bytes": 34116
   },
   "git_branch": "main",
-  "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+  "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
   "github_remote": "https://github.com/SBP0917/SBP_LEX_DUAL_V6.git",
   "github_sync_status": {
     "branch_has_ahead_count": false,
     "branch_has_behind_count": false,
-    "branch_status_short": "## main...origin/main\n M outputs/adversarial_local_trust_negative_harness.json\n M outputs/local_constitutional_gates.json\n M outputs/local_evidence_chain.json\n M outputs/local_execution_environment_trust_envelope.json\n M outputs/local_toolchain_guard.json\n M outputs/local_trust_25_year_capstone.json\n M outputs/local_trust_regression_matrix.json\n M outputs/local_trust_root_manifest.json\n M outputs/release_integrity_bundle/ARTIFACT_HASH_INDEX.json\n M outputs/release_integrity_bundle/RELEASE_MANIFEST.json\n M outputs/university_validation_dossier/EVIDENCE_ARTIFACT_INDEX.json\n M outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md\n M reports/R4_INDEPENDENT_VERIFICATION_PACKAGE_REPORT.md\n M sbp_lex/runtime/approved_runtime_baselines.json",
+    "branch_status_short": "## main...origin/main",
     "git_branch": "main",
-    "git_commit": "2c5f339ccf685cd1b856457029fd3b55de478730",
+    "git_commit": "f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b",
     "synced_to_origin_branch": true,
-    "tracked_working_tree_clean": false,
-    "working_tree_clean": false
+    "tracked_working_tree_clean": true,
+    "working_tree_clean": true
   },
   "handoff_readme_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
-    "sha256": "57027dc69abb5509c1cd6509e07435c2bf8bacd884bc25cf50104d6abafde8ca",
+    "path": "outputs/university_validation_dossier/UNIVERSITY_HANDOFF_README.md",
+    "sha256": "94d02088549eefb084466decd59a3f922784bc4ad306aa6b3fe9bc76c0b50a21",
     "size_bytes": 3105
   },
-  "repository_root": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\R4_FINAL_VERIFY_20260716T171731+1000\\SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_root": "C:\\SBPT\\v1215-fcdff7246f8d\\repo",
   "reviewer_commands_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
+    "path": "outputs/university_validation_dossier/REVIEWER_VERIFICATION_COMMANDS.json",
     "sha256": "69c02e0b08568f414178feb895f410319438810e6de47e6f6649e7ba6b530a96",
     "size_bytes": 13933
   },
   "scope_and_exclusions_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
+    "path": "outputs/university_validation_dossier/SCOPE_AND_EXCLUSIONS_LOCK.json",
     "sha256": "8fd63f8ed8c12871828f328077fbba9d3ef9a112415c7efa29350dbb4ef485e3",
     "size_bytes": 2011
   },
-  "signature_mode": "UNIVERSITY_VALIDATION_DOSSIER_DETERMINISTIC_PLACEHOLDER",
+  "signature_mode": "ML_DSA_65_TRUSTED_SIGNATURE_V2",
   "source_phase": "18.8",
   "validation_failures": [],
   "validation_questions_reference": {
     "exists": true,
-    "path": "C:/Users/LeighMC/Documents/Codex/V/R4_FINAL_VERIFY_20260716T171731+1000/SBP_LEX_DUAL_V6_DESKTOP_V1/outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
+    "path": "outputs/university_validation_dossier/VALIDATION_QUESTIONS.json",
     "sha256": "3cf4248ad1bed4ec38ac67d085bfa530c9f64ebe6b26801e8a3e58b7363fba23",
     "size_bytes": 17921
   }

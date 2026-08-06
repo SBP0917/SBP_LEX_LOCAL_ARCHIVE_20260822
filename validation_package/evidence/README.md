@@ -121,6 +121,18 @@ Experimental cognitive work remains isolated from the canonical Desktop V1 runti
 From an approved local environment:
 
 ```text
+scripts\run_double_triple_assurance.bat
+```
+
+That default command is the sole pre-handover gate. It runs the complete suite
+once, the startup-to-terminal linkage suite in three fresh processes, strict
+schema/static/dependency/Git checks, and the production evidence and
+repository-bound R4 verification chain. A source-only or evidence-only
+diagnostic run does not authorize handover.
+
+For ordinary development diagnostics:
+
+```text
 python -m compileall -q .
 python -m pytest -q
 scripts\run_tests.bat
@@ -129,3 +141,7 @@ python main.py replay
 ```
 
 Additional repository commands validate measured startup, Local Trust, evidence comparison, Constitutional Gates, Toolchain Guard, Release Integrity, the validation dossier, adversarial negative evidence, PHQ formal assurance, and the capstone baseline.
+
+The production ML-DSA public verification key and its expected SHA-256
+fingerprint must be obtained through a separate authenticated channel. The
+handover package cannot establish its own trust root.

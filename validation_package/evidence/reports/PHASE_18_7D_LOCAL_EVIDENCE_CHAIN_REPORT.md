@@ -26,7 +26,7 @@ This phase does not alter SBP-LEX runtime authority or execution behavior.
 - Added missing evidence recording rather than silent omission.
 - Added manifest binding to `outputs/local_trust_root_manifest.json`.
 - Added execution envelope binding to `outputs/local_execution_environment_trust_envelope.json`.
-- Added chain digest and placeholder signature binding using the existing local trust canonical JSON rules.
+- Added chain digest and ML-DSA-65 signature binding using the local-trust canonical JSON rules.
 - Added compare mode to detect modified, missing, replaced, or newly appeared evidence files.
 - Added validator statuses:
   - `EVIDENCE_CHAIN_VALID`
@@ -37,7 +37,7 @@ This phase does not alter SBP-LEX runtime authority or execution behavior.
 
 ## Evidence Chain Fields
 
-The evidence chain records chain identity, version, created timestamp, repository root, Git commit, Git branch, working-tree state, bound manifest path/digest/status, bound execution envelope path/digest/status, evidence scope, evidence items, missing evidence items, excluded volatile paths, payload digest, chain digest, signature placeholder, signature mode, evidence chain status, and validation failures.
+The evidence chain records chain identity, version, created timestamp, repository root, Git commit, Git branch, working-tree state, bound manifest path/digest/status, bound execution envelope path/digest/status, evidence scope, evidence items, missing evidence items, excluded volatile paths, payload digest, chain digest, ML-DSA signature envelope, signature mode, evidence chain status, and validation failures. Verification is pinned to an explicitly configured trusted public key.
 
 ## Evidence Item Categories
 
