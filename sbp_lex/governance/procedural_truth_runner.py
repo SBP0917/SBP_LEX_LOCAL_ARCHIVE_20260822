@@ -7,7 +7,11 @@ from sbp_lex.governance.evidence_engine import run_evidence_validation
 from sbp_lex.governance.corroboration_engine import run_corroboration_validation
 from sbp_lex.governance.threshold_conditioning_engine import run_threshold_conditioning
 from sbp_lex.governance.procedural_consistency_engine import run_procedural_consistency
-from sbp_lex.governance.procedural_truth_engine import finalize_procedural_truth
+from sbp_lex.governance.procedural_truth_engine import (
+    fail_procedural_truth_entry,
+    finalize_procedural_truth,
+    validate_procedural_truth_entry,
+)
 
 PROCEDURAL_TRUTH_ORDER = [
     run_evidence_validation,
@@ -20,6 +24,31 @@ PROCEDURAL_TRUTH_ORDER = [
 
 def run_procedural_truth_pipeline(state: Mapping[str, object]) -> Dict[str, object]:
     working_state = deepcopy(dict(state))
+
+    entry_valid, entry_failures = validate_procedural_truth_entry(
+        working_state,
+        require_current_state_hash=True,
+    )
+    if not entry_valid:
+        working_state = fail_procedural_truth_entry(
+            working_state,
+            failures=entry_failures,
+        )
+        working_state["decision"] = "DENY"
+        working_state["execution_result"] = "HALT"
+        working_state["execution_verified"] = False
+        working_state["governed_reentry"] = {
+            "reentry_permitted": False,
+            "retry_eligible": False,
+            "reason": "root_preflight_failure_requires_corrected_state",
+            "required_action": "full_retraversal_after_correction",
+            "required_corrections": [
+                "corrected_root_of_trust_state",
+                "corrected_authority_token",
+                "full_retraversal",
+            ],
+        }
+        return working_state
 
     for engine in PROCEDURAL_TRUTH_ORDER:
         working_state = engine(working_state)

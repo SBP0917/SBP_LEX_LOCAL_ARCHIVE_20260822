@@ -189,6 +189,7 @@ EVIDENCE_ALLOWED_KEYS = {
     "jurisdiction_valid",
     "runtime_validity_valid",
     "chain_of_custody_valid",
+    "relevance_valid",
     "material_contradiction",
     "unresolved_contradiction",
     "claim_id",
@@ -198,6 +199,11 @@ EVIDENCE_ALLOWED_KEYS = {
     "retrieved_at",
     "digest",
     "content_digest",
+    "request_fingerprint",
+    "eie_digest",
+    "collective_signal_digest",
+    "action_digest",
+    "pt_binding",
 }
 
 
@@ -359,6 +365,32 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
                     failures.append(f"invalid_evidence_source:{index}")
                 if not isinstance(item.get("content"), str):
                     failures.append(f"invalid_evidence_content:{index}")
+                source_id = item.get("source_id")
+                if source_id is not None and (
+                    not isinstance(source_id, str)
+                    or not SOURCE_PATTERN.match(source_id)
+                ):
+                    failures.append(f"invalid_evidence_source_id:{index}")
+                source_uri = item.get("source_uri")
+                if source_uri is not None and (
+                    not isinstance(source_uri, str)
+                    or not source_uri.strip()
+                    or len(source_uri) > 2048
+                ):
+                    failures.append(f"invalid_evidence_source_uri:{index}")
+                source_type = item.get("source_type")
+                if source_type is not None and (
+                    not isinstance(source_type, str)
+                    or not source_type.strip()
+                    or len(source_type) > 128
+                ):
+                    failures.append(f"invalid_evidence_source_type:{index}")
+                claim_id = item.get("claim_id")
+                if claim_id is not None and (
+                    not isinstance(claim_id, str)
+                    or not SOURCE_PATTERN.match(claim_id)
+                ):
+                    failures.append(f"invalid_evidence_claim_id:{index}")
                 for flag in (
                     "verified",
                     "attested",
@@ -371,11 +403,43 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
                     "jurisdiction_valid",
                     "runtime_validity_valid",
                     "chain_of_custody_valid",
+                    "relevance_valid",
                     "material_contradiction",
                     "unresolved_contradiction",
                 ):
                     if item.get(flag) is not None and not isinstance(item.get(flag), bool):
                         failures.append(f"evidence_{flag}_must_be_bool:{index}")
+                for binding_field in (
+                    "request_fingerprint",
+                    "eie_digest",
+                    "collective_signal_digest",
+                    "action_digest",
+                ):
+                    binding_value = item.get(binding_field)
+                    if binding_value is not None and (
+                        not isinstance(binding_value, str)
+                        or not binding_value
+                    ):
+                        failures.append(
+                            f"evidence_{binding_field}_must_be_string:{index}"
+                        )
+                if item.get("pt_binding") is not None and not isinstance(
+                    item.get("pt_binding"), Mapping
+                ):
+                    failures.append(f"evidence_pt_binding_must_be_mapping:{index}")
+
+        financial_amount = context.get("financial_amount")
+        if financial_amount is not None:
+            try:
+                financial_amount_float = float(financial_amount)
+            except (TypeError, ValueError, OverflowError):
+                financial_amount_float = math.inf
+            if isinstance(financial_amount, bool) or not isinstance(
+                financial_amount, (int, float)
+            ) or not math.isfinite(financial_amount_float):
+                failures.append("context_financial_amount_must_be_finite_number")
+            elif financial_amount < 0:
+                failures.append("context_financial_amount_must_be_non_negative")
 
     safety_profile = request.get("safety_profile")
     if not _is_mapping(safety_profile):
@@ -384,9 +448,9 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
         _append_unknown_keys(failures, prefix="safety_profile", data=safety_profile, allowed=SAFETY_ALLOWED_KEYS)
         for key in SAFETY_ALLOWED_KEYS:
             value = safety_profile.get(key)
-            if not isinstance(value, int):
+            if isinstance(value, bool) or not isinstance(value, int):
                 failures.append(f"safety_profile_{key}_must_be_int")
-            elif value < 0 or value > 5:
+            elif value < 0 or value > 3:
                 failures.append(f"safety_profile_{key}_out_of_range")
 
     for field in ("resolved_authority", "jurisdiction"):

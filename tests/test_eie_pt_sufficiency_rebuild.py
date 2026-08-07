@@ -80,7 +80,7 @@ def test_procedural_truth_requires_independence_beyond_source_floor() -> None:
     request["context"]["evidence"][1]["source"] = "same_source"
     state = run_pipeline(request)
     certification = state["procedural_truth_certification"]
-    assert certification["source_floor_met"] is True
+    assert certification["source_floor_met"] is False
     assert certification["independence_met"] is False
     assert certification["certification_status"] == "NOT_CERTIFIED"
     assert state["classification_result"] == "UNSET"

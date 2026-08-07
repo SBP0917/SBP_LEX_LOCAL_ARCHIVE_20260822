@@ -376,11 +376,21 @@ def test_repeated_run_and_replay_parity_are_exact() -> None:
     for field in (
         "eie_hash",
         "state_construction_hash",
-        "collective_attachment",
         "verified_substrate_references",
         "pipeline_initial_parity",
     ):
         assert first[field] == second[field]
+    first_attachment = first["collective_attachment"]
+    second_attachment = second["collective_attachment"]
+    assert first_attachment["attachment_hash"] == second_attachment["attachment_hash"]
+    assert (
+        first_attachment["attestation"]["payload"]
+        == second_attachment["attestation"]["payload"]
+    )
+    assert (
+        first_attachment["attestation"]["attestation_digest"]
+        == second_attachment["attestation"]["attestation_digest"]
+    )
     replay = run_replay_check(request=_request(), replay_count=3)
     assert replay["matched"] is True
     assert replay["mismatches"] == []

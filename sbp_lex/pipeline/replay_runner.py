@@ -19,8 +19,18 @@ REPLAY_COMPARISON_FIELDS = [
     "audit_hash",
     "pipeline_mode",
     "authority_first_result",
+    "authority_first_reason",
+    "root_evidence_digest",
+    "root_stage_results_digest",
     "procedural_truth_result",
     "procedural_truth_outcome",
+    "procedural_truth_reason",
+    "pt_evidence_digest",
+    "qualifying_source_count",
+    "evidentiary_sufficiency_result",
+    "computed_tier",
+    "corroboration_required",
+    "corroboration_observed",
     "pt_evidence_envelope_digest",
     "pt_bound_metadata",
     "classification_result",
@@ -33,6 +43,7 @@ REPLAY_COMPARISON_FIELDS = [
     "execution_verified",
     "convergence_hash",
     "convergence_matched",
+    "root_pt_parity",
     "token_failures",
     "audit_finalisation",
     "controlled_outcome_hash",
@@ -105,6 +116,41 @@ def verify_replay_result(result: Mapping[str, Any]) -> tuple[bool, list[str]]:
 def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
     convergence = state.get("pipeline_convergence", {})
     envelope = state.get("pt_evidence_envelope", {})
+    root_evidence = state.get("root_of_trust_evidence", {})
+    root_payload = (
+        root_evidence.get("payload", {})
+        if isinstance(root_evidence, Mapping)
+        else {}
+    )
+    root_payload = root_payload if isinstance(root_payload, Mapping) else {}
+    pt_evidence = state.get("procedural_truth_evidence", {})
+    pt_payload = (
+        pt_evidence.get("payload", {})
+        if isinstance(pt_evidence, Mapping)
+        else {}
+    )
+    pt_payload = pt_payload if isinstance(pt_payload, Mapping) else {}
+    certification = state.get("procedural_truth_certification", {})
+    certification = (
+        certification if isinstance(certification, Mapping) else {}
+    )
+    threshold_snapshot = state.get("governance_feedback", {}).get(
+        "threshold_snapshot", {}
+    )
+    threshold_snapshot = (
+        threshold_snapshot
+        if isinstance(threshold_snapshot, Mapping)
+        else {}
+    )
+
+    def record_digest(record: object, *names: str) -> object:
+        if not isinstance(record, Mapping):
+            return None
+        for name in names:
+            if record.get(name) not in (None, ""):
+                return record.get(name)
+        return None
+
     return {
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_digest": state.get("eie_hash"),
@@ -125,8 +171,63 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "audit_hash": state.get("audit_hash"),
         "pipeline_mode": state.get("pipeline_mode"),
         "authority_first_result": state.get("authority_first_result"),
+        "authority_first_reason": state.get("authority_first_reason"),
+        "root_evidence_digest": record_digest(
+            root_evidence, "root_evidence_digest", "evidence_digest"
+        )
+        or state.get("root_of_trust_evidence_anchor", {}).get(
+            "anchor_digest"
+        ),
+        "root_stage_results_digest": generate_digest(
+            root_payload.get(
+                "stage_results",
+                root_evidence.get(
+                    "stage_results",
+                    state.get("governance_feedback", {}).get(
+                        "root_of_trust_stage_results", {}
+                    ),
+                )
+                if isinstance(root_evidence, Mapping)
+                else {},
+            )
+        ),
         "procedural_truth_result": state.get("procedural_truth_result"),
         "procedural_truth_outcome": state.get("procedural_truth_outcome"),
+        "procedural_truth_reason": state.get("procedural_truth_reason"),
+        "pt_evidence_digest": record_digest(
+            pt_evidence,
+            "pt_evidence_digest",
+            "procedural_truth_evidence_digest",
+            "evidence_digest",
+        ),
+        "qualifying_source_count": pt_payload.get(
+            "source_count_qualifying",
+            pt_payload.get(
+                "qualifying_source_count",
+                envelope.get("qualifying_source_count"),
+            ),
+        ),
+        "evidentiary_sufficiency_result": pt_payload.get(
+            "evidentiary_sufficiency_result",
+            certification.get("certification_status"),
+        ),
+        "computed_tier": pt_payload.get(
+            "computed_tier",
+            pt_payload.get(
+                "tier",
+                state.get("safety_profile", {}).get("computed_tier"),
+            ),
+        ),
+        "corroboration_required": pt_payload.get(
+            "corroboration_required", state.get("corroboration_required")
+        ),
+        "corroboration_observed": pt_payload.get(
+            "corroboration_observed",
+            threshold_snapshot.get(
+                "qualified_evidence_count",
+                envelope.get("qualifying_source_count"),
+            ),
+        ),
         "pt_evidence_envelope_digest": state.get("pt_evidence_envelope_digest"),
         "pt_bound_metadata": {
             "request_fingerprint": envelope.get("request_fingerprint"),
@@ -156,6 +257,7 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "execution_verified": state.get("execution_verified"),
         "convergence_hash": convergence.get("convergence_hash"),
         "convergence_matched": convergence.get("matched"),
+        "root_pt_parity": state.get("pipeline_root_pt_parity", {}),
         "token_failures": state.get("token_verification_failures", []),
         "audit_finalisation": state.get("audit_finalisation", {}),
         "controlled_outcome_hash": state.get("controlled_outcome", {}).get("outcome_hash"),

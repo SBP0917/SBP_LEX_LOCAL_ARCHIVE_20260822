@@ -90,6 +90,254 @@ def _signal_payload_for_digest(signals: Mapping[str, Any]) -> Dict[str, Any]:
     return {key: deepcopy(value) for key, value in dict(signals).items() if key not in {"digest", "signature"}}
 
 
+def _root_trust_material(
+    *,
+    state: Mapping[str, Any],
+    signals: Mapping[str, Any],
+    substrate_evidence: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Project only admitted, signed Desktop-v1 material needed by Root.
+
+    The projection does not grant authority.  It records the authority and
+    attestation assertions that crossed Hard Entry so Root can validate them
+    rather than reconstructing authority from unbound request fields.
+    """
+
+    authority_signal = signals.get("authority_link_signal", {})
+    authority_signal = (
+        authority_signal if isinstance(authority_signal, Mapping) else {}
+    )
+    jurisdiction_signal = signals.get("jurisdiction_signal", {})
+    jurisdiction_signal = (
+        jurisdiction_signal if isinstance(jurisdiction_signal, Mapping) else {}
+    )
+    precedence_signal = signals.get("precedence_signal", {})
+    precedence_signal = (
+        precedence_signal if isinstance(precedence_signal, Mapping) else {}
+    )
+    timestamp = signals.get("timestamp")
+    window = signals.get("freshness_window_seconds")
+    valid_until = (
+        timestamp + window
+        if isinstance(timestamp, int)
+        and not isinstance(timestamp, bool)
+        and isinstance(window, int)
+        and not isinstance(window, bool)
+        else None
+    )
+    authority_identity = authority_signal.get("resolved_authority")
+    jurisdiction = jurisdiction_signal.get("jurisdiction")
+    collective_digest = signals.get("digest")
+    collective_signature_digest = generate_digest(signals.get("signature", {}))
+    verified_references = state.get("verified_substrate_references", {})
+    verified_references = (
+        verified_references
+        if isinstance(verified_references, Mapping)
+        else {}
+    )
+    skg_status = substrate_evidence.get(
+        "skg_validation_status",
+        verified_references.get("skg_validation_status"),
+    )
+    dtn_status = substrate_evidence.get(
+        "dtn_validation_status",
+        verified_references.get("dtn_validation_status"),
+    )
+    bridge_status = substrate_evidence.get(
+        "bridge_validation_status",
+        verified_references.get("bridge_validation_status"),
+    )
+    admitted_basis_valid = (
+        skg_status == "VALID"
+        and dtn_status == "VALID"
+        and bridge_status == "PASS"
+        and authority_identity == state.get("resolved_authority")
+        and jurisdiction == state.get("jurisdiction")
+    )
+    common_binding = {
+        "request_fingerprint": state.get("request_fingerprint"),
+        "eie_digest": state.get("eie_hash"),
+        "collective_signal_digest": collective_digest,
+        "issued_at": timestamp,
+        "valid_until": valid_until,
+        "nonce": signals.get("nonce"),
+    }
+
+    authority = {
+        "authority_identity": authority_identity,
+        "jurisdiction": jurisdiction,
+        "legitimacy_status": authority_signal.get(
+            "legitimacy_status", "VALID" if admitted_basis_valid else "INVALID"
+        ),
+        "authority_status": authority_signal.get(
+            "authority_status", "ACTIVE" if admitted_basis_valid else "INVALID"
+        ),
+        "revoked": authority_signal.get(
+            "authority_revoked", authority_signal.get("revoked", False)
+        ),
+        "issued_at": authority_signal.get("authority_valid_from", timestamp),
+        "valid_until": authority_signal.get(
+            "authority_valid_until", valid_until
+        ),
+        "skg_package_digest": substrate_evidence.get(
+            "skg_package_digest",
+            verified_references.get("skg_package_digest", signals.get("skg_digest")),
+        ),
+    }
+    authority["authority_evidence_digest"] = generate_digest(authority)
+
+    default_attestation_identity = generate_digest(
+        {
+            "authority_identity": authority_identity,
+            "collective_signal_digest": collective_digest,
+            "collective_signature_digest": collective_signature_digest,
+        }
+    )
+    consensus_inputs = authority_signal.get("attestation_consensus_records")
+    if not isinstance(consensus_inputs, list) or not consensus_inputs:
+        consensus_inputs = [{}]
+    attestations: list[dict[str, Any]] = []
+    for index, supplied in enumerate(consensus_inputs):
+        supplied = supplied if isinstance(supplied, Mapping) else {}
+        attestation = {
+            "attestation_identity": supplied.get(
+                "attestation_identity",
+                authority_signal.get(
+                    "attestation_identity",
+                    default_attestation_identity
+                    if index == 0
+                    else generate_digest(
+                        {
+                            "base": default_attestation_identity,
+                            "index": index,
+                        }
+                    ),
+                ),
+            ),
+            "authority_identity": supplied.get(
+                "attestation_authority_identity",
+                authority_signal.get(
+                    "attestation_authority_identity", authority_identity
+                ),
+            ),
+            "jurisdiction": supplied.get(
+                "attestation_jurisdiction",
+                authority_signal.get("attestation_jurisdiction", jurisdiction),
+            ),
+            "status": supplied.get(
+                "attestation_status",
+                authority_signal.get(
+                    "attestation_status",
+                    "VALID" if admitted_basis_valid else "INVALID",
+                ),
+            ),
+            "revoked": supplied.get(
+                "attestation_revoked",
+                authority_signal.get("attestation_revoked", False),
+            ),
+            "collective_signature_digest": collective_signature_digest,
+            "consensus_statement_digest": supplied.get(
+                "consensus_statement_digest",
+                authority_signal.get(
+                    "attestation_consensus_statement_digest",
+                    collective_digest,
+                ),
+            ),
+            **common_binding,
+        }
+        attestation["collective_signal_digest"] = supplied.get(
+            "attestation_subject_digest",
+            authority_signal.get(
+                "attestation_subject_digest", collective_digest
+            ),
+        )
+        attestation["issued_at"] = supplied.get(
+            "attestation_issued_at",
+            authority_signal.get("attestation_issued_at", timestamp),
+        )
+        attestation["valid_until"] = supplied.get(
+            "attestation_valid_until",
+            authority_signal.get("attestation_valid_until", valid_until),
+        )
+        attestation["attestation_digest"] = generate_digest(attestation)
+        attestations.append(attestation)
+
+    lineage = precedence_signal.get("temporal_rule_lineage", [])
+    truth = {
+        "truth_identity": generate_digest(
+            {
+                "request_fingerprint": state.get("request_fingerprint"),
+                "eie_digest": state.get("eie_hash"),
+                "collective_signal_digest": collective_digest,
+                "temporal_rule_lineage": lineage,
+            }
+        ),
+        "status": precedence_signal.get(
+            "truth_status", "VALID" if admitted_basis_valid else "INVALID"
+        ),
+        "revoked": precedence_signal.get("truth_revoked", False),
+        "continuity_reference": precedence_signal.get(
+            "truth_continuity_reference", generate_digest(lineage)
+        ),
+        **common_binding,
+    }
+    truth["issued_at"] = precedence_signal.get("truth_issued_at", timestamp)
+    truth["valid_until"] = precedence_signal.get(
+        "truth_valid_until", valid_until
+    )
+    truth["truth_material_digest"] = generate_digest(truth)
+
+    material = {
+        "schema_version": "desktop-v1.root-trust-material.v1",
+        "authority": authority,
+        "attestations": attestations,
+        "truth": truth,
+        "skg_validation_status": skg_status,
+        "dtn_validation_status": dtn_status,
+        "bridge_validation_status": bridge_status,
+        "validation_basis": {
+            "basis": "VALIDATED_SYNTHETIC_SKG_DTN_BRIDGE",
+            "authority_identity_exact": authority_identity
+            == state.get("resolved_authority"),
+            "jurisdiction_exact": jurisdiction == state.get("jurisdiction"),
+            "skg_package_digest": verified_references.get("skg_package_digest"),
+            "dtn_package_digest": verified_references.get("dtn_package_digest"),
+            "bridge_result_digest": verified_references.get(
+                "bridge_result_digest"
+            ),
+            "closed_synthetic_schema_revocation_default": "CLEAR",
+        },
+    }
+    return {**material, "material_digest": generate_digest(material)}
+
+
+def _collective_attachment_attestation(
+    attachment_payload: Mapping[str, Any], attachment_hash: str
+) -> Dict[str, Any]:
+    payload = {
+        "schema_version": "desktop-v1.collective-attachment-attestation.v1",
+        "attachment_hash": attachment_hash,
+        "request_fingerprint": attachment_payload.get("request_fingerprint"),
+        "eie_digest": attachment_payload.get("eie_digest"),
+        "collective_signal_digest": attachment_payload.get("signal_digest"),
+        "collective_projection_digest": attachment_payload.get(
+            "collective_projection_digest"
+        ),
+        "prior_state_hash": attachment_payload.get("prior_state_hash"),
+        "root_trust_material_digest": attachment_payload.get(
+            "root_trust_material_digest"
+        ),
+    }
+    digest = generate_digest(payload)
+    signature = sign_payload(payload)
+    return {
+        "payload": payload,
+        "attestation_digest": digest,
+        "signature": signature,
+        "verified": verify_signature(payload, signature),
+    }
+
+
 def validate_collective_signal_package(
     *,
     signals: Mapping[str, Any],
@@ -136,6 +384,21 @@ def validate_collective_signal_package(
         failures.append("collective_skg_digest_mismatch")
     if signals.get("dtn_digest") != dtn_context.get("dtn_digest"):
         failures.append("collective_dtn_digest_mismatch")
+    for field in (
+        "authority_link_signal",
+        "jurisdiction_signal",
+        "policy_conflict_signal",
+        "precedence_signal",
+    ):
+        if signals.get(field) != skg_context.get(field):
+            failures.append(f"collective_skg_projection_mismatch:{field}")
+    for field in (
+        "risk_potential_signal",
+        "dependency_signal",
+        "operational_context_signal",
+    ):
+        if signals.get(field) != dtn_context.get(field):
+            failures.append(f"collective_dtn_projection_mismatch:{field}")
     return len(failures) == 0, failures
 
 
@@ -247,6 +510,9 @@ def attach_collective_signals(
         "eie_digest": working_state.get("eie_hash"),
         "digest_bound": True,
         "signal_digest": pre_context_signals.get("digest"),
+        "collective_projection_digest": generate_digest(
+            working_state.get("collective_signals", {})
+        ),
         "freshness_bound": True,
         "logical_timestamp": pre_context_signals.get("timestamp"),
         "skg_verified": True,
@@ -274,6 +540,7 @@ def attach_collective_signals(
         request_snapshot,
         pre_context_signals,
         eie=eie,
+        admitted_basis=working_state.get("verified_substrate_references", {}),
     )
     working_state["pt_evidence_envelope"] = envelope
     working_state["pt_evidence_envelope_digest"] = envelope_digest
@@ -282,6 +549,9 @@ def attach_collective_signals(
         "request_fingerprint": working_state.get("request_fingerprint"),
         "eie_digest": working_state.get("eie_hash"),
         "signal_digest": pre_context_signals.get("digest"),
+        "collective_projection_digest": generate_digest(
+            working_state.get("collective_signals", {})
+        ),
         "logical_timestamp": pre_context_signals.get("timestamp"),
         "freshness_window_seconds": pre_context_signals.get(
             "freshness_window_seconds"
@@ -297,9 +567,22 @@ def attach_collective_signals(
             "verified_substrate_references", {}
         ).get("bridge_result_digest"),
     }
+    root_trust_material = _root_trust_material(
+        state=working_state,
+        signals=pre_context_signals,
+        substrate_evidence=substrate_evidence,
+    )
+    attachment_payload["root_trust_material"] = root_trust_material
+    attachment_payload["root_trust_material_digest"] = root_trust_material[
+        "material_digest"
+    ]
+    attachment_hash = generate_digest(attachment_payload)
     working_state["collective_attachment"] = {
         **attachment_payload,
-        "attachment_hash": generate_digest(attachment_payload),
+        "attachment_hash": attachment_hash,
+        "attestation": _collective_attachment_attestation(
+            attachment_payload, attachment_hash
+        ),
     }
     working_state.setdefault("audit_trace", []).append({"stage": "collective_attach", "event": "COLLECTIVE_SIGNAL_ATTACHED", "digest": pre_context_signals.get("digest")})
     protected_valid, protected_failures = validate_boundary_protection(

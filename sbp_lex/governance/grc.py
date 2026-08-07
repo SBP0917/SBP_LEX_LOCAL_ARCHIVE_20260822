@@ -5,6 +5,7 @@ from typing import Any, Dict, Mapping
 
 from sbp_lex.governance.reentry_engine import evaluate_reentry
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.authority_boundary import validate_root_pt_eligibility
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.hash_chain import append_hash_entry
 from sbp_lex.shared.results import enforce_result
@@ -15,6 +16,12 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
 
     governance_result = enforce_result("governance", working_state.get("governance_result", "DENY"))
     governance_reason = working_state.get("governance_reason", "governance_reason_unset")
+    root_pt_valid, root_pt_failures = validate_root_pt_eligibility(
+        working_state
+    )
+    if not root_pt_valid:
+        governance_result = "DENY"
+        governance_reason = "root_pt_ineligible"
     reentry = evaluate_reentry(working_state)
 
     if governance_result == "ALLOW":
@@ -67,6 +74,10 @@ def run_grc(state: Mapping[str, Any]) -> Dict[str, Any]:
         working_state["last_denied_fingerprint"] = working_state.get("request_fingerprint")
 
     working_state.setdefault("governance_feedback", {})["grc"] = grc_outcome
+    if root_pt_failures:
+        working_state["governance_feedback"]["grc"]["failures"] = (
+            root_pt_failures
+        )
 
     working_state.setdefault("audit_trace", []).append(
         {

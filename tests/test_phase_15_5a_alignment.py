@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 
 from main import main, sample_request
+from sbp_lex.authority_first.root_of_trust_runner import run_root_of_trust
+from sbp_lex.classification.ap_acf import run_ap_acf_precheck
 from sbp_lex.config.security_config import (
     CONDITIONAL_THRESHOLD_TOKENS,
     build_audit_security,
@@ -69,8 +71,10 @@ def _corroboration_state(tier_factor: int, evidence: list[dict[str, object]]) ->
     prepared = prepare_pipeline_boundary(request)
     assert isinstance(prepared, PreparedPipelineBoundary)
     state = prepared.materialize()
-    state = run_threshold_conditioning(state)
+    state = run_ap_acf_precheck(state)
+    state = run_root_of_trust(state)
     state = run_evidence_validation(state)
+    state = run_threshold_conditioning(state)
     return run_corroboration_validation(state)
 
 
@@ -185,13 +189,7 @@ def _domain_state(profile: str | None = None) -> dict:
     request["context"]["operational_scope"] = "test_scope"
     if profile:
         request["context"]["deployment_profile"] = profile
-    state = main(request)
-    state["classification"] = {"operational_scope": "test_scope"}
-    state["safety_profile"]["computed_tier"] = LOW
-    state["audit_trace"] = [
-        item for item in state["audit_trace"] if item.get("stage") != "domain_wrap_attempt"
-    ]
-    return state
+    return main(request)
 
 
 def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:
@@ -202,7 +200,12 @@ def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:
     assert len(lineage) == 3
     assert len({item["candidate_hash"] for item in lineage}) == 3
     assert [item["candidate"]["search_space_remaining"] for item in lineage] == [4, 3, 2]
-    assert len([item for item in result["audit_trace"] if item["stage"] == "domain_wrap_attempt"]) == 3
+    attempt_audit = [
+        item for item in result["audit_trace"] if item["stage"] == "domain_wrap_attempt"
+    ]
+    assert [item["candidate_hash"] for item in attempt_audit[-3:]] == [
+        item["candidate_hash"] for item in lineage
+    ]
 
 
 def test_domain_fallback_escalates_at_profile_limit(monkeypatch) -> None:

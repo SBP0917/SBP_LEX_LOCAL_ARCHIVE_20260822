@@ -11,6 +11,21 @@ from sbp_lex.security.pqc import generate_digest
 from sbp_lex.security.token_stack import issue_token, verify_token
 
 
+PASS4_SEMANTIC_THRESHOLD_NAMES = (
+    "consequentiality_threshold",
+    "financial_threshold",
+    "human_safety_threshold",
+    "irreversibility_threshold",
+    "cascading_impact_threshold",
+    "financial_operational_threshold",
+    "consequentiality_tier",
+    "corroboration_threshold",
+    "financial_tier_threshold",
+    "escalation_threshold",
+    "jurisdiction_threshold",
+)
+
+
 def _threshold_values_from_state(state: Mapping[str, Any]) -> Dict[str, Any]:
     safety = state.get("safety_profile", {}) or {}
     context = state.get("context", {}) or {}
@@ -77,18 +92,56 @@ def verify_threshold_bundle(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
     tokens = state.get("tokens", {})
     expected_fingerprint = state.get("request_fingerprint")
     required_names = required_threshold_token_names()
+    expected_values = _threshold_values_from_state(state)
+    expected_tier = state.get("safety_profile", {}).get("computed_tier")
+    expected_corroboration = state.get("corroboration_required")
     for name in required_names:
         token = tokens.get(name)
         if token is None:
             failures.append(f"missing_threshold_component:{name}")
         elif not verify_token(token, expected_request_fingerprint=expected_fingerprint):
             failures.append(f"invalid_threshold_component:{name}")
+        else:
+            if token.get("issued_at_stage") != "procedural_truth":
+                failures.append(f"threshold_component_stage_mismatch:{name}")
+            if token.get("tier") != expected_tier:
+                failures.append(f"threshold_component_tier_mismatch:{name}")
+            if token.get("corroboration_required") != expected_corroboration:
+                failures.append(
+                    f"threshold_component_corroboration_mismatch:{name}"
+                )
+            if name in PASS4_SEMANTIC_THRESHOLD_NAMES:
+                payload = token.get("payload", {})
+                expected_value = expected_values.get(name)
+                if not isinstance(payload, Mapping):
+                    failures.append(f"threshold_component_payload_invalid:{name}")
+                else:
+                    if payload.get("component") != name:
+                        failures.append(
+                            f"threshold_component_name_mismatch:{name}"
+                        )
+                    if payload.get("value") != expected_value:
+                        failures.append(
+                            f"threshold_component_value_mismatch:{name}"
+                        )
+                    if payload.get("component_hash") != generate_digest(
+                        {"component": name, "value": expected_value}
+                    ):
+                        failures.append(
+                            f"threshold_component_hash_mismatch:{name}"
+                        )
     bundle = tokens.get("threshold_bundle")
     if bundle is None:
         failures.append("missing_threshold_bundle")
     elif not verify_token(bundle, expected_request_fingerprint=expected_fingerprint):
         failures.append("invalid_threshold_bundle")
     else:
+        if bundle.get("issued_at_stage") != "procedural_truth":
+            failures.append("threshold_bundle_stage_mismatch")
+        if bundle.get("tier") != expected_tier:
+            failures.append("threshold_bundle_tier_mismatch")
+        if bundle.get("corroboration_required") != expected_corroboration:
+            failures.append("threshold_bundle_corroboration_mismatch")
         payload = bundle.get("payload", {})
         expected_hashes = {
             name: tokens.get(name, {}).get("digest") for name in required_names
