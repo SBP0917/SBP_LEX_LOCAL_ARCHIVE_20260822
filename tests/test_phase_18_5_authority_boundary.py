@@ -12,10 +12,13 @@ from sbp_lex.classification.ap_acf import run_ap_acf_precheck
 from sbp_lex.collective.context_interface import attach_collective_signals, prepare_pre_context_signals
 from sbp_lex.execution.execution_gate import run_execution_gate
 from sbp_lex.pipeline.replay_runner import run_replay_check
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.runner import (
+    PreparedPipelineBoundary,
+    prepare_pipeline_boundary,
+    run_pipeline,
+)
 from sbp_lex.security.pqc import generate_digest, sign_payload
 from sbp_lex.shared.hash_chain import rebuild_state_hash
-from sbp_lex.shared.state_builder import build_state
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,14 +42,9 @@ def _resign(signals: dict) -> dict:
 def _root_ready_state() -> dict:
     request = sample_request()
     signals = prepare_pre_context_signals(request)
-    state = build_state(request, signals)
-    state["hard_entry_gate"] = {
-        "accepted": True,
-        "request_fingerprint": state["request_fingerprint"],
-        "signal_digest": signals["digest"],
-        "failures": [],
-    }
-    state = attach_collective_signals(state, signals)
+    prepared = prepare_pipeline_boundary(request, signals)
+    assert isinstance(prepared, PreparedPipelineBoundary)
+    state = prepared.materialize()
     return run_ap_acf_precheck(state)
 
 
@@ -54,8 +52,9 @@ def test_external_package_cannot_self_traverse() -> None:
     _, _, external_package = build_demo_chain()
     state = run_pipeline(sample_request(), external_package)
     assert state["hard_entry_gate"]["accepted"] is False
-    assert state["integration_stage_order"] == ["hard_ingress", "audit", "controlled_return"]
-    assert state["authority_first_result"] == "UNSET"
+    assert state["integration_stage_order"] == ["hard_ingress"]
+    assert state["governed_state_formed"] is False
+    assert "authority_first_result" not in state
 
 
 def test_external_package_cannot_bypass_hard_entry() -> None:
@@ -83,7 +82,8 @@ def test_external_package_cannot_overwrite_governance_result() -> None:
     signals["governance_result"] = "ALLOW"
     state = run_pipeline(request, _resign(signals))
     assert state["hard_entry_gate"]["accepted"] is False
-    assert state["governance_result"] == "UNSET"
+    assert state["governed_state_formed"] is False
+    assert "governance_result" not in state
 
 
 def test_external_package_cannot_overwrite_execution_result() -> None:
@@ -92,7 +92,8 @@ def test_external_package_cannot_overwrite_execution_result() -> None:
     signals["execution_result"] = "EXECUTE"
     state = run_pipeline(request, _resign(signals))
     assert state["hard_entry_gate"]["accepted"] is False
-    assert state["execution_result"] == "HALT"
+    assert state["governed_state_formed"] is False
+    assert "execution_result" not in state
 
 
 def test_missing_pt_envelope_blocks_progression() -> None:

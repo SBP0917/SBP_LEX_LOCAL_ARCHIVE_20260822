@@ -9,9 +9,12 @@ from sbp_lex.collective.context_interface import prepare_pre_context_signals
 from sbp_lex.execution.controlled_outcome import verify_controlled_outcome
 from sbp_lex.governance.reentry_engine import evaluate_reentry
 from sbp_lex.pipeline.replay_runner import run_replay_check
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.runner import (
+    PreparedPipelineBoundary,
+    prepare_pipeline_boundary,
+    run_pipeline,
+)
 from sbp_lex.security.pqc import generate_digest, sign_payload
-from sbp_lex.shared.state_builder import build_state
 
 
 EXPECTED_STAGE_ORDER = [
@@ -40,6 +43,12 @@ def _resign_signal_package(signals: dict) -> dict:
     return signals
 
 
+def _initial_state(request: dict, signals: dict | None = None) -> dict:
+    prepared = prepare_pipeline_boundary(request, signals)
+    assert isinstance(prepared, PreparedPipelineBoundary)
+    return prepared.materialize()
+
+
 def test_canonical_integration_stage_order_is_locked() -> None:
     state = main(sample_request())
     assert state["integration_stage_order"] == EXPECTED_STAGE_ORDER
@@ -53,14 +62,11 @@ def test_hard_entry_gate_rejects_before_authoritative_traversal() -> None:
     request.pop("resolved_authority")
     state = run_pipeline(request)
     assert state["hard_entry_gate"]["accepted"] is False
-    assert state["integration_stage_order"] == [
-        "hard_ingress",
-        "audit",
-        "controlled_return",
-    ]
-    assert state["authority_first_result"] == "UNSET"
-    assert state["execution_result"] == "HALT"
-    assert state["persistent_inoperability"] is True
+    assert state["integration_stage_order"] == ["hard_ingress"]
+    assert state["governed_state_formed"] is False
+    assert state["authority_token_issued"] is False
+    assert "authority_first_result" not in state
+    assert "execution_result" not in state
 
 
 def test_request_fingerprint_remains_stable_across_hash_chain() -> None:
@@ -86,10 +92,9 @@ def test_skg_dtn_relation_mismatch_is_rejected_before_root_of_trust() -> None:
     _resign_signal_package(signals)
 
     state = run_pipeline(request, signals)
-    assert state["collective_signal_status"] == "REJECTED"
-    assert "dtn_skg_constraint_mismatch" in state["governance_feedback"]["collective_signal_failures"]
-    assert state["authority_first_result"] == "UNSET"
-    assert state["persistent_inoperability"] is True
+    assert state["governed_state_formed"] is False
+    assert "dtn_skg_constraint_mismatch" in state["failures"]
+    assert state["downstream_stage_reached"] is False
 
 
 def test_collective_signals_are_context_only_and_verified() -> None:
@@ -104,7 +109,7 @@ def test_collective_signals_are_context_only_and_verified() -> None:
 
 def test_ap_acf_precheck_precedes_root_and_cannot_change() -> None:
     request = sample_request()
-    state = build_state(request)
+    state = _initial_state(request)
     state["collective_signals"] = prepare_pre_context_signals(request)
     state = run_ap_acf_precheck(state)
     assert state["ap_acf_precheck_result"] == "PASS"
@@ -118,12 +123,15 @@ def test_ap_acf_precheck_precedes_root_and_cannot_change() -> None:
 
 def test_root_of_trust_blocks_unresolved_authority() -> None:
     request = sample_request()
-    state = build_state(request)
+    state = _initial_state(request)
     state["resolved_authority"] = ""
     state["ap_acf_precheck_result"] = "PASS"
     result = run_root_of_trust(state)
     assert result["authority_first_result"] == "FAIL"
     assert result["execution_result"] == "HALT"
+    assert "protected_state_field_mutation" in result[
+        "root_of_trust_evidence_anchor"
+    ]["failures"]
 
 
 def test_classification_failure_prevents_all_later_authority_stages() -> None:

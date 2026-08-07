@@ -3,15 +3,42 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Mapping
 
+from external_substrates.shared.validation import contains_prohibited_authority
 from sbp_lex.security.pqc import generate_digest, verify_signature
 
-EIE_DOWNSTREAM_RESULT_FIELDS = {
+EIE_DIGEST_EXCLUDED_FIELDS = {"eie_hash"}
+EIE_ALLOWED_FIELDS = frozenset({
+    "object_type",
+    "eie_version",
+    "schema_version",
+    "canonical_traversal_state",
+    "adapter_identity",
+    "source_system_identity",
+    "native_format",
+    "source_payload_hash",
+    "request_fingerprint",
+    "traversal_id",
+    "intent",
+    "action",
+    "objective",
+    "actor",
+    "principal",
+    "authority_claim_inputs",
+    "autonomy",
+    "deployment",
+    "environment",
+    "consequence",
+    "ap_acf_deployment_declarations",
+    "environment_modifiers",
+    "payload",
+    "context",
+    "resolved_authority",
+    "jurisdiction",
+    "external_substrate_references",
+    "freshness",
+    "replay",
     "eie_hash",
-    "skg_truth_foundation",
-    "dtn_contextual_verification",
-    "root_of_trust_anchorage",
-    "procedural_truth_certification",
-}
+})
 
 REQUIRED_EIE_STRING_FIELDS = (
     "object_type",
@@ -73,7 +100,7 @@ def canonical_eie_payload(eie: Mapping[str, Any]) -> dict[str, Any]:
     return {
         key: deepcopy(value)
         for key, value in dict(eie).items()
-        if key not in EIE_DOWNSTREAM_RESULT_FIELDS
+        if key not in EIE_DIGEST_EXCLUDED_FIELDS
     }
 
 
@@ -98,8 +125,14 @@ def validate_eie_binding(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
 
     if eie.get("object_type") != "ExecutionIntentEnvelope":
         failures.append("eie_object_type_invalid")
+    if eie.get("schema_version") != "desktop-v1.eie.v1":
+        failures.append("eie_schema_version_invalid")
     if eie.get("canonical_traversal_state") is not True:
         failures.append("eie_canonical_traversal_state_missing")
+    if set(eie) != EIE_ALLOWED_FIELDS:
+        failures.append("eie_schema_fields_rejected")
+    if contains_prohibited_authority(eie):
+        failures.append("eie_contains_runtime_authority_outcome")
 
     for field in REQUIRED_EIE_STRING_FIELDS:
         if not _present_string(eie.get(field)):
@@ -140,10 +173,42 @@ def validate_eie_binding(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
         failures.append("state_eie_hash_invalid")
     if eie.get("intent") != snapshot.get("action"):
         failures.append("eie_intent_mismatch")
+    if eie.get("action") != snapshot.get("action"):
+        failures.append("eie_action_mismatch")
     if eie.get("payload") != snapshot.get("payload", {}):
         failures.append("eie_payload_mismatch")
     if eie.get("context") != snapshot.get("context", {}):
         failures.append("eie_context_mismatch")
+    freshness = eie.get("freshness")
+    if not isinstance(freshness, Mapping) or set(freshness) != {
+        "clock", "issued_at", "valid_until", "max_age_seconds"
+    }:
+        failures.append("eie_freshness_schema_invalid")
+    else:
+        issued_at = freshness.get("issued_at")
+        valid_until = freshness.get("valid_until")
+        max_age = freshness.get("max_age_seconds")
+        if (
+            freshness.get("clock")
+            != "REQUEST_FINGERPRINT_LOGICAL_CLOCK_V1"
+            or not isinstance(issued_at, int)
+            or isinstance(issued_at, bool)
+            or not isinstance(valid_until, int)
+            or isinstance(valid_until, bool)
+            or not isinstance(max_age, int)
+            or isinstance(max_age, bool)
+            or max_age < 0
+            or valid_until != issued_at + max_age
+        ):
+            failures.append("eie_freshness_contract_invalid")
+    replay = eie.get("replay")
+    if not isinstance(replay, Mapping) or set(replay) != {"nonce", "scope"}:
+        failures.append("eie_replay_schema_invalid")
+    elif (
+        not _present_string(replay.get("nonce"))
+        or replay.get("scope") != "DESKTOP_V1_HARD_ENTRY"
+    ):
+        failures.append("eie_replay_contract_invalid")
     return not failures, sorted(set(failures))
 
 
@@ -191,12 +256,16 @@ def validate_skg_dtn_binding(state: Mapping[str, Any]) -> tuple[bool, list[str]]
         failures.append("skg_enrichment_hash_mismatch")
     if dtn.get("dtn_enrichment_hash") != _metadata_digest(dtn, "dtn_enrichment_hash"):
         failures.append("dtn_enrichment_hash_mismatch")
-    eie = state.get("eie", {})
-    if isinstance(eie, Mapping):
-        if eie.get("skg_truth_foundation") != skg:
-            failures.append("eie_skg_metadata_mismatch")
-        if eie.get("dtn_contextual_verification") != dtn:
-            failures.append("eie_dtn_metadata_mismatch")
+    collective = state.get("collective_signal_evidence", {})
+    if not isinstance(collective, Mapping):
+        failures.append("collective_signal_evidence_missing")
+    else:
+        if collective.get("request_fingerprint") != state.get(
+            "request_fingerprint"
+        ):
+            failures.append("collective_request_binding_mismatch")
+        if collective.get("eie_digest") != state.get("eie_hash"):
+            failures.append("collective_eie_binding_mismatch")
     return not failures, sorted(set(failures))
 
 
@@ -241,6 +310,11 @@ def validate_root_anchor_binding(state: Mapping[str, Any]) -> tuple[bool, list[s
 
 def validate_control_chain_bindings(state: Mapping[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
+    from sbp_lex.shared.state_builder import validate_boundary_protection
+
+    boundary_valid, boundary_failures = validate_boundary_protection(state)
+    if not boundary_valid:
+        failures.extend(boundary_failures)
     for validator in (validate_eie_binding, validate_skg_dtn_binding):
         valid, validator_failures = validator(state)
         if not valid:

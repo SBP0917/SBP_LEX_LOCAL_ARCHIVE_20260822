@@ -14,6 +14,10 @@ from sbp_lex.pipeline.hard_ingress import (
     validate_pre_context_signal_package,
 )
 from sbp_lex.security.pqc import generate_digest, sign_payload
+from sbp_lex.shared.state_builder import (
+    EIE_FRESHNESS_WINDOW_SECONDS,
+    build_execution_intent_envelope,
+)
 
 REQUIRED_EXTERNAL_SIGNALS = {
     "authority_link_signal",
@@ -104,8 +108,11 @@ def translate_external_pre_context_package(
 
     skg_context = _build_runtime_skg_context(request, signal_payloads)
     dtn_context = _build_runtime_dtn_context(signal_payloads, skg_context)
+    eie = build_execution_intent_envelope(request)
     runtime_signals = {
+        "collective_signal_schema_version": "desktop-v1.collective-signal.v1",
         "request_fingerprint": request_fingerprint,
+        "eie_digest": eie["eie_hash"],
         "intent_signal": _intent_signal(request),
         "risk_potential_signal": signal_payloads["risk_potential_signal"],
         "authority_link_signal": skg_context["authority_link_signal"],
@@ -120,16 +127,22 @@ def translate_external_pre_context_package(
         "dtn_context": dtn_context,
         "timestamp": _canonical_signal_timestamp(request_fingerprint),
         "timestamp_authority": CANONICAL_SIGNAL_AUTHORITY,
+        "freshness_window_seconds": EIE_FRESHNESS_WINDOW_SECONDS,
     }
     runtime_signals["nonce"] = _canonical_signal_nonce(
-        request_fingerprint, runtime_signals["timestamp"]
+        request_fingerprint,
+        eie["eie_hash"],
+        runtime_signals["timestamp"],
     )
     body = deepcopy(runtime_signals)
     runtime_signals["digest"] = generate_digest(body)
     runtime_signals["signature"] = sign_payload(body)
 
     valid, hard_entry_failures = validate_pre_context_signal_package(
-        signals=runtime_signals, request_fingerprint=request_fingerprint
+        signals=runtime_signals,
+        request_fingerprint=request_fingerprint,
+        expected_eie_digest=eie["eie_hash"],
+        validation_logical_time=runtime_signals["timestamp"],
     )
     if not valid:
         return _reject([f"translated_signal_{failure}" for failure in hard_entry_failures])
@@ -336,10 +349,13 @@ def _canonical_signal_timestamp(request_fingerprint: str) -> int:
     return int(request_fingerprint[:12], 16)
 
 
-def _canonical_signal_nonce(request_fingerprint: str, timestamp: int) -> str:
+def _canonical_signal_nonce(
+    request_fingerprint: str, eie_digest: str, timestamp: int
+) -> str:
     return generate_digest(
         {
             "request_fingerprint": request_fingerprint,
+            "eie_digest": eie_digest,
             "timestamp": timestamp,
             "timestamp_authority": CANONICAL_SIGNAL_AUTHORITY,
         }

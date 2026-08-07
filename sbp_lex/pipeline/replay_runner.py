@@ -9,6 +9,12 @@ from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 REPLAY_COMPARISON_FIELDS = [
     "request_fingerprint",
+    "eie_digest",
+    "state_construction_hash",
+    "collective_attachment_hash",
+    "pipeline_a_initial_hash",
+    "pipeline_b_initial_hash",
+    "pipeline_initial_exact_parity",
     "state_hash",
     "audit_hash",
     "pipeline_mode",
@@ -101,6 +107,20 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
     envelope = state.get("pt_evidence_envelope", {})
     return {
         "request_fingerprint": state.get("request_fingerprint"),
+        "eie_digest": state.get("eie_hash"),
+        "state_construction_hash": state.get("state_construction_hash"),
+        "collective_attachment_hash": state.get(
+            "collective_attachment", {}
+        ).get("attachment_hash"),
+        "pipeline_a_initial_hash": state.get(
+            "pipeline_initial_parity", {}
+        ).get("pipeline_a_initial_hash"),
+        "pipeline_b_initial_hash": state.get(
+            "pipeline_initial_parity", {}
+        ).get("pipeline_b_initial_hash"),
+        "pipeline_initial_exact_parity": state.get(
+            "pipeline_initial_parity", {}
+        ).get("exact_parity_result"),
         "state_hash": state.get("state_hash"),
         "audit_hash": state.get("audit_hash"),
         "pipeline_mode": state.get("pipeline_mode"),

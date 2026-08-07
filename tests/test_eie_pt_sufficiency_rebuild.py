@@ -115,4 +115,4 @@ def test_audit_trace_preserves_new_certification_metadata() -> None:
     assert binding["skg_truth_foundation_metadata"]["skg_verification_status"] == "VALID"
     assert binding["dtn_contextual_verification_metadata"]["dtn_contextualisation_status"] == "VALID"
     assert state["procedural_truth_certification"]["certification_status"] == "CERTIFIED"
-    assert state["eie"]["procedural_truth_certification"]["certification_status"] == "CERTIFIED"
+    assert "procedural_truth_certification" not in state["eie"]

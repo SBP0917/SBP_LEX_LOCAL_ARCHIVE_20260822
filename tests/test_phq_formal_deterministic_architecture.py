@@ -533,7 +533,9 @@ def test_denied_runtime_snapshot_cannot_reenter_downstream() -> None:
     request = sample_request()
     request.pop("resolved_authority")
     denied = run_pipeline(request)
-    assert denied["decision"] == "DENY"
+    assert denied["governed_state_formed"] is False
+    assert denied["downstream_stage_reached"] is False
+    assert "decision" not in denied
     source = state_at("DENIED", decision_state="DENY")
     destination = state_at("EXECUTION_GATE_RESOLVED", decision_state="ALLOW")
     valid, violation = verify_transition(source, destination)

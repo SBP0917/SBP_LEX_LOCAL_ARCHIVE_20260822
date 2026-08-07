@@ -218,9 +218,6 @@ def finalize_procedural_truth(state: Mapping[str, object]) -> Dict[str, object]:
     working_state["procedural_truth_failure_reasons"] = deterministic_failures
     working_state["procedural_truth_failure_outcome"] = failure_outcome
     working_state["procedural_truth_certification"] = certification
-    if isinstance(working_state.get("eie"), Mapping):
-        working_state["eie"] = deepcopy(dict(working_state["eie"]))
-        working_state["eie"]["procedural_truth_certification"] = deepcopy(certification)
 
     working_state.setdefault("audit_trace", []).append(
         {

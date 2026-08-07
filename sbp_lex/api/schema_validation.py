@@ -11,6 +11,7 @@ MAX_STRING_LENGTH = 8192
 MAX_LIST_LENGTH = 128
 MAX_EVIDENCE_ITEMS = 25
 MAX_PRE_CONTEXT_SIGNAL_KEYS = 32
+MAX_RUNTIME_REQUEST_BYTES = 65_536
 
 ACTION_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9_:\-]{0,63}$")
 REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9_:\-.]{1,128}$")
@@ -46,6 +47,10 @@ REQUEST_ALLOWED_KEYS = {
     "adapter_identity",
     "source_system_identity",
     "native_format",
+    "objective",
+    "actor",
+    "principal",
+    "authority_claims",
 }
 
 PAYLOAD_ALLOWED_KEYS = {
@@ -109,6 +114,22 @@ CONTEXT_ALLOWED_KEYS = {
     "escalation_path_available",
     "deployment_profile",
     "domain_fallback_safe",
+    "objective",
+    "pathway_id",
+    "locality",
+}
+
+IDENTITY_ALLOWED_KEYS = {
+    "id",
+    "type",
+    "role",
+    "tenant",
+}
+
+AUTHORITY_CLAIM_ALLOWED_KEYS = {
+    "claimed_authority",
+    "delegation_reference",
+    "scope",
 }
 
 API_BODY_ALLOWED_KEYS = {
@@ -148,6 +169,10 @@ PRE_CONTEXT_SIGNAL_ALLOWED_KEYS = {
     "timestamp",
     "timestamp_authority",
     "nonce",
+    "eie_digest",
+    "collective_signal_schema_version",
+    "freshness_window_seconds",
+    "synthetic_substrate_evidence",
 }
 
 EVIDENCE_ALLOWED_KEYS = {
@@ -269,6 +294,20 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
     _, shape_failures = validate_json_shape(request, root_name="request")
     failures.extend(shape_failures)
     _append_unknown_keys(failures, prefix="request", data=request, allowed=REQUEST_ALLOWED_KEYS)
+    try:
+        encoded_size = len(
+            json.dumps(
+                request,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+                allow_nan=False,
+            ).encode("utf-8")
+        )
+    except (TypeError, ValueError):
+        encoded_size = MAX_RUNTIME_REQUEST_BYTES + 1
+    if encoded_size > MAX_RUNTIME_REQUEST_BYTES:
+        failures.append("request_size_limit_exceeded")
 
     action = request.get("action")
     if not isinstance(action, str) or not ACTION_PATTERN.match(action):
@@ -356,6 +395,50 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
             failures.append(f"{field}_required")
         elif len(value) > 128:
             failures.append(f"{field}_too_long")
+
+    objective = request.get("objective")
+    if objective is not None and (
+        not isinstance(objective, str)
+        or not objective.strip()
+        or len(objective) > 512
+    ):
+        failures.append("objective_invalid")
+
+    for field in ("actor", "principal"):
+        identity = request.get(field)
+        if identity is None:
+            continue
+        if not _is_mapping(identity):
+            failures.append(f"{field}_not_mapping")
+            continue
+        _append_unknown_keys(
+            failures,
+            prefix=field,
+            data=identity,
+            allowed=IDENTITY_ALLOWED_KEYS,
+        )
+        for key, value in identity.items():
+            if not isinstance(value, str) or not value.strip() or len(value) > 128:
+                failures.append(f"{field}_{key}_invalid")
+
+    claims = request.get("authority_claims")
+    if claims is not None:
+        if not _is_mapping(claims):
+            failures.append("authority_claims_not_mapping")
+        else:
+            _append_unknown_keys(
+                failures,
+                prefix="authority_claims",
+                data=claims,
+                allowed=AUTHORITY_CLAIM_ALLOWED_KEYS,
+            )
+            for key, value in claims.items():
+                if (
+                    not isinstance(value, str)
+                    or not value.strip()
+                    or len(value) > 256
+                ):
+                    failures.append(f"authority_claims_{key}_invalid")
 
     return len(failures) == 0, failures
 

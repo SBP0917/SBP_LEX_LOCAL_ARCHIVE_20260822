@@ -116,10 +116,10 @@ def test_dtn_contextualisation_hash_missing_is_rejected() -> None:
 
 def test_skg_dtn_mismatch_is_rejected() -> None:
     state = _valid_state()
-    state["eie"]["dtn_contextual_verification"]["dtn_contextualisation_status"] = "MISMATCHED"
+    state["collective_signal_evidence"]["eie_digest"] = "MISMATCHED"
     valid, failures = validate_skg_dtn_binding(state)
     assert valid is False
-    assert "eie_dtn_metadata_mismatch" in failures
+    assert "collective_eie_binding_mismatch" in failures
 
 
 def test_root_anchorage_missing_eie_hash_is_rejected() -> None:

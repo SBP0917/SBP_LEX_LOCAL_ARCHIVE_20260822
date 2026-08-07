@@ -4,14 +4,13 @@ from copy import deepcopy
 from typing import Any, Mapping
 
 from sbp_lex.security.pqc import generate_digest
-from sbp_lex.shared.state_builder import build_state
+from sbp_lex.shared.state_builder import build_execution_intent_envelope
 
 PHASE19A_FIXTURE_TIMESTAMP = "2026-07-08T00:00:00Z"
 
 
 def build_eie_fixture(request: Mapping[str, Any]) -> dict[str, Any]:
-    state = build_state(dict(request))
-    eie = deepcopy(dict(state["eie"]))
+    eie = build_execution_intent_envelope(dict(request))
     eie["fixture_timestamp"] = PHASE19A_FIXTURE_TIMESTAMP
     eie["freshness_status"] = "FRESH"
     eie["fixture_digest"] = generate_digest(

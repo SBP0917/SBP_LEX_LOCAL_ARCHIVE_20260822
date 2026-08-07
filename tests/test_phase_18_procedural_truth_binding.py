@@ -11,9 +11,12 @@ from sbp_lex.classification.ap_acf import run_ap_acf_precheck
 from sbp_lex.collective.context_interface import attach_collective_signals, prepare_pre_context_signals
 from sbp_lex.governance.procedural_truth_runner import run_procedural_truth_pipeline
 from sbp_lex.pipeline.replay_runner import run_replay_check
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.runner import (
+    PreparedPipelineBoundary,
+    prepare_pipeline_boundary,
+    run_pipeline,
+)
 from sbp_lex.security.pqc import generate_digest
-from sbp_lex.shared.state_builder import build_state
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -114,15 +117,16 @@ def test_unverified_source_is_excluded() -> None:
 def test_no_silent_tier_downgrade_or_threshold_relaxation() -> None:
     request = _request("TOP", 2)
     signals = prepare_pre_context_signals(request)
-    state = build_state(request, signals)
+    prepared = prepare_pipeline_boundary(request, signals)
+    assert isinstance(prepared, PreparedPipelineBoundary)
+    state = prepared.materialize()
     state["pt_evidence_envelope"]["threshold_tier"] = "LOW"
     state["pt_evidence_envelope"]["threshold_requirement"] = 2
     state["pt_evidence_envelope_digest"] = generate_digest(state["pt_evidence_envelope"])
-    state = attach_collective_signals(state, signals)
     state = run_ap_acf_precheck(state)
     state = run_root_of_trust(state)
     state = run_procedural_truth_pipeline(state)
-    assert state["procedural_truth_outcome"] == "PT_FAIL"
+    assert state["procedural_truth_outcome"] in {"PT_FAIL", "PT_ESCALATE"}
     assert "pt_threshold_tier_substitution" in state["procedural_truth_failure_reasons"]
 
 

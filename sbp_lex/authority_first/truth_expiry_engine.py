@@ -13,10 +13,13 @@ def _canonical_signal_timestamp(request_fingerprint: str) -> int:
     return int(str(request_fingerprint)[:12], 16)
 
 
-def _canonical_signal_nonce(request_fingerprint: str, timestamp: int) -> str:
+def _canonical_signal_nonce(
+    request_fingerprint: str, eie_digest: str, timestamp: int
+) -> str:
     return generate_digest(
         {
             "request_fingerprint": request_fingerprint,
+            "eie_digest": eie_digest,
             "timestamp": timestamp,
             "timestamp_authority": CANONICAL_SIGNAL_AUTHORITY,
         }
@@ -36,7 +39,11 @@ def run_truth_expiry(state: Mapping[str, object]) -> Dict[str, object]:
         failures.append("truth_timestamp_not_canonical")
     if signals.get("timestamp_authority") != CANONICAL_SIGNAL_AUTHORITY:
         failures.append("truth_timestamp_authority_invalid")
-    if isinstance(timestamp, int) and signals.get("nonce") != _canonical_signal_nonce(fingerprint, timestamp):
+    if isinstance(timestamp, int) and signals.get("nonce") != _canonical_signal_nonce(
+        fingerprint,
+        str(working_state.get("eie_hash", "")),
+        timestamp,
+    ):
         failures.append("truth_nonce_not_canonical")
 
     passed = len(failures) == 0

@@ -366,11 +366,14 @@ def test_valid_pair_emits_minimal_signals_without_raw_packages() -> None:
 
 def test_default_pipeline_uses_synthetic_path_before_state_and_attachment() -> None:
     state = run_pipeline(request())
-    evidence = state["collective_signals"]["synthetic_substrate_evidence"]
-    assert evidence["stage_order"] == list(STAGE_ORDER)
+    evidence = state["collective_signal_evidence"]
     assert state["hard_entry_gate"]["accepted"] is True
     assert state["collective_signal_status"] == "ATTACHED"
     assert evidence["eie_digest"] == state["eie_hash"]
+    assert evidence["provenance"]["skg_package_digest"] == state[
+        "verified_substrate_references"
+    ]["skg_package_digest"]
+    assert "synthetic_substrate_evidence" not in state["collective_signals"]
 
 
 def test_schema_versions_and_controlled_local_signature_mode_are_locked() -> None:

@@ -36,7 +36,10 @@ from sbp_lex.governance.evidence_engine import run_evidence_validation
 from sbp_lex.governance.threshold_conditioning_engine import run_threshold_conditioning
 from sbp_lex.security.threshold_tokens import verify_threshold_bundle
 from sbp_lex.security.token_stack import issue_token
-from sbp_lex.shared.state_builder import build_state
+from sbp_lex.pipeline.runner import (
+    PreparedPipelineBoundary,
+    prepare_pipeline_boundary,
+)
 
 
 def _qualified_evidence(count: int) -> list[dict[str, object]]:
@@ -63,7 +66,9 @@ def _corroboration_state(tier_factor: int, evidence: list[dict[str, object]]) ->
     }
     request["context"]["financial_amount"] = 0
     request["context"]["evidence"] = evidence
-    state = build_state(request)
+    prepared = prepare_pipeline_boundary(request)
+    assert isinstance(prepared, PreparedPipelineBoundary)
+    state = prepared.materialize()
     state = run_threshold_conditioning(state)
     state = run_evidence_validation(state)
     return run_corroboration_validation(state)
