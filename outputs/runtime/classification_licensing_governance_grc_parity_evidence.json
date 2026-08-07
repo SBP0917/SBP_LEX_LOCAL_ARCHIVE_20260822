@@ -1,0 +1,148 @@
+{
+  "schema_version": "desktop-v1.runtime-pass5-classification-licensing-governance-grc-parity.v1",
+  "evidence_date": "2026-08-08",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit": "6a8ea7d75096dc90b17c618a73ef090c79c821df",
+  "branch": "main",
+  "request_fingerprint": "cd84a2f696258fe3f24aa6014be5d6b4a7f1805fe593733ecac7b53e428598a8",
+  "eie_digest": "6d4c48f5a9c296fb06e81681a148f0f2af57d17a082ae0951e23e2c997aae1f5",
+  "pipeline_initial_parity": {
+    "schema_version": "desktop-v1.pipeline-initial-parity.v1",
+    "pipeline_a_initial_hash": "493a71aa337ae717e41f91a2c6c8143bb4b6bcdbf871f0af5eb10b8462bc6a23",
+    "pipeline_b_initial_hash": "493a71aa337ae717e41f91a2c6c8143bb4b6bcdbf871f0af5eb10b8462bc6a23",
+    "computed_initial_tier": "MEDIUM",
+    "initial_corroboration_requirement": 3,
+    "exact_parity_result": true,
+    "all_fields_match": true,
+    "near_match_reconciliation_used": false
+  },
+  "root_pt_parity": {
+    "applicable": true,
+    "pipeline_a_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "pipeline_b_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "pipeline_a_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pipeline_b_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "root_parity": true,
+    "pt_parity": true,
+    "tier_parity": true,
+    "corroboration_parity": true,
+    "exact_parity_result": true,
+    "near_match_reconciliation_used": false
+  },
+  "governed_stage_parity": {
+    "applicable": true,
+    "comparison_fields": [
+      "classification_result",
+      "classification_reason",
+      "classification_state_digest",
+      "classification_live_state_digest",
+      "classification_evidence_valid",
+      "classification_evidence_failures_digest",
+      "classification_evidence_digest",
+      "classification_token_digest",
+      "licensing_result",
+      "licensing_reason",
+      "licensing_state_digest",
+      "licensing_live_state_digest",
+      "licensing_evidence_valid",
+      "licensing_evidence_failures_digest",
+      "licensing_evidence_digest",
+      "licensing_token_digest",
+      "governance_result",
+      "governance_reason",
+      "governance_state_digest",
+      "governance_live_state_digest",
+      "governance_evidence_valid",
+      "governance_evidence_failures_digest",
+      "governance_evidence_digest",
+      "governance_token_digest",
+      "governance_history_digest",
+      "grc_result",
+      "grc_reason",
+      "grc_state_digest",
+      "grc_live_state_digest",
+      "grc_evidence_valid",
+      "grc_evidence_failures_digest",
+      "grc_evidence_digest",
+      "grc_token_digest",
+      "governed_reentry_digest",
+      "governed_constraint_digest"
+    ],
+    "field_match_count": 35,
+    "all_fields_match": true,
+    "exact_parity_result": true,
+    "near_match_reconciliation_used": false
+  },
+  "stage_snapshot": {
+    "classification": {
+      "result": "ALLOW",
+      "reason": "classification_valid",
+      "state_digest": "677a1b9e733efc1184ff518d9b7baca0dc1413b6980ee496839d4070cb0923f7",
+      "live_state_digest_matches": true,
+      "evidence_digest": "40eca99738bc6e060a305105263092b0d345da52d445b1c3283e60a5f8ae24e7",
+      "evidence_valid": true,
+      "token_digest": "f5bc2e105e7b51960522822a0e75229bbc755d2c080b34aa81f5e3f707a79b70"
+    },
+    "licensing": {
+      "result": "ALLOW",
+      "reason": "licensing_valid",
+      "state_digest": "eb7537ce243ddaa8becd4af52ad37f29c55d6cd6c1c1267251bf488415cdbeb7",
+      "live_state_digest_matches": true,
+      "evidence_digest": "a858f2b303873a14017959dd555c725f3361c3ca5432f76416c8beaf169d0839",
+      "evidence_valid": true,
+      "token_digest": "92117ebcb7cb4a9b08a844c2740d67bb0d60906fc61075baa347252b596c9c94"
+    },
+    "governance": {
+      "result": "ALLOW",
+      "reason": "governance_admissibility_satisfied",
+      "state_digest": "b7fa69602450bbce977f75ca02b26c8338319a485bc5486ef693649d29076f45",
+      "live_state_digest_matches": true,
+      "evidence_digest": "1fe597cfb34e36fdc9368ff5108a311cdaab357b60243a6f1c332ad311269a28",
+      "evidence_valid": true,
+      "token_digest": "584c91ee69318380931738d76bedc21c04c6bf771f5f60b35c8dd320133f5d5a",
+      "governance_history_digest": "3f91c74e92c43c7dab13df90150fb5a286f253b21f4719466374d624f303e638"
+    },
+    "grc": {
+      "result": "PASS",
+      "reason": "governed_response_pass",
+      "state_digest": "9bd414f955bc1dbab1f3f87116aab99b3f90900681dae4d4c14bb8c40a175f3c",
+      "live_state_digest_matches": true,
+      "evidence_digest": "9717a8377863bc60cb0082be4b632ee9153affe6fc7bec3f8f9f62ad8d80e634",
+      "evidence_valid": true,
+      "token_digest": "b98b626638c720f6bf503644c42a57fe840a69398affdade7270f5c8107ff3ce"
+    }
+  },
+  "pipeline_convergence": {
+    "matched": true,
+    "mismatches": [],
+    "convergence_hash": "6fdeeecaaa34390b87afaea226f5e11b8ad510af917e2bb826e2e4892f970f30",
+    "mismatch_action": "fail_closed",
+    "weighted_reconciliation_used": false,
+    "probabilistic_merge_used": false,
+    "near_match_reconciliation_used": false
+  },
+  "replay": {
+    "replay_count": 2,
+    "matched": true,
+    "mismatches": [],
+    "exact_governed_field_metadata_required": true,
+    "replay_hash": "0d69a686a5017d8ceee25f800ab84ff935a93d0ad16284989c75f663ec2fee2f"
+  },
+  "negative_parity_evidence": {
+    "live_classification_and_licensing_mutation_detected": true,
+    "grc_result_divergence_detected": true,
+    "governed_reentry_divergence_detected": true,
+    "resigned_inconsistent_convergence_proof_rejected": true,
+    "resigned_replay_metadata_mismatch_rejected": true,
+    "actual_dual_runner_divergence_result": "ESCALATE",
+    "actual_dual_runner_divergence_execution_result": "HALT",
+    "near_match_substitution_accepted": false,
+    "proofs": [
+      "test_pass5_ab_parity_detects_grc_and_reentry_divergence",
+      "test_parity_recomputes_live_state_and_rejects_resigned_inconsistency",
+      "test_replay_verifier_requires_exact_comparison_metadata",
+      "test_actual_dual_runner_reports_exact_pass5_parity_and_halts_divergence"
+    ]
+  },
+  "secrets_recorded": false
+}

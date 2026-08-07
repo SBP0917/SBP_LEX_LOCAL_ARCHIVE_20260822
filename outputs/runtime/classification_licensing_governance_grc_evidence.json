@@ -1,0 +1,318 @@
+{
+  "schema_version": "desktop-v1.runtime-pass5-classification-licensing-governance-grc-evidence.v1",
+  "evidence_date": "2026-08-08",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit_before": "2e02b18c7e25f4160f3d2cf3645e3f6cc18fe4e9",
+  "repository_implementation_commit": "6a8ea7d75096dc90b17c618a73ef090c79c821df",
+  "repository_implementation_commit_role": "clean Pass 5 runtime and focused-test commit used for all authoritative verification",
+  "evidence_recording_commit": "the Git commit containing this file; the exact hash is emitted in the final handoff because a file cannot contain its own commit hash",
+  "branch": "main",
+  "provider_mode": "synthetic_local",
+  "python_executable": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python_version": "3.14.6",
+  "scope": {
+    "entry": "certified Procedural Truth state",
+    "stages": [
+      "classification",
+      "licensing",
+      "governance",
+      "grc"
+    ],
+    "exit": "governed state admitted at Domain ingress",
+    "domain_reasoning_hardened": false,
+    "aurion_hardened": false,
+    "execution_gate_hardened": false,
+    "architecture_changed": false,
+    "canon_changed": false,
+    "traversal_order_changed": false,
+    "new_token_type_introduced": false,
+    "new_authority_source_introduced": false
+  },
+  "verification": {
+    "compile": {
+      "command": "python -m compileall -q .",
+      "status": "PASS",
+      "exit_code": 0,
+      "note": "Historical inaccessible pytest cache/temp directories produced non-fatal Can't list notices."
+    },
+    "focused": {
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_runtime_pass5_classification_licensing_governance_grc_hardening.py",
+      "status": "PASS",
+      "passed": 54,
+      "duration_seconds": 103.07
+    },
+    "focused_plus_phase15": {
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_runtime_pass5_classification_licensing_governance_grc_hardening.py tests/test_phase_15_5a_alignment.py tests/test_phase_15_5b_integration.py",
+      "status": "PASS",
+      "passed": 79,
+      "duration_seconds": 110.09
+    },
+    "directly_affected": {
+      "status": "PASS",
+      "passed": 336,
+      "skipped": 1,
+      "duration_seconds": 271.95,
+      "suites": [
+        "tests/test_runtime_pass5_classification_licensing_governance_grc_hardening.py",
+        "tests/test_phase_15_5a_alignment.py",
+        "tests/test_phase_15_5b_integration.py",
+        "tests/test_runtime_pass4_root_pt_hardening.py",
+        "tests/test_runtime_pass3_eie_state_boundary.py",
+        "tests/test_phase_18_5_authority_boundary.py",
+        "tests/test_phase_18_procedural_truth_binding.py",
+        "tests/test_eie_pt_sufficiency_rebuild.py",
+        "tests/test_double_triple_assurance.py",
+        "tests/test_execution_gate_strictness.py",
+        "tests/test_adversarial_runtime.py",
+        "tests/test_phase_18_6_historical_audit_mutation.py",
+        "tests/test_generated_evidence_lineage.py",
+        "tests/test_h6ghi_external_identity_trust_replay.py",
+        "tests/test_phase_18_7d_local_evidence_chain.py"
+      ]
+    },
+    "full_windows_suite": {
+      "command": "scripts\\run_tests.bat -p no:cacheprovider -q",
+      "status": "PASS",
+      "passed": 2005,
+      "skipped": 7,
+      "duration_seconds": 975.74,
+      "wrapper_exit_code": 0,
+      "wrapper_final_line": "[PASS] Requested test run passed.",
+      "environment": "clean local verification clone on attached main with origin/main and the canonical GitHub remote; system temp directory used for nested-Git tests",
+      "commit": "6a8ea7d75096dc90b17c618a73ef090c79c821df"
+    },
+    "full_suite_environmental_diagnostics": [
+      {
+        "result": "EXPECTED ENVIRONMENTAL REJECTION",
+        "summary": "The shared primary checkout run reached 1945 passed and 7 skipped; provenance suites then rejected unrelated uncommitted video-generator files as tracked_working_tree_dirty."
+      },
+      {
+        "result": "EXPECTED ENVIRONMENTAL REJECTION",
+        "summary": "A clean-clone run with TEMP nested inside the source repository reached 2001 passed and 7 skipped; four nested-Git lineage tests rejected recursive/in-repository temp placement."
+      },
+      {
+        "result": "PASS",
+        "summary": "The authoritative clean-clone run used the normal system temp directory and passed every discovered tracked test."
+      }
+    ],
+    "runtime": {
+      "status": "PASS",
+      "decision": "ALLOW",
+      "execution_result": "EXECUTE",
+      "pipeline_mode": "MODE_2_SPLIT_VALIDATOR",
+      "convergence_matched": true,
+      "token_failures": [],
+      "measured_startup_status": "MEASURED_STARTUP_APPROVED",
+      "audit_hash": "5d3b2741d7576ac258dda40beabb2a2655241f63a0f480bec3b02d95785d8ec2"
+    },
+    "replay": {
+      "status": "PASS",
+      "replay_count": 2,
+      "matched": true,
+      "mismatches": [],
+      "pass5_fields_compared": true,
+      "replay_hash": "0d69a686a5017d8ceee25f800ab84ff935a93d0ad16284989c75f663ec2fee2f"
+    },
+    "release_integrity": "RELEASE_INTEGRITY_PASS",
+    "local_trust_25_year_capstone": "LOCAL_TRUST_CAPSTONE_PASS",
+    "adversarial_negative_harness": "ADVERSARIAL_NEGATIVE_HARNESS_PASS"
+  },
+  "governed_handoff_snapshot": {
+    "request_fingerprint": "cd84a2f696258fe3f24aa6014be5d6b4a7f1805fe593733ecac7b53e428598a8",
+    "eie_digest": "6d4c48f5a9c296fb06e81681a148f0f2af57d17a082ae0951e23e2c997aae1f5",
+    "traversal_id": "f408b9dfb98807febe67bb7be3d4c1600821d3b059ebd9fa3ac1667a9fc76d66",
+    "state_hash": "58d4f64d3a32e05211495360fbf994b9f21df75dd83f690f7283104631d681fa",
+    "hash_chain_head": "e4356ae3a02698a0fa72d26652117a4ed52e07091155c770257dc8688c1715df",
+    "live_state_hash_valid": true,
+    "hash_chain_valid": true,
+    "constraint_continuity_valid": true,
+    "governance_history_valid": true,
+    "domain_handoff_valid": true,
+    "domain_handoff_failures": [],
+    "constraint_snapshot": {
+      "computed_tier": "MEDIUM",
+      "corroboration_required": 3,
+      "autonomy_level": 50,
+      "autonomy_ceiling": 75,
+      "resolved_authority": "test_authority",
+      "jurisdiction": "AU-PACIFIC",
+      "operational_scope": "controlled_test",
+      "licensing_scope": "controlled_test",
+      "pt_result": "PASS",
+      "pt_outcome": "PT_PASS"
+    }
+  },
+  "stage_lineage": {
+    "classification": {
+      "result": "ALLOW",
+      "reason": "classification_valid",
+      "evidence_digest": "40eca99738bc6e060a305105263092b0d345da52d445b1c3283e60a5f8ae24e7",
+      "evidence_valid": true,
+      "token_digest": "f5bc2e105e7b51960522822a0e75229bbc755d2c080b34aa81f5e3f707a79b70",
+      "token_valid": true,
+      "state_hash_entering_stage": "bdc13bc63c5072b4209351b01158913842e12da51e2928dd97abeffaba9f8ceb",
+      "chain_hash_entering_finalisation": "00cb838b1b417bd7afb8d8aea0d56578d9e422659a7cceb87070f7d7484162e0",
+      "stage_state_digest": "677a1b9e733efc1184ff518d9b7baca0dc1413b6980ee496839d4070cb0923f7",
+      "hash_chain_logical_index": 18
+    },
+    "licensing": {
+      "result": "ALLOW",
+      "reason": "licensing_valid",
+      "evidence_digest": "a858f2b303873a14017959dd555c725f3361c3ca5432f76416c8beaf169d0839",
+      "evidence_valid": true,
+      "token_digest": "92117ebcb7cb4a9b08a844c2740d67bb0d60906fc61075baa347252b596c9c94",
+      "token_valid": true,
+      "state_hash_entering_stage": "97669858f238a8d4bc3e3a6a854642dfb897676eeddb21928049311e505f105b",
+      "chain_hash_entering_finalisation": "e752e115f1defba38c6975db74fe91c63d8d44923cce9bea68739fdf04bbfb77",
+      "stage_state_digest": "eb7537ce243ddaa8becd4af52ad37f29c55d6cd6c1c1267251bf488415cdbeb7",
+      "hash_chain_logical_index": 19
+    },
+    "governance": {
+      "result": "ALLOW",
+      "reason": "governance_admissibility_satisfied",
+      "evidence_digest": "1fe597cfb34e36fdc9368ff5108a311cdaab357b60243a6f1c332ad311269a28",
+      "evidence_valid": true,
+      "token_digest": "584c91ee69318380931738d76bedc21c04c6bf771f5f60b35c8dd320133f5d5a",
+      "token_valid": true,
+      "state_hash_entering_stage": "de58c71468bdb00e2776ffd3e225eb49882de3137744b0b40fa15b73cf57daa1",
+      "chain_hash_entering_finalisation": "6fbb2b8b4bfc34a553b2d5ee33a9ee44f75239a86dba4f464f827e86b74f3e40",
+      "stage_state_digest": "b7fa69602450bbce977f75ca02b26c8338319a485bc5486ef693649d29076f45",
+      "hash_chain_logical_index": 21
+    },
+    "grc": {
+      "result": "PASS",
+      "reason": "governed_response_pass",
+      "evidence_digest": "9717a8377863bc60cb0082be4b632ee9153affe6fc7bec3f8f9f62ad8d80e634",
+      "evidence_valid": true,
+      "token_digest": "b98b626638c720f6bf503644c42a57fe840a69398affdade7270f5c8107ff3ce",
+      "token_valid": true,
+      "state_hash_entering_stage": "cb7fbbaf99342d87692df94e0ce068be6148f4d2775e6ecc61d569881e441600",
+      "chain_hash_entering_finalisation": "47eaa444c0a770ee07eec026c903051fb33d9756c8d771c4e827c0d0c7b62999",
+      "stage_state_digest": "9bd414f955bc1dbab1f3f87116aab99b3f90900681dae4d4c14bb8c40a175f3c",
+      "hash_chain_logical_index": 22
+    }
+  },
+  "governance_and_reentry": {
+    "history_entry_count": 1,
+    "history_digest": "3f91c74e92c43c7dab13df90150fb5a286f253b21f4719466374d624f303e638",
+    "latest_entry_digest": "c8a159735533e54e4bb02585b7b35215660e553322f48c3ca2470439d9db8a22",
+    "latest_result": "ALLOW",
+    "retry_eligible": false,
+    "reentry_permitted": false,
+    "required_action": "continue_pipeline",
+    "reason": "governance_allowed_no_reentry_required"
+  },
+  "audit_lineage": {
+    "audit_record_valid": true,
+    "audit_hash": "5d3b2741d7576ac258dda40beabb2a2655241f63a0f480bec3b02d95785d8ec2",
+    "audit_complete": true,
+    "audit_locked": true,
+    "audit_verified": true,
+    "all_stage_evidence_valid": true,
+    "all_expected_tokens_present_and_valid": true,
+    "governance_history_valid": true,
+    "constraint_continuity_valid": true,
+    "domain_handoff_valid_at_audit": true
+  },
+  "adversarial_closure": {
+    "classification_bypass_protection": {
+      "status": "PASS",
+      "proofs": [
+        "test_classification_scope_substitution_cannot_enter_licensing",
+        "test_cross_request_classification_evidence_and_token_are_rejected",
+        "test_classification_denial_reentry_purges_all_descendant_authority",
+        "test_historical_classification_allow_is_superseded_by_later_denial"
+      ]
+    },
+    "licensing_bypass_protection": {
+      "status": "PASS",
+      "proofs": [
+        "test_missing_licence_never_defaults_to_valid",
+        "test_conflicting_licence_sources_fail_closed",
+        "test_licensing_scope_substitution_cannot_enter_governance",
+        "test_licensing_denial_reentry_purges_stale_allow_token"
+      ]
+    },
+    "governance_bypass_and_denial_supremacy": {
+      "status": "PASS",
+      "authority_inversion_vectors": 8,
+      "proofs": [
+        "test_grc_cannot_pass_without_the_complete_governance_chain",
+        "test_grc_cannot_pass_when_governance_token_is_deleted",
+        "test_deleting_governance_denial_history_cannot_invert_to_allow",
+        "test_governance_denial_supremacy_survives_downstream_authority_inversion",
+        "test_historical_governed_allow_cannot_supersede_later_denial"
+      ]
+    },
+    "escalate_protection": {
+      "status": "PASS",
+      "proofs": [
+        "test_escalate_cannot_become_domain_or_execution_permission",
+        "test_escalate_to_allow_mutation_cannot_pass_grc",
+        "test_audit_token_expectations_cover_deny_and_escalate"
+      ]
+    },
+    "reentry_control": {
+      "status": "PASS",
+      "proofs": [
+        "test_grc_evidence_binds_the_denial_and_reentry_inputs_it_consumes",
+        "test_grc_rejects_fingerprint_retry_fallback_and_feedback_substitution",
+        "test_governance_denial_audit_preserves_valid_grc_denial_token"
+      ]
+    },
+    "tier_autonomy_and_scope_monotonicity": {
+      "status": "PASS",
+      "proofs": [
+        "test_class_profile_ceiling_cannot_be_self_escalated",
+        "test_explicit_scope_contract_is_reachable_but_never_broadens",
+        "test_tier_and_autonomy_constraints_cannot_be_weakened_late"
+      ]
+    },
+    "domain_handoff_boundary": {
+      "status": "PASS",
+      "proofs": [
+        "test_domain_requires_exact_pass_grc_evidence_and_token",
+        "test_direct_domain_rejects_every_incomplete_pass5_prefix",
+        "test_valid_governed_handoff_has_exact_signed_stage_lineage"
+      ]
+    },
+    "replay_parity_and_audit": {
+      "status": "PASS",
+      "proofs": [
+        "test_pass5_replay_compares_exact_governed_fields",
+        "test_replay_preserves_classification_licensing_and_escalate_outcomes",
+        "test_parity_recomputes_live_state_and_rejects_resigned_inconsistency",
+        "test_replay_verifier_requires_exact_comparison_metadata",
+        "test_actual_dual_runner_reports_exact_pass5_parity_and_halts_divergence",
+        "test_audit_preserves_complete_pass5_evidence_and_domain_boundary"
+      ]
+    }
+  },
+  "gap_closure": {
+    "identified": 8,
+    "closed": 8,
+    "remaining": 0,
+    "closed_gap_ids": [
+      "GAP-CLG-001",
+      "GAP-CLG-002",
+      "GAP-CLG-003",
+      "GAP-CLG-004",
+      "GAP-CLG-005",
+      "GAP-CLG-006",
+      "GAP-CLG-007",
+      "GAP-CLG-008"
+    ],
+    "unresolved_classification_gaps": [],
+    "unresolved_licensing_gaps": [],
+    "unresolved_governance_gaps": [],
+    "unresolved_grc_gaps": []
+  },
+  "worktree_observation": {
+    "pass5_files_committed": true,
+    "implementation_commit_verified_clean": true,
+    "authoritative_full_suite_clone_clean": true,
+    "shared_primary_checkout_clean": false,
+    "shared_primary_checkout_note": "Unrelated concurrent video-generator changes in README.md, CHANGELOG.md, docs/VIDEO_GENERATOR.md, examples/, sbp_video/, and tests/video/ were preserved and excluded from both Pass 5 commits."
+  },
+  "secrets_recorded": false
+}
