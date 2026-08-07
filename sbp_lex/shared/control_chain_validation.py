@@ -7,6 +7,8 @@ from sbp_lex.security.pqc import generate_digest, verify_signature
 
 EIE_DOWNSTREAM_RESULT_FIELDS = {
     "eie_hash",
+    "skg_truth_foundation",
+    "dtn_contextual_verification",
     "root_of_trust_anchorage",
     "procedural_truth_certification",
 }

@@ -5,6 +5,7 @@ from typing import Any, Mapping
 
 from external_substrates.shared.digest import digest_mapping
 from external_substrates.shared.signing import verify_signature
+from external_substrates.shared.validation import contains_prohibited_authority
 
 BRIDGE_PACKAGE_VERSION = "1.0"
 
@@ -48,6 +49,8 @@ def _validate_external_authority(package: Mapping[str, Any], failures: list[str]
         _append(failures, "external_package_contains_execution_permission")
     if _contains_key(package, "governance_result"):
         _append(failures, "external_package_contains_governance_result")
+    if contains_prohibited_authority(package):
+        _append(failures, "external_package_contains_forbidden_authority")
 
 
 def _validate_common(

@@ -2,14 +2,18 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-PROHIBITED_AUTHORITY_KEYS = {
+PROHIBITED_AUTHORITY_KEYS = frozenset({
     "execution_permission",
     "execution_result",
     "execution_verified",
     "governance_result",
+    "external_governance_result",
+    "runtime_authority",
     "final_admissibility",
-}
-PROHIBITED_AUTHORITY_VALUES = {"ALLOW", "DENY", "ESCALATE"}
+})
+PROHIBITED_AUTHORITY_VALUES = frozenset(
+    {"ALLOW", "DENY", "ESCALATE", "EXECUTE", "HALT"}
+)
 
 
 def contains_prohibited_authority(value: Any) -> bool:

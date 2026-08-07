@@ -8,7 +8,7 @@ from sbp_lex.aurion15.runtime.runner import run_aurion_runtime
 from sbp_lex.authority_first.root_of_trust_runner import run_root_of_trust
 from sbp_lex.classification.engine import run_classification
 from sbp_lex.classification.ap_acf import run_ap_acf_precheck
-from sbp_lex.collective.context_interface import attach_collective_signals, prepare_pre_context_signals
+from sbp_lex.collective.context_interface import attach_collective_signals
 from sbp_lex.domains.runner import run_domain_wrap
 from sbp_lex.execution.controlled_outcome import (
     apply_terminal_control_state,
@@ -23,6 +23,9 @@ from sbp_lex.licensing.engine import run_licensing
 from sbp_lex.pipeline.hard_ingress import run_hard_ingress, validate_request_ingress
 from sbp_lex.shared.state_builder import build_state
 from sbp_lex.shared.hash_chain import append_hash_entry, rebuild_state_hash
+from sbp_lex.runtime.synthetic_substrates import (
+    prepare_synthetic_substrate_signals,
+)
 
 
 def _mark_stage(state: Dict[str, Any], stage: str) -> Dict[str, Any]:
@@ -52,8 +55,20 @@ def run_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, A
         ingress = {"accepted": False, "failures": request_failures}
         signals = None
     else:
-        signals = deepcopy(dict(pre_context_signals)) if pre_context_signals else prepare_pre_context_signals(request_copy)
+        substrate_failures: list[str] = []
+        if pre_context_signals is not None:
+            signals = deepcopy(dict(pre_context_signals))
+        else:
+            substrate = prepare_synthetic_substrate_signals(request_copy)
+            signals = substrate.signals
+            substrate_failures = list(substrate.failures)
         ingress = run_hard_ingress(request=request_copy, pre_context_signals=signals)
+        if substrate_failures:
+            ingress["accepted"] = False
+            ingress["failures"] = [
+                *substrate_failures,
+                *ingress.get("failures", []),
+            ]
     if not ingress.get("accepted"):
         state = build_state(request_copy)
         state["hard_entry_gate"] = {

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sbp-lex:desktop-v1:synthetic-skg-package:v1",
+  "title": "Desktop V1 deterministic synthetic SKG package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "package_type",
+    "schema_version",
+    "package_reference",
+    "request_fingerprint",
+    "eie_digest",
+    "authority_hierarchy",
+    "jurisdiction",
+    "legitimacy",
+    "precedence",
+    "procedural_obligation_references",
+    "evidentiary_references",
+    "substrate_constraints",
+    "provenance",
+    "issued_at",
+    "freshness_seconds",
+    "nonce",
+    "signature_mode",
+    "digest",
+    "signature"
+  ],
+  "properties": {
+    "package_type": {"const": "synthetic_skg_package"},
+    "schema_version": {"const": "desktop-v1.synthetic.skg.v1"},
+    "package_reference": {"type": "string", "minLength": 1},
+    "request_fingerprint": {"type": "string", "minLength": 1},
+    "eie_digest": {"type": "string", "minLength": 1},
+    "authority_hierarchy": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["authority_id", "parent_authority_id", "legitimate", "precedence_rank"],
+        "properties": {
+          "authority_id": {"type": "string", "minLength": 1},
+          "parent_authority_id": {"type": ["string", "null"]},
+          "legitimate": {"const": true},
+          "precedence_rank": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "jurisdiction": {"type": "object"},
+    "legitimacy": {"type": "object"},
+    "precedence": {"type": "object"},
+    "procedural_obligation_references": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "evidentiary_references": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "substrate_constraints": {"type": "object"},
+    "provenance": {"type": "array", "minItems": 1},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "freshness_seconds": {"type": "integer", "minimum": 0},
+    "nonce": {"type": "string", "minLength": 1},
+    "signature_mode": {"const": "CONTROLLED_LOCAL_HMAC_SHA256_V1"},
+    "digest": {"type": "string", "minLength": 1},
+    "signature": {"type": "string", "minLength": 1}
+  }
+}

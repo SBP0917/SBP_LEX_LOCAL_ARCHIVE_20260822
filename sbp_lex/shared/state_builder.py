@@ -17,40 +17,102 @@ def _safe_factor(value: Any) -> int:
     return factor if factor >= 0 else 0
 
 
-def build_state(
+def build_execution_intent_envelope(
     request: Mapping[str, Any],
-    admitted_pre_context: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
+    """Construct the immutable EIE before any synthetic substrate package."""
     request_dict = deepcopy(dict(request))
     request_fingerprint = generate_digest(request_dict)
     source_payload_hash = generate_digest(request_dict.get("payload", {}))
-    eie = {
+    context = (
+        request_dict.get("context", {})
+        if isinstance(request_dict.get("context"), Mapping)
+        else {}
+    )
+    payload = (
+        request_dict.get("payload", {})
+        if isinstance(request_dict.get("payload"), Mapping)
+        else {}
+    )
+    classification = (
+        payload.get("classification", {})
+        if isinstance(payload.get("classification"), Mapping)
+        else {}
+    )
+    substrate_references = {
+        "skg_package_reference": generate_digest({
+            "package_type": "synthetic_skg_package",
+            "schema_version": "desktop-v1.synthetic.skg.v1",
+            "request_fingerprint": request_fingerprint,
+        }),
+        "dtn_package_reference": generate_digest({
+            "package_type": "synthetic_dtn_package",
+            "schema_version": "desktop-v1.synthetic.dtn.v1",
+            "request_fingerprint": request_fingerprint,
+        }),
+        "signature_mode": "CONTROLLED_LOCAL_HMAC_SHA256_V1",
+        "provider_mode": "synthetic_local",
+    }
+    eie: Dict[str, Any] = {
         "object_type": "ExecutionIntentEnvelope",
         "eie_version": "1.0",
         "canonical_traversal_state": True,
-        "adapter_identity": request_dict.get("adapter_identity", "LOCAL_RUNTIME_ADAPTER"),
-        "source_system_identity": request_dict.get("source_system_identity", "LOCAL_RUNTIME"),
+        "adapter_identity": request_dict.get(
+            "adapter_identity", "LOCAL_RUNTIME_ADAPTER"
+        ),
+        "source_system_identity": request_dict.get(
+            "source_system_identity", "LOCAL_RUNTIME"
+        ),
         "native_format": request_dict.get("native_format", "runtime_request"),
         "source_payload_hash": source_payload_hash,
         "request_fingerprint": request_fingerprint,
-        "traversal_id": generate_digest(
-            {
-                "request_fingerprint": request_fingerprint,
-                "source_payload_hash": source_payload_hash,
-                "adapter_identity": request_dict.get("adapter_identity", "LOCAL_RUNTIME_ADAPTER"),
-            }
-        ),
+        "traversal_id": generate_digest({
+            "request_fingerprint": request_fingerprint,
+            "source_payload_hash": source_payload_hash,
+            "adapter_identity": request_dict.get(
+                "adapter_identity", "LOCAL_RUNTIME_ADAPTER"
+            ),
+        }),
         "intent": request_dict.get("action", ""),
-        "payload": request_dict.get("payload", {}),
-        "context": request_dict.get("context", {}),
+        "objective": request_dict.get(
+            "objective", context.get("objective", request_dict.get("action", ""))
+        ),
+        "autonomy": classification.get(
+            "autonomy_level", request_dict.get("autonomy", 0)
+        ),
+        "deployment": context.get(
+            "operational_scope", request_dict.get("deployment", "local")
+        ),
+        "environment": context.get(
+            "environment", request_dict.get("environment", "local")
+        ),
+        "consequence": deepcopy(
+            request_dict.get(
+                "safety_profile", context.get("consequence", {})
+            )
+        ),
+        "payload": deepcopy(payload),
+        "context": deepcopy(context),
         "resolved_authority": request_dict.get("resolved_authority", ""),
         "jurisdiction": request_dict.get("jurisdiction", ""),
+        "external_substrate_references": substrate_references,
         "skg_truth_foundation": {},
         "dtn_contextual_verification": {},
         "root_of_trust_anchorage": {},
         "procedural_truth_certification": {},
     }
     eie["eie_hash"] = canonical_eie_digest(eie)
+    return eie
+
+
+def build_state(
+    request: Mapping[str, Any],
+    admitted_pre_context: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    request_dict = deepcopy(dict(request))
+    request_fingerprint = generate_digest(request_dict)
+    eie = build_execution_intent_envelope(request_dict)
+    source_payload_hash = eie["source_payload_hash"]
     pt_envelope, pt_envelope_digest = build_pt_evidence_envelope(
         request_dict, admitted_pre_context, eie=eie
     )

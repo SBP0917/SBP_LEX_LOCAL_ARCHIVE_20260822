@@ -1,0 +1,101 @@
+{
+  "evidence_version": "RUNTIME_PASS_2_SYNTHETIC_SKG_DTN_EVIDENCE_V1",
+  "scope": "Desktop V1 deterministic local/synthetic external substrate runtime only",
+  "repository": {
+    "identity": "github.com/SBP0917/SBP_LEX_DUAL_V6",
+    "branch": "main",
+    "base_commit": "00fb5979f5830f4f9f2591485d5a2a070c36eb59",
+    "artifact_commit": "SAME_COMMIT_AS_THIS_EVIDENCE_FILE"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "fixture_issued_at": "2026-08-07T00:00:00Z",
+    "fixture_validation_time": "2026-08-07T00:00:00Z",
+    "provider_mode": "synthetic_local",
+    "signature_mode": "CONTROLLED_LOCAL_HMAC_SHA256_V1"
+  },
+  "fixture_hashes": {
+    "request_fingerprint": "0ad0f7f68ca162aed100ae10da86b1bc55047b41cbbbbb36f1eb5a1a5233991b",
+    "eie_digest": "f9b983674581d88ab740c1d9b5d2c1f508bc7194a3caa9a7e80c50926d144790",
+    "skg_digest": "7f7898022eb49527bfbcd5b4f438737a14bee4f1cd76763a81c32ae30ba2d65c",
+    "dtn_digest": "400f057164d642c815817d09f472cc4fc002831707ea9845367cef4303698d33",
+    "skg_canonical_sha256": "2d1ae7a135313b38ed3bad5ffe70fe618b9a0abc972acaa38ca34372c49cfa47",
+    "dtn_canonical_sha256": "a5b4e590e47647ff4b1e7ab3bf7171d5908b0829cbbc4a786529ad39bf4d9daf",
+    "fixture_corpus_sha256": "449396e8106b776163c31602315c50e5d723e779dbd08c2b787c62bc7dc99543"
+  },
+  "fixtures": [
+    "valid_skg_package",
+    "valid_dtn_package",
+    "valid_paired_package",
+    "malformed_package",
+    "stale_package",
+    "replayed_package",
+    "request_mismatch",
+    "eie_mismatch",
+    "digest_mismatch",
+    "signature_mismatch",
+    "jurisdiction_conflict",
+    "authority_conflict",
+    "forbidden_authority_leakage",
+    "provider_mode_activation_attempt"
+  ],
+  "validation_summary": {
+    "skg_schema": "PASS",
+    "dtn_schema": "PASS",
+    "request_binding": "PASS",
+    "eie_binding": "PASS",
+    "bridge": "PASS",
+    "freshness": "PASS",
+    "nonce_replay": "PASS",
+    "provenance": "PASS",
+    "authority_leakage": "PASS",
+    "hard_entry_isolation": "PASS",
+    "provider_mode_blocking": "PASS",
+    "canonical_serialization": "PASS",
+    "repeated_run_equality": "PASS"
+  },
+  "negative_test_summary": {
+    "malformed": "REJECTED",
+    "stale": "REJECTED",
+    "replayed_nonce": "REJECTED",
+    "replayed_digest": "REJECTED",
+    "request_mismatch": "REJECTED",
+    "eie_mismatch": "REJECTED",
+    "digest_tamper": "REJECTED",
+    "signature_tamper": "REJECTED",
+    "jurisdiction_conflict": "REJECTED",
+    "authority_conflict": "REJECTED",
+    "missing_dependency": "REJECTED",
+    "skg_pathway_conflict": "REJECTED",
+    "authority_leakage": "REJECTED",
+    "provider_activation": "REJECTED",
+    "direct_state_write": "NOT_AVAILABLE"
+  },
+  "replay_result": {
+    "fresh_registry_first_acceptance": true,
+    "same_registry_second_acceptance": false,
+    "stable_failures": [
+      "replayed_package_nonce",
+      "replayed_package_digest"
+    ],
+    "equal_repeated_rejection": true
+  },
+  "tests": {
+    "focused_command": "py -3.14 -m pytest -p no:cacheprovider -q tests/test_runtime_pass2_synthetic_skg_dtn.py",
+    "focused_result": "37 passed",
+    "affected_regression_command": "py -3.14 -m pytest -p no:cacheprovider -q tests/test_runtime_pass2_synthetic_skg_dtn.py external_substrates/shared/tests/test_bridge_readiness.py tests/test_eie_pt_sufficiency_rebuild.py",
+    "affected_regression_result": "65 passed",
+    "precommit_full_command": "scripts\\run_tests.bat -p no:cacheprovider -q",
+    "precommit_full_result": "1796 passed, 7 skipped; 22 failed and 37 errors exclusively because tracked_working_tree_dirty is required before commit",
+    "postcommit_full_result": "RECORDED_IN_FINAL_HANDOFF_AFTER_CLEAN-COMMIT_RUN"
+  },
+  "boundary_assertions": {
+    "architecture_changed": false,
+    "authority_changed": false,
+    "skg_external": true,
+    "dtn_external": true,
+    "live_linkage_introduced": false,
+    "cloud_nodes_mesh_quorum_distributed_runtime_introduced": false
+  }
+}
