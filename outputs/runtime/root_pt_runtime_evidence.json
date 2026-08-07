@@ -1,0 +1,184 @@
+{
+  "schema_version": "desktop-v1.runtime-pass4-root-pt-evidence.v1",
+  "evidence_date": "2026-08-07",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit_before": "7cf107245ec561e927bfa178f35a7d49a4da129b",
+  "repository_commit_after": "e53bf8f560b3ad62a7d4a9104ba53153860e3729",
+  "repository_commit_after_role": "clean implementation commit tested before the evidence-only recording commit",
+  "evidence_recording_commit": "the Git commit containing this file; exact hash is emitted in the final handoff because a file cannot contain its own commit hash",
+  "branch": "main",
+  "working_tree_before": "clean",
+  "working_tree_after": "clean",
+  "python_executable": "C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "provider_mode": "synthetic_local",
+  "verification_commands": [
+    {
+      "command": "python -m compileall -q .",
+      "result": "PASS (exit 0); inaccessible historical pytest cache/temp directories produced non-fatal Can't list notices"
+    },
+    {
+      "command": "python -m pytest -p no:cacheprovider -q tests/test_runtime_pass4_root_pt_hardening.py",
+      "result": "PASS: 77 passed in 21.02s"
+    },
+    {
+      "command": "python -m pytest -p no:cacheprovider -q tests/test_runtime_pass4_root_pt_hardening.py tests/test_eie_pt_sufficiency_rebuild.py tests/test_phase_18_8b_repository_hardening.py tests/test_phase19a_bounded_translator.py tests/test_phase_15_5b_integration.py tests/test_phase_15_5a_alignment.py tests/test_runtime_pass3_eie_state_boundary.py",
+      "result": "PASS: 167 passed in 101.07s"
+    },
+    {
+      "command": "$env:Path='C:\\Users\\LeighMC\\AppData\\Local\\Python\\pythoncore-3.14-64;' + $env:Path; cmd.exe /d /c scripts\\run_tests.bat -p no:cacheprovider -q",
+      "result": "PASS: 1951 passed, 7 skipped in 2126.93s; wrapper exit 0"
+    },
+    {
+      "command": "python -c \"import runpy,sys; runpy.run_path('tests/conftest.py'); sys.argv=['main.py']; runpy.run_path('main.py',run_name='__main__')\"",
+      "result": "PASS: ALLOW / EXECUTE; convergence matched; no token failures"
+    },
+    {
+      "command": "python -c \"import runpy,sys; runpy.run_path('tests/conftest.py'); sys.argv=['main.py','replay']; runpy.run_path('main.py',run_name='__main__')\"",
+      "result": "PASS: two runs matched; zero mismatches"
+    },
+    {
+      "command": "python -c \"import json,runpy; runpy.run_path('tests/conftest.py'); from main import sample_request; from sbp_lex.pipeline.dual_runner import run_dual_pipeline; s=run_dual_pipeline(sample_request()); print(json.dumps({'initial_parity':s['pipeline_initial_parity']['exact_parity_result'],'root_pt_parity':s['pipeline_root_pt_parity'],'convergence_matched':s['pipeline_convergence']['matched']},sort_keys=True))\"",
+      "result": "PASS: initial, Root, PT, tier and corroboration parity exact; convergence matched; near-match reconciliation false"
+    },
+    {
+      "command": "repository-approved release_integrity, local_trust_capstone and adversarial_negative_harness validate commands after tests/conftest.py current-state test-local trust bootstrap",
+      "result": "PASS: RELEASE_INTEGRITY_PASS; LOCAL_TRUST_CAPSTONE_PASS; ADVERSARIAL_NEGATIVE_HARNESS_PASS; all exit 0"
+    },
+    {
+      "command": "git diff --check; git status --short; git branch --show-current; git rev-parse HEAD",
+      "result": "PASS: diff check clean; final worktree clean; branch main; exact final recording commit emitted at handoff"
+    }
+  ],
+  "focused_test_count": 77,
+  "affected_regression_count": 167,
+  "full_suite_result": {
+    "status": "PASS",
+    "passed": 1951,
+    "skipped": 7,
+    "duration_seconds": 2126.93,
+    "wrapper_exit_code": 0
+  },
+  "runtime_result": {
+    "status": "PASS",
+    "decision": "ALLOW",
+    "execution_result": "EXECUTE",
+    "pipeline_mode": "MODE_2_SPLIT_VALIDATOR",
+    "convergence_matched": true,
+    "token_failures": [],
+    "measured_startup_status": "MEASURED_STARTUP_APPROVED",
+    "audit_hash": "92c768ce5efa1d4a0435320f3c2ea7d234d0b1ac49568d80562114ea09d11160"
+  },
+  "replay_result": {
+    "status": "PASS",
+    "replay_count": 2,
+    "matched": true,
+    "mismatches": [],
+    "pipeline_initial_exact_parity": true,
+    "root_pt_exact_parity": true
+  },
+  "trust_integrity_result": {
+    "current_test_local_release_integrity": "RELEASE_INTEGRITY_PASS",
+    "current_test_local_capstone": "LOCAL_TRUST_CAPSTONE_PASS",
+    "current_test_local_adversarial_harness": "ADVERSARIAL_NEGATIVE_HARNESS_PASS",
+    "historical_persisted_bundle_diagnostic": "The separately persisted Phase 18.7 generated bundle remains intentionally anchored to f5ba5b2b7da8fbc63f1ddac1a3bce2cb1112ea5b and reports stale against later source commits; it was not rewritten by this bounded runtime pass."
+  },
+  "root_evidence": {
+    "request_fingerprint": "cd84a2f696258fe3f24aa6014be5d6b4a7f1805fe593733ecac7b53e428598a8",
+    "eie_digest": "6d4c48f5a9c296fb06e81681a148f0f2af57d17a082ae0951e23e2c997aae1f5",
+    "state_hash_entering_root": "2841221de4175426c693ec51ee051afadfb4b428cce86e23b26e790b6eef2507",
+    "collective_signal_digest": "f3d4917dd0050a58b7d52d09a749ed7c0ad8dc926b2a44cf1bf491b9b1d421e1",
+    "anchor_validation_result": "PASS",
+    "attestation_result": "PASS",
+    "attestation_consensus_result": "PASS",
+    "truth_anchor_result": "PASS",
+    "truth_continuity_result": "PASS",
+    "truth_expiry_result": "PASS",
+    "truth_revocation_result": "PASS",
+    "root_result": "PASS",
+    "root_reason": "root_of_trust_chain_complete",
+    "root_evidence_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "root_evidence_verified": true,
+    "root_context_digest": "c3163d723fe6e5eb5fed6838940f6dded6ef0d3f189708c6854104c790ee60f9",
+    "truth_anchor_digest": "6e0b74cdadd021296c815d21bc0c86ecc8b74c95f70e4c1d289763865116fe05"
+  },
+  "procedural_truth_evidence": {
+    "source_count_total": 3,
+    "source_count_qualifying": 3,
+    "source_identity_summary": [
+      {
+        "source_identity": "test_source_a",
+        "provenance_identity": "test_source_a",
+        "qualified": true,
+        "record_digest": "43464fdb6ac0281018e4074d7e09e32fa413d7daf246ce1c62d373307098bbdd"
+      },
+      {
+        "source_identity": "test_source_b",
+        "provenance_identity": "test_source_b",
+        "qualified": true,
+        "record_digest": "2ffe5a20e450503a7d6b89a8fd288e0241ff8eb95d91188f3f2b6a0cbccd72ae"
+      },
+      {
+        "source_identity": "test_source_c",
+        "provenance_identity": "test_source_c",
+        "qualified": true,
+        "record_digest": "9bea0dfe7a3716a83e8c81b5908783101c3d33ed7bd1e1a495a2ef05ae6bc327"
+      }
+    ],
+    "verification_result": "VALID",
+    "attestation_result": "VALID",
+    "freshness_result": "VALID",
+    "provenance_result": "VALID",
+    "consistency_result": "VALID",
+    "evidentiary_sufficiency_result": "SUFFICIENT",
+    "evidentiary_sufficiency_digest": "7585aeaa71c2f967d54ba6b1bbfc776ee74d75ca70a176f8293691c128621e2e",
+    "human_safety": 2,
+    "irreversibility": 1,
+    "cascading_impact": 1,
+    "financial_operational": 2,
+    "computed_tier": "MEDIUM",
+    "previous_tier": "LOW",
+    "current_tier": "MEDIUM",
+    "high_water_tier": "MEDIUM",
+    "tier_monotonic": true,
+    "corroboration_required": 3,
+    "corroboration_observed": 3,
+    "procedural_truth_result": "PASS",
+    "procedural_truth_reason": "procedural_truth_certified",
+    "pt_evidence_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pt_evidence_verified": true,
+    "threshold_state_digest": "238f16a910b93c1561f22c92cd6455a36d0d9a3614eb509d91c8d700ab0f0f49",
+    "threshold_bundle_digest": "d1a67b9c880b865204116508f4b1aaeccfc08d4f6198c9e73eb3368a3f313791"
+  },
+  "procedural_truth_token": {
+    "issued": true,
+    "issued_at_stage": "procedural_truth",
+    "verified": true,
+    "request_fingerprint": "cd84a2f696258fe3f24aa6014be5d6b4a7f1805fe593733ecac7b53e428598a8",
+    "eie_digest": "6d4c48f5a9c296fb06e81681a148f0f2af57d17a082ae0951e23e2c997aae1f5",
+    "collective_signal_digest": "f3d4917dd0050a58b7d52d09a749ed7c0ad8dc926b2a44cf1bf491b9b1d421e1",
+    "state_hash": "f0b0c303a731c0f6c080eebc8d46761015a63ea8d9c801d5bb66435b64b9179c",
+    "tier": "MEDIUM",
+    "corroboration_required": 3,
+    "corroboration_observed": 3,
+    "procedural_truth_result": "PASS",
+    "pt_evidence_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "token_digest": "68c4608a63706978a5aa42d94599898fdb758e52cae6635c79eec3bd943ca3f3",
+    "timestamp": 17,
+    "nonce": "06d290050e8b7ead45bc0ce25d879e77"
+  },
+  "parity": {
+    "pipeline_a_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "pipeline_b_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "root_parity": true,
+    "pipeline_a_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pipeline_b_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pt_parity": true,
+    "tier_parity": true,
+    "corroboration_parity": true,
+    "exact_parity_result": true,
+    "near_match_reconciliation_used": false
+  },
+  "snapshot_digest": "324768a0d6224ab266058808ccfce94bc3dc75e12824bec037c3e6dc05c1b5e3",
+  "secrets_recorded": false
+}

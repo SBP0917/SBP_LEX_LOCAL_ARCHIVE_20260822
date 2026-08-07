@@ -1,0 +1,59 @@
+{
+  "schema_version": "desktop-v1.runtime-pass4-root-pt-parity.v1",
+  "evidence_date": "2026-08-07",
+  "repository_commit": "e53bf8f560b3ad62a7d4a9104ba53153860e3729",
+  "branch": "main",
+  "request_fingerprint": "cd84a2f696258fe3f24aa6014be5d6b4a7f1805fe593733ecac7b53e428598a8",
+  "eie_digest": "6d4c48f5a9c296fb06e81681a148f0f2af57d17a082ae0951e23e2c997aae1f5",
+  "state_hash_entering_root": "2841221de4175426c693ec51ee051afadfb4b428cce86e23b26e790b6eef2507",
+  "collective_signal_digest": "f3d4917dd0050a58b7d52d09a749ed7c0ad8dc926b2a44cf1bf491b9b1d421e1",
+  "pipeline_initial_parity": {
+    "pipeline_a_initial_hash": "493a71aa337ae717e41f91a2c6c8143bb4b6bcdbf871f0af5eb10b8462bc6a23",
+    "pipeline_b_initial_hash": "493a71aa337ae717e41f91a2c6c8143bb4b6bcdbf871f0af5eb10b8462bc6a23",
+    "exact_parity_result": true
+  },
+  "root_pt_parity": {
+    "pipeline_a_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "pipeline_b_root_digest": "8eb173496557da6574e26007be643683394cdfe12161e2bd0569cd9820cc0940",
+    "root_parity": true,
+    "pipeline_a_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pipeline_b_pt_digest": "d8881488c40e547f722709dbef0798e53c040f204539ed250f0b5b90b57619a4",
+    "pt_parity": true,
+    "tier_parity": true,
+    "corroboration_parity": true,
+    "field_matches": {
+      "root_result": true,
+      "root_reason": true,
+      "root_evidence_digest": true,
+      "procedural_truth_result": true,
+      "procedural_truth_outcome": true,
+      "pt_evidence_digest": true,
+      "qualifying_source_count": true,
+      "evidentiary_sufficiency_result": true,
+      "computed_tier": true,
+      "corroboration_required": true,
+      "corroboration_observed": true
+    },
+    "exact_parity_result": true,
+    "near_match_reconciliation_used": false
+  },
+  "pipeline_convergence": {
+    "matched": true,
+    "mismatch_action": "fail_closed",
+    "weighted_reconciliation_used": false,
+    "probabilistic_merge_used": false
+  },
+  "replay": {
+    "replay_count": 2,
+    "matched": true,
+    "mismatches": [],
+    "root_pt_fields_compared": true
+  },
+  "computed_tier": "MEDIUM",
+  "corroboration_required": 3,
+  "corroboration_observed": 3,
+  "procedural_truth_result": "PASS",
+  "evidentiary_sufficiency_result": "SUFFICIENT",
+  "snapshot_digest": "324768a0d6224ab266058808ccfce94bc3dc75e12824bec037c3e6dc05c1b5e3",
+  "secrets_recorded": false
+}
