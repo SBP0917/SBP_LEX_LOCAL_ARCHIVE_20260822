@@ -17,13 +17,19 @@ No approved Pass 2 gap remains. Broader runtime hardening was not entered.
 - Pre-commit full Windows wrapper: 1,796 passed and 7 skipped; the remaining 22
   failures and 37 setup errors were exclusively the suite's expected
   `tracked_working_tree_dirty` guard.
-- Clean-commit full-suite result: recorded in the final handoff after the exact
-  post-commit Windows wrapper run.
+- Clean implementation commit full-suite result: 1,855 passed and 7 skipped in
+  1,446.78 seconds using the exact Windows wrapper.
 - Provider-mode blocking: PASS for live mode, live URLs, network enablement,
   credentials, cloud endpoints, production sensor feeds, external service modes,
   and live ingestion.
-- Runtime and replay results: recorded after clean-commit execution in the final
-  handoff and paired JSON evidence.
+- Compile: PASS; source compiled successfully. `compileall` warned only that
+  pre-existing OS-locked pytest cache directories could not be listed.
+- Runtime: PASS, exit 0, `ALLOW`/`EXECUTE`, convergence matched, measured startup
+  approved.
+- Replay: PASS, exit 0, two runs matched, zero mismatches, replay hash
+  `2074a037993247a1608abae760f39a44910b554d8254fbeca5cef90bdd3116f9`.
+- Implementation commit: `3941dcab8400bebd57cae686263fc7b9e20c1894`.
+- Final evidence commit: the commit containing this report.
 
 ## Files changed
 

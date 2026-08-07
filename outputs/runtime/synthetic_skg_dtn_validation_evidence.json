@@ -5,6 +5,7 @@
     "identity": "github.com/SBP0917/SBP_LEX_DUAL_V6",
     "branch": "main",
     "base_commit": "00fb5979f5830f4f9f2591485d5a2a070c36eb59",
+    "implementation_commit": "3941dcab8400bebd57cae686263fc7b9e20c1894",
     "artifact_commit": "SAME_COMMIT_AS_THIS_EVIDENCE_FILE"
   },
   "environment": {
@@ -88,7 +89,29 @@
     "affected_regression_result": "65 passed",
     "precommit_full_command": "scripts\\run_tests.bat -p no:cacheprovider -q",
     "precommit_full_result": "1796 passed, 7 skipped; 22 failed and 37 errors exclusively because tracked_working_tree_dirty is required before commit",
-    "postcommit_full_result": "RECORDED_IN_FINAL_HANDOFF_AFTER_CLEAN-COMMIT_RUN"
+    "postcommit_full_result": "1855 passed, 7 skipped in 1446.78 seconds",
+    "compile_command": "python -m compileall -q .",
+    "compile_result": "PASS; source tree compiled, with warnings only for pre-existing OS-locked pytest cache directories",
+    "runtime_command": "python main.py",
+    "runtime_result": {
+      "exit_code": 0,
+      "decision": "ALLOW",
+      "execution_result": "EXECUTE",
+      "pipeline_mode": "MODE_2_SPLIT_VALIDATOR",
+      "convergence_matched": true,
+      "measured_startup_status": "MEASURED_STARTUP_APPROVED"
+    },
+    "replay_command": "python main.py replay",
+    "runtime_replay_result": {
+      "exit_code": 0,
+      "replay_count": 2,
+      "matched": true,
+      "mismatch_count": 0,
+      "replay_hash": "2074a037993247a1608abae760f39a44910b554d8254fbeca5cef90bdd3116f9",
+      "measured_startup_status": "MEASURED_STARTUP_APPROVED"
+    },
+    "diff_check": "PASS",
+    "postcommit_worktree": "CLEAN"
   },
   "boundary_assertions": {
     "architecture_changed": false,
