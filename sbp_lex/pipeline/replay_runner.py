@@ -6,6 +6,10 @@ from typing import Any, Dict, Mapping
 from sbp_lex.collective.context_interface import prepare_pre_context_signals
 from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
+from sbp_lex.shared.convergence import (
+    GOVERNED_STAGE_PARITY_FIELDS,
+    governed_stage_summary,
+)
 
 REPLAY_COMPARISON_FIELDS = [
     "request_fingerprint",
@@ -33,9 +37,7 @@ REPLAY_COMPARISON_FIELDS = [
     "corroboration_observed",
     "pt_evidence_envelope_digest",
     "pt_bound_metadata",
-    "classification_result",
-    "licensing_result",
-    "governance_result",
+    *GOVERNED_STAGE_PARITY_FIELDS,
     "domain_result",
     "aurion15_result",
     "decision",
@@ -44,6 +46,7 @@ REPLAY_COMPARISON_FIELDS = [
     "convergence_hash",
     "convergence_matched",
     "root_pt_parity",
+    "governed_stage_parity",
     "token_failures",
     "audit_finalisation",
     "controlled_outcome_hash",
@@ -80,6 +83,8 @@ def run_replay_check(*, request: Mapping[str, Any], pre_context_signals: Mapping
 
 def verify_replay_result(result: Mapping[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
+    if result.get("comparison_fields") != REPLAY_COMPARISON_FIELDS:
+        failures.append("REPLAY_MISMATCH")
     payload = {
         key: deepcopy(value)
         for key, value in dict(result).items()
@@ -247,9 +252,7 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
             "root_anchor_digest": state.get("root_of_trust_evidence_anchor", {}).get("anchor_digest"),
             "token_chain_reference": state.get("root_of_trust_evidence_anchor", {}).get("payload", {}).get("token_chain_reference"),
         },
-        "classification_result": state.get("classification_result"),
-        "licensing_result": state.get("licensing_result"),
-        "governance_result": state.get("governance_result"),
+        **governed_stage_summary(state),
         "domain_result": state.get("domain_result"),
         "aurion15_result": state.get("aurion15_result"),
         "decision": state.get("decision"),
@@ -258,6 +261,9 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "convergence_hash": convergence.get("convergence_hash"),
         "convergence_matched": convergence.get("matched"),
         "root_pt_parity": state.get("pipeline_root_pt_parity", {}),
+        "governed_stage_parity": state.get(
+            "pipeline_governed_stage_parity", {}
+        ),
         "token_failures": state.get("token_verification_failures", []),
         "audit_finalisation": state.get("audit_finalisation", {}),
         "controlled_outcome_hash": state.get("controlled_outcome", {}).get("outcome_hash"),

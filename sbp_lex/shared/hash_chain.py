@@ -47,8 +47,14 @@ def rebuild_state_hash(state: Mapping[str, Any]) -> str:
 
 
 def verify_hash_chain(state: Mapping[str, Any]) -> bool:
+    chain = state.get("hash_chain", [])
+    if not isinstance(chain, list):
+        return False
+
     previous_hash = "GENESIS"
-    for entry in state.get("hash_chain", []):
+    for entry in chain:
+        if not isinstance(entry, Mapping):
+            return False
         if entry.get("previous_hash") != previous_hash:
             return False
         expected_payload = {

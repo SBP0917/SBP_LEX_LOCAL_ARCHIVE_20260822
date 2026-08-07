@@ -77,6 +77,15 @@ CLASSIFICATION_ALLOWED_KEYS = {
     "manufacturer_declaration",
 }
 
+ENVIRONMENT_MODIFIER_ALLOWED_KEYS = {
+    "environment",
+    "human_proximity",
+    "geographic_isolation",
+    "operational_containment",
+    "public_exposure",
+    "operational_scope",
+}
+
 SAFETY_ALLOWED_KEYS = {
     "human_safety",
     "irreversibility",
@@ -88,6 +97,9 @@ CONTEXT_ALLOWED_KEYS = {
     "evidence",
     "financial_amount",
     "operational_scope",
+    "requested_scope",
+    "permitted_scopes",
+    "permitted_environments",
     "public_exposure",
     "environment",
     "human_proximity",
@@ -333,11 +345,54 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
                 failures.append("classification_class_required")
             for numeric_field in ("autonomy_level", "autonomy_ceiling"):
                 value = classification.get(numeric_field)
-                if value is not None and not isinstance(value, int):
+                if value is not None and (
+                    isinstance(value, bool) or not isinstance(value, int)
+                ):
                     failures.append(f"classification_{numeric_field}_must_be_int")
+                elif value is not None and (value < 0 or value > 100):
+                    failures.append(
+                        f"classification_{numeric_field}_out_of_range"
+                    )
             restrictions = classification.get("deployment_restrictions")
             if restrictions is not None and not isinstance(restrictions, list):
                 failures.append("deployment_restrictions_must_be_list")
+            elif isinstance(restrictions, list) and any(
+                not isinstance(item, str) or not item.strip()
+                for item in restrictions
+            ):
+                failures.append("deployment_restrictions_must_be_strings")
+            modifiers = classification.get("environment_modifiers")
+            if modifiers is not None:
+                if not _is_mapping(modifiers):
+                    failures.append("classification_environment_modifiers_must_be_mapping")
+                else:
+                    _append_unknown_keys(
+                        failures,
+                        prefix="payload.classification.environment_modifiers",
+                        data=modifiers,
+                        allowed=ENVIRONMENT_MODIFIER_ALLOWED_KEYS,
+                    )
+                    if any(
+                        not isinstance(value, str) or not value.strip()
+                        for value in modifiers.values()
+                    ):
+                        failures.append(
+                            "classification_environment_modifiers_must_be_strings"
+                        )
+            manufacturer = classification.get("manufacturer_declaration")
+            if manufacturer is not None and not _is_mapping(manufacturer):
+                failures.append(
+                    "classification_manufacturer_declaration_must_be_mapping"
+                )
+
+        for field in ("licence_state", "license_state"):
+            value = payload.get(field)
+            if value is not None and not isinstance(value, str):
+                failures.append(f"payload_{field}_must_be_string")
+        for field in ("licence", "license"):
+            value = payload.get(field)
+            if value is not None and not isinstance(value, (str, Mapping)):
+                failures.append(f"payload_{field}_invalid")
 
     context = request.get("context")
     if not _is_mapping(context):
@@ -440,6 +495,29 @@ def validate_runtime_request_schema(request: Mapping[str, Any]) -> tuple[bool, l
                 failures.append("context_financial_amount_must_be_finite_number")
             elif financial_amount < 0:
                 failures.append("context_financial_amount_must_be_non_negative")
+
+        for field in ("licence_state", "license_state"):
+            value = context.get(field)
+            if value is not None and not isinstance(value, str):
+                failures.append(f"context_{field}_must_be_string")
+        for field in ("licence", "license"):
+            value = context.get(field)
+            if value is not None and not isinstance(value, (str, Mapping)):
+                failures.append(f"context_{field}_invalid")
+        for field in ("operational_scope", "requested_scope"):
+            value = context.get(field)
+            if value is not None and (
+                not isinstance(value, str) or not value.strip()
+            ):
+                failures.append(f"context_{field}_must_be_string")
+        for field in ("permitted_scopes", "permitted_environments"):
+            value = context.get(field)
+            if value is not None and (
+                not isinstance(value, list)
+                or any(not isinstance(item, str) or not item.strip() for item in value)
+                or len(set(value)) != len(value)
+            ):
+                failures.append(f"context_{field}_must_be_unique_string_list")
 
     safety_profile = request.get("safety_profile")
     if not _is_mapping(safety_profile):

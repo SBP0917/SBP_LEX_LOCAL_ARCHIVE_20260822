@@ -10,6 +10,7 @@ from sbp_lex.pipeline.runner import (
 )
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.shared.convergence import (
+    GOVERNED_STAGE_PARITY_FIELDS,
     ROOT_PT_PARITY_FIELDS,
     build_pipeline_convergence_proof,
 )
@@ -61,6 +62,35 @@ def _root_pt_parity_from_proof(proof: Mapping[str, Any]) -> Dict[str, Any]:
                 "corroboration_observed",
             )
         ),
+        "exact_parity_result": all(matches.values()),
+        "near_match_reconciliation_used": False,
+    }
+
+
+def _governed_stage_parity_from_proof(
+    proof: Mapping[str, Any]
+) -> Dict[str, Any]:
+    pipeline_a = proof.get("pipeline_a", {})
+    pipeline_b = proof.get("pipeline_b")
+    if not isinstance(pipeline_a, Mapping):
+        pipeline_a = {}
+    if not isinstance(pipeline_b, Mapping):
+        return {
+            "applicable": False,
+            "reason": "single_constrained_pipeline_mode",
+            "comparison_fields": GOVERNED_STAGE_PARITY_FIELDS,
+            "field_matches": {},
+            "exact_parity_result": None,
+            "near_match_reconciliation_used": False,
+        }
+    matches = {
+        field: pipeline_a.get(field) == pipeline_b.get(field)
+        for field in GOVERNED_STAGE_PARITY_FIELDS
+    }
+    return {
+        "applicable": True,
+        "comparison_fields": GOVERNED_STAGE_PARITY_FIELDS,
+        "field_matches": matches,
         "exact_parity_result": all(matches.values()),
         "near_match_reconciliation_used": False,
     }
@@ -198,6 +228,9 @@ def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[s
         pipeline_a["pipeline_root_pt_parity"] = (
             _root_pt_parity_from_proof(proof)
         )
+        pipeline_a["pipeline_governed_stage_parity"] = (
+            _governed_stage_parity_from_proof(proof)
+        )
         return pipeline_a
 
     pipeline_b = _run_admitted_pipeline(prepared)
@@ -206,6 +239,9 @@ def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[s
     pipeline_a["pipeline_b_summary"] = proof.get("pipeline_b")
     pipeline_a["pipeline_root_pt_parity"] = _root_pt_parity_from_proof(
         proof
+    )
+    pipeline_a["pipeline_governed_stage_parity"] = (
+        _governed_stage_parity_from_proof(proof)
     )
     if not proof.get("matched") or not initial_parity["exact_parity_result"]:
         registry = DivergenceRegistry()

@@ -5,6 +5,7 @@ from copy import deepcopy
 from main import main, sample_request
 from sbp_lex.authority_first.root_of_trust_runner import run_root_of_trust
 from sbp_lex.classification.ap_acf import run_ap_acf_precheck
+from sbp_lex.classification.engine import run_classification
 from sbp_lex.config.security_config import (
     CONDITIONAL_THRESHOLD_TOKENS,
     build_audit_security,
@@ -35,11 +36,17 @@ from sbp_lex.domains.base_domain import (
 from sbp_lex.execution.execution_gate import run_execution_gate
 from sbp_lex.governance.corroboration_engine import run_corroboration_validation
 from sbp_lex.governance.evidence_engine import run_evidence_validation
+from sbp_lex.governance.governance_runner import run_governance_pipeline
+from sbp_lex.governance.procedural_truth_runner import (
+    run_procedural_truth_pipeline,
+)
 from sbp_lex.governance.threshold_conditioning_engine import run_threshold_conditioning
+from sbp_lex.licensing.engine import run_licensing
 from sbp_lex.security.threshold_tokens import verify_threshold_bundle
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.pipeline.runner import (
     PreparedPipelineBoundary,
+    _mark_stage,
     prepare_pipeline_boundary,
 )
 
@@ -187,9 +194,24 @@ def _domain_state(profile: str | None = None) -> dict:
     request = sample_request()
     request["action"] = "governed_test"
     request["context"]["operational_scope"] = "test_scope"
+    request["payload"]["classification"]["operational_scope"] = "test_scope"
     if profile:
         request["context"]["deployment_profile"] = profile
-    return main(request)
+    prepared = prepare_pipeline_boundary(request)
+    assert isinstance(prepared, PreparedPipelineBoundary)
+    state = run_ap_acf_precheck(prepared.materialize())
+    state = _mark_stage(state, "ap_acf_precheck")
+    state = run_root_of_trust(state)
+    state = _mark_stage(state, "root_of_trust")
+    state = run_procedural_truth_pipeline(state)
+    state = _mark_stage(state, "procedural_truth")
+    state = run_classification(state)
+    state = _mark_stage(state, "classification")
+    state = run_licensing(state)
+    state = _mark_stage(state, "licensing")
+    state = run_governance_pipeline(state)
+    state = _mark_stage(state, "governance")
+    return _mark_stage(state, "grc")
 
 
 def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:

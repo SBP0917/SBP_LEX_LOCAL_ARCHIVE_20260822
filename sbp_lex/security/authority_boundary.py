@@ -7,6 +7,14 @@ from sbp_lex.security.threshold_tokens import verify_threshold_bundle
 from sbp_lex.security.token_stack import verify_token
 from sbp_lex.config.security_config import STATE_VERSION
 from sbp_lex.shared.control_chain_validation import validate_control_chain_bindings
+from sbp_lex.security.governed_stage_evidence import (
+    EVIDENCE_FIELD,
+    live_state_hash_valid,
+    validate_constraint_continuity,
+    validate_governance_history,
+    validate_stage_evidence,
+    validate_stage_token_semantics,
+)
 
 TOKEN_STAGE = {
     "authority": "root_of_trust",
@@ -466,30 +474,22 @@ def _semantic_token_matches(state: Mapping[str, Any], name: str, payload: Mappin
             and payload.get("pt_evidence_digest") == evidence_digest
         )
     if name == "classification":
-        classification = state.get("classification", {})
         return (
             state.get("classification_result") == "ALLOW"
-            and payload.get("ap_acf_class") == classification.get("ap_acf_class")
-            and payload.get("autonomy_level") == classification.get("autonomy_level")
-            and payload.get("autonomy_ceiling") == classification.get("autonomy_ceiling")
-            and payload.get("pipeline_mode") == state.get("pipeline_mode")
+            and validate_stage_token_semantics(state, name, payload)
         )
     if name == "licensing":
-        return payload.get("licensing_result") == state.get("licensing_result")
+        return (
+            state.get("licensing_result") == "ALLOW"
+            and validate_stage_token_semantics(state, name, payload)
+        )
     if name == "governance":
         return (
-            payload.get("governance_result") == state.get("governance_result")
-            and payload.get("authority_first_result") == state.get("authority_first_result")
-            and payload.get("procedural_truth_result") == state.get("procedural_truth_result")
-            and payload.get("classification_result") == state.get("classification_result")
-            and payload.get("licensing_result") == state.get("licensing_result")
+            state.get("governance_result") == "ALLOW"
+            and validate_stage_token_semantics(state, name, payload)
         )
     if name == "grc":
-        return (
-            payload.get("grc_result") == state.get("grc_result")
-            and payload.get("governance_result") == state.get("governance_result")
-            and payload.get("reentry_digest") == generate_digest(state.get("governed_reentry", {}))
-        )
+        return validate_stage_token_semantics(state, name, payload)
     if name == "domain":
         return payload.get("domain_result") == state.get("domain_result")
     if name == "aurion":
@@ -532,6 +532,23 @@ def validate_canonical_upstream(
         if not isinstance(payload, Mapping) or not _semantic_token_matches(state, name, payload):
             failures.append(f"validation_state_mismatch:{name}")
             continue
+        if name in EVIDENCE_FIELD:
+            evidence = state.get(EVIDENCE_FIELD[name], {})
+            evidence_payload = (
+                evidence.get("payload", {})
+                if isinstance(evidence, Mapping)
+                else {}
+            )
+            if (
+                token.get("state_hash")
+                != evidence_payload.get("state_hash_before_token")
+                or token.get("tier")
+                != state.get("safety_profile", {}).get("computed_tier")
+                or token.get("corroboration_required")
+                != state.get("corroboration_required")
+            ):
+                failures.append(f"validation_state_mismatch:{name}")
+                continue
         matching_trace = [
             entry
             for entry in state.get("token_trace", [])
@@ -544,4 +561,150 @@ def validate_canonical_upstream(
         ]
         if len(matching_trace) != 1:
             failures.append(f"token_lineage_mismatch:{name}")
+    return not failures, sorted(set(failures))
+
+
+def validate_governed_stage_token(
+    state: Mapping[str, Any], name: str
+) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    token = tokens.get(name)
+    if not isinstance(token, Mapping):
+        return False, [f"confused_deputy_rejected:missing_token:{name}"]
+    if token.get("name") != name or token.get("issued_at_stage") != TOKEN_STAGE.get(name):
+        failures.append(f"signed_field_substitution_detected:{name}")
+    elif not verify_token(
+        token, expected_request_fingerprint=state.get("request_fingerprint")
+    ):
+        failures.append(f"signature_payload_mismatch:{name}")
+    else:
+        payload = token.get("payload", {})
+        if not isinstance(payload, Mapping) or not _semantic_token_matches(
+            state, name, payload
+        ):
+            failures.append(f"validation_state_mismatch:{name}")
+        evidence = state.get(EVIDENCE_FIELD.get(name, ""), {})
+        evidence_payload = (
+            evidence.get("payload", {})
+            if isinstance(evidence, Mapping)
+            else {}
+        )
+        if (
+            token.get("state_hash")
+            != evidence_payload.get("state_hash_before_token")
+            or token.get("tier")
+            != state.get("safety_profile", {}).get("computed_tier")
+            or token.get("corroboration_required")
+            != state.get("corroboration_required")
+        ):
+            failures.append(f"validation_state_mismatch:{name}")
+    matching_trace = [
+        entry
+        for entry in state.get("token_trace", [])
+        if isinstance(entry, Mapping)
+        and entry.get("event") == "ISSUED"
+        and entry.get("name") == name
+        and entry.get("stage") == token.get("issued_at_stage")
+        and entry.get("issued_at") == token.get("issued_at")
+        and entry.get("digest") == token.get("digest")
+    ]
+    if len(matching_trace) != 1:
+        failures.append(f"token_lineage_mismatch:{name}")
+    return not failures, sorted(set(failures))
+
+
+def validate_governance_handoff_to_grc(
+    state: Mapping[str, Any],
+) -> tuple[bool, list[str]]:
+    """Validate the completed Governance outcome before GRC consumes it.
+
+    The outer runner records the Governance/GRC integration markers only after
+    the combined Governance pipeline returns, so this boundary uses signed
+    Governance evidence/hash lineage rather than inventing an early marker.
+    """
+    failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
+    if not live_state_hash_valid(state):
+        failures.append("grc_entry_state_hash_invalid")
+    evidence_valid, evidence_failures = validate_stage_evidence(
+        state, "governance"
+    )
+    if not evidence_valid:
+        failures.extend(evidence_failures)
+    history_valid, history_failures = validate_governance_history(state)
+    if not history_valid:
+        failures.extend(history_failures)
+    constraints_valid, constraint_failures = validate_constraint_continuity(
+        state, through_stage="governance"
+    )
+    if not constraints_valid:
+        failures.extend(constraint_failures)
+    governance_result = state.get("governance_result")
+    if governance_result not in {"ALLOW", "DENY", "ESCALATE"}:
+        failures.append("governance_result_invalid")
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    if governance_result == "ALLOW":
+        token_valid, token_failures = validate_governed_stage_token(
+            state, "governance"
+        )
+        if not token_valid:
+            failures.extend(token_failures)
+    elif isinstance(tokens.get("governance"), Mapping):
+        failures.append("stale_governance_allow_token_present")
+    return not failures, sorted(set(failures))
+
+
+def validate_governed_domain_handoff(
+    state: Mapping[str, Any],
+) -> tuple[bool, list[str]]:
+    """Fail-closed Pass 5 admission check; Domain reasoning stays untouched."""
+    failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+            "governance",
+            "grc",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
+    if not live_state_hash_valid(state):
+        failures.append("domain_handoff_state_hash_invalid")
+    for stage in ("classification", "licensing", "governance", "grc"):
+        evidence_valid, evidence_failures = validate_stage_evidence(state, stage)
+        if not evidence_valid:
+            failures.extend(evidence_failures)
+    history_valid, history_failures = validate_governance_history(state)
+    if not history_valid:
+        failures.extend(history_failures)
+    constraints_valid, constraint_failures = validate_constraint_continuity(
+        state, through_stage="grc"
+    )
+    if not constraints_valid:
+        failures.extend(constraint_failures)
+    if state.get("classification_result") != "ALLOW":
+        failures.append("domain_handoff_classification_not_allowed")
+    if state.get("licensing_result") != "ALLOW":
+        failures.append("domain_handoff_licensing_not_allowed")
+    if state.get("governance_result") != "ALLOW":
+        failures.append("domain_handoff_governance_not_allowed")
+    if state.get("grc_result") != "PASS":
+        failures.append("domain_handoff_grc_not_pass")
     return not failures, sorted(set(failures))

@@ -17,7 +17,7 @@ from sbp_lex.domains.sovereign_domain import SovereignDomain
 from sbp_lex.security.token_stack import issue_token
 from sbp_lex.shared.hash_chain import append_hash_entry
 from sbp_lex.security.pqc import generate_digest
-from sbp_lex.security.authority_boundary import validate_canonical_upstream
+from sbp_lex.security.authority_boundary import validate_governed_domain_handoff
 
 DOMAIN_ENGINES = [
     LegalDomain(),
@@ -101,8 +101,8 @@ def _evaluate_domains(state: Mapping[str, Any]) -> list[Dict[str, Any]]:
 def run_domain_wrap(state: Mapping[str, Any]) -> Dict[str, Any]:
     working_state = deepcopy(dict(state))
 
-    upstream_valid, upstream_failures = validate_canonical_upstream(
-        working_state, required_tokens=("governance",)
+    upstream_valid, upstream_failures = validate_governed_domain_handoff(
+        working_state
     )
     if not upstream_valid:
         working_state["domain_result"] = DOMAIN_ESCALATE
