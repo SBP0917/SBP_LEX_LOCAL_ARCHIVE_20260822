@@ -39,8 +39,16 @@ from sbp_lex.formal.verifier import (
     formalize_runtime_state,
 )
 from sbp_lex.pipeline.dual_runner import run_dual_pipeline
+from sbp_lex.pipeline.hard_ingress import adapt_external_request
 from sbp_lex.pipeline.replay_runner import run_replay_check
 from sbp_lex.runtime.canonical_runtime import CanonicalRuntime
+from sbp_lex.runtime.measured_startup import ensure_measured_startup
+from sbp_lex.runtime.terminal_custody import terminal_custody_bindings
+from sbp_lex.runtime.traversal_receipt import (
+    NON_OPERATIONAL_REPLAY,
+    OPERATIONAL_TRAVERSAL,
+    build_traversal_receipt,
+)
 from sbp_lex.security.pqc import generate_digest, sign_payload
 
 
@@ -181,29 +189,61 @@ def _runtime_event(
     }
 
 
+def _traversal_started_event(
+    state: Mapping[str, Any],
+) -> dict[str, Any]:
+    receipt_payload = state["runtime_traversal_receipt"]["payload"]
+    return _runtime_event(
+        int(receipt_payload["traversal_started_sequence"]),
+        "traversal_started",
+        {
+            "request_id": receipt_payload["request_id"],
+            "request_fingerprint": receipt_payload[
+                "request_fingerprint"
+            ],
+            "action": state["action"],
+            **{
+                field: receipt_payload[field]
+                for field in capability_module.MEASURED_STARTUP_BINDING_FIELDS
+            },
+        },
+    )
+
+
+def _positive_result(
+    capability: Mapping[str, Any], **extra: Any,
+) -> dict[str, Any]:
+    return {
+        "status": "DONE",
+        "target": capability["target_identity"],
+        "operation": capability["operation_identity"],
+        **extra,
+    }
+
+
+def _terminal_custody(
+    state: Mapping[str, Any],
+) -> dict[str, str]:
+    bindings = terminal_custody_bindings(state, require=True)
+    assert bindings is not None
+    return bindings
+
+
 def _authority(
     state: Mapping[str, Any], *, request_id: str = "h7-request-1",
     first_sequence: int = 1,
 ) -> dict[str, Any]:
-    started = _runtime_event(
-        first_sequence, "traversal_started",
-        {
-            "request_id": request_id,
-            "action": "test_action",
-            **{
-                field: MEASUREMENT[field]
-                for field in (
-                    "runtime_identity",
-                    "approved_baseline_identifier",
-                    "measurement_digest",
-                    "startup_attestation_digest",
-                    "startup_sequence",
-                )
-            },
-        },
-    )
+    del request_id
+    receipt_payload = state["runtime_traversal_receipt"]["payload"]
+    request_id = str(receipt_payload["request_id"])
+    started = _traversal_started_event(state)
+    started_sequence = int(started["sequence"])
+    assert started["event_hash"] == receipt_payload[
+        "traversal_started_event_hash"
+    ]
+    completed_sequence = max(first_sequence + 1, started_sequence + 1)
     completed = _runtime_event(
-        first_sequence + 1, "traversal_completed",
+        completed_sequence, "traversal_completed",
         {
             "request_id": request_id,
             "request_fingerprint": state.get("request_fingerprint"),
@@ -220,12 +260,50 @@ def _authority(
                 "request_id": request_id,
                 "receipt": "persistence",
             }),
+            **_terminal_custody(state),
         },
         previous_hash=started["event_hash"],
     )
     return build_execution_traversal_authority(
         state, runtime_id="SBP_LEX_V1_CANONICAL_RUNTIME", request_id=request_id,
         traversal_started_event=started, traversal_completed_event=completed,
+    )
+
+
+def _operational_state(
+    request: Mapping[str, Any], *, request_id: str
+) -> dict[str, Any]:
+    measurement = ensure_measured_startup()
+    MEASUREMENT.update(deepcopy(measurement))
+    action = str(request.get("action", ""))
+    adapter_result, adapter_failures = adapt_external_request(request)
+    assert adapter_result is not None, adapter_failures
+    request_fingerprint = adapter_result.request_fingerprint
+    started = _runtime_event(
+        1,
+        "traversal_started",
+        {
+            "request_id": request_id,
+            "request_fingerprint": request_fingerprint,
+            "action": action,
+            **{
+                field: measurement[field]
+                for field in capability_module.MEASURED_STARTUP_BINDING_FIELDS
+            },
+        },
+    )
+    receipt = build_traversal_receipt(
+        purpose=OPERATIONAL_TRAVERSAL,
+        request_fingerprint=request_fingerprint,
+        measurement=measurement,
+        traversal_started_event=started,
+        request_id=request_id,
+        action=action,
+    )
+    return run_dual_pipeline(
+        request,
+        runtime_traversal_receipt=receipt,
+        runtime_receipt_purpose=OPERATIONAL_TRAVERSAL,
     )
 
 
@@ -286,7 +364,9 @@ class H7Harness:
 
 @pytest.fixture(scope="session")
 def mode2_state() -> dict[str, Any]:
-    state = run_dual_pipeline(sample_request())
+    state = _operational_state(
+        sample_request(), request_id="h7-mode2-traversal"
+    )
     assert state["pipeline_mode"] == "MODE_2_SPLIT_VALIDATOR"
     assert state["decision"] == "ALLOW"
     return state
@@ -303,7 +383,9 @@ def mode3_state() -> dict[str, Any]:
         "human_safety": 1, "irreversibility": 1,
         "cascading_impact": 1, "financial_operational": 1,
     }
-    state = run_dual_pipeline(request)
+    state = _operational_state(
+        request, request_id="h7-mode3-traversal"
+    )
     assert state["pipeline_mode"] == "MODE_3_SINGLE_CONSTRAINED"
     assert state["decision"] == "ALLOW"
     return state
@@ -350,7 +432,7 @@ def _start(harness: H7Harness, capability: Mapping[str, Any]) -> dict[str, Any]:
 
 def _complete(harness: H7Harness, capability: Mapping[str, Any]) -> dict[str, Any]:
     context = _start(harness, capability)
-    result = {"status": "DONE"}
+    result = _positive_result(capability)
     evidence = capability_module._completion_evidence(capability, result=result, now=harness.clock())
     return harness.service.complete(
         capability, context=context, completion_classification="COMPLETED",
@@ -750,7 +832,7 @@ def test_restart_state_is_durable_and_inflight_execution_becomes_ambiguous(
     if restart_state in {"EXECUTING", "COMPLETED"}:
         harness.service.start(capability, context=context)
     if restart_state == "COMPLETED":
-        result = {"status": "DONE"}
+        result = _positive_result(capability)
         evidence = capability_module._completion_evidence(capability, result=result, now=harness.clock())
         harness.service.complete(
             capability, context=context, completion_classification="COMPLETED",
@@ -1062,7 +1144,7 @@ def test_startup_authority_capability_and_terminal_evidence_are_explicitly_linke
     authority = harness.new_authority("explicit-startup-linkage")
     capability = harness.issue(authority=authority, activate=True)
     context = _start(harness, capability)
-    result = {"status": "DONE"}
+    result = _positive_result(capability)
     evidence = capability_module._completion_evidence(
         capability, result=result, now=harness.clock(),
     )
@@ -1190,7 +1272,7 @@ def test_resigned_version_downgrades_are_rejected_at_every_link(h7_factory: Any)
     assert not verify_capability(downgraded_capability)
 
     context = _start(harness, capability)
-    result = {"status": "DONE"}
+    result = _positive_result(capability)
     evidence = capability_module._completion_evidence(
         capability, result=result, now=harness.clock(),
     )
@@ -1236,7 +1318,7 @@ def test_resigned_completion_evidence_substitution_is_rejected(
 ) -> None:
     harness = h7_factory()
     capability = harness.issue()
-    result = {"status": "DONE"}
+    result = _positive_result(capability)
     evidence = capability_module._completion_evidence(
         capability, result=result, now=harness.clock(),
     )
@@ -1418,7 +1500,7 @@ def test_measured_state_drift_during_execution_fails_and_cannot_complete(
     with pytest.raises(ExecutionIntegrityError, match="capability_not_executing"):
         harness.service.complete(
             capability, context=context, completion_classification="COMPLETED",
-            result={"status": "DONE"}, positive_completion_evidence=None,
+            result=_positive_result(capability), positive_completion_evidence=None,
         )
 
 
@@ -1435,7 +1517,7 @@ def test_missing_evidence_and_communication_loss_never_become_success(h7_factory
     lost = h7_factory()
     lost_capability = lost.issue(activate=True)
     lost_context = _start(lost, lost_capability)
-    result = {"status": "DONE"}
+    result = _positive_result(lost_capability)
     evidence = capability_module._completion_evidence(lost_capability, result=result, now=lost.clock())
     lost_attestation = lost.service.complete(
         lost_capability, context=lost_context, completion_classification="COMPLETED",
@@ -1550,7 +1632,8 @@ def test_attestation_exact_schema_capability_match_and_global_chain(h7_factory: 
     extra["unexpected"] = True
     assert not verify_post_execution_attestation(extra, capability=second)
     other = h7_factory()
-    other_capability = other.issue(authority=other.new_authority("other-capability"))
+    other.new_authority()
+    other_capability = other.issue()
     assert not verify_post_execution_attestation(first_attestation, capability=other_capability)
     harness.store.validate()
 
@@ -1559,7 +1642,10 @@ def test_parallel_completion_attestations_are_atomically_chained(h7_factory: Any
     harness = h7_factory()
     capabilities = [harness.issue(activate=True), harness.issue(activate=True)]
     contexts = [_start(harness, capability) for capability in capabilities]
-    results = [{"status": "DONE", "index": index} for index in range(2)]
+    results = [
+        _positive_result(capability, index=index)
+        for index, capability in enumerate(capabilities)
+    ]
     evidences = [
         capability_module._completion_evidence(capability, result=result, now=harness.clock())
         for capability, result in zip(capabilities, results)
@@ -1749,7 +1835,7 @@ def test_terminal_attestation_head_recovers_after_ledger_before_metadata_crash(
     harness = h7_factory()
     capability = harness.issue(activate=True)
     context = _start(harness, capability)
-    result = {"status": "DONE"}
+    result = _positive_result(capability)
     evidence = capability_module._completion_evidence(capability, result=result, now=harness.clock())
     original_metadata = harness.store._write_metadata
 
@@ -1806,6 +1892,12 @@ def test_replay_is_observational_and_does_not_consume_capability_state(
         for path in harness.root.iterdir() if path.is_file() and path != harness.store.lock_path
     }
     assert replay["matched"] is True
+    assert all(
+        run["runtime_receipt_purpose"] == NON_OPERATIONAL_REPLAY
+        and run["effect_authority_eligible"] is False
+        and run["effect_phase"] == "NOT_AUTHORISED"
+        for run in replay["runs"]
+    )
     assert before == after
     assert harness.store.state(capability["capability_id"]) == "ACTIVE"
 
@@ -1816,37 +1908,24 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
     tampered = deepcopy(authority)
     tampered["payload"]["request_id"] = "substituted"
     assert not verify_execution_traversal_authority(tampered, mode2_state)
-    started = _runtime_event(
-        1,
-        "traversal_started",
-        {
-            "request_id": "expected",
-            "action": "test_action",
-            **{
-                field: MEASUREMENT[field]
-                for field in (
-                    "runtime_identity",
-                    "approved_baseline_identifier",
-                    "measurement_digest",
-                    "startup_attestation_digest",
-                    "startup_sequence",
-                )
-            },
-        },
-    )
+    receipt_payload = mode2_state["runtime_traversal_receipt"]["payload"]
+    request_id = str(receipt_payload["request_id"])
+    started = _traversal_started_event(mode2_state)
     completed = _runtime_event(
-        2, "traversal_completed", {"request_id": "other"},
+        int(started["sequence"]) + 1,
+        "traversal_completed",
+        {"request_id": "other"},
         previous_hash=started["event_hash"],
     )
     with pytest.raises(ExecutionIntegrityError, match="traversal_completed_evidence_invalid"):
         build_execution_traversal_authority(
-            mode2_state, runtime_id="SBP_LEX_V1_CANONICAL_RUNTIME", request_id="expected",
+            mode2_state, runtime_id="SBP_LEX_V1_CANONICAL_RUNTIME", request_id=request_id,
             traversal_started_event=started, traversal_completed_event=completed,
         )
     valid_completed = _runtime_event(
-        2, "traversal_completed",
+        int(started["sequence"]) + 1, "traversal_completed",
         {
-            "request_id": "expected",
+            "request_id": request_id,
             "request_fingerprint": mode2_state["request_fingerprint"],
             "decision": mode2_state["decision"],
             "execution_result": mode2_state["execution_result"],
@@ -1854,19 +1933,20 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
             "audit_hash": mode2_state["audit_hash"],
             "traversal_started_event_hash": started["event_hash"],
             "replay_ledger_hash": generate_digest({
-                "request_id": "expected",
+                "request_id": request_id,
                 "receipt": "replay",
             }),
             "persistence_record_hash": generate_digest({
-                "request_id": "expected",
+                "request_id": request_id,
                 "receipt": "persistence",
             }),
+            **_terminal_custody(mode2_state),
         },
         previous_hash=started["event_hash"],
     )
     with pytest.raises(ExecutionIntegrityError, match="canonical_runtime_identity_invalid"):
         build_execution_traversal_authority(
-            mode2_state, runtime_id="ATTACKER_RUNTIME", request_id="expected",
+            mode2_state, runtime_id="ATTACKER_RUNTIME", request_id=request_id,
             traversal_started_event=started, traversal_completed_event=valid_completed,
         )
 
@@ -1874,6 +1954,7 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
 @pytest.mark.parametrize(
     ("field", "replacement"),
     [
+        ("request_fingerprint", "f" * 64),
         ("measurement_digest", None),
         ("startup_attestation_digest", "0" * 64),
         ("startup_sequence", 8),
@@ -1884,11 +1965,14 @@ def test_traversal_authority_tampering_and_event_substitution_are_denied(mode2_s
 def test_traversal_start_receipt_is_exactly_bound_to_startup_and_action(
     field: str, replacement: Any, mode2_state: Mapping[str, Any],
 ) -> None:
+    receipt_payload = mode2_state["runtime_traversal_receipt"]["payload"]
+    request_id = str(receipt_payload["request_id"])
     start_payload = {
-        "request_id": "start-binding",
+        "request_id": request_id,
+        "request_fingerprint": mode2_state["request_fingerprint"],
         "action": "test_action",
         **{
-            name: MEASUREMENT[name]
+            name: receipt_payload[name]
             for name in capability_module.MEASURED_STARTUP_BINDING_FIELDS
         },
     }
@@ -1896,12 +1980,16 @@ def test_traversal_start_receipt_is_exactly_bound_to_startup_and_action(
         start_payload.pop(field)
     else:
         start_payload[field] = replacement
-    started = _runtime_event(1, "traversal_started", start_payload)
+    started = _runtime_event(
+        int(receipt_payload["traversal_started_sequence"]),
+        "traversal_started",
+        start_payload,
+    )
     completed = _runtime_event(
-        2,
+        int(started["sequence"]) + 1,
         "traversal_completed",
         {
-            "request_id": "start-binding",
+            "request_id": request_id,
             "request_fingerprint": mode2_state["request_fingerprint"],
             "decision": mode2_state["decision"],
             "execution_result": mode2_state["execution_result"],
@@ -1909,13 +1997,14 @@ def test_traversal_start_receipt_is_exactly_bound_to_startup_and_action(
             "audit_hash": mode2_state["audit_hash"],
             "traversal_started_event_hash": started["event_hash"],
             "replay_ledger_hash": generate_digest({
-                "request_id": "start-binding",
+                "request_id": request_id,
                 "receipt": "replay",
             }),
             "persistence_record_hash": generate_digest({
-                "request_id": "start-binding",
+                "request_id": request_id,
                 "receipt": "persistence",
             }),
+            **_terminal_custody(mode2_state),
         },
         previous_hash=started["event_hash"],
     )
@@ -1925,7 +2014,7 @@ def test_traversal_start_receipt_is_exactly_bound_to_startup_and_action(
         build_execution_traversal_authority(
             mode2_state,
             runtime_id="SBP_LEX_V1_CANONICAL_RUNTIME",
-            request_id="start-binding",
+            request_id=request_id,
             traversal_started_event=started,
             traversal_completed_event=completed,
         )

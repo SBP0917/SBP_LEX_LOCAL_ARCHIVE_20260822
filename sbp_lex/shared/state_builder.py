@@ -235,6 +235,16 @@ def build_state(
         "collective_signal_evidence": {},
         "collective_attachment": {},
         "verified_substrate_references": {
+            "runtime": substrate_evidence.get("runtime"),
+            "authority_role": substrate_evidence.get("authority_role"),
+            "provider_mode": substrate_evidence.get("provider_mode"),
+            "signature_mode": substrate_evidence.get("signature_mode"),
+            "raw_packages_crossed_hard_entry": substrate_evidence.get(
+                "raw_packages_crossed_hard_entry"
+            ),
+            "direct_state_write": substrate_evidence.get(
+                "direct_state_write"
+            ),
             "skg_package_reference": substrate_evidence.get(
                 "skg_package_reference"
             ),

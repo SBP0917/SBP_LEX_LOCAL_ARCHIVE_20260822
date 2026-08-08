@@ -25,6 +25,7 @@ from sbp_lex.runtime.boundary_types import (
 )
 from sbp_lex.security.pqc import (
     generate_digest,
+    sign_payload,
     verify_signature,
 )
 from sbp_lex.shared.control_chain_validation import validate_eie_binding
@@ -55,6 +56,30 @@ REQUIRED_SIGNAL_FIELDS = (
     "nonce",
 )
 CANONICAL_SIGNAL_AUTHORITY = "CANONICAL_RUNTIME"
+HARD_ENTRY_REJECTION_AUDIT_VERSION = (
+    "PASS7_HARD_ENTRY_REJECTION_AUDIT_V1"
+)
+HARD_ENTRY_REJECTION_AUDIT_DOMAIN = (
+    "SBP_LEX_DESKTOP_V1_HARD_ENTRY_REJECTION_AUDIT"
+)
+_HARD_ENTRY_REJECTION_AUDIT_FIELDS = frozenset(
+    {"payload", "audit_hash", "signature", "valid"}
+)
+_HARD_ENTRY_REJECTION_PAYLOAD_FIELDS = frozenset(
+    {
+        "audit_version",
+        "event_type",
+        "decision",
+        "execution_result",
+        "execution_verified",
+        "governed_state_formed",
+        "request_fingerprint",
+        "eie_digest",
+        "stopped_at",
+        "failures",
+        "denial_evidence_digest",
+    }
+)
 PROHIBITED_EXTERNAL_AUTHORITY_KEYS = PROHIBITED_AUTHORITY_KEYS
 PROHIBITED_EXTERNAL_AUTHORITY_VALUES = PROHIBITED_AUTHORITY_VALUES
 DIRECT_STATE_INJECTION_KEYS = frozenset({
@@ -441,7 +466,114 @@ def _denial_evidence(
         "request_fingerprint": adapter.request_fingerprint if adapter else None,
         "eie_digest": eie.get("eie_hash") if isinstance(eie, Mapping) else None,
     }
-    return {**payload, "denial_evidence_digest": generate_digest(payload)}
+    denial_evidence_digest = generate_digest(payload)
+    audit_payload = {
+        "audit_version": HARD_ENTRY_REJECTION_AUDIT_VERSION,
+        "event_type": "HARD_ENTRY_REJECTED",
+        "decision": "DENY",
+        "execution_result": "HALT",
+        "execution_verified": False,
+        "governed_state_formed": False,
+        "request_fingerprint": payload.get("request_fingerprint"),
+        "eie_digest": payload.get("eie_digest"),
+        "stopped_at": stopped_at,
+        "failures": payload["failures"],
+        "denial_evidence_digest": denial_evidence_digest,
+    }
+    bound_audit = {
+        "integrity_domain": HARD_ENTRY_REJECTION_AUDIT_DOMAIN,
+        "payload": audit_payload,
+    }
+    audit_signature = sign_payload(bound_audit)
+    audit = {
+        "payload": audit_payload,
+        "audit_hash": generate_digest(bound_audit),
+        "signature": audit_signature,
+        "valid": verify_signature(bound_audit, audit_signature),
+    }
+    return {
+        **payload,
+        "denial_evidence_digest": denial_evidence_digest,
+        "hard_entry_rejection_audit": audit,
+    }
+
+
+def verify_hard_entry_rejection_audit(
+    audit: object,
+    *,
+    denial_evidence: Mapping[str, Any] | None = None,
+) -> bool:
+    """Verify exact signed custody for a pre-state hard-entry rejection."""
+
+    try:
+        if (
+            not isinstance(audit, Mapping)
+            or set(audit) != _HARD_ENTRY_REJECTION_AUDIT_FIELDS
+            or audit.get("valid") is not True
+        ):
+            return False
+        payload = audit.get("payload")
+        if (
+            not isinstance(payload, Mapping)
+            or set(payload) != _HARD_ENTRY_REJECTION_PAYLOAD_FIELDS
+            or payload.get("audit_version")
+            != HARD_ENTRY_REJECTION_AUDIT_VERSION
+            or payload.get("event_type") != "HARD_ENTRY_REJECTED"
+            or payload.get("decision") != "DENY"
+            or payload.get("execution_result") != "HALT"
+            or payload.get("execution_verified") is not False
+            or payload.get("governed_state_formed") is not False
+            or not isinstance(payload.get("failures"), list)
+            or not payload.get("failures")
+            or payload.get("failures")
+            != sorted(set(payload.get("failures", [])))
+        ):
+            return False
+        bound_audit = {
+            "integrity_domain": HARD_ENTRY_REJECTION_AUDIT_DOMAIN,
+            "payload": dict(payload),
+        }
+        if (
+            audit.get("audit_hash") != generate_digest(bound_audit)
+            or not verify_signature(bound_audit, audit.get("signature", {}))
+        ):
+            return False
+        if denial_evidence is not None:
+            denial_payload = {
+                key: denial_evidence.get(key)
+                for key in (
+                    "object_type",
+                    "schema_version",
+                    "accepted",
+                    "governed_state_formed",
+                    "authority_token_issued",
+                    "governance_result_issued",
+                    "downstream_stage_reached",
+                    "stopped_at",
+                    "failures",
+                    "normalized_request_digest",
+                    "request_fingerprint",
+                    "eie_digest",
+                )
+            }
+            if (
+                denial_evidence.get("denial_evidence_digest")
+                != generate_digest(denial_payload)
+                or payload.get("denial_evidence_digest")
+                != denial_evidence.get("denial_evidence_digest")
+                or payload.get("request_fingerprint")
+                != denial_evidence.get("request_fingerprint")
+                or payload.get("eie_digest")
+                != denial_evidence.get("eie_digest")
+                or payload.get("stopped_at")
+                != denial_evidence.get("stopped_at")
+                or payload.get("failures")
+                != denial_evidence.get("failures")
+            ):
+                return False
+        return True
+    except Exception:
+        return False
 
 
 def run_hard_ingress(

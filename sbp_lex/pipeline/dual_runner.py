@@ -3,19 +3,223 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, Mapping
 
+from sbp_lex.audit.audit_finalisation import build_audit_record, finalise_audit
 from sbp_lex.audit.divergence_registry import DivergenceRegistry
+from sbp_lex.execution.controlled_outcome import (
+    apply_terminal_control_state,
+    build_controlled_outcome,
+    finalise_outcome,
+    verify_controlled_outcome,
+)
+from sbp_lex.execution.terminal_assurance import build_terminal_state_seal
 from sbp_lex.pipeline.runner import (
     PreparedPipelineBoundary,
     _run_admitted_pipeline,
     prepare_pipeline_boundary,
 )
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.runtime.traversal_receipt import (
+    NON_OPERATIONAL_VALIDATION,
+    OPERATIONAL_TRAVERSAL,
+)
 from sbp_lex.shared.convergence import (
     DOMAIN_AURION_PARITY_FIELDS,
     GOVERNED_STAGE_PARITY_FIELDS,
     ROOT_PT_PARITY_FIELDS,
     build_pipeline_convergence_proof,
 )
+from sbp_lex.shared.hash_chain import rebuild_state_hash
+
+
+_TERMINAL_GATE_SUCCESS_TOKENS = frozenset(
+    {
+        "execution_boundary",
+        "token_bundle",
+        "master_convergence",
+        "execution_attestation",
+    }
+)
+
+
+def _remove_terminal_gate_success_material(
+    state: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Remove live Gate-success surfaces while retaining labelled history."""
+
+    captured: Dict[str, Any] = {}
+    tokens = state.get("tokens")
+    if isinstance(tokens, Mapping):
+        captured["tokens"] = {
+            name: deepcopy(token)
+            for name, token in tokens.items()
+            if name in _TERMINAL_GATE_SUCCESS_TOKENS
+        }
+        state["tokens"] = {
+            name: deepcopy(token)
+            for name, token in tokens.items()
+            if name not in _TERMINAL_GATE_SUCCESS_TOKENS
+        }
+    trace = state.get("token_trace")
+    if isinstance(trace, list):
+        captured["token_trace"] = [
+            deepcopy(entry)
+            for entry in trace
+            if isinstance(entry, Mapping)
+            and entry.get("name") in _TERMINAL_GATE_SUCCESS_TOKENS
+        ]
+        state["token_trace"] = [
+            deepcopy(entry)
+            for entry in trace
+            if not isinstance(entry, Mapping)
+            or entry.get("name") not in _TERMINAL_GATE_SUCCESS_TOKENS
+        ]
+    for field in (
+        "master_token",
+        "execution_attestation",
+        "execution_timestamp",
+        "execution_convergence",
+        "convergence_hash",
+    ):
+        if field in state:
+            captured[field] = deepcopy(state.pop(field))
+    return captured
+
+
+def _conserve_terminal_divergence(
+    state: Dict[str, Any],
+    *,
+    initial_parity_exact: bool,
+) -> Dict[str, Any]:
+    """Create a signed, non-authoritative final audit for dual divergence."""
+
+    working_state = deepcopy(state)
+    convergence = working_state.get("pipeline_convergence", {})
+    convergence = convergence if isinstance(convergence, Mapping) else {}
+    divergence = working_state.get("divergence_record", {})
+    divergence = divergence if isinstance(divergence, Mapping) else {}
+
+    pre_convergence_evidence = {
+        "authority_role": "historical_evidence_only_non_authoritative",
+        "audit_record": deepcopy(working_state.pop("audit_record", {})),
+        "audit_hash": working_state.pop("audit_hash", ""),
+        "audit_finalisation": deepcopy(
+            working_state.pop("audit_finalisation", {})
+        ),
+        "controlled_outcome": deepcopy(
+            working_state.pop("controlled_outcome", {})
+        ),
+        "final_outcome": deepcopy(working_state.pop("final_outcome", {})),
+        "operational_state": working_state.get("operational_state"),
+        "persistent_inoperability": working_state.get(
+            "persistent_inoperability"
+        ),
+        "terminal_gate_success_material": (
+            _remove_terminal_gate_success_material(working_state)
+        ),
+    }
+    prior_audit = pre_convergence_evidence["audit_record"]
+    prior_outcome = pre_convergence_evidence["controlled_outcome"]
+    prior_outcome_hash = (
+        prior_outcome.get("outcome_hash")
+        if isinstance(prior_outcome, Mapping)
+        else None
+    )
+    failure_reasons = []
+    if convergence.get("matched") is not True:
+        failure_reasons.append("dual_pipeline_result_divergence")
+    if not initial_parity_exact:
+        failure_reasons.append("dual_pipeline_initial_parity_divergence")
+    if not failure_reasons:
+        failure_reasons.append("dual_pipeline_convergence_invalid")
+
+    working_state["decision"] = "ESCALATE"
+    working_state["execution_result"] = "HALT"
+    working_state["execution_verified"] = False
+    working_state["execution_reason"] = ",".join(failure_reasons)
+    working_state["token_stack_valid"] = False
+    token_failures = list(
+        working_state.get("token_verification_failures", [])
+    )
+    token_failures.extend(failure_reasons)
+    working_state["token_verification_failures"] = list(
+        dict.fromkeys(str(item) for item in token_failures if str(item))
+    )
+    working_state["convergence_hash"] = convergence.get(
+        "convergence_hash", generate_digest(dict(convergence))
+    )
+    working_state["effect_phase"] = "NOT_AUTHORISED"
+    working_state["effect_confirmed_success"] = False
+    working_state["effect_authority_eligible"] = False
+    working_state["pre_convergence_terminal_evidence"] = (
+        pre_convergence_evidence
+    )
+    working_state = apply_terminal_control_state(working_state)
+    working_state["state_hash"] = rebuild_state_hash(working_state)
+
+    terminal_integration_evidence = {
+        "evidence_version": "PASS7_TERMINAL_CONVERGENCE_AUDIT_V1",
+        "stage": "dual_pipeline_convergence",
+        "authority_role": "evidence_only_non_authoritative",
+        "failure_reasons": failure_reasons,
+        "pipeline_convergence_hash": convergence.get("convergence_hash"),
+        "pipeline_convergence_digest": generate_digest(dict(convergence)),
+        "pipeline_convergence_matched": convergence.get("matched"),
+        "pipeline_convergence_verified": convergence.get("verified"),
+        "initial_parity_exact": initial_parity_exact,
+        "divergence_hash": divergence.get("divergence_hash"),
+        "divergence_digest": generate_digest(dict(divergence)),
+        "pre_convergence_audit_hash": (
+            prior_audit.get("audit_hash")
+            if isinstance(prior_audit, Mapping)
+            else None
+        ),
+        "pre_convergence_controlled_outcome_hash": prior_outcome_hash,
+        "pre_convergence_terminal_evidence_digest": generate_digest(
+            pre_convergence_evidence
+        ),
+        "effect_authority_eligible": False,
+    }
+    terminal_audit = build_audit_record(
+        {
+            "request_fingerprint": working_state.get(
+                "request_fingerprint"
+            ),
+            "state_hash": working_state.get("state_hash"),
+            "decision": "ESCALATE",
+            "execution_result": "HALT",
+            "execution_verified": False,
+            "convergence_hash": working_state.get("convergence_hash"),
+            "audit_chain": working_state.get("hash_chain", []),
+            "pipeline_mode": working_state.get("pipeline_mode"),
+            "integration_evidence": terminal_integration_evidence,
+        }
+    )
+    terminal_finalisation = finalise_audit(terminal_audit)
+    if (
+        terminal_audit.get("valid") is not True
+        or terminal_finalisation.get("audit_complete") is not True
+    ):
+        raise RuntimeError("terminal_convergence_audit_failed")
+    working_state["audit_record"] = terminal_audit
+    working_state["audit_hash"] = terminal_audit["audit_hash"]
+    working_state["audit_finalisation"] = terminal_finalisation
+    working_state["terminal_convergence_audit"] = deepcopy(terminal_audit)
+    working_state.setdefault("audit_trace", []).append(
+        {
+            "stage": "terminal_convergence_audit",
+            "audit_hash": terminal_audit["audit_hash"],
+            "audit_complete": True,
+            "decision": "ESCALATE",
+            "execution_result": "HALT",
+        }
+    )
+    working_state["state_hash"] = rebuild_state_hash(working_state)
+    controlled_outcome = build_controlled_outcome(working_state)
+    if not verify_controlled_outcome(controlled_outcome):
+        raise RuntimeError("terminal_convergence_controlled_outcome_failed")
+    working_state["controlled_outcome"] = controlled_outcome
+    working_state["final_outcome"] = finalise_outcome(controlled_outcome)
+    return working_state
 
 
 def _root_pt_parity_from_proof(proof: Mapping[str, Any]) -> Dict[str, Any]:
@@ -292,7 +496,7 @@ def _run_dual_prepared_pipeline(
         pipeline_a["pipeline_domain_aurion_parity"] = (
             _domain_aurion_parity_from_proof(proof)
         )
-        return pipeline_a
+        return _seal_terminal_convergence(pipeline_a)
 
     pipeline_b = _run_admitted_pipeline(prepared)
     proof = build_pipeline_convergence_proof(pipeline_a=pipeline_a, pipeline_b=pipeline_b, mode=mode)
@@ -316,19 +520,65 @@ def _run_dual_prepared_pipeline(
             request_fingerprint=pipeline_a.get("request_fingerprint"),
             severity="HIGH",
         )
-        pipeline_a["decision"] = "ESCALATE"
-        pipeline_a["execution_result"] = "HALT"
-        pipeline_a["execution_verified"] = False
-    return pipeline_a
+        pipeline_a = _conserve_terminal_divergence(
+            pipeline_a,
+            initial_parity_exact=bool(
+                initial_parity["exact_parity_result"]
+            ),
+        )
+    return _seal_terminal_convergence(pipeline_a)
+
+
+def _seal_terminal_convergence(state: Dict[str, Any]) -> Dict[str, Any]:
+    receipt = state.get("runtime_traversal_receipt", {})
+    purpose = (
+        receipt.get("payload", {}).get("purpose")
+        if isinstance(receipt, Mapping)
+        and isinstance(receipt.get("payload"), Mapping)
+        else None
+    )
+    convergence = state.get("pipeline_convergence", {})
+    converged = (
+        isinstance(convergence, Mapping)
+        and convergence.get("matched") is True
+        and convergence.get("verified") is True
+    )
+    authorised = (
+        state.get("decision") == "ALLOW"
+        and state.get("execution_result") == "EXECUTE"
+        and state.get("execution_verified") is True
+        and converged
+    )
+    operationally_authorised = bool(
+        authorised and purpose == OPERATIONAL_TRAVERSAL
+    )
+    state["effect_phase"] = (
+        "AUTHORISED_TO_ATTEMPT"
+        if operationally_authorised
+        else "NOT_AUTHORISED"
+    )
+    state["effect_confirmed_success"] = False
+    state["effect_authority_eligible"] = operationally_authorised
+    state["terminal_state_seal"] = build_terminal_state_seal(
+        state,
+        runtime_receipt=receipt,
+        expected_receipt_purpose=str(purpose),
+    )
+    return state
 
 
 def run_dual_pipeline(
     request: Mapping[str, Any],
     pre_context_signals: Mapping[str, Any] | None = None,
+    *,
+    runtime_traversal_receipt: Mapping[str, Any] | None = None,
+    runtime_receipt_purpose: str = NON_OPERATIONAL_VALIDATION,
 ) -> Dict[str, Any]:
     prepared = prepare_pipeline_boundary(
         deepcopy(dict(request)) if isinstance(request, Mapping) else request,
         deepcopy(dict(pre_context_signals)) if pre_context_signals else None,
+        runtime_traversal_receipt=runtime_traversal_receipt,
+        runtime_receipt_purpose=runtime_receipt_purpose,
     )
     if isinstance(prepared, dict):
         return prepared

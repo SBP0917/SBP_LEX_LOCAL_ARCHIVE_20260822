@@ -67,7 +67,9 @@ def test_hard_entry_gate_rejects_before_authoritative_traversal() -> None:
     assert state["governed_state_formed"] is False
     assert state["authority_token_issued"] is False
     assert "authority_first_result" not in state
-    assert "execution_result" not in state
+    assert state["decision"] == "DENY"
+    assert state["execution_result"] == "HALT"
+    assert state["execution_verified"] is False
 
 
 def test_request_fingerprint_remains_stable_across_hash_chain() -> None:

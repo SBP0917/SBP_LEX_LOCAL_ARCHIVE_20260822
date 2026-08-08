@@ -6,10 +6,13 @@ import pytest
 
 from main import sample_request
 from sbp_lex.api.schema_validation import validate_runtime_request_schema
+from sbp_lex.audit.audit_finalisation import verify_audit_record
 from sbp_lex.authority_first.root_of_trust_runner import run_root_of_trust
 from sbp_lex.classification.ap_acf import run_ap_acf_precheck
 from sbp_lex.classification.engine import run_classification
 from sbp_lex.domains.runner import run_domain_wrap
+from sbp_lex.execution.controlled_outcome import verify_controlled_outcome
+from sbp_lex.execution.terminal_assurance import verify_terminal_state_seal
 from sbp_lex.governance.engine import run_governance
 from sbp_lex.governance.governance_runner import run_governance_pipeline
 from sbp_lex.governance.grc import run_grc
@@ -780,4 +783,37 @@ def test_actual_dual_runner_reports_exact_pass5_parity_and_halts_divergence(
     assert result["pipeline_convergence"]["matched"] is False
     assert result["decision"] == "ESCALATE"
     assert result["execution_result"] == "HALT"
+    assert result["execution_verified"] is False
+    assert result["token_stack_valid"] is False
+    assert result["operational_state"] == "PERSISTENT_INOPERABILITY"
+    assert result["persistent_inoperability"] is True
+    assert result["effect_phase"] == "NOT_AUTHORISED"
+    assert result["effect_authority_eligible"] is False
+    assert result["effect_confirmed_success"] is False
+    assert result["final_outcome"] == {
+        "allowed": False,
+        "decision": "ESCALATE",
+        "outcome_locked": True,
+    }
+    assert verify_audit_record(result["audit_record"])
+    assert result["audit_record"]["payload"]["decision"] == "ESCALATE"
+    assert result["audit_record"]["payload"]["execution_result"] == "HALT"
+    assert result["audit_record"]["payload"]["execution_verified"] is False
+    assert verify_controlled_outcome(result["controlled_outcome"])
+    assert result["pre_convergence_terminal_evidence"]["authority_role"] == (
+        "historical_evidence_only_non_authoritative"
+    )
+    for terminal_name in (
+        "execution_boundary",
+        "token_bundle",
+        "master_convergence",
+        "execution_attestation",
+    ):
+        assert terminal_name not in result["tokens"]
+        assert all(
+            entry.get("name") != terminal_name
+            for entry in result["token_trace"]
+        )
+    seal_valid, seal_failures = verify_terminal_state_seal(result)
+    assert seal_valid, seal_failures
     assert "divergence_record" in result

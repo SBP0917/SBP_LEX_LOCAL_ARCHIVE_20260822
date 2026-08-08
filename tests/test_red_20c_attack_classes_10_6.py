@@ -32,7 +32,7 @@ from sbp_lex.persistence.integrity_store import (
     IntegrityStore,
     quarantine_poisoned_integrity_store,
 )
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.runtime.chronology import CanonicalChronology, compare_chronology_heads
 from sbp_lex.security.authority_boundary import validate_canonical_upstream
 from sbp_lex.security.pqc import generate_digest, sign_payload
@@ -40,7 +40,7 @@ from sbp_lex.security.token_stack import verify_token
 
 
 def _state(request: dict | None = None) -> dict:
-    state = run_pipeline(request or sample_request())
+    state = run_dual_pipeline(request or sample_request())
     assert verify_historical_state(state) == (True, [])
     return state
 

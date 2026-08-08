@@ -9,6 +9,12 @@ from typing import Any, Dict, List, Mapping
 
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.api.schema_validation import loads_strict_json
+from sbp_lex.runtime.terminal_custody import (
+    REJECTION_CUSTODY_FIELDS,
+    TERMINAL_CUSTODY_FIELDS,
+    durable_custody_bindings,
+    verify_terminal_custody_fields,
+)
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 RUNTIME_ARTIFACT_ROOT = (REPOSITORY_ROOT / "runtime_artifacts").resolve()
@@ -102,6 +108,7 @@ def verify_integrity_records(
 ) -> tuple[bool, list[str]]:
     failures: list[str] = []
     previous_hash = "GENESIS"
+    custody_started = False
     for index, record in enumerate(records):
         payload = {
             key: value
@@ -116,6 +123,20 @@ def verify_integrity_records(
             failures.append(f"persistence_hash_mismatch:{index}")
         if not verify_signature(payload, record.get("signature", {})):
             failures.append(f"persistence_signature_invalid:{index}")
+        custody_ok, custody_present, custody_failures = (
+            verify_terminal_custody_fields(record)
+        )
+        if not custody_ok:
+            failures.extend(
+                f"persistence_{failure}:{index}"
+                for failure in custody_failures
+            )
+        if custody_present:
+            custody_started = True
+        elif custody_started:
+            failures.append(
+                f"persistence_terminal_custody_downgrade:{index}"
+            )
         previous_hash = str(record.get("record_hash"))
     if records and checkpoint is None:
         failures.append("persistence_checkpoint_missing")
@@ -195,6 +216,14 @@ class IntegrityStore:
                 "persistence_poisoning_detected:"
                 + ",".join(self._load_failures + chain_failures)
             )
+        custody = durable_custody_bindings(state)
+        if custody is None and any(
+            (TERMINAL_CUSTODY_FIELDS | REJECTION_CUSTODY_FIELDS).intersection(
+                record
+            )
+            for record in self._records
+        ):
+            raise RuntimeError("persistence_terminal_custody_downgrade")
         previous_hash = self._records[-1]["record_hash"] if self._records else "GENESIS"
         sequence = len(self._records) + 1
         payload = {
@@ -209,6 +238,8 @@ class IntegrityStore:
             "convergence_hash": state.get("pipeline_convergence", {}).get("convergence_hash"),
             "previous_hash": previous_hash,
         }
+        if custody is not None:
+            payload.update(custody)
         record = {**payload, "record_hash": generate_digest(payload), "signature": sign_payload(payload)}
         self._records.append(deepcopy(record))
         self.path.parent.mkdir(parents=True, exist_ok=True)

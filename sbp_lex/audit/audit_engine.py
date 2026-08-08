@@ -23,7 +23,7 @@ from sbp_lex.security.governed_stage_evidence import (
     validate_stage_evidence as validate_governed_stage_evidence,
 )
 from sbp_lex.security.pqc import generate_digest
-from sbp_lex.shared.hash_chain import append_hash_entry
+from sbp_lex.shared.hash_chain import append_hash_entry, verify_hash_chain
 
 
 def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
@@ -490,6 +490,7 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
         "request_fingerprint": working_state.get("request_fingerprint"),
         "state_hash": working_state.get("state_hash"),
         "decision": working_state.get("decision"),
+        "execution_result": working_state.get("execution_result"),
         "execution_verified": working_state.get("execution_verified", False),
         "convergence_hash": working_state.get("convergence_hash"),
         "audit_chain": working_state.get("hash_chain", []),
@@ -533,6 +534,19 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
             "domain_wrap": working_state.get("governance_feedback", {}).get("domain_wrap", {}),
             "aurion15_result": working_state.get("aurion15_result"),
             "token_verification_failures": working_state.get("token_verification_failures", []),
+            "token_stack_valid": working_state.get("token_stack_valid", False),
+            "hash_chain_valid_at_audit": verify_hash_chain(working_state),
+            "eie_identity": {
+                "traversal_id": working_state.get("traversal_id"),
+                "eie_digest": working_state.get("eie_hash"),
+            },
+            "execution_boundary_digest": working_state.get(
+                "tokens", {}
+            ).get("execution_boundary", {}).get("digest"),
+            "execution_runtime_binding": working_state.get(
+                "execution_runtime_binding", {}
+            ),
+            "audit_readiness": working_state.get("audit_readiness", {}),
             "token_chain_reference": working_state.get("root_of_trust_evidence_anchor", {}).get("payload", {}).get("token_chain_reference"),
             "audit_chain_reference": working_state.get("root_of_trust_evidence_anchor", {}).get("payload", {}).get("audit_chain_reference"),
             "execution_reason": working_state.get("execution_reason", ""),

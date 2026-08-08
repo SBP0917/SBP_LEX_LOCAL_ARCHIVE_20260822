@@ -3,6 +3,12 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, List, Mapping
 
+from sbp_lex.runtime.terminal_custody import (
+    REJECTION_CUSTODY_FIELDS,
+    TERMINAL_CUSTODY_FIELDS,
+    durable_custody_bindings,
+    verify_terminal_custody_fields,
+)
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 
 REPLAY_LEDGER_ID = "SBP_LEX_V1_PIPELINE_REPLAY_LEDGER"
@@ -31,6 +37,7 @@ def verify_replay_ledger_entries(
 ) -> tuple[bool, list[str]]:
     failures: list[str] = []
     previous_hash = "GENESIS"
+    custody_started = False
     for index, item in enumerate(entries):
         payload = {key: value for key, value in item.items() if key not in {"ledger_hash", "signature"}}
         if item.get("sequence") != index + 1:
@@ -41,6 +48,17 @@ def verify_replay_ledger_entries(
             failures.append(f"ledger_corruption:{index}")
         if not verify_signature(payload, item.get("signature", {})):
             failures.append(f"ledger_signature_invalid:{index}")
+        custody_ok, custody_present, custody_failures = (
+            verify_terminal_custody_fields(item)
+        )
+        if not custody_ok:
+            failures.extend(
+                f"ledger_{failure}:{index}" for failure in custody_failures
+            )
+        if custody_present:
+            custody_started = True
+        elif custody_started:
+            failures.append(f"ledger_terminal_custody_downgrade:{index}")
         previous_hash = str(item.get("ledger_hash"))
     checkpoint_payload = checkpoint.get("payload", {}) if isinstance(checkpoint, Mapping) else {}
     if (
@@ -80,6 +98,19 @@ class PipelineReplayLedger:
         self._checkpoint = build_replay_ledger_checkpoint(self._ledger)
 
     def append(self, state: Mapping[str, Any]) -> Dict[str, Any]:
+        ledger_ok, ledger_failures = self.verify()
+        if not ledger_ok:
+            raise RuntimeError(
+                "replay_ledger_integrity_invalid:" + ",".join(ledger_failures)
+            )
+        custody = durable_custody_bindings(state)
+        if custody is None and any(
+            (TERMINAL_CUSTODY_FIELDS | REJECTION_CUSTODY_FIELDS).intersection(
+                entry
+            )
+            for entry in self._ledger
+        ):
+            raise RuntimeError("replay_ledger_terminal_custody_downgrade")
         previous_hash = self._ledger[-1]["ledger_hash"] if self._ledger else "GENESIS"
         sequence = len(self._ledger) + 1
         payload = {
@@ -94,6 +125,8 @@ class PipelineReplayLedger:
             "convergence_hash": state.get("pipeline_convergence", {}).get("convergence_hash"),
             "previous_hash": previous_hash,
         }
+        if custody is not None:
+            payload.update(custody)
         entry = {**payload, "ledger_hash": generate_digest(payload), "signature": sign_payload(payload)}
         self._ledger.append(deepcopy(entry))
         self._checkpoint = build_replay_ledger_checkpoint(self._ledger)

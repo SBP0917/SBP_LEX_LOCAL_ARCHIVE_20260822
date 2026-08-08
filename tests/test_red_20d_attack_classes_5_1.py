@@ -9,7 +9,7 @@ from sbp_lex.audit.historical_integrity import verify_historical_state
 from sbp_lex.audit.pipeline_replay_ledger import PipelineReplayLedger, compare_replay_ledger_heads
 from sbp_lex.execution.execution_gate import evaluate_strict_execution_security
 from sbp_lex.persistence.integrity_store import IntegrityStore
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.security.authority_boundary import validate_canonical_upstream, verify_canonical_stage_lineage
 from sbp_lex.security.pqc import generate_digest, sign_payload
 from sbp_lex.security.supply_chain import build_supply_chain_manifest, validate_supply_chain_manifest
@@ -19,7 +19,7 @@ from sbp_lex.security.token_stack import TOKEN_SIGNED_FIELDS
 def _state(action: str = "red20d") -> dict:
     request = sample_request()
     request["action"] = action
-    state = run_pipeline(request)
+    state = run_dual_pipeline(request)
     assert state["execution_result"] == "EXECUTE"
     return state
 

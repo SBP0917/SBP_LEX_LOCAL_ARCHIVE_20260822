@@ -6,6 +6,7 @@ from typing import Any, Dict, Mapping
 from sbp_lex.collective.context_interface import prepare_pre_context_signals
 from sbp_lex.pipeline.dual_runner import _run_dual_prepared_pipeline
 from sbp_lex.pipeline.runner import prepare_pipeline_boundary
+from sbp_lex.runtime.traversal_receipt import NON_OPERATIONAL_REPLAY
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.shared.convergence import (
     DOMAIN_AURION_PARITY_FIELDS,
@@ -54,6 +55,10 @@ REPLAY_COMPARISON_FIELDS = [
     "audit_finalisation",
     "controlled_outcome_hash",
     "final_outcome",
+    "runtime_receipt_purpose",
+    "terminal_state_seal_digest",
+    "effect_authority_eligible",
+    "effect_phase",
 ]
 
 
@@ -62,7 +67,9 @@ def run_replay_check(*, request: Mapping[str, Any], pre_context_signals: Mapping
     request_copy = deepcopy(dict(request))
     stable_signals = deepcopy(dict(pre_context_signals)) if pre_context_signals else prepare_pre_context_signals(request_copy)
     prepared = prepare_pipeline_boundary(
-        deepcopy(request_copy), deepcopy(stable_signals)
+        deepcopy(request_copy),
+        deepcopy(stable_signals),
+        runtime_receipt_purpose=NON_OPERATIONAL_REPLAY,
     )
     runs = (
         [deepcopy(prepared) for _ in range(replay_count)]
@@ -283,4 +290,14 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "audit_finalisation": state.get("audit_finalisation", {}),
         "controlled_outcome_hash": state.get("controlled_outcome", {}).get("outcome_hash"),
         "final_outcome": state.get("final_outcome", {}),
+        "runtime_receipt_purpose": state.get(
+            "runtime_traversal_receipt", {}
+        ).get("payload", {}).get("purpose"),
+        "terminal_state_seal_digest": state.get(
+            "terminal_state_seal", {}
+        ).get("seal_digest"),
+        "effect_authority_eligible": state.get(
+            "effect_authority_eligible"
+        ),
+        "effect_phase": state.get("effect_phase"),
     }

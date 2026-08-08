@@ -17,12 +17,15 @@ from sbp_lex.audit.pipeline_replay_ledger import (
     verify_replay_ledger_entries,
 )
 from sbp_lex.pipeline.replay_runner import run_replay_check, verify_replay_result
-from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.pipeline.dual_runner import run_dual_pipeline
 from sbp_lex.runtime.chronology import CanonicalChronology
 
 
-def _completed_state() -> dict:
-    state = run_pipeline(sample_request())
+def _completed_state(action: str | None = None) -> dict:
+    request = sample_request()
+    if action is not None:
+        request["action"] = action
+    state = run_dual_pipeline(request)
     assert verify_historical_state(state) == (True, [])
     return state
 
@@ -36,8 +39,7 @@ def _assert_state_attack_detected(state: dict, expected: str) -> None:
 def _ledger_fixture() -> tuple[list[dict], dict]:
     ledger = PipelineReplayLedger()
     for index in range(3):
-        state = _completed_state()
-        state["request_fingerprint"] = f"historical-request-{index}"
+        state = _completed_state(f"historical-request-{index}")
         ledger.append(state)
     entries = ledger.export()
     checkpoint = ledger.checkpoint()

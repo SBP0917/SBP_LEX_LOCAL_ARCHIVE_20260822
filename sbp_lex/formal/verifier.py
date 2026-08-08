@@ -11,6 +11,7 @@ from sbp_lex.execution.capability import (
     verify_capability,
     verify_post_execution_attestation,
 )
+from sbp_lex.execution.terminal_assurance import verify_terminal_state_seal
 from sbp_lex.formal.model import (
     ARCHITECTURAL_STATES,
     AUTHORITY_CAPABILITIES,
@@ -537,6 +538,18 @@ class FormalArchitectureVerifier:
         return replace(result, integrity_signature=signature)
 
 
+def _formal_canonical_state_hash(state: Mapping[str, Any]) -> str:
+    seal = state.get("terminal_state_seal")
+    seal_valid, _ = verify_terminal_state_seal(state, seal)
+    if seal_valid and isinstance(seal, Mapping):
+        payload = seal.get("payload")
+        if isinstance(payload, Mapping):
+            terminal_digest = payload.get("pre_seal_state_digest")
+            if isinstance(terminal_digest, str) and terminal_digest:
+                return terminal_digest
+    return str(state.get("state_hash", ""))
+
+
 def formalize_runtime_state(state: Mapping[str, Any], runtime_status: Mapping[str, Any]) -> FormalState:
     order = tuple(state.get("integration_stage_order", ()))
     latest = "EXECUTION_GATE_RESOLVED" if "execution_gate" in order else (
@@ -544,10 +557,11 @@ def formalize_runtime_state(state: Mapping[str, Any], runtime_status: Mapping[st
     )
     convergence = state.get("pipeline_convergence", {})
     mode = str(state.get("pipeline_mode", "MODE_3_SINGLE_CONSTRAINED"))
+    canonical_state_hash = _formal_canonical_state_hash(state)
     pipeline_a = {
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_digest": state.get("eie_hash"),
-        "canonical_state_hash": state.get("state_hash"),
+        "canonical_state_hash": canonical_state_hash,
         "decision": state.get("decision"),
         "governance_result": state.get("governance_result"),
         "domain_result": state.get("domain_result"),
@@ -583,7 +597,7 @@ def formalize_runtime_state(state: Mapping[str, Any], runtime_status: Mapping[st
         required_evidence=tuple(sorted(evidence)),
         causal_predecessor="AURION_RESOLVED" if latest == "EXECUTION_GATE_RESOLVED" else None,
         request_fingerprint=str(state.get("request_fingerprint", "")),
-        canonical_state_hash=str(state.get("state_hash", "")),
+        canonical_state_hash=canonical_state_hash,
         eie_digest=str(state.get("eie_hash", "")),
         runtime_identity=str(runtime_status.get("measured_runtime_identity", "")),
         measured_baseline_identity=str(runtime_status.get("approved_runtime_baseline", "")),

@@ -26,7 +26,17 @@ from sbp_lex.governance.procedural_truth_runner import (
 )
 from sbp_lex.licensing.engine import run_licensing
 from sbp_lex.pipeline.hard_ingress import run_hard_ingress
+from sbp_lex.pipeline.hard_ingress import (
+    verify_hard_entry_rejection_audit,
+)
 from sbp_lex.runtime.boundary_types import EIEReplayRegistry
+from sbp_lex.runtime.traversal_receipt import (
+    NON_OPERATIONAL_VALIDATION,
+    TRAVERSAL_RECEIPT_PURPOSES,
+    build_traversal_receipt,
+    claim_operational_traversal_receipt,
+    verify_traversal_receipt,
+)
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.security.authority_boundary import (
     validate_execution_convergence_handoff,
@@ -135,6 +145,8 @@ def prepare_pipeline_boundary(
     *,
     validation_logical_time: int | None = None,
     replay_registry: EIEReplayRegistry | None = None,
+    runtime_traversal_receipt: Mapping[str, Any] | None = None,
+    runtime_receipt_purpose: str = NON_OPERATIONAL_VALIDATION,
 ) -> PreparedPipelineBoundary | Dict[str, Any]:
     ingress = run_hard_ingress(
         request=deepcopy(dict(request)) if isinstance(request, Mapping) else request,
@@ -148,16 +160,67 @@ def prepare_pipeline_boundary(
     )
     if not ingress.accepted or ingress.admission is None:
         denial = ingress.evidence()
+        rejection_audit = denial.get("hard_entry_rejection_audit")
+        if not verify_hard_entry_rejection_audit(
+            rejection_audit, denial_evidence=denial
+        ):
+            raise ValueError("hard_entry_rejection_audit_invalid")
         denial["hard_entry_gate"] = {
             "accepted": False,
             "failures": denial.get("failures", []),
             "denial_evidence_digest": denial.get("denial_evidence_digest"),
         }
         denial["integration_stage_order"] = ["hard_ingress"]
+        denial["decision"] = "DENY"
+        denial["execution_result"] = "HALT"
+        denial["execution_verified"] = False
+        denial["operational_state"] = "INOPERABLE"
+        denial["persistent_inoperability"] = True
+        denial["effect_phase"] = "NOT_AUTHORISED"
+        denial["effect_authority_eligible"] = False
+        denial["effect_confirmed_success"] = False
+        denial["audit_record"] = deepcopy(rejection_audit)
+        denial["audit_hash"] = rejection_audit.get("audit_hash")
+        denial["final_outcome"] = {
+            "allowed": False,
+            "decision": "DENY",
+            "outcome_locked": True,
+        }
         return denial
 
     admission = ingress.admission
     state = build_state(admission)
+    if runtime_receipt_purpose not in TRAVERSAL_RECEIPT_PURPOSES:
+        raise ValueError("runtime_traversal_receipt_purpose_invalid")
+    receipt = (
+        deepcopy(dict(runtime_traversal_receipt))
+        if isinstance(runtime_traversal_receipt, Mapping)
+        else build_traversal_receipt(
+            purpose=runtime_receipt_purpose,
+            request_fingerprint=str(state["request_fingerprint"]),
+        )
+    )
+    receipt_valid, receipt_failures = verify_traversal_receipt(
+        receipt,
+        expected_purpose=runtime_receipt_purpose,
+        expected_request_fingerprint=str(state["request_fingerprint"]),
+    )
+    if not receipt_valid:
+        raise ValueError(
+            "runtime_traversal_receipt_invalid:"
+            + ",".join(receipt_failures)
+        )
+    if runtime_receipt_purpose == "OPERATIONAL_TRAVERSAL":
+        claimed, claim_failures = claim_operational_traversal_receipt(
+            receipt
+        )
+        if not claimed:
+            raise ValueError(
+                "runtime_traversal_receipt_invalid:"
+                + ",".join(claim_failures)
+            )
+    state["runtime_traversal_receipt"] = receipt
+    state["state_hash"] = rebuild_state_hash(state)
     state = _mark_stage(state, "hard_ingress")
     state = append_hash_entry(
         state, stage="hard_ingress", payload=state["hard_entry_gate"]

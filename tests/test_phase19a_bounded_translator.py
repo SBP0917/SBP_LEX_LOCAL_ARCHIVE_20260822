@@ -194,7 +194,9 @@ def test_phase19a_raw_external_package_cannot_self_traverse() -> None:
     assert state["hard_entry_gate"]["accepted"] is False
     assert state["integration_stage_order"] == ["hard_ingress"]
     assert state["governed_state_formed"] is False
-    assert "execution_result" not in state
+    assert state["decision"] == "DENY"
+    assert state["execution_result"] == "HALT"
+    assert state["execution_verified"] is False
 
 
 def test_phase19a_unbound_external_package_fails_closed() -> None:
@@ -445,7 +447,9 @@ def test_phase19a_external_result_injection_attempts_are_rejected() -> None:
         assert "external_package_contains_authority" in result.failures, key
         state = run_pipeline(request, injected)
         assert state["governed_state_formed"] is False, key
-        assert "execution_result" not in state, key
+        assert state["decision"] == "DENY", key
+        assert state["execution_result"] == "HALT", key
+        assert state["execution_verified"] is False, key
         assert state["hard_entry_gate"]["accepted"] is False, key
 
 
@@ -473,7 +477,9 @@ def test_phase19a_translated_signals_enter_only_after_hard_entry_validation() ->
     state = run_pipeline(request, tampered)
     assert state["hard_entry_gate"]["accepted"] is False
     assert state["governed_state_formed"] is False
-    assert "execution_result" not in state
+    assert state["decision"] == "DENY"
+    assert state["execution_result"] == "HALT"
+    assert state["execution_verified"] is False
 
 
 def test_phase19a_detached_evidence_summary_is_support_only() -> None:

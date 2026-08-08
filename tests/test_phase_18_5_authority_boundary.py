@@ -93,7 +93,9 @@ def test_external_package_cannot_overwrite_execution_result() -> None:
     state = run_pipeline(request, _resign(signals))
     assert state["hard_entry_gate"]["accepted"] is False
     assert state["governed_state_formed"] is False
-    assert "execution_result" not in state
+    assert state["decision"] == "DENY"
+    assert state["execution_result"] == "HALT"
+    assert state["execution_verified"] is False
 
 
 def test_missing_pt_envelope_blocks_progression() -> None:

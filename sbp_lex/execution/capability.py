@@ -13,6 +13,8 @@ from sbp_lex.api.schema_validation import loads_strict_json
 from sbp_lex.execution.capability_store import CapabilityLifecycleStore, CapabilityStoreError
 from sbp_lex.execution.execution_gate import evaluate_strict_execution_security
 from sbp_lex.runtime.measured_startup import ensure_measured_startup
+from sbp_lex.runtime.terminal_custody import terminal_custody_bindings
+from sbp_lex.runtime.traversal_receipt import OPERATIONAL_TRAVERSAL
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.shared.convergence import verify_convergence_proof
 
@@ -28,6 +30,15 @@ ATTESTATION_DOMAIN = "SBP_LEX_DESKTOP_V1_POST_EXECUTION_ATTESTATION"
 CONTROL_DOMAIN = "SBP_LEX_DESKTOP_V1_EXECUTION_CAPABILITY_CONTROL"
 TRAVERSAL_AUTHORITY_DOMAIN = "SBP_LEX_DESKTOP_V1_EXECUTION_TRAVERSAL_AUTHORITY"
 COMPLETION_EVIDENCE_DOMAIN = "SBP_LEX_DESKTOP_V1_ADAPTER_COMPLETION_EVIDENCE"
+CONFIRMED_LOCAL_EFFECT_STATUSES = frozenset({
+    "DONE",
+    "OK",
+    "SUCCESS",
+    "SUCCEEDED",
+    "COMPLETED",
+    "CONFIRMED",
+    "CONFIRMED_SUCCESS",
+})
 STATES = frozenset({
     "PENDING", "ACTIVE", "RESERVED", "EXECUTING", "COMPLETED", "CANCELLED",
     "EXPIRED", "REVOKED", "FAILED", "AMBIGUOUS", "RETIRED",
@@ -104,6 +115,8 @@ TRAVERSAL_AUTHORITY_FIELDS = frozenset({
     "startup_attestation_digest", "startup_sequence",
     "traversal_started_event_hash", "traversal_started_sequence",
     "traversal_completed_event_hash", "traversal_completed_sequence",
+    "terminal_custody_version", "terminal_state_digest",
+    "terminal_seal_digest",
 })
 COMPLETION_EVIDENCE_FIELDS = frozenset({
     "evidence_version", "capability_id", "request_fingerprint",
@@ -326,6 +339,30 @@ def validate_target(target_identity: Any, target_type: Any) -> tuple[str, str]:
     return target_identity, target_type
 
 
+def _terminal_state_binding(state: Mapping[str, Any]) -> str | None:
+    """Return the signed digest of the complete terminal pre-seal state."""
+
+    try:
+        custody = terminal_custody_bindings(state, require=True)
+    except (TypeError, ValueError):
+        return None
+    digest = custody.get("terminal_state_digest") if custody else None
+    return str(digest) if _is_digest(digest) else None
+
+
+def _operational_receipt_payload(
+    state: Mapping[str, Any],
+) -> Mapping[str, Any] | None:
+    receipt = state.get("runtime_traversal_receipt")
+    payload = receipt.get("payload") if isinstance(receipt, Mapping) else None
+    return (
+        payload
+        if isinstance(payload, Mapping)
+        and payload.get("purpose") == OPERATIONAL_TRAVERSAL
+        else None
+    )
+
+
 def build_execution_traversal_authority(
     state: Mapping[str, Any], *, runtime_id: str, request_id: str,
     traversal_started_event: Mapping[str, Any],
@@ -356,10 +393,19 @@ def build_execution_traversal_authority(
     if measurement.get("status") != "MEASURED_STARTUP_APPROVED":
         raise ExecutionIntegrityError("measured_startup_not_approved")
     measured_binding = _require_measured_startup_binding(measurement)
+    try:
+        custody_bindings = terminal_custody_bindings(state, require=True)
+    except (TypeError, ValueError) as exc:
+        raise ExecutionIntegrityError(
+            "terminal_state_custody_invalid"
+        ) from exc
+    if custody_bindings is None:  # pragma: no cover - require=True
+        raise ExecutionIntegrityError("terminal_state_custody_invalid")
     if not _verify_runtime_event(
         traversal_started_event, event_type="traversal_started",
         required_payload={
             "request_id": request_id,
+            "request_fingerprint": state.get("request_fingerprint"),
             "action": state.get("action"),
             **measured_binding,
         },
@@ -375,6 +421,7 @@ def build_execution_traversal_authority(
             "pipeline_mode": state.get("pipeline_mode"),
             "audit_hash": state.get("audit_hash"),
             "traversal_started_event_hash": traversal_started_event.get("event_hash"),
+            **custody_bindings,
         },
     ):
         raise ExecutionIntegrityError("traversal_completed_evidence_invalid")
@@ -385,12 +432,38 @@ def build_execution_traversal_authority(
             not _is_digest(completed_payload.get(field))
             for field in (
                 "replay_ledger_hash", "persistence_record_hash",
+                "terminal_state_digest", "terminal_seal_digest",
             )
         )
     ):
         raise ExecutionIntegrityError("traversal_completed_evidence_invalid")
     if int(traversal_completed_event["sequence"]) <= int(traversal_started_event["sequence"]):
         raise ExecutionIntegrityError("traversal_event_order_invalid")
+    receipt_payload = _operational_receipt_payload(state)
+    if receipt_payload is None:
+        raise ExecutionIntegrityError(
+            "operational_runtime_traversal_receipt_required"
+        )
+    expected_receipt = {
+        "runtime_id": runtime_id,
+        "request_id": request_id,
+        "request_fingerprint": state.get("request_fingerprint"),
+        "action": state.get("action"),
+        "traversal_started_event_hash": traversal_started_event.get(
+            "event_hash"
+        ),
+        "traversal_started_sequence": traversal_started_event.get(
+            "sequence"
+        ),
+        **measured_binding,
+    }
+    if any(
+        receipt_payload.get(field) != value
+        for field, value in expected_receipt.items()
+    ):
+        raise ExecutionIntegrityError(
+            "operational_runtime_traversal_receipt_mismatch"
+        )
     payload = {
         "authority_version": TRAVERSAL_AUTHORITY_VERSION,
         "runtime_id": runtime_id,
@@ -398,7 +471,9 @@ def build_execution_traversal_authority(
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_identifier": state.get("traversal_id"),
         "eie_digest": state.get("eie_hash"),
-        "canonical_state_hash": state.get("state_hash"),
+        "canonical_state_hash": custody_bindings[
+            "terminal_state_digest"
+        ],
         "pipeline_mode": state.get("pipeline_mode"),
         "convergence_result": convergence.get("convergence_hash"),
         "audit_lineage_identifier": state.get("audit_hash"),
@@ -413,6 +488,7 @@ def build_execution_traversal_authority(
         "traversal_started_sequence": traversal_started_event.get("sequence"),
         "traversal_completed_event_hash": traversal_completed_event.get("event_hash"),
         "traversal_completed_sequence": traversal_completed_event.get("sequence"),
+        **custody_bindings,
     }
     string_fields = TRAVERSAL_AUTHORITY_FIELDS - {
         "authority_version", "startup_sequence",
@@ -456,15 +532,50 @@ def verify_execution_traversal_authority(
     payload = authority.get("payload")
     if not isinstance(payload, Mapping) or set(payload) != TRAVERSAL_AUTHORITY_FIELDS:
         return False
+    try:
+        custody_bindings = terminal_custody_bindings(state, require=True)
+    except (TypeError, ValueError):
+        return False
+    if custody_bindings is None:  # pragma: no cover - require=True
+        return False
     expected = {
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_identifier": state.get("traversal_id"),
         "eie_digest": state.get("eie_hash"),
-        "canonical_state_hash": state.get("state_hash"),
+        "canonical_state_hash": custody_bindings[
+            "terminal_state_digest"
+        ],
         "pipeline_mode": state.get("pipeline_mode"),
         "convergence_result": state.get("pipeline_convergence", {}).get("convergence_hash"),
         "audit_lineage_identifier": state.get("audit_hash"),
+        **custody_bindings,
     }
+    receipt_payload = _operational_receipt_payload(state)
+    if receipt_payload is None:
+        return False
+    expected.update(
+        {
+            "runtime_id": receipt_payload.get("runtime_id"),
+            "request_id": receipt_payload.get("request_id"),
+            "runtime_identity": receipt_payload.get("runtime_identity"),
+            "approved_baseline_identifier": receipt_payload.get(
+                "approved_baseline_identifier"
+            ),
+            "measurement_digest": receipt_payload.get(
+                "measurement_digest"
+            ),
+            "startup_attestation_digest": receipt_payload.get(
+                "startup_attestation_digest"
+            ),
+            "startup_sequence": receipt_payload.get("startup_sequence"),
+            "traversal_started_event_hash": receipt_payload.get(
+                "traversal_started_event_hash"
+            ),
+            "traversal_started_sequence": receipt_payload.get(
+                "traversal_started_sequence"
+            ),
+        }
+    )
     if payload.get("authority_version") != TRAVERSAL_AUTHORITY_VERSION:
         return False
     if payload.get("runtime_id") != CANONICAL_RUNTIME_ID:
@@ -497,6 +608,7 @@ def verify_execution_traversal_authority(
         "convergence_result", "audit_lineage_identifier", "runtime_identity",
         "measurement_digest", "startup_attestation_digest",
         "traversal_started_event_hash", "traversal_completed_event_hash",
+        "terminal_state_digest", "terminal_seal_digest",
     )
     if any(not _is_digest(payload.get(field)) for field in digest_fields):
         return False
@@ -580,7 +692,7 @@ def binding_context(
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_identifier": state.get("traversal_id"),
         "eie_digest": state.get("eie_hash"),
-        "canonical_state_hash": state.get("state_hash"),
+        "canonical_state_hash": _terminal_state_binding(state),
         "audit_lineage_identifier": state.get("audit_hash"),
     }
     if any(not isinstance(value, str) or not value for value in critical.values()):
@@ -590,7 +702,7 @@ def binding_context(
         "request_fingerprint": state.get("request_fingerprint"),
         "eie_identifier": state.get("traversal_id"),
         "eie_digest": state.get("eie_hash"),
-        "canonical_state_hash": state.get("state_hash"),
+        "canonical_state_hash": _terminal_state_binding(state),
         "pipeline_mode": mode,
         "pipeline_a_result_digest": generate_digest(pipeline_a),
         "pipeline_b_result_digest": generate_digest(pipeline_b) if pipeline_b is not None else None,
@@ -1075,6 +1187,65 @@ def _completion_evidence(
     }
     bound = {"integrity_domain": COMPLETION_EVIDENCE_DOMAIN, "payload": payload}
     return {"payload": payload, "integrity_binding": sign_payload(bound)}
+
+
+def _validate_positive_local_acknowledgement(
+    capability: Mapping[str, Any], result: Mapping[str, Any],
+) -> None:
+    """Accept only an explicit, exactly-bound local effect acknowledgement."""
+
+    if not isinstance(result, Mapping):
+        raise ExecutionIntegrityError("adapter_acknowledgement_missing")
+    status = result.get("status")
+    if (
+        not isinstance(status, str)
+        or status.strip().upper() not in CONFIRMED_LOCAL_EFFECT_STATUSES
+    ):
+        raise ExecutionIntegrityError("adapter_acknowledgement_unconfirmed")
+    if result.get("target") != capability.get("target_identity"):
+        raise ExecutionIntegrityError(
+            "adapter_acknowledgement_binding_mismatch:target_identity"
+        )
+    if result.get("operation") != capability.get("operation_identity"):
+        raise ExecutionIntegrityError(
+            "adapter_acknowledgement_binding_mismatch:operation_identity"
+        )
+    optional_bindings = {
+        "target_type": "target_type",
+        "capability_id": "capability_id",
+        "request_fingerprint": "request_fingerprint",
+        "adapter_identity": "execution_adapter_identity",
+    }
+    for result_field, capability_field in optional_bindings.items():
+        if (
+            result_field in result
+            and result.get(result_field) != capability.get(capability_field)
+        ):
+            raise ExecutionIntegrityError(
+                f"adapter_acknowledgement_binding_mismatch:{result_field}"
+            )
+    for field in ("acknowledged", "confirmed", "complete", "successful"):
+        if field in result and result.get(field) is not True:
+            raise ExecutionIntegrityError(
+                f"adapter_acknowledgement_unconfirmed:{field}"
+            )
+    for field in (
+        "ambiguous",
+        "unknown",
+        "partial",
+        "timed_out",
+        "timeout",
+        "unconfirmed",
+    ):
+        if field in result and result.get(field) is not False:
+            raise ExecutionIntegrityError(
+                f"adapter_acknowledgement_ambiguous:{field}"
+            )
+    for field in ("error", "failure", "exception"):
+        if result.get(field) not in (None, False, "", {}):
+            raise ExecutionIntegrityError(
+                f"adapter_acknowledgement_failed:{field}"
+            )
 
 
 def _verify_completion_evidence(
@@ -1629,6 +1800,7 @@ class ExecutionIntegrityService:
             raise ExecutionIntegrityError("capability_not_executing")
         if self._active_adapter(capability) is None:
             raise ExecutionIntegrityError("adapter_completion_session_missing")
+        _validate_positive_local_acknowledgement(capability, result)
         return _completion_evidence(capability, result=result, now=self._now())
 
     def complete(
@@ -1647,6 +1819,14 @@ class ExecutionIntegrityService:
             positive_completion_evidence, capability=capability,
             result=result_value, now=now,
         ) if positive_completion_evidence else False
+        if classification == "COMPLETED":
+            try:
+                _validate_positive_local_acknowledgement(
+                    capability, result_value
+                )
+            except ExecutionIntegrityError:
+                classification = "AMBIGUOUS"
+                evidence_valid = False
         if classification == "COMPLETED" and not evidence_valid:
             classification = "AMBIGUOUS"
         deadline = _parse(capability["completion_report_deadline"])
@@ -1821,7 +2001,26 @@ class ExecutionIntegrityService:
                 raise
             raise ExecutionIntegrityError("post_effect_completion_ambiguous") from exc
         self._release_active_adapter(capability)
-        return {"result": result_value, "execution_attestation": attestation}
+        attestation_payload = attestation.get("payload", {})
+        if (
+            not isinstance(attestation_payload, Mapping)
+            or attestation_payload.get("completion_classification")
+            != "COMPLETED"
+            or attestation_payload.get("completion_evidence_valid") is not True
+            or not verify_post_execution_attestation(
+                attestation,
+                capability=capability,
+                expected_result=result_value,
+            )
+        ):
+            raise ExecutionIntegrityError(
+                "confirmed_effect_attestation_invalid"
+            )
+        return {
+            "result": result_value,
+            "execution_attestation": attestation,
+            "effect_status": "CONFIRMED_SUCCESS",
+        }
 
     def retire(self, capability: Mapping[str, Any]) -> dict[str, Any]:
         current = self.store.state(str(capability["capability_id"]))
