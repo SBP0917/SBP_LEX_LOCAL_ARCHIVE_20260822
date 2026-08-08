@@ -5,11 +5,13 @@ from typing import Any, Dict, Mapping
 
 from sbp_lex.audit.divergence_registry import DivergenceRegistry
 from sbp_lex.pipeline.runner import (
+    PreparedPipelineBoundary,
     _run_admitted_pipeline,
     prepare_pipeline_boundary,
 )
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.shared.convergence import (
+    DOMAIN_AURION_PARITY_FIELDS,
     GOVERNED_STAGE_PARITY_FIELDS,
     ROOT_PT_PARITY_FIELDS,
     build_pipeline_convergence_proof,
@@ -96,13 +98,69 @@ def _governed_stage_parity_from_proof(
     }
 
 
-def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[str, Any] | None = None) -> Dict[str, Any]:
-    prepared = prepare_pipeline_boundary(
-        deepcopy(dict(request)) if isinstance(request, Mapping) else request,
-        deepcopy(dict(pre_context_signals)) if pre_context_signals else None,
-    )
-    if isinstance(prepared, dict):
-        return prepared
+def _domain_aurion_parity_from_proof(
+    proof: Mapping[str, Any]
+) -> Dict[str, Any]:
+    pipeline_a = proof.get("pipeline_a", {})
+    pipeline_b = proof.get("pipeline_b")
+    if not isinstance(pipeline_a, Mapping):
+        pipeline_a = {}
+    if not isinstance(pipeline_b, Mapping):
+        return {
+            "applicable": False,
+            "reason": "single_constrained_pipeline_mode",
+            "comparison_fields": DOMAIN_AURION_PARITY_FIELDS,
+            "field_matches": {},
+            "exact_parity_result": None,
+            "near_match_reconciliation_used": False,
+        }
+    matches = {
+        field: pipeline_a.get(field) == pipeline_b.get(field)
+        for field in DOMAIN_AURION_PARITY_FIELDS
+    }
+    return {
+        "applicable": True,
+        "comparison_fields": DOMAIN_AURION_PARITY_FIELDS,
+        "field_matches": matches,
+        "domain_evidence_parity": all(
+            matches.get(field, False)
+            for field in (
+                "domain_result",
+                "domain_reason",
+                "domain_state_digest",
+                "domain_live_state_digest",
+                "domain_evidence_digest",
+            )
+        ),
+        "aurion_pathway_parity": all(
+            matches.get(field, False)
+            for field in (
+                "aurion15_result",
+                "aurion_reason",
+                "generated_candidate_set_digest",
+                "ordered_candidate_set_digest",
+                "selected_candidate_digest",
+                "selected_pathway_digest",
+            )
+        ),
+        "handoff_parity": all(
+            matches.get(field, False)
+            for field in (
+                "domain_aurion_constraint_digest",
+                "execution_convergence_handoff_digest",
+                "execution_convergence_handoff_valid",
+            )
+        ),
+        "exact_parity_result": all(matches.values()),
+        "near_match_reconciliation_used": False,
+    }
+
+
+def _run_dual_prepared_pipeline(
+    prepared: PreparedPipelineBoundary,
+) -> Dict[str, Any]:
+    if not isinstance(prepared, PreparedPipelineBoundary):
+        raise TypeError("prepared_pipeline_boundary_required")
     initial_a = prepared.materialize()
     initial_b = prepared.materialize()
     parity_fields = {
@@ -231,6 +289,9 @@ def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[s
         pipeline_a["pipeline_governed_stage_parity"] = (
             _governed_stage_parity_from_proof(proof)
         )
+        pipeline_a["pipeline_domain_aurion_parity"] = (
+            _domain_aurion_parity_from_proof(proof)
+        )
         return pipeline_a
 
     pipeline_b = _run_admitted_pipeline(prepared)
@@ -242,6 +303,9 @@ def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[s
     )
     pipeline_a["pipeline_governed_stage_parity"] = (
         _governed_stage_parity_from_proof(proof)
+    )
+    pipeline_a["pipeline_domain_aurion_parity"] = (
+        _domain_aurion_parity_from_proof(proof)
     )
     if not proof.get("matched") or not initial_parity["exact_parity_result"]:
         registry = DivergenceRegistry()
@@ -256,3 +320,16 @@ def run_dual_pipeline(request: Mapping[str, Any], pre_context_signals: Mapping[s
         pipeline_a["execution_result"] = "HALT"
         pipeline_a["execution_verified"] = False
     return pipeline_a
+
+
+def run_dual_pipeline(
+    request: Mapping[str, Any],
+    pre_context_signals: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    prepared = prepare_pipeline_boundary(
+        deepcopy(dict(request)) if isinstance(request, Mapping) else request,
+        deepcopy(dict(pre_context_signals)) if pre_context_signals else None,
+    )
+    if isinstance(prepared, dict):
+        return prepared
+    return _run_dual_prepared_pipeline(prepared)

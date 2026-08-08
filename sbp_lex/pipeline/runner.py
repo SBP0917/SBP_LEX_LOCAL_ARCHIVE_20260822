@@ -28,6 +28,13 @@ from sbp_lex.licensing.engine import run_licensing
 from sbp_lex.pipeline.hard_ingress import run_hard_ingress
 from sbp_lex.runtime.boundary_types import EIEReplayRegistry
 from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.authority_boundary import (
+    validate_execution_convergence_handoff,
+)
+from sbp_lex.security.domain_aurion_evidence import (
+    apply_controlled_reentry_proof_use_guard,
+    build_execution_convergence_handoff,
+)
 from sbp_lex.shared.state_builder import (
     build_state,
     validate_boundary_protection,
@@ -182,6 +189,7 @@ def prepare_pipeline_boundary(
     state = _mark_stage(state, "collective_attach")
     if state.get("collective_signal_status") != "ATTACHED":
         return _attachment_halt(state)
+    state = apply_controlled_reentry_proof_use_guard(state)
     state_json = canonical_dumps(state)
     state_digest = generate_digest(state)
     construction_hash = str(state["state_construction_hash"])
@@ -245,8 +253,27 @@ def _run_admitted_pipeline(
         state = run_aurion_runtime(state)
         state = _mark_stage(state, "aurion_runtime")
     if state.get("aurion15_result") == "pass":
-        state = run_execution_gate(state)
-        state = _mark_stage(state, "execution_gate")
+        state["execution_convergence_handoff"] = (
+            build_execution_convergence_handoff(state)
+        )
+        state["state_hash"] = rebuild_state_hash(state)
+        handoff_valid, handoff_failures = (
+            validate_execution_convergence_handoff(state)
+        )
+        if handoff_valid:
+            state = run_execution_gate(state)
+            state = _mark_stage(state, "execution_gate")
+        else:
+            state["decision"] = "DENY"
+            state["execution_result"] = "HALT"
+            state["execution_verified"] = False
+            state["execution_reason"] = (
+                "execution_convergence_handoff_rejected"
+            )
+            state["token_stack_valid"] = False
+            state.setdefault("token_verification_failures", []).extend(
+                handoff_failures
+            )
     else:
         state.setdefault("convergence_hash", state.get("state_hash"))
         state.setdefault("execution_verified", False)

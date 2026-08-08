@@ -147,9 +147,13 @@ def resolve_candidates(
 
     return {
 
-        "valid":
+        "valid":False,
 
-        verified,
+        "reason":"NON_CANONICAL_AURION_HELPER_NO_AUTHORITY",
+
+        "integrity_verified":verified,
+
+        "execution_convergence_eligible":False,
 
         "candidate_hash":
 
@@ -251,8 +255,12 @@ def evaluate_candidate(
 
     return {
 
-        "allowed":True,
+        "allowed":False,
 
-        "candidate_verified":True,
+        "reason":"NON_CANONICAL_AURION_HELPER_NO_AUTHORITY",
 
-  }
+        "integrity_verified":True,
+
+        "execution_convergence_eligible":False,
+
+}

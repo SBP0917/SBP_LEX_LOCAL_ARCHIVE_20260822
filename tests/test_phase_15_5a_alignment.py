@@ -215,7 +215,14 @@ def _domain_state(profile: str | None = None) -> dict:
 
 
 def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:
-    monkeypatch.setattr(domain_runner, "DOMAIN_ENGINES", [_PassOnThirdCandidate()])
+    rule = _PassOnThirdCandidate()
+    monkeypatch.setattr(domain_runner, "DOMAIN_ENGINES", [rule])
+    monkeypatch.setattr(
+        domain_runner, "REQUIRED_DOMAIN_ENGINE_ORDER", ("test_domain",)
+    )
+    monkeypatch.setattr(
+        domain_runner, "REQUIRED_DOMAIN_ENGINE_TYPES", (type(rule),)
+    )
     result = domain_runner.run_domain_wrap(_domain_state())
     lineage = result["governance_feedback"]["domain_wrap"]["attempts"]
     assert result["domain_result"] == DOMAIN_PASS
@@ -231,7 +238,14 @@ def test_domain_fallback_is_bounded_unique_and_audited(monkeypatch) -> None:
 
 
 def test_domain_fallback_escalates_at_profile_limit(monkeypatch) -> None:
-    monkeypatch.setattr(domain_runner, "DOMAIN_ENGINES", [_NeverPasses()])
+    rule = _NeverPasses()
+    monkeypatch.setattr(domain_runner, "DOMAIN_ENGINES", [rule])
+    monkeypatch.setattr(
+        domain_runner, "REQUIRED_DOMAIN_ENGINE_ORDER", ("test_domain",)
+    )
+    monkeypatch.setattr(
+        domain_runner, "REQUIRED_DOMAIN_ENGINE_TYPES", (type(rule),)
+    )
     result = domain_runner.run_domain_wrap(_domain_state("physical-critical"))
     feedback = result["governance_feedback"]["domain_wrap"]
     assert result["domain_result"] == DOMAIN_ESCALATE

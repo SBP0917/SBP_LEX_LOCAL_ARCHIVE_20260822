@@ -3,7 +3,10 @@ from __future__ import annotations
 from typing import Any, Mapping
 
 from sbp_lex.security.pqc import generate_digest, verify_signature
-from sbp_lex.security.threshold_tokens import verify_threshold_bundle
+from sbp_lex.security.threshold_tokens import (
+    required_threshold_token_names,
+    verify_threshold_bundle,
+)
 from sbp_lex.security.token_stack import verify_token
 from sbp_lex.config.security_config import STATE_VERSION
 from sbp_lex.shared.control_chain_validation import validate_control_chain_bindings
@@ -14,6 +17,17 @@ from sbp_lex.security.governed_stage_evidence import (
     validate_governance_history,
     validate_stage_evidence,
     validate_stage_token_semantics,
+)
+from sbp_lex.security.domain_aurion_evidence import (
+    CONTROLLED_REENTRY_USE_SCHEMA_VERSION,
+    EVIDENCE_FIELD as DOMAIN_AURION_EVIDENCE_FIELD,
+    PRE_EXECUTION_PERMISSION_FIELDS,
+    controlled_denial_proof_details,
+    normalized_governed_reentry,
+    validate_handoff_evidence,
+    validate_stage_evidence as validate_domain_aurion_stage_evidence,
+    validate_stage_history as validate_domain_aurion_stage_history,
+    validate_stage_token_semantics as validate_domain_aurion_token_semantics,
 )
 
 TOKEN_STAGE = {
@@ -44,6 +58,30 @@ CANONICAL_STAGE_SEQUENCE = (
     "aurion_runtime",
     "execution_gate",
 )
+
+
+def _nested_permission_field_paths(
+    value: object, *, path: tuple[str, ...] = ()
+) -> list[str]:
+    prohibited = set(PRE_EXECUTION_PERMISSION_FIELDS)
+    paths: list[str] = []
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            key_text = str(key)
+            child_path = (*path, key_text)
+            if path and key in prohibited:
+                paths.append(".".join(child_path))
+            paths.extend(
+                _nested_permission_field_paths(item, path=child_path)
+            )
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            paths.extend(
+                _nested_permission_field_paths(
+                    item, path=(*path, f"[{index}]")
+                )
+            )
+    return paths
 
 
 def _evidence_digest(
@@ -491,19 +529,58 @@ def _semantic_token_matches(state: Mapping[str, Any], name: str, payload: Mappin
     if name == "grc":
         return validate_stage_token_semantics(state, name, payload)
     if name == "domain":
-        return payload.get("domain_result") == state.get("domain_result")
+        return (
+            state.get("domain_result") == "pass"
+            and validate_domain_aurion_token_semantics(
+                state, name, payload
+            )
+        )
     if name == "aurion":
         return (
-            payload.get("aurion15_result") == state.get("aurion15_result")
-            and payload.get("candidate_id") == state.get("current_candidate", {}).get("candidate_id")
+            state.get("aurion15_result") == "pass"
+            and validate_domain_aurion_token_semantics(
+                state, name, payload
+            )
         )
     return False
 
 
-def validate_canonical_upstream(
+def _verified_execution_boundary_present(
+    state: Mapping[str, Any], tokens: Mapping[str, Any]
+) -> bool:
+    token = tokens.get("execution_boundary")
+    if (
+        not isinstance(token, Mapping)
+        or token.get("name") != "execution_boundary"
+        or token.get("issued_at_stage") != "execution_gate"
+        or not verify_token(
+            token,
+            expected_request_fingerprint=state.get("request_fingerprint"),
+        )
+    ):
+        return False
+    order = state.get("integration_stage_order", [])
+    if not isinstance(order, list) or order.count("execution_gate") != 1:
+        return False
+    matching_trace = [
+        entry
+        for entry in state.get("token_trace", [])
+        if isinstance(entry, Mapping)
+        and entry.get("event") == "ISSUED"
+        and entry.get("name") == "execution_boundary"
+        and entry.get("stage") == "execution_gate"
+        and entry.get("issued_at") == token.get("issued_at")
+        and entry.get("digest") == token.get("digest")
+    ]
+    return len(matching_trace) == 1
+
+
+def _validate_canonical_upstream_unchecked(
     state: Mapping[str, Any], *, required_tokens: tuple[str, ...]
 ) -> tuple[bool, list[str]]:
     _, failures = verify_request_identity_binding(state)
+    if not isinstance(state.get("audit_trace"), list):
+        failures.append("canonical_upstream_audit_trace_invalid")
     _, stage_failures = verify_canonical_stage_lineage(state, required_tokens=required_tokens)
     failures.extend(stage_failures)
     control_chain_valid, control_chain_failures = validate_control_chain_bindings(state)
@@ -532,8 +609,12 @@ def validate_canonical_upstream(
         if not isinstance(payload, Mapping) or not _semantic_token_matches(state, name, payload):
             failures.append(f"validation_state_mismatch:{name}")
             continue
-        if name in EVIDENCE_FIELD:
-            evidence = state.get(EVIDENCE_FIELD[name], {})
+        evidence_field = (
+            EVIDENCE_FIELD.get(name)
+            or DOMAIN_AURION_EVIDENCE_FIELD.get(name)
+        )
+        if evidence_field:
+            evidence = state.get(evidence_field, {})
             evidence_payload = (
                 evidence.get("payload", {})
                 if isinstance(evidence, Mapping)
@@ -561,7 +642,56 @@ def validate_canonical_upstream(
         ]
         if len(matching_trace) != 1:
             failures.append(f"token_lineage_mismatch:{name}")
+    for stage in ("domain", "aurion"):
+        if stage not in required_tokens:
+            continue
+        evidence_valid, evidence_failures = (
+            validate_domain_aurion_stage_evidence(state, stage)
+        )
+        if not evidence_valid:
+            failures.extend(evidence_failures)
+        history_valid, history_failures = (
+            validate_domain_aurion_stage_history(state, stage)
+        )
+        if not history_valid:
+            failures.extend(history_failures)
+    if "aurion" in required_tokens:
+        handoff_valid, handoff_failures = validate_handoff_evidence(state)
+        if not handoff_valid:
+            failures.extend(handoff_failures)
+        if not _verified_execution_boundary_present(state, tokens):
+            failures.extend(
+                _pre_execution_authority_failures(
+                    state,
+                    boundary="canonical_aurion_handoff",
+                    expected_stage_order=CANONICAL_STAGE_SEQUENCE[:-1],
+                    allowed_stage_tokens=(
+                        "authority",
+                        "procedural_truth",
+                        "classification",
+                        "licensing",
+                        "governance",
+                        "grc",
+                        "domain",
+                        "aurion",
+                    ),
+                    expected_chain_stage="aurion_runtime",
+                    stage_evidence_field="aurion_evidence",
+                )
+            )
     return not failures, sorted(set(failures))
+
+
+def validate_canonical_upstream(
+    state: Mapping[str, Any], *, required_tokens: tuple[str, ...]
+) -> tuple[bool, list[str]]:
+    """Validate arbitrary public-boundary state without propagating errors."""
+    try:
+        return _validate_canonical_upstream_unchecked(
+            state, required_tokens=required_tokens
+        )
+    except Exception:
+        return False, ["canonical_upstream_structure_invalid"]
 
 
 def validate_governed_stage_token(
@@ -667,7 +797,127 @@ def validate_governance_handoff_to_grc(
     return not failures, sorted(set(failures))
 
 
-def validate_governed_domain_handoff(
+def _pre_execution_authority_failures(
+    state: Mapping[str, Any],
+    *,
+    boundary: str,
+    expected_stage_order: tuple[str, ...],
+    allowed_stage_tokens: tuple[str, ...],
+    expected_chain_stage: str,
+    stage_evidence_field: str,
+) -> list[str]:
+    """Require a clean, non-authorizing state before Execution Convergence."""
+    failures: list[str] = []
+    if state.get("decision") != "UNSET":
+        failures.append(f"{boundary}_pre_execution_decision_invalid")
+    if state.get("execution_result") != "UNSET":
+        failures.append(f"{boundary}_pre_execution_result_invalid")
+    if state.get("operational_state") != "UNSET":
+        failures.append(f"{boundary}_pre_execution_operational_state_invalid")
+    neutral_fields = {
+        "execution_reason": "",
+        "token_stack_valid": False,
+        "token_verification_failures": [],
+        "persistent_inoperability": False,
+        "controlled_return_required": False,
+        "last_denied_fingerprint": None,
+    }
+    for field, expected in neutral_fields.items():
+        if state.get(field) != expected:
+            failures.append(f"{boundary}_pre_execution_field_invalid:{field}")
+
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    expected_token_names = set(required_threshold_token_names()) | {
+        "threshold_bundle",
+        *allowed_stage_tokens,
+    }
+    actual_token_names = set(tokens)
+    for name in sorted(actual_token_names - expected_token_names, key=str):
+        failures.append(f"{boundary}_pre_execution_token_unexpected:{name}")
+    for name in sorted(expected_token_names - actual_token_names):
+        failures.append(f"{boundary}_pre_execution_token_missing:{name}")
+
+    issued_trace = [
+        entry
+        for entry in state.get("token_trace", [])
+        if isinstance(entry, Mapping) and entry.get("event") == "ISSUED"
+    ]
+    for name in expected_token_names:
+        token = tokens.get(name)
+        matches = [
+            entry
+            for entry in issued_trace
+            if entry.get("name") == name
+            and isinstance(token, Mapping)
+            and entry.get("stage") == token.get("issued_at_stage")
+            and entry.get("issued_at") == token.get("issued_at")
+            and entry.get("digest") == token.get("digest")
+        ]
+        if len(matches) != 1:
+            failures.append(
+                f"{boundary}_pre_execution_token_trace_invalid:{name}"
+            )
+    if any(entry.get("name") not in expected_token_names for entry in issued_trace):
+        failures.append(f"{boundary}_pre_execution_token_trace_unexpected")
+
+    order = state.get("integration_stage_order", [])
+    if order != list(expected_stage_order):
+        failures.append(f"{boundary}_pre_execution_stage_order_invalid")
+    chain = state.get("hash_chain", [])
+    evidence = state.get(stage_evidence_field, {})
+    evidence_payload = (
+        evidence.get("payload", {}) if isinstance(evidence, Mapping) else {}
+    )
+    if (
+        not isinstance(chain, list)
+        or not chain
+        or not isinstance(chain[-1], Mapping)
+        or chain[-1].get("stage") != expected_chain_stage
+        or evidence_payload.get("logical_index") != len(chain)
+        or evidence_payload.get("chain_hash_entering_finalisation")
+        != chain[-1].get("previous_hash")
+    ):
+        failures.append(f"{boundary}_pre_execution_chain_tail_invalid")
+
+    for field in (
+        "execution_verified",
+        "execution_timestamp",
+        "execution_attestation",
+        "execution_convergence",
+        "convergence_hash",
+        "audit_record",
+        "audit_hash",
+        "audit_finalisation",
+        "controlled_outcome",
+        "final_outcome",
+        "pipeline_convergence",
+        "pipeline_b_summary",
+        "pipeline_domain_aurion_parity",
+        "execution_permission",
+        "allow_execution",
+        "runtime_authority",
+        "final_admissibility",
+        "external_allow",
+        "external_deny",
+        "external_escalate",
+        "_".join(("external", "governance_result")),
+    ):
+        if field in state:
+            failures.append(f"{boundary}_pre_execution_field_present:{field}")
+    for path in sorted(set(_nested_permission_field_paths(state))):
+        failures.append(
+            f"{boundary}_pre_execution_nested_permission_field:{path}"
+        )
+    raw_reentry = state.get("governed_reentry")
+    if not isinstance(raw_reentry, Mapping):
+        failures.append(f"{boundary}_pre_execution_reentry_invalid")
+    elif "reentry_completed" in raw_reentry:
+        failures.append(f"{boundary}_pre_execution_reentry_completed")
+    return failures
+
+
+def _validate_governed_domain_handoff_unchecked(
     state: Mapping[str, Any],
 ) -> tuple[bool, list[str]]:
     """Fail-closed Pass 5 admission check; Domain reasoning stays untouched."""
@@ -707,4 +957,289 @@ def validate_governed_domain_handoff(
         failures.append("domain_handoff_governance_not_allowed")
     if state.get("grc_result") != "PASS":
         failures.append("domain_handoff_grc_not_pass")
+    reentry_valid, reentry_failures = _validate_controlled_reentry(state)
+    if not reentry_valid:
+        failures.extend(reentry_failures)
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    if not _verified_execution_boundary_present(state, tokens):
+        failures.extend(
+            _pre_execution_authority_failures(
+                state,
+                boundary="domain_handoff",
+                expected_stage_order=CANONICAL_STAGE_SEQUENCE[:10],
+                allowed_stage_tokens=(
+                    "authority",
+                    "procedural_truth",
+                    "classification",
+                    "licensing",
+                    "governance",
+                    "grc",
+                ),
+                expected_chain_stage="grc",
+                stage_evidence_field="grc_evidence",
+            )
+        )
     return not failures, sorted(set(failures))
+
+
+def validate_governed_domain_handoff(
+    state: Mapping[str, Any],
+) -> tuple[bool, list[str]]:
+    """Fail closed for malformed governed-to-Domain public input."""
+    try:
+        return _validate_governed_domain_handoff_unchecked(state)
+    except Exception:
+        return False, ["domain_handoff_structure_invalid"]
+
+
+def _validate_controlled_reentry(
+    state: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    reentry = normalized_governed_reentry(state)
+    context = state.get("context", {})
+    context = context if isinstance(context, Mapping) else {}
+    direct_target = context.get("reentry_target") or context.get("retry_stage")
+    if direct_target not in (None, "", "full_traversal"):
+        failures.append("controlled_reentry_direct_stage_jump_rejected")
+    if any(
+        context.get(field) is True
+        for field in (
+            "domain_direct_reentry",
+            "aurion_direct_reentry",
+            "execution_direct_reentry",
+        )
+    ):
+        failures.append("controlled_reentry_direct_stage_jump_rejected")
+    if reentry.get("retry_eligible") is True and reentry.get(
+        "reentry_permitted"
+    ) is not True:
+        failures.append("controlled_reentry_eligibility_invalid")
+    if reentry.get("reentry_permitted") is True:
+        prior = reentry.get("prior_denied_fingerprint")
+        current = reentry.get("current_request_fingerprint")
+        if (
+            not isinstance(prior, str)
+            or not prior
+            or not isinstance(current, str)
+            or current != state.get("request_fingerprint")
+            or current == prior
+        ):
+            failures.append("controlled_reentry_identity_invalid")
+        reason = reentry.get("material_change_reason")
+        if not isinstance(reason, str) or not reason.strip():
+            failures.append("controlled_reentry_material_change_missing")
+        if context.get("material_change_declared") is not True:
+            failures.append("controlled_reentry_declaration_missing")
+        proof_details = controlled_denial_proof_details(state)
+        if proof_details.get("present_count") == 0:
+            failures.append("controlled_reentry_prior_denial_proof_missing")
+        elif proof_details.get("present_count") != 1 or proof_details.get(
+            "valid"
+        ) is not True:
+            failures.append("controlled_reentry_prior_denial_proof_invalid")
+
+        proof_use = state.get("controlled_reentry_proof_use")
+        expected_use_fields = {
+            "schema_version",
+            "status",
+            "proof_digest",
+            "prior_denied_fingerprint",
+            "current_request_fingerprint",
+            "registry_scope",
+            "single_use",
+            "registry_capacity",
+        }
+        if not isinstance(proof_use, Mapping):
+            failures.append("controlled_reentry_proof_use_missing")
+        elif (
+            set(proof_use) != expected_use_fields
+            or proof_use.get("schema_version")
+            != CONTROLLED_REENTRY_USE_SCHEMA_VERSION
+            or proof_use.get("proof_digest")
+            != proof_details.get("proof_digest")
+            or proof_use.get("prior_denied_fingerprint") != prior
+            or proof_use.get("current_request_fingerprint") != current
+            or proof_use.get("registry_scope") != "DESKTOP_V1_PROCESS"
+            or proof_use.get("single_use") is not True
+            or not isinstance(proof_use.get("registry_capacity"), int)
+            or isinstance(proof_use.get("registry_capacity"), bool)
+            or proof_use.get("registry_capacity", 0) < 1
+        ):
+            failures.append("controlled_reentry_proof_use_invalid")
+        elif proof_use.get("status") == "REPLAYED":
+            failures.append("controlled_reentry_prior_denial_proof_replayed")
+        elif proof_use.get("status") == "CAPACITY_EXHAUSTED":
+            failures.append("controlled_reentry_replay_registry_exhausted")
+        elif proof_use.get("status") != "ACCEPTED":
+            failures.append("controlled_reentry_proof_use_invalid")
+    return not failures, sorted(set(failures))
+
+
+def _validate_domain_handoff_to_aurion_unchecked(
+    state: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    """Validate the exact completed Domain state consumed by Aurion."""
+    failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+            "governance",
+            "grc",
+            "domain",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
+    if not live_state_hash_valid(state):
+        failures.append("aurion_entry_state_hash_invalid")
+    constraints_valid, constraint_failures = validate_constraint_continuity(
+        state, through_stage="grc"
+    )
+    if not constraints_valid:
+        failures.extend(constraint_failures)
+    required_results = {
+        "procedural_truth_result": "PASS",
+        "procedural_truth_outcome": "PT_PASS",
+        "classification_result": "ALLOW",
+        "licensing_result": "ALLOW",
+        "governance_result": "ALLOW",
+        "grc_result": "PASS",
+        "domain_result": "pass",
+    }
+    for field, expected in required_results.items():
+        if state.get(field) != expected:
+            failures.append(f"aurion_entry_invalid:{field}")
+    domain_candidate = state.get("domain_candidate")
+    if not isinstance(domain_candidate, Mapping) or not domain_candidate:
+        failures.append("aurion_entry_domain_candidate_missing")
+    order = state.get("integration_stage_order", [])
+    if not isinstance(order, list) or order.count("domain_wrap") != 1:
+        failures.append("aurion_entry_domain_stage_missing")
+    if isinstance(order, list) and "aurion_runtime" in order:
+        failures.append("aurion_entry_stage_already_present")
+    reentry_valid, reentry_failures = _validate_controlled_reentry(state)
+    if not reentry_valid:
+        failures.extend(reentry_failures)
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    if not _verified_execution_boundary_present(state, tokens):
+        failures.extend(
+            _pre_execution_authority_failures(
+                state,
+                boundary="aurion_entry",
+                expected_stage_order=CANONICAL_STAGE_SEQUENCE[:11],
+                allowed_stage_tokens=(
+                    "authority",
+                    "procedural_truth",
+                    "classification",
+                    "licensing",
+                    "governance",
+                    "grc",
+                    "domain",
+                ),
+                expected_chain_stage="domain_wrap",
+                stage_evidence_field="domain_evidence",
+            )
+        )
+    return not failures, sorted(set(failures))
+
+
+def validate_domain_handoff_to_aurion(
+    state: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    """Fail closed for malformed Domain-to-Aurion public input."""
+    try:
+        return _validate_domain_handoff_to_aurion_unchecked(state)
+    except Exception:
+        return False, ["aurion_handoff_structure_invalid"]
+
+
+def _validate_execution_convergence_handoff_unchecked(
+    state: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    """Validate Pass 6 output without changing Execution Convergence/Gate."""
+    failures: list[str] = []
+    upstream_valid, upstream_failures = validate_canonical_upstream(
+        state,
+        required_tokens=(
+            "authority",
+            "procedural_truth",
+            "classification",
+            "licensing",
+            "governance",
+            "grc",
+            "domain",
+            "aurion",
+        ),
+    )
+    if not upstream_valid:
+        failures.extend(upstream_failures)
+    if not live_state_hash_valid(state):
+        failures.append("execution_convergence_handoff_state_hash_invalid")
+    constraints_valid, constraint_failures = validate_constraint_continuity(
+        state, through_stage="grc"
+    )
+    if not constraints_valid:
+        failures.extend(constraint_failures)
+    for field, expected in (
+        ("procedural_truth_result", "PASS"),
+        ("procedural_truth_outcome", "PT_PASS"),
+        ("classification_result", "ALLOW"),
+        ("licensing_result", "ALLOW"),
+        ("governance_result", "ALLOW"),
+        ("grc_result", "PASS"),
+        ("domain_result", "pass"),
+        ("aurion15_result", "pass"),
+    ):
+        if state.get(field) != expected:
+            failures.append(f"execution_convergence_handoff_invalid:{field}")
+    order = state.get("integration_stage_order", [])
+    if (
+        not isinstance(order, list)
+        or order.count("domain_wrap") != 1
+        or order.count("aurion_runtime") != 1
+        or order.index("domain_wrap") >= order.index("aurion_runtime")
+    ):
+        failures.append("execution_convergence_handoff_stage_order_invalid")
+    reentry_valid, reentry_failures = _validate_controlled_reentry(state)
+    if not reentry_valid:
+        failures.extend(reentry_failures)
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    if not _verified_execution_boundary_present(state, tokens):
+        failures.extend(
+            _pre_execution_authority_failures(
+                state,
+                boundary="execution_convergence_handoff",
+                expected_stage_order=CANONICAL_STAGE_SEQUENCE[:-1],
+                allowed_stage_tokens=(
+                    "authority",
+                    "procedural_truth",
+                    "classification",
+                    "licensing",
+                    "governance",
+                    "grc",
+                    "domain",
+                    "aurion",
+                ),
+                expected_chain_stage="aurion_runtime",
+                stage_evidence_field="aurion_evidence",
+            )
+        )
+    return not failures, sorted(set(failures))
+
+
+def validate_execution_convergence_handoff(
+    state: Mapping[str, Any]
+) -> tuple[bool, list[str]]:
+    """Fail closed for malformed Pass 6 execution-convergence handoff."""
+    try:
+        return _validate_execution_convergence_handoff_unchecked(state)
+    except Exception:
+        return False, ["execution_convergence_handoff_structure_invalid"]

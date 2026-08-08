@@ -117,7 +117,13 @@ def build_domain_admissibility(
 
     return {
 
-        "valid":verified,
+        "valid":False,
+
+        "reason":"NON_CANONICAL_DOMAIN_HELPER_NO_AUTHORITY",
+
+        "integrity_verified":verified,
+
+        "execution_convergence_eligible":False,
 
         "domain_hash":digest,
 
@@ -195,40 +201,14 @@ def evaluate_domain(
 
         }
 
-    payload=(
-
-        domain_record.get(
-
-            "payload",
-
-            {},
-
-        )
-
-    )
-
-    state=payload.get(
-
-        "domain_state"
-
-    )
-
-    if state!="VALID":
-
-        return {
-
-            "allowed":False,
-
-            "reason":
-
-            f"DOMAIN_{state}",
-
-        }
-
     return {
 
-        "allowed":True,
+        "allowed":False,
 
-        "domain_verified":True,
+        "reason":"NON_CANONICAL_DOMAIN_HELPER_NO_AUTHORITY",
+
+        "integrity_verified":True,
+
+        "execution_convergence_eligible":False,
 
 }

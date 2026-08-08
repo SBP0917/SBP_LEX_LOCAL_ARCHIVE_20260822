@@ -184,6 +184,24 @@ _DOWNSTREAM_FIELDS = {
     ),
 }
 
+_PASS6_DOWNSTREAM_FIELDS = (
+    "domain_reason",
+    "domain_candidate",
+    "domain_evidence",
+    "aurion_reason",
+    "aurion_evidence",
+    "candidate_attempt_count",
+    "current_candidate",
+    "domain_aurion_history",
+    "execution_convergence_handoff",
+    "pipeline_domain_aurion_parity",
+)
+for _governed_stage in GOVERNED_STAGES:
+    _DOWNSTREAM_FIELDS[_governed_stage] = (
+        *_DOWNSTREAM_FIELDS[_governed_stage],
+        *_PASS6_DOWNSTREAM_FIELDS,
+    )
+
 _TERMINAL_FIELDS = (
     "audit_record",
     "audit_hash",
@@ -307,6 +325,29 @@ def _constraint_snapshot(
     return snapshot
 
 
+def audit_lineage_projection(
+    state: Mapping[str, Any], *, terminal_stage: str
+) -> Dict[str, Any]:
+    trace = state.get("audit_trace", [])
+    if not isinstance(trace, list):
+        trace = []
+    terminal_indexes = [
+        index
+        for index, entry in enumerate(trace)
+        if isinstance(entry, Mapping)
+        and entry.get("stage") == terminal_stage
+    ]
+    cutoff = terminal_indexes[-1] + 1 if terminal_indexes else 0
+    prefix = deepcopy(trace[:cutoff])
+    return {
+        "terminal_stage": terminal_stage,
+        "terminal_present": bool(terminal_indexes),
+        "terminal_entry_count": len(terminal_indexes),
+        "entry_count": len(prefix),
+        "prefix_digest": generate_digest(prefix),
+    }
+
+
 def stage_projection(state: Mapping[str, Any], stage: str) -> Dict[str, Any]:
     if stage not in GOVERNED_STAGES:
         raise ValueError(f"unsupported_governed_stage:{stage}")
@@ -314,6 +355,9 @@ def stage_projection(state: Mapping[str, Any], stage: str) -> Dict[str, Any]:
         "result": state.get(RESULT_FIELD[stage]),
         "reason": state.get(REASON_FIELD[stage]),
         "constraint_snapshot": _constraint_snapshot(state, stage),
+        "audit_lineage": audit_lineage_projection(
+            state, terminal_stage=stage
+        ),
     }
     if stage == "classification":
         projection.update(
@@ -382,6 +426,13 @@ def stage_projection(state: Mapping[str, Any], stage: str) -> Dict[str, Any]:
                         state.get("context")
                     ).get("escalation_path_available", False),
                 },
+                "controlled_reentry_proof_use": deepcopy(
+                    dict(
+                        _mapping(
+                            state.get("controlled_reentry_proof_use")
+                        )
+                    )
+                ),
             }
         )
     return projection
@@ -644,6 +695,14 @@ def validate_stage_evidence(
         if payload.get(field) != expected:
             failures.append(f"{stage}_evidence_mismatch:{field}")
     projection = stage_projection(state, stage)
+    audit_lineage = _mapping(projection.get("audit_lineage"))
+    if (
+        audit_lineage.get("terminal_present") is not True
+        or audit_lineage.get("terminal_entry_count") != 1
+        or not isinstance(audit_lineage.get("entry_count"), int)
+        or audit_lineage.get("entry_count", 0) < 1
+    ):
+        failures.append(f"{stage}_audit_lineage_invalid")
     if payload.get("stage_state") != projection:
         failures.append(f"{stage}_evidence_mismatch:stage_state")
     if payload.get("stage_state_digest") != generate_digest(projection):
@@ -728,6 +787,7 @@ def invalidate_from_stage(
     for name in GOVERNED_STAGES[start:]:
         feedback.pop(name, None)
     feedback.pop("domain_wrap", None)
+    feedback.pop("aurion", None)
     working_state["governance_feedback"] = feedback
     return working_state
 

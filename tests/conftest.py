@@ -7,6 +7,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+import pytest
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 TEST_STORE = REPOSITORY_ROOT / "runtime_artifacts" / "pytest_integrity_store.jsonl"
@@ -179,6 +181,19 @@ def _build_test_local_trust_evidence() -> None:
 
 
 _build_test_local_trust_evidence()
+
+
+@pytest.fixture(autouse=True)
+def _isolated_controlled_reentry_registry(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from sbp_lex.security import domain_aurion_evidence
+
+    monkeypatch.setattr(
+        domain_aurion_evidence,
+        "_CONTROLLED_REENTRY_REPLAY_REGISTRY",
+        domain_aurion_evidence._ControlledReentryReplayRegistry(),
+    )
 
 
 def pytest_sessionfinish(session: object, exitstatus: int) -> None:

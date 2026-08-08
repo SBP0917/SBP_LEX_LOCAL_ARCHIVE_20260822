@@ -4,10 +4,13 @@ from copy import deepcopy
 from typing import Any, Dict, Mapping
 
 from sbp_lex.collective.context_interface import prepare_pre_context_signals
-from sbp_lex.pipeline.dual_runner import run_dual_pipeline
+from sbp_lex.pipeline.dual_runner import _run_dual_prepared_pipeline
+from sbp_lex.pipeline.runner import prepare_pipeline_boundary
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
 from sbp_lex.shared.convergence import (
+    DOMAIN_AURION_PARITY_FIELDS,
     GOVERNED_STAGE_PARITY_FIELDS,
+    domain_aurion_summary,
     governed_stage_summary,
 )
 
@@ -38,8 +41,7 @@ REPLAY_COMPARISON_FIELDS = [
     "pt_evidence_envelope_digest",
     "pt_bound_metadata",
     *GOVERNED_STAGE_PARITY_FIELDS,
-    "domain_result",
-    "aurion15_result",
+    *DOMAIN_AURION_PARITY_FIELDS,
     "decision",
     "execution_result",
     "execution_verified",
@@ -47,6 +49,7 @@ REPLAY_COMPARISON_FIELDS = [
     "convergence_matched",
     "root_pt_parity",
     "governed_stage_parity",
+    "domain_aurion_parity",
     "token_failures",
     "audit_finalisation",
     "controlled_outcome_hash",
@@ -58,7 +61,17 @@ def run_replay_check(*, request: Mapping[str, Any], pre_context_signals: Mapping
     replay_count = max(2, int(replay_count))
     request_copy = deepcopy(dict(request))
     stable_signals = deepcopy(dict(pre_context_signals)) if pre_context_signals else prepare_pre_context_signals(request_copy)
-    runs = [run_dual_pipeline(deepcopy(request_copy), deepcopy(stable_signals)) for _ in range(replay_count)]
+    prepared = prepare_pipeline_boundary(
+        deepcopy(request_copy), deepcopy(stable_signals)
+    )
+    runs = (
+        [deepcopy(prepared) for _ in range(replay_count)]
+        if isinstance(prepared, dict)
+        else [
+            _run_dual_prepared_pipeline(prepared)
+            for _ in range(replay_count)
+        ]
+    )
     summaries = [build_replay_summary(run) for run in runs]
     reference = summaries[0]
     mismatches: list[Dict[str, Any]] = []
@@ -253,8 +266,7 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
             "token_chain_reference": state.get("root_of_trust_evidence_anchor", {}).get("payload", {}).get("token_chain_reference"),
         },
         **governed_stage_summary(state),
-        "domain_result": state.get("domain_result"),
-        "aurion15_result": state.get("aurion15_result"),
+        **domain_aurion_summary(state),
         "decision": state.get("decision"),
         "execution_result": state.get("execution_result"),
         "execution_verified": state.get("execution_verified"),
@@ -263,6 +275,9 @@ def build_replay_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         "root_pt_parity": state.get("pipeline_root_pt_parity", {}),
         "governed_stage_parity": state.get(
             "pipeline_governed_stage_parity", {}
+        ),
+        "domain_aurion_parity": state.get(
+            "pipeline_domain_aurion_parity", {}
         ),
         "token_failures": state.get("token_verification_failures", []),
         "audit_finalisation": state.get("audit_finalisation", {}),

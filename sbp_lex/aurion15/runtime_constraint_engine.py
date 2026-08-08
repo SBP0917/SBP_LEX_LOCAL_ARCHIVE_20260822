@@ -125,9 +125,13 @@ def build_runtime_constraint(
 
     return {
 
-        "valid":
+        "valid":False,
 
-        verified,
+        "reason":"NON_CANONICAL_RUNTIME_HELPER_NO_AUTHORITY",
+
+        "integrity_verified":verified,
+
+        "execution_convergence_eligible":False,
 
         "runtime_hash":
 
@@ -211,40 +215,14 @@ def evaluate_runtime_constraint(
 
         }
 
-    payload=(
-
-        runtime_record.get(
-
-            "payload",
-
-            {},
-
-        )
-
-    )
-
-    constraint=payload.get(
-
-        "constraint_state"
-
-    )
-
-    if constraint!="VALID":
-
-        return {
-
-            "allowed":False,
-
-            "reason":
-
-            f"RUNTIME_{constraint}",
-
-        }
-
     return {
 
-        "allowed":True,
+        "allowed":False,
 
-        "runtime_verified":True,
+        "reason":"NON_CANONICAL_RUNTIME_HELPER_NO_AUTHORITY",
 
-  }
+        "integrity_verified":True,
+
+        "execution_convergence_eligible":False,
+
+}

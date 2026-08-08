@@ -5,14 +5,22 @@ from typing import Any, Dict, Mapping
 
 from sbp_lex.audit.audit_finalisation import build_audit_record, finalise_audit
 from sbp_lex.security.authority_boundary import (
+    validate_canonical_upstream,
     validate_governed_domain_handoff,
     validate_governed_stage_token,
     validate_root_pt_eligibility,
 )
+from sbp_lex.security.domain_aurion_evidence import (
+    constraint_snapshot as domain_aurion_constraint_snapshot,
+    stage_projection as domain_aurion_stage_projection,
+    validate_handoff_evidence,
+    validate_stage_evidence as validate_domain_aurion_stage_evidence,
+    validate_stage_history as validate_domain_aurion_stage_history,
+)
 from sbp_lex.security.governed_stage_evidence import (
     validate_constraint_continuity,
     validate_governance_history,
-    validate_stage_evidence,
+    validate_stage_evidence as validate_governed_stage_evidence,
 )
 from sbp_lex.security.pqc import generate_digest
 from sbp_lex.shared.hash_chain import append_hash_entry
@@ -164,7 +172,7 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
             if isinstance(evidence_payload, Mapping)
             else {}
         )
-        evidence_valid, evidence_failures = validate_stage_evidence(
+        evidence_valid, evidence_failures = validate_governed_stage_evidence(
             working_state, stage
         )
         token = working_state.get("tokens", {}).get(stage, {})
@@ -267,6 +275,217 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
         "domain_handoff_valid": domain_handoff_valid,
         "domain_handoff_failures": domain_handoff_failures,
     }
+
+    domain_aurion_stage_lineage: Dict[str, Any] = {}
+    tokens = working_state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    domain_aurion_histories = working_state.get(
+        "domain_aurion_history", {}
+    )
+    domain_aurion_histories = (
+        domain_aurion_histories
+        if isinstance(domain_aurion_histories, Mapping)
+        else {}
+    )
+    hash_chain = working_state.get("hash_chain", [])
+    hash_chain = hash_chain if isinstance(hash_chain, list) else []
+    token_prefix = (
+        "authority",
+        "procedural_truth",
+        "classification",
+        "licensing",
+        "governance",
+        "grc",
+    )
+    stage_hash_name = {
+        "domain": "domain_wrap",
+        "aurion": "aurion_runtime",
+    }
+    for stage in ("domain", "aurion"):
+        evidence = working_state.get(f"{stage}_evidence", {})
+        evidence = evidence if isinstance(evidence, Mapping) else {}
+        evidence_payload = evidence.get("payload", {})
+        evidence_payload = (
+            evidence_payload
+            if isinstance(evidence_payload, Mapping)
+            else {}
+        )
+        evidence_valid, evidence_failures = (
+            validate_domain_aurion_stage_evidence(working_state, stage)
+        )
+        history = domain_aurion_histories.get(stage, [])
+        history_valid, history_failures = (
+            validate_domain_aurion_stage_history(working_state, stage)
+        )
+        token = tokens.get(stage, {})
+        token = token if isinstance(token, Mapping) else {}
+        result_field = "domain_result" if stage == "domain" else "aurion15_result"
+        result_value = working_state.get(result_field)
+        token_expected = result_value == "pass"
+        token_present = bool(token)
+        if token_expected:
+            required_tokens = token_prefix + (
+                ("domain",)
+                if stage == "domain"
+                else ("domain", "aurion")
+            )
+            token_valid, token_failures = validate_canonical_upstream(
+                working_state, required_tokens=required_tokens
+            )
+        elif token_present:
+            token_valid = False
+            token_failures = [f"unexpected_{stage}_token_present"]
+        else:
+            token_valid = True
+            token_failures = []
+        logical_index = evidence_payload.get("logical_index")
+        matching_indexes = [
+            index
+            for index, entry in enumerate(hash_chain, start=1)
+            if isinstance(entry, Mapping)
+            and entry.get("stage") == stage_hash_name[stage]
+        ]
+        finalisation_hash = (
+            hash_chain[logical_index - 1].get("hash")
+            if isinstance(logical_index, int)
+            and not isinstance(logical_index, bool)
+            and 1 <= logical_index <= len(hash_chain)
+            and isinstance(hash_chain[logical_index - 1], Mapping)
+            else None
+        )
+        domain_aurion_stage_lineage[stage] = {
+            "stage": stage,
+            "result": result_value,
+            "reason": working_state.get(f"{stage}_reason"),
+            "evidence": evidence,
+            "evidence_digest": evidence.get("evidence_digest"),
+            "evidence_valid": evidence_valid,
+            "evidence_failures": evidence_failures,
+            "stage_state_digest": evidence_payload.get(
+                "stage_state_digest"
+            ),
+            "live_stage_state_digest": generate_digest(
+                domain_aurion_stage_projection(working_state, stage)
+            ),
+            "state_hash_entering_stage": evidence_payload.get(
+                "state_hash_entering_stage"
+            ),
+            "state_hash_before_token": evidence_payload.get(
+                "state_hash_before_token"
+            ),
+            "chain_hash_entering_finalisation": evidence_payload.get(
+                "chain_hash_entering_finalisation"
+            ),
+            "hash_chain_logical_index": logical_index,
+            "hash_chain_stage_indexes": matching_indexes,
+            "hash_chain_finalisation_hash": finalisation_hash,
+            "token_digest": token.get("digest"),
+            "token_expected": token_expected,
+            "token_present": token_present,
+            "token_valid": token_valid,
+            "token_failures": token_failures,
+            "upstream_token_digests": evidence_payload.get(
+                "upstream_token_digests", {}
+            ),
+            "upstream_evidence_digests": evidence_payload.get(
+                "upstream_evidence_digests", {}
+            ),
+            "history": history,
+            "history_digest": generate_digest(history),
+            "history_valid": history_valid,
+            "history_failures": history_failures,
+            "constraint_snapshot": evidence_payload.get(
+                "stage_state", {}
+            ).get("constraint_snapshot", {})
+            if isinstance(evidence_payload.get("stage_state", {}), Mapping)
+            else {},
+        }
+    handoff = working_state.get("execution_convergence_handoff", {})
+    handoff = handoff if isinstance(handoff, Mapping) else {}
+    handoff_valid, handoff_failures = validate_handoff_evidence(
+        working_state
+    )
+    feedback = working_state.get("governance_feedback", {})
+    feedback = feedback if isinstance(feedback, Mapping) else {}
+    domain_feedback = feedback.get("domain_wrap", {})
+    domain_feedback = (
+        domain_feedback if isinstance(domain_feedback, Mapping) else {}
+    )
+    aurion_feedback = feedback.get("aurion", {})
+    aurion_feedback = (
+        aurion_feedback if isinstance(aurion_feedback, Mapping) else {}
+    )
+    selected_candidate = working_state.get("current_candidate", {})
+    selected_candidate = (
+        selected_candidate
+        if isinstance(selected_candidate, Mapping)
+        else {}
+    )
+    selected_pathway = selected_candidate.get("pathway", {})
+    selected_pathway = (
+        selected_pathway if isinstance(selected_pathway, Mapping) else {}
+    )
+    pass6_constraint_snapshot = domain_aurion_constraint_snapshot(
+        working_state
+    )
+    domain_aurion_lineage = {
+        "schema_version": "desktop-v1.pass6-domain-aurion-lineage.v1",
+        "stages": domain_aurion_stage_lineage,
+        "domain_history": domain_aurion_histories.get("domain", []),
+        "domain_history_digest": generate_digest(
+            domain_aurion_histories.get("domain", [])
+        ),
+        "aurion_history": domain_aurion_histories.get("aurion", []),
+        "aurion_history_digest": generate_digest(
+            domain_aurion_histories.get("aurion", [])
+        ),
+        "domain_feedback": domain_feedback,
+        "domain_attempts_digest": generate_digest(
+            domain_feedback.get("attempts")
+        ),
+        "domain_results_digest": generate_digest(
+            domain_feedback.get("domain_results")
+        ),
+        "aurion_feedback": aurion_feedback,
+        "generated_candidate_set_digest": generate_digest(
+            aurion_feedback.get("generated_candidates")
+        ),
+        "candidate_validations_digest": generate_digest(
+            aurion_feedback.get("candidate_validations")
+        ),
+        "ranked_candidate_validations_digest": generate_digest(
+            aurion_feedback.get("ranked_candidate_validations")
+        ),
+        "admissible_candidate_set_digest": generate_digest(
+            aurion_feedback.get("admissible_candidates")
+        ),
+        "ordered_candidate_set_digest": generate_digest(
+            aurion_feedback.get("ranked_candidates")
+        ),
+        "rejected_candidates_digest": generate_digest(
+            aurion_feedback.get("rejected_candidates")
+        ),
+        "selected_candidate": selected_candidate,
+        "selected_candidate_digest": generate_digest(
+            dict(selected_candidate)
+        ),
+        "selected_pathway": selected_pathway,
+        "selected_pathway_digest": generate_digest(dict(selected_pathway)),
+        "constraint_snapshot": pass6_constraint_snapshot,
+        "constraint_snapshot_digest": generate_digest(
+            pass6_constraint_snapshot
+        ),
+        "governed_reentry": working_state.get("governed_reentry", {}),
+        "governed_reentry_digest": generate_digest(
+            working_state.get("governed_reentry", {})
+        ),
+        "execution_convergence_handoff": handoff,
+        "execution_convergence_handoff_digest": handoff.get(
+            "handoff_digest"
+        ),
+        "execution_convergence_handoff_valid": handoff_valid,
+        "execution_convergence_handoff_failures": handoff_failures,
+    }
     audit_state = {
         "request_fingerprint": working_state.get("request_fingerprint"),
         "state_hash": working_state.get("state_hash"),
@@ -310,6 +529,7 @@ def run_audit(state: Mapping[str, Any]) -> Dict[str, Any]:
             "governance_result": working_state.get("governance_result"),
             "grc_result": working_state.get("grc_result"),
             "classification_licensing_governance_grc_lineage": governed_lineage,
+            "domain_aurion_lineage": domain_aurion_lineage,
             "domain_wrap": working_state.get("governance_feedback", {}).get("domain_wrap", {}),
             "aurion15_result": working_state.get("aurion15_result"),
             "token_verification_failures": working_state.get("token_verification_failures", []),

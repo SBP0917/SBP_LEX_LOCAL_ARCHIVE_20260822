@@ -4,9 +4,16 @@ from typing import Any, Dict, Mapping
 
 from sbp_lex.config.security_config import CONVERGENCE_VERSION
 from sbp_lex.security.pqc import generate_digest, sign_payload, verify_signature
+from sbp_lex.security.domain_aurion_evidence import (
+    constraint_snapshot as domain_aurion_constraint_snapshot,
+    stage_projection as domain_aurion_stage_projection,
+    validate_handoff_evidence,
+    validate_stage_evidence as validate_domain_aurion_stage_evidence,
+    validate_stage_history as validate_domain_aurion_stage_history,
+)
 from sbp_lex.security.governed_stage_evidence import (
-    stage_projection,
-    validate_stage_evidence,
+    stage_projection as governed_stage_projection,
+    validate_stage_evidence as validate_governed_stage_evidence,
 )
 
 
@@ -62,13 +69,54 @@ GOVERNED_STAGE_PARITY_FIELDS = [
     "governed_constraint_digest",
 ]
 
+DOMAIN_AURION_PARITY_FIELDS = [
+    "domain_result",
+    "domain_reason",
+    "domain_state_digest",
+    "domain_live_state_digest",
+    "domain_evidence_valid",
+    "domain_evidence_failures_digest",
+    "domain_evidence_digest",
+    "domain_token_digest",
+    "domain_history_digest",
+    "domain_history_valid",
+    "domain_history_failures_digest",
+    "domain_attempt_count",
+    "domain_max_attempts",
+    "domain_attempts_digest",
+    "domain_results_digest",
+    "domain_candidate_digest",
+    "aurion15_result",
+    "aurion_reason",
+    "aurion_state_digest",
+    "aurion_live_state_digest",
+    "aurion_evidence_valid",
+    "aurion_evidence_failures_digest",
+    "aurion_evidence_digest",
+    "aurion_token_digest",
+    "aurion_history_digest",
+    "aurion_history_valid",
+    "aurion_history_failures_digest",
+    "candidate_attempt_count",
+    "generated_candidate_set_digest",
+    "candidate_validations_digest",
+    "admissible_candidate_set_digest",
+    "ordered_candidate_set_digest",
+    "rejected_candidates_digest",
+    "selected_candidate_digest",
+    "selected_pathway_digest",
+    "domain_aurion_constraint_digest",
+    "execution_convergence_handoff_digest",
+    "execution_convergence_handoff_valid",
+    "execution_convergence_handoff_failures_digest",
+]
+
 CONVERGENCE_COMPARISON_FIELDS = [
     "decision",
     "execution_result",
-    "domain_result",
-    "aurion15_result",
     *ROOT_PT_PARITY_FIELDS,
     *GOVERNED_STAGE_PARITY_FIELDS,
+    *DOMAIN_AURION_PARITY_FIELDS,
 ]
 
 
@@ -106,6 +154,7 @@ def build_pipeline_convergence_proof(*, pipeline_a: Mapping[str, Any], pipeline_
         "comparison_fields": CONVERGENCE_COMPARISON_FIELDS,
         "root_pt_comparison_fields": ROOT_PT_PARITY_FIELDS,
         "governed_stage_comparison_fields": GOVERNED_STAGE_PARITY_FIELDS,
+        "domain_aurion_comparison_fields": DOMAIN_AURION_PARITY_FIELDS,
         "root_pt_matched": (
             all(
                 a_summary.get(field) == b_summary.get(field)
@@ -118,6 +167,14 @@ def build_pipeline_convergence_proof(*, pipeline_a: Mapping[str, Any], pipeline_
             all(
                 a_summary.get(field) == b_summary.get(field)
                 for field in GOVERNED_STAGE_PARITY_FIELDS
+            )
+            if b_summary is not None
+            else None
+        ),
+        "domain_aurion_matched": (
+            all(
+                a_summary.get(field) == b_summary.get(field)
+                for field in DOMAIN_AURION_PARITY_FIELDS
             )
             if b_summary is not None
             else None
@@ -222,6 +279,7 @@ def _state_summary(state: Mapping[str, Any] | None) -> Dict[str, Any] | None:
             ),
         ),
         **governed_stage_summary(state),
+        **domain_aurion_summary(state),
     }
 
 
@@ -234,11 +292,11 @@ def governed_stage_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
         evidence = evidence if isinstance(evidence, Mapping) else {}
         payload = evidence.get("payload", {})
         payload = payload if isinstance(payload, Mapping) else {}
-        valid, failures = validate_stage_evidence(state, stage)
+        valid, failures = validate_governed_stage_evidence(state, stage)
         return (
             payload.get("stage_state_digest"),
             evidence.get("evidence_digest"),
-            generate_digest(stage_projection(state, stage)),
+            generate_digest(governed_stage_projection(state, stage)),
             valid,
             generate_digest(failures),
         )
@@ -329,6 +387,157 @@ def governed_stage_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
     }
 
 
+def domain_aurion_summary(state: Mapping[str, Any]) -> Dict[str, Any]:
+    """Return the exact live and signed Domain/Aurion parity surface."""
+    tokens = state.get("tokens", {})
+    tokens = tokens if isinstance(tokens, Mapping) else {}
+    feedback = state.get("governance_feedback", {})
+    feedback = feedback if isinstance(feedback, Mapping) else {}
+    domain_feedback = feedback.get("domain_wrap", {})
+    domain_feedback = (
+        domain_feedback if isinstance(domain_feedback, Mapping) else {}
+    )
+    aurion_feedback = feedback.get("aurion", {})
+    aurion_feedback = (
+        aurion_feedback if isinstance(aurion_feedback, Mapping) else {}
+    )
+    histories = state.get("domain_aurion_history", {})
+    histories = histories if isinstance(histories, Mapping) else {}
+
+    def stage_values(stage: str) -> Dict[str, Any]:
+        evidence = state.get(f"{stage}_evidence", {})
+        evidence = evidence if isinstance(evidence, Mapping) else {}
+        payload = evidence.get("payload", {})
+        payload = payload if isinstance(payload, Mapping) else {}
+        evidence_valid, evidence_failures = (
+            validate_domain_aurion_stage_evidence(state, stage)
+        )
+        history_valid, history_failures = (
+            validate_domain_aurion_stage_history(state, stage)
+        )
+        history = histories.get(stage, [])
+        return {
+            "state_digest": payload.get("stage_state_digest"),
+            "live_state_digest": generate_digest(
+                domain_aurion_stage_projection(state, stage)
+            ),
+            "evidence_valid": evidence_valid,
+            "evidence_failures_digest": generate_digest(
+                evidence_failures
+            ),
+            "evidence_digest": evidence.get("evidence_digest"),
+            "history_digest": generate_digest(history),
+            "history_valid": history_valid,
+            "history_failures_digest": generate_digest(
+                history_failures
+            ),
+        }
+
+    domain_values = stage_values("domain")
+    aurion_values = stage_values("aurion")
+    domain_candidate = state.get("domain_candidate", {})
+    domain_candidate = (
+        domain_candidate if isinstance(domain_candidate, Mapping) else {}
+    )
+    selected_candidate = state.get("current_candidate", {})
+    selected_candidate = (
+        selected_candidate
+        if isinstance(selected_candidate, Mapping)
+        else {}
+    )
+    selected_pathway = selected_candidate.get("pathway", {})
+    selected_pathway = (
+        selected_pathway if isinstance(selected_pathway, Mapping) else {}
+    )
+    handoff = state.get("execution_convergence_handoff", {})
+    handoff = handoff if isinstance(handoff, Mapping) else {}
+    handoff_valid, handoff_failures = validate_handoff_evidence(state)
+    return {
+        "domain_result": state.get("domain_result"),
+        "domain_reason": state.get("domain_reason"),
+        "domain_state_digest": domain_values["state_digest"],
+        "domain_live_state_digest": domain_values["live_state_digest"],
+        "domain_evidence_valid": domain_values["evidence_valid"],
+        "domain_evidence_failures_digest": domain_values[
+            "evidence_failures_digest"
+        ],
+        "domain_evidence_digest": domain_values["evidence_digest"],
+        "domain_token_digest": (
+            tokens.get("domain", {}).get("digest")
+            if isinstance(tokens.get("domain", {}), Mapping)
+            else None
+        ),
+        "domain_history_digest": domain_values["history_digest"],
+        "domain_history_valid": domain_values["history_valid"],
+        "domain_history_failures_digest": domain_values[
+            "history_failures_digest"
+        ],
+        "domain_attempt_count": domain_feedback.get("attempt_count"),
+        "domain_max_attempts": domain_feedback.get("max_attempts"),
+        "domain_attempts_digest": generate_digest(
+            domain_feedback.get("attempts")
+        ),
+        "domain_results_digest": generate_digest(
+            domain_feedback.get("domain_results")
+        ),
+        "domain_candidate_digest": generate_digest(dict(domain_candidate)),
+        "aurion15_result": state.get("aurion15_result"),
+        "aurion_reason": state.get("aurion_reason"),
+        "aurion_state_digest": aurion_values["state_digest"],
+        "aurion_live_state_digest": aurion_values["live_state_digest"],
+        "aurion_evidence_valid": aurion_values["evidence_valid"],
+        "aurion_evidence_failures_digest": aurion_values[
+            "evidence_failures_digest"
+        ],
+        "aurion_evidence_digest": aurion_values["evidence_digest"],
+        "aurion_token_digest": (
+            tokens.get("aurion", {}).get("digest")
+            if isinstance(tokens.get("aurion", {}), Mapping)
+            else None
+        ),
+        "aurion_history_digest": aurion_values["history_digest"],
+        "aurion_history_valid": aurion_values["history_valid"],
+        "aurion_history_failures_digest": aurion_values[
+            "history_failures_digest"
+        ],
+        "candidate_attempt_count": state.get("candidate_attempt_count"),
+        "generated_candidate_set_digest": generate_digest(
+            aurion_feedback.get("generated_candidates")
+        ),
+        "candidate_validations_digest": generate_digest(
+            {
+                "generated": aurion_feedback.get("candidate_validations"),
+                "ranked": aurion_feedback.get(
+                    "ranked_candidate_validations"
+                ),
+            }
+        ),
+        "admissible_candidate_set_digest": generate_digest(
+            aurion_feedback.get("admissible_candidates")
+        ),
+        "ordered_candidate_set_digest": generate_digest(
+            aurion_feedback.get("ranked_candidates")
+        ),
+        "rejected_candidates_digest": generate_digest(
+            aurion_feedback.get("rejected_candidates")
+        ),
+        "selected_candidate_digest": generate_digest(
+            dict(selected_candidate)
+        ),
+        "selected_pathway_digest": generate_digest(dict(selected_pathway)),
+        "domain_aurion_constraint_digest": generate_digest(
+            domain_aurion_constraint_snapshot(state)
+        ),
+        "execution_convergence_handoff_digest": handoff.get(
+            "handoff_digest"
+        ),
+        "execution_convergence_handoff_valid": handoff_valid,
+        "execution_convergence_handoff_failures_digest": generate_digest(
+            handoff_failures
+        ),
+    }
+
+
 def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
     payload = {
         "version": proof.get("version"),
@@ -344,6 +553,10 @@ def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
             "governed_stage_comparison_fields"
         ),
         "governed_stage_matched": proof.get("governed_stage_matched"),
+        "domain_aurion_comparison_fields": proof.get(
+            "domain_aurion_comparison_fields"
+        ),
+        "domain_aurion_matched": proof.get("domain_aurion_matched"),
         "matched": proof.get("matched"),
         "mismatches": proof.get("mismatches"),
         "near_match_reconciliation_used": proof.get(
@@ -364,6 +577,10 @@ def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
         GOVERNED_STAGE_PARITY_FIELDS
     ):
         return False
+    if proof.get("domain_aurion_comparison_fields") != (
+        DOMAIN_AURION_PARITY_FIELDS
+    ):
+        return False
     if proof.get("near_match_reconciliation_used") is not False:
         return False
     pipeline_a = proof.get("pipeline_a")
@@ -374,6 +591,7 @@ def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
         expected_mismatches: list[str] = []
         expected_root_pt_matched = None
         expected_governed_stage_matched = None
+        expected_domain_aurion_matched = None
     elif isinstance(pipeline_b, Mapping):
         expected_mismatches = [
             field
@@ -388,6 +606,10 @@ def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
             pipeline_a.get(field) == pipeline_b.get(field)
             for field in GOVERNED_STAGE_PARITY_FIELDS
         )
+        expected_domain_aurion_matched = all(
+            pipeline_a.get(field) == pipeline_b.get(field)
+            for field in DOMAIN_AURION_PARITY_FIELDS
+        )
     else:
         return False
     return (
@@ -396,4 +618,6 @@ def verify_convergence_proof(proof: Mapping[str, Any]) -> bool:
         and proof.get("root_pt_matched") is expected_root_pt_matched
         and proof.get("governed_stage_matched")
         is expected_governed_stage_matched
+        and proof.get("domain_aurion_matched")
+        is expected_domain_aurion_matched
     )

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+from external_substrates.shared.canonical_json import canonical_dumps
 from main import main, sample_request
 from sbp_lex.authority_first.root_of_trust_runner import run_root_of_trust
 from sbp_lex.classification.ap_acf import run_ap_acf_precheck
@@ -197,6 +198,16 @@ def test_governed_reentry_requires_material_change_and_full_traversal() -> None:
     corrected["context"]["prior_denied_fingerprint"] = denied["request_fingerprint"]
     corrected["context"]["material_change_declared"] = True
     corrected["context"]["material_change_reason"] = "autonomy returned within locked ceiling"
+    corrected["context"]["evidence"].append(
+        {
+            "source": "controlled_denial_proof",
+            "content": canonical_dumps(denied["controlled_outcome"]),
+            "verified": True,
+            "attested": True,
+            "freshness_valid": True,
+            "consistency_valid": True,
+        }
+    )
     state = run_pipeline(corrected)
     assert state["integration_stage_order"] == EXPECTED_STAGE_ORDER
     assert state["governed_reentry"]["reentry_permitted"] is True
