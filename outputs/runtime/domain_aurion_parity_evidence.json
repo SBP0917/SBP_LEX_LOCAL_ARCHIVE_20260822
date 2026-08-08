@@ -1,0 +1,121 @@
+{
+  "schema_version": "desktop-v1.runtime-pass6-domain-aurion-parity.v1",
+  "evidence_date": "2026-08-08",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit_before": "067bf77cac99b6e6aee6167a4f29eb26369b03be",
+  "repository_implementation_commit": "d9f4a5b2b472035784452f6140e926698d73cfce",
+  "evidence_recording_commit": "the Git commit containing this file; supplied in final handoff",
+  "branch": "main",
+  "scope": {
+    "entry": "same valid GRC-governed input in both canonical pipelines",
+    "exit": "same valid execution-convergence handoff state",
+    "execution_convergence_hardened": false,
+    "execution_gate_hardened": false,
+    "scope_stops_before_execution_convergence_and_execution_gate_hardening": true
+  },
+  "domain_aurion_stage_parity": {
+    "applicable": true,
+    "comparison_fields": [
+      "domain_result",
+      "domain_reason",
+      "domain_state_digest",
+      "domain_live_state_digest",
+      "domain_evidence_valid",
+      "domain_evidence_failures_digest",
+      "domain_evidence_digest",
+      "domain_token_digest",
+      "domain_history_digest",
+      "domain_history_valid",
+      "domain_history_failures_digest",
+      "domain_attempt_count",
+      "domain_max_attempts",
+      "domain_attempts_digest",
+      "domain_results_digest",
+      "domain_candidate_digest",
+      "aurion15_result",
+      "aurion_reason",
+      "aurion_state_digest",
+      "aurion_live_state_digest",
+      "aurion_evidence_valid",
+      "aurion_evidence_failures_digest",
+      "aurion_evidence_digest",
+      "aurion_token_digest",
+      "aurion_history_digest",
+      "aurion_history_valid",
+      "aurion_history_failures_digest",
+      "candidate_attempt_count",
+      "generated_candidate_set_digest",
+      "candidate_validations_digest",
+      "admissible_candidate_set_digest",
+      "ordered_candidate_set_digest",
+      "rejected_candidates_digest",
+      "selected_candidate_digest",
+      "selected_pathway_digest",
+      "domain_aurion_constraint_digest",
+      "execution_convergence_handoff_digest",
+      "execution_convergence_handoff_valid",
+      "execution_convergence_handoff_failures_digest"
+    ],
+    "field_count": 39,
+    "field_match_count": 39,
+    "all_fields_match": true,
+    "exact_parity_result": true,
+    "near_match_reconciliation_used": false,
+    "weighted_reconciliation_used": false,
+    "probabilistic_merge_used": false
+  },
+  "stage_snapshot": {
+    "domain": {
+      "result": "pass",
+      "reason": "domain_wrap_passed",
+      "attempt_count": 1,
+      "evidence_valid": true,
+      "history_valid": true
+    },
+    "aurion": {
+      "result": "pass",
+      "reason": "aurion_pathway_resolved",
+      "candidate_attempt_count": 2,
+      "evidence_valid": true,
+      "history_valid": true
+    },
+    "handoff": {
+      "evidence_valid": true,
+      "failures": [],
+      "handoff_digest": "c2428319e1637b10438d9bb85ed9112befe4d4243c613ae6694b1b5cc46029c4",
+      "computed_tier": "MEDIUM",
+      "state_hash": "2b418a100e08653d2033f159512b847df37d46f5d3dfeed0e7b58eac373c6071",
+      "audit_hash": "1526a849b545333a9d9f573fa73a4293973e11a99bfdcb061f338c118a53941c"
+    }
+  },
+  "pipeline_convergence": {
+    "matched": true,
+    "mismatches": [],
+    "domain_aurion_matched": true,
+    "mismatch_action": "fail_closed",
+    "near_match_reconciliation_used": false,
+    "runtime_output_sha256": "b81c93799eb1de5e7fe28126b8d3fff717aed0aad4502ef54287c2af19aba658"
+  },
+  "replay": {
+    "status": "PASS",
+    "matched": true,
+    "mismatches": [],
+    "exact_domain_aurion_field_metadata_required": true,
+    "replay_output_sha256": "7bf5f02029c2d30c6e354b4234c9dd84858b295f676ea8080fa2e60ebd918135"
+  },
+  "negative_parity_evidence": {
+    "same_result_domain_mutation_detected": true,
+    "same_result_aurion_pathway_mutation_detected": true,
+    "candidate_order_or_selection_mutation_detected": true,
+    "handoff_mutation_detected": true,
+    "near_match_substitution_accepted": false,
+    "material_mismatch_action": "fail_closed",
+    "proofs": [
+      "test_convergence_detects_same_result_domain_aurion_pathway_mutation",
+      "test_replay_projection_detects_same_result_aurion_pathway_mutation",
+      "test_valid_domain_aurion_evidence_tokens_and_handoff_are_exactly_bound",
+      "test_pass6_handoff_requires_exact_stage_order_and_hash_chain_tail"
+    ]
+  },
+  "secrets_recorded": false
+}

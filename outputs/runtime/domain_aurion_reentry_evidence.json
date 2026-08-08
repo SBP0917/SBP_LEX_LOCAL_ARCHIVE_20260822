@@ -1,0 +1,163 @@
+{
+  "schema_version": "desktop-v1.runtime-pass6-domain-aurion-reentry.v1",
+  "evidence_date": "2026-08-08",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit_before": "067bf77cac99b6e6aee6167a4f29eb26369b03be",
+  "repository_implementation_commit": "d9f4a5b2b472035784452f6140e926698d73cfce",
+  "evidence_recording_commit": "the Git commit containing this file; supplied in final handoff",
+  "branch": "main",
+  "scope": {
+    "mechanism": "existing GRC-owned materially changed request followed by full canonical retraversal",
+    "new_loop_architecture_introduced": false,
+    "direct_reentry_to_domain_permitted": false,
+    "direct_reentry_to_aurion_permitted": false,
+    "direct_reentry_to_execution_permitted": false,
+    "execution_convergence_hardened": false,
+    "execution_gate_hardened": false,
+    "scope_stops_before_execution_convergence_and_execution_gate_hardening": true
+  },
+  "denied_origin": {
+    "decision": "DENY",
+    "execution_result": "HALT",
+    "request_fingerprint": "161274d5fa058879286eaa58eeb3aea7e4321bae6af4f82911ff54f6016ba575",
+    "denial_remains_inoperable": true,
+    "eligible_only_as_signed_prior_denial_lineage": true
+  },
+  "signed_prior_denial_proof": {
+    "context_evidence_source": "controlled_denial_proof",
+    "canonical_controlled_outcome_required": true,
+    "signature_verification_required": true,
+    "freshness_required": true,
+    "consistency_required": true,
+    "request_fingerprint_binding_required": true,
+    "audit_hash_required": true,
+    "convergence_hash_required": true,
+    "state_hash_required": true,
+    "single_proof_required": true
+  },
+  "missing_proof": {
+    "status": "PASS",
+    "proof_present": false,
+    "decision": "DENY",
+    "execution_result": "HALT",
+    "failure": "controlled_reentry_prior_denial_proof_missing"
+  },
+  "materially_changed_request": {
+    "required": true,
+    "full_canonical_retraversal_required": true,
+    "prior_denial_lineage_preserved": true,
+    "rejecting_stage_bypass_permitted": false
+  },
+  "successful_controlled_reentry": {
+    "result": "PASS",
+    "proof_use_status": "ACCEPTED",
+    "domain_result": "pass",
+    "aurion15_result": "pass",
+    "decision": "ALLOW",
+    "execution_result": "EXECUTE",
+    "reentry_permitted": true,
+    "reentry_completed": true,
+    "prior_denial_history_preserved": true,
+    "full_retraversal_completed": true
+  },
+  "single_use_replay_control": {
+    "registry_visibility": "private",
+    "registry_scope": "DESKTOP_V1_PROCESS",
+    "registry_capacity": 4096,
+    "bounded": true,
+    "single_use": true,
+    "first_valid_live_use": "ACCEPTED",
+    "distinct_second_live_use": "REPLAYED",
+    "distinct_second_live_use_decision": "DENY",
+    "distinct_second_live_use_execution_result": "HALT",
+    "distinct_second_live_use_failure": "controlled_reentry_prior_denial_proof_replayed",
+    "public_registry_injection_parameter_present": false,
+    "public_entry_points_without_registry_override": [
+      "prepare_pipeline_boundary",
+      "run_pipeline",
+      "run_dual_pipeline"
+    ]
+  },
+  "fresh_reentry_replay": {
+    "status": "PASS",
+    "replay_count": 2,
+    "matched": true,
+    "mismatches": [],
+    "reference_domain_result": "pass",
+    "reference_aurion15_result": "pass",
+    "reference_execution_result": "EXECUTE",
+    "preparation_model": "one consumed prepared boundary cloned immutably for deterministic replay"
+  },
+  "negative_matrix": [
+    {
+      "vector": "material-change claim without signed prior denial proof",
+      "expected": "DENY/HALT",
+      "observed": "DENY/HALT",
+      "failure": "controlled_reentry_prior_denial_proof_missing",
+      "status": "PASS"
+    },
+    {
+      "vector": "prior denied fingerprint does not match the signed proof",
+      "expected": "DENY",
+      "observed": "DENY",
+      "failure": "controlled_reentry_prior_denial_proof_invalid",
+      "status": "PASS"
+    },
+    {
+      "vector": "distinct live request reuses an already consumed denial proof",
+      "expected": "REPLAYED and DENY/HALT",
+      "observed": "REPLAYED and DENY/HALT",
+      "failure": "controlled_reentry_prior_denial_proof_replayed",
+      "status": "PASS"
+    },
+    {
+      "vector": "repeat Domain entry attempts to reuse prior permission",
+      "expected": "DENY/HALT",
+      "observed": "DENY/HALT",
+      "failure": "domain_reentry_rejected",
+      "status": "PASS"
+    },
+    {
+      "vector": "repeat Aurion entry attempts to reuse prior permission",
+      "expected": "DENY/HALT",
+      "observed": "DENY/HALT",
+      "failure": "aurion_reentry_rejected",
+      "status": "PASS"
+    },
+    {
+      "vector": "public entry point attempts to inject a fresh registry",
+      "expected": "API rejects unsupported override",
+      "observed": "TypeError and no public registry parameter",
+      "status": "PASS"
+    },
+    {
+      "vector": "fresh deterministic replay clones one consumed prepared boundary twice",
+      "expected": "exact replay match without double-consuming proof",
+      "observed": "2/2 matched with no mismatches",
+      "status": "PASS"
+    }
+  ],
+  "lineage_and_boundedness": {
+    "explicit_eligible_reason_required": true,
+    "prior_failure_and_denial_history_preserved": true,
+    "request_identity_transition_recorded": true,
+    "material_change_required": true,
+    "domain_failure_erasure_accepted": false,
+    "failed_pathway_history_erasure_accepted": false,
+    "bounded_process_local_registry": true,
+    "audit_visible": true,
+    "deterministic_fresh_retraversal_replayable": true,
+    "proofs": [
+      "test_controlled_reentry_requires_signed_prior_denial_lineage",
+      "test_fresh_reentry_replay_clones_one_consumed_prepared_boundary",
+      "test_repeated_domain_and_aurion_entry_cannot_reuse_prior_permission",
+      "test_governed_reentry_requires_material_change_and_full_traversal"
+    ]
+  },
+  "gap_closure": {
+    "controlled_reentry_gap": "GAP-DA-006",
+    "status": "CLOSED",
+    "unresolved_reentry_gaps": []
+  },
+  "secrets_recorded": false
+}

@@ -1,0 +1,268 @@
+{
+  "schema_version": "desktop-v1.runtime-pass6-domain-aurion-evidence.v1",
+  "evidence_date": "2026-08-08",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "repository_commit_before": "067bf77cac99b6e6aee6167a4f29eb26369b03be",
+  "repository_implementation_commit": "d9f4a5b2b472035784452f6140e926698d73cfce",
+  "repository_implementation_commit_role": "clean Pass 6 runtime and focused-test commit used for authoritative verification",
+  "evidence_recording_commit": "the Git commit containing this file; supplied in final handoff",
+  "branch": "main",
+  "provider_mode": "synthetic_local",
+  "python_executable": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\VENV_SBP_V1_3ef5992_20260716T152709+1000\\Scripts\\python.exe",
+  "python_version": "3.12.13",
+  "scope": {
+    "entry": "valid GRC-governed state entering Domain",
+    "stages": [
+      "domain_wrap",
+      "aurion_runtime",
+      "controlled full-retraversal re-entry where canonically eligible"
+    ],
+    "exit": "signed valid state entering Execution Convergence",
+    "desktop_v1_exclusive_mediation_only": true,
+    "execution_convergence_hardened": false,
+    "execution_gate_hardened": false,
+    "scope_stops_before_execution_convergence_and_execution_gate_hardening": true,
+    "architecture_changed": false,
+    "canon_changed": false,
+    "traversal_order_changed": false,
+    "new_token_type_introduced": false,
+    "new_authority_source_introduced": false
+  },
+  "verification": {
+    "compile": {
+      "command": "python -m compileall -q sbp_lex tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    "focused": {
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_runtime_pass6_domain_aurion_reentry_hardening.py tests/test_phase_15_5b_integration.py",
+      "status": "PASS",
+      "passed": 68,
+      "duration_seconds": 72.02
+    },
+    "directly_affected": {
+      "status": "PASS",
+      "passed": 296,
+      "duration_seconds": 289.24,
+      "suites": [
+        "tests/test_adversarial_runtime.py",
+        "tests/test_execution_gate_strictness.py",
+        "tests/test_phase_15_5a_alignment.py",
+        "tests/test_phase_15_5b_integration.py",
+        "tests/test_phase_18_5_authority_boundary.py",
+        "tests/test_phase_18_6_historical_audit_mutation.py",
+        "tests/test_phase_18_procedural_truth_binding.py",
+        "tests/test_runtime_pass3_eie_state_boundary.py",
+        "tests/test_runtime_pass4_root_pt_hardening.py",
+        "tests/test_runtime_pass5_classification_licensing_governance_grc_hardening.py",
+        "tests/test_runtime_pass6_domain_aurion_reentry_hardening.py"
+      ]
+    },
+    "full_windows_suite": {
+      "command": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\VENV_SBP_V1_3ef5992_20260716T152709+1000\\Scripts\\python.exe -m pytest -p no:cacheprovider -q",
+      "status": "PASS",
+      "passed": 2060,
+      "skipped": 7,
+      "duration_seconds": 2436.60,
+      "exit_code": 0,
+      "environment": "existing isolated Python 3.12.13 Windows validation environment; pytest plugin autoload and user site disabled",
+      "commit": "d9f4a5b2b472035784452f6140e926698d73cfce"
+    },
+    "runtime_cli": {
+      "command": "python main.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "decision": "ALLOW",
+      "execution_result": "EXECUTE",
+      "convergence_matched": true,
+      "output_sha256": "b81c93799eb1de5e7fe28126b8d3fff717aed0aad4502ef54287c2af19aba658"
+    },
+    "replay_cli": {
+      "command": "python main.py replay",
+      "status": "PASS",
+      "exit_code": 0,
+      "matched": true,
+      "mismatches": [],
+      "output_sha256": "7bf5f02029c2d30c6e354b4234c9dd84858b295f676ea8080fa2e60ebd918135"
+    },
+    "direct_deterministic_parity": {
+      "status": "PASS",
+      "exact_parity_result": true,
+      "domain_aurion_field_match_count": 39,
+      "domain_aurion_field_count": 39,
+      "near_match_reconciliation_used": false,
+      "handoff_evidence_valid": true,
+      "handoff_failures": []
+    },
+    "release_integrity": "RELEASE_INTEGRITY_PASS",
+    "local_trust_25_year_capstone": "LOCAL_TRUST_CAPSTONE_PASS",
+    "adversarial_negative_harness": "ADVERSARIAL_NEGATIVE_HARNESS_PASS"
+  },
+  "valid_execution_convergence_handoff_snapshot": {
+    "decision": "ALLOW",
+    "execution_result": "EXECUTE",
+    "convergence_matched": true,
+    "computed_tier": "MEDIUM",
+    "state_hash": "2b418a100e08653d2033f159512b847df37d46f5d3dfeed0e7b58eac373c6071",
+    "audit_hash": "1526a849b545333a9d9f573fa73a4293973e11a99bfdcb061f338c118a53941c",
+    "handoff_evidence_valid": true,
+    "handoff_failures": [],
+    "handoff_digest": "c2428319e1637b10438d9bb85ed9112befe4d4243c613ae6694b1b5cc46029c4",
+    "execution_permission_issued_by_domain": false,
+    "execution_permission_issued_by_aurion": false
+  },
+  "domain_runtime": {
+    "result": "pass",
+    "reason": "domain_wrap_passed",
+    "attempt_count": 1,
+    "evidence_valid": true,
+    "evidence_failures": [],
+    "history_valid": true,
+    "history_failures": [],
+    "complete_governed_prefix_required": true,
+    "same_name_implementation_substitution_rejected": true,
+    "failure_outputs_neutralize_downstream_authority": true
+  },
+  "aurion_runtime": {
+    "result": "pass",
+    "reason": "aurion_pathway_resolved",
+    "candidate_attempt_count": 2,
+    "evidence_valid": true,
+    "evidence_failures": [],
+    "history_valid": true,
+    "history_failures": [],
+    "exact_canonical_candidate_set_required": true,
+    "deterministic_candidate_order_required": true,
+    "complete_domain_admissible_prefix_required": true,
+    "failure_outputs_neutralize_downstream_authority": true
+  },
+  "stage_lineage": {
+    "domain": {
+      "stage": "domain_wrap",
+      "result": "pass",
+      "reason": "domain_wrap_passed",
+      "signed_evidence_required": true,
+      "existing_token_semantics_exactly_bound": true,
+      "append_only_history_valid": true,
+      "audit_prefix_bound": true
+    },
+    "aurion": {
+      "stage": "aurion_runtime",
+      "result": "pass",
+      "reason": "aurion_pathway_resolved",
+      "signed_evidence_required": true,
+      "existing_token_semantics_exactly_bound": true,
+      "append_only_history_valid": true,
+      "audit_prefix_bound": true
+    },
+    "execution_convergence_handoff": {
+      "signed": true,
+      "valid": true,
+      "failures": [],
+      "canonical_stage_prefix_required": true,
+      "exact_hash_chain_tail_required": true
+    }
+  },
+  "constraint_and_integrity_continuity": {
+    "status": "PASS",
+    "request_identity_bound": true,
+    "eie_identity_bound": true,
+    "governed_state_bound": true,
+    "state_hash_continuity": true,
+    "token_continuity": true,
+    "audit_lineage_continuity": true,
+    "domain_constraint_preserved_through_aurion": true,
+    "authority_expansion_accepted": false,
+    "licence_scope_broadening_accepted": false,
+    "tier_downgrade_accepted": false,
+    "autonomy_ceiling_increase_accepted": false,
+    "governance_denial_reversal_accepted": false,
+    "domain_failure_reversal_accepted": false
+  },
+  "audit_lineage": {
+    "audit_hash": "1526a849b545333a9d9f573fa73a4293973e11a99bfdcb061f338c118a53941c",
+    "domain_evidence_valid": true,
+    "domain_history_valid": true,
+    "aurion_evidence_valid": true,
+    "aurion_history_valid": true,
+    "handoff_evidence_valid": true,
+    "prior_audit_lineage_deletion_rejected": true,
+    "exact_domain_aurion_projection_present": true
+  },
+  "adversarial_closure": {
+    "domain_bypass_protection": {
+      "status": "PASS",
+      "proofs": [
+        "test_domain_rejects_missing_grc_evidence_or_token",
+        "test_same_name_domain_implementation_substitution_fails_closed",
+        "test_public_domain_and_aurion_boundaries_deny_noncanonical_state"
+      ]
+    },
+    "aurion_bypass_protection": {
+      "status": "PASS",
+      "proofs": [
+        "test_aurion_rejects_missing_domain_evidence_or_token",
+        "test_deleted_domain_feedback_cannot_enter_aurion",
+        "test_candidate_binding_scope_tier_autonomy_and_authority_mutations_reject"
+      ]
+    },
+    "denial_and_domain_failure_supremacy": {
+      "status": "PASS",
+      "proofs": [
+        "test_failed_domain_and_aurion_outputs_neutralize_forged_authority",
+        "test_pre_gate_execution_authority_substitution_is_rejected",
+        "test_prior_audit_lineage_deletion_cannot_cross_pass6_boundaries"
+      ]
+    },
+    "candidate_and_pathway_integrity": {
+      "status": "PASS",
+      "proofs": [
+        "test_empty_malformed_or_duplicate_candidate_sets_fail_closed",
+        "test_schema_valid_forged_candidate_set_cannot_replace_canonical_output",
+        "test_ranker_cannot_mutate_validated_candidate_content",
+        "test_same_id_pathway_mutation_is_rejected_by_direct_execution_gate"
+      ]
+    },
+    "exclusive_mediation": {
+      "status": "PASS",
+      "claim_boundary": "canonical Desktop V1 runtime only",
+      "proofs": [
+        "test_standalone_legacy_domain_helper_is_integrity_only",
+        "test_standalone_legacy_aurion_helpers_are_integrity_only",
+        "test_direct_gate_rejects_forged_pre_execution_control_state"
+      ]
+    },
+    "replay_parity_and_handoff": {
+      "status": "PASS",
+      "proofs": [
+        "test_convergence_detects_same_result_domain_aurion_pathway_mutation",
+        "test_replay_projection_detects_same_result_aurion_pathway_mutation",
+        "test_pass6_handoff_requires_exact_stage_order_and_hash_chain_tail",
+        "test_handoff_rejects_unknown_signed_token_and_permission_fields"
+      ]
+    }
+  },
+  "gap_closure": {
+    "identified": 8,
+    "closed": 8,
+    "remaining": 0,
+    "closed_gap_ids": [
+      "GAP-DA-001",
+      "GAP-DA-002",
+      "GAP-DA-003",
+      "GAP-DA-004",
+      "GAP-DA-005",
+      "GAP-DA-006",
+      "GAP-DA-007",
+      "GAP-DA-008"
+    ],
+    "unresolved_domain_gaps": [],
+    "unresolved_aurion_gaps": [],
+    "unresolved_reentry_gaps": []
+  },
+  "worktree_observation": {
+    "implementation_commit_verified_clean_before_evidence_recording": true,
+    "evidence_files_pending_scoped_evidence_commit": true
+  },
+  "secrets_recorded": false
+}
