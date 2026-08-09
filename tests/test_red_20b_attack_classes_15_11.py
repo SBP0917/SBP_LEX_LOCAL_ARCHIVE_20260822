@@ -18,6 +18,7 @@ from sbp_lex.domains.runner import run_domain_wrap
 from sbp_lex.execution.execution_gate import run_execution_gate
 from sbp_lex.governance.engine import run_governance
 from sbp_lex.pipeline.runner import run_pipeline
+from sbp_lex.runtime.measured_startup import reset_measured_startup_for_tests
 from sbp_lex.security.authority_boundary import validate_canonical_upstream
 from sbp_lex.security.pqc import generate_digest, sign_payload
 from sbp_lex.security.token_stack import verify_required_tokens, verify_token
@@ -32,6 +33,12 @@ CANONICAL_STAGE_TOKENS = (
     "domain",
     "aurion",
 )
+
+
+@pytest.fixture(scope="module", autouse=True)
+def _refresh_measured_startup_after_subprocess_tests() -> None:
+    """Discard a parent-process cache invalidated by earlier CLI tests."""
+    reset_measured_startup_for_tests()
 
 
 def _valid_state(request: dict | None = None) -> dict:
