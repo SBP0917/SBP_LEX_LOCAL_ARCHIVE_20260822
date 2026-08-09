@@ -3,19 +3,23 @@ from __future__ import annotations
 import argparse
 import json
 from copy import deepcopy
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from sbp_lex.recovery.common import atomic_json
-from sbp_lex.security.pqc import generate_digest
+from external_substrates.shared.canonical_json import canonical_bytes, canonical_dumps
 
 
 SCENARIO_VERSION = "PASS8_DESKTOP_V1_SYNTHETIC_RESILIENCE_SCENARIOS_V1"
 
 
+def _digest(value: Any) -> str:
+    return sha256(canonical_bytes(value)).hexdigest()
+
+
 def _seal(payload: Mapping[str, Any]) -> dict[str, Any]:
     result = deepcopy(dict(payload))
-    result["fixture_digest"] = generate_digest(result)
+    result["fixture_digest"] = _digest(result)
     return result
 
 
@@ -151,7 +155,7 @@ def validate_scenario(value: Mapping[str, Any]) -> tuple[bool, list[str]]:
     if not isinstance(value, Mapping):
         return False, ["scenario_not_mapping"]
     payload = {key: item for key, item in value.items() if key != "fixture_digest"}
-    if value.get("fixture_digest") != generate_digest(payload):
+    if value.get("fixture_digest") != _digest(payload):
         failures.append("scenario_digest_invalid")
     if value.get("scenario_version") != SCENARIO_VERSION:
         failures.append("scenario_version_invalid")
@@ -259,7 +263,7 @@ def evaluate_scenario(value: Mapping[str, Any]) -> dict[str, Any]:
         "external_effect": False,
         "authority_manufactured": False,
     }
-    result["result_digest"] = generate_digest(result)
+    result["result_digest"] = _digest(result)
     return result
 
 
@@ -283,7 +287,7 @@ def build_scenario_fixture_package() -> dict[str, Any]:
         "live_effects_used": False,
         "real_targeting_data_used": False,
     }
-    return {**payload, "package_digest": generate_digest(payload)}
+    return {**payload, "package_digest": _digest(payload)}
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -292,7 +296,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     result = build_scenario_fixture_package()
     if args.output:
-        atomic_json(Path(args.output), result)
+        output = Path(args.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(canonical_dumps(result) + "\n", encoding="utf-8")
     print(json.dumps(result, sort_keys=True, separators=(",", ":")))
     return 0 if result["all_fixtures_valid"] else 1
 
