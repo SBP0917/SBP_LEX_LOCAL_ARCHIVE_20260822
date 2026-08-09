@@ -1,0 +1,139 @@
+{
+  "evidence_version": "PASS8_DESKTOP_V1_OPERATIONAL_RESILIENCE_EVIDENCE_V1",
+  "pass_status": "COMPLETE",
+  "scope": "SBP_LEX_DUAL_V6_DESKTOP_V1_LOCAL_SINGLE_HOST",
+  "baseline": {
+    "branch": "main",
+    "starting_commit": "45bfad36d89569a0cdc7e8206c8c7a2d09869093",
+    "starting_working_tree": "CLEAN",
+    "pass_7_prerequisite": "COMPLETE",
+    "implementation_commit": "717c9c8e09983e646d70852dad20e0731f06f564",
+    "ending_verified_implementation_commit": "717c9c8e09983e646d70852dad20e0731f06f564",
+    "ending_commit_note": "The report/evidence-only commit is recorded by Git history and the final completion response; a commit cannot embed its own hash."
+  },
+  "verification": {
+    "focused": "168 passed in 3.41 seconds (166 focused Pass 8 checks plus two external-substrate boundary checks)",
+    "adjacent_regression": "388 passed, 2 skipped in 971.41 seconds",
+    "full_suite": "2341 passed, 7 skipped in 3150.49s (0:52:30)",
+    "compileall_exit_code": 0,
+    "diff_check": "PASS",
+    "final_working_tree": "clean after the report/evidence commit"
+  },
+  "operational_controls": {
+    "exclusive_runtime_owner": "PASS",
+    "stale_lock_validation_and_preservation": "PASS",
+    "corrupt_lock_fail_closed": "PASS",
+    "clean_and_repeated_shutdown": "PASS",
+    "mid_stage_drain_or_invalidation": "PASS",
+    "capability_issuance_during_drain": "BLOCKED",
+    "crash_loop_bound": 3,
+    "recovery_attempt_bound": 3,
+    "automatic_resume": false,
+    "automatic_ambiguous_effect_retry": false,
+    "pre_crash_capability_reuse": "REJECTED",
+    "pt_deny_conserved": true,
+    "governance_deny_conserved": true,
+    "persistence_and_quarantine": "PASS",
+    "backup_and_separate_restore": "PASS",
+    "authority_granted_by_operational_layer": false
+  },
+  "soak": {
+    "artifact": "outputs/runtime/pass_08_soak_metrics.json",
+    "duration_seconds": 1800.0,
+    "workload_count": 35151,
+    "workload_mix": {
+      "valid": 7031,
+      "denied": 7030,
+      "escalated": 7030,
+      "malformed": 7030,
+      "replay": 7030
+    },
+    "assertion_count": 14,
+    "all_assertions": "PASS",
+    "resource_summary": {
+      "working_set_baseline_bytes": 26906624,
+      "working_set_warmup_end_bytes": 27078656,
+      "working_set_peak_and_end_bytes": 29368320,
+      "python_traced_peak_bytes": 981924,
+      "python_traced_steady_median_bytes": 637859,
+      "python_traced_end_bytes": 867431,
+      "thread_baseline_peak_end": 1,
+      "windows_handle_baseline_peak_end": 178,
+      "bounded_telemetry_samples": 359,
+      "open_file_count_available": false,
+      "universal_memory_threshold_used": false
+    },
+    "latency_summary_ms": {
+      "minimum": 0.1873,
+      "median": 0.57355,
+      "p95": 0.9178,
+      "p99": 1.2433,
+      "maximum": 3.5468,
+      "bounded_sample_count": 4096
+    },
+    "supporting_artifact_sha256": "278c7a2042812e940d9568fbebd7118faa4b462d80297fabc0aa789849c06b7e",
+    "external_services_used": false,
+    "live_effects_used": false
+  },
+  "resource_controls": {
+    "artifact": "outputs/runtime/pass_08_resource_budget_snapshot.json",
+    "metric_class_count": 27,
+    "above_bound_rejection": "PASS",
+    "unknown_or_invalid_metric_rejection": "PASS",
+    "duplicate_and_saturation_rejection": "PASS"
+  },
+  "fault_injection": {
+    "critical_seam_count": 32,
+    "fault_class_count": 22,
+    "disabled_by_default": true,
+    "available_in_normal_runtime": false,
+    "faults_grant_authority": false,
+    "result": "PASS"
+  },
+  "pqc_readiness": {
+    "inventory_artifact": "outputs/security/pqc_migration_readiness_inventory.json",
+    "performance_artifact": "outputs/security/pqc_performance_baseline.json",
+    "boundary_count": 22,
+    "provider_id": "cryptography.mldsa",
+    "provider_version": "49.0.0",
+    "algorithm_identifier": "ML-DSA",
+    "inventory_validation": "PASS",
+    "no_silent_downgrade": "PASS",
+    "provider_loss_fail_closed": "PASS",
+    "provider_replaced": false,
+    "migration_completed": false,
+    "quantum_safe_claim": false,
+    "detached_pqc_clone": "NO_PQC_NAMED_REGISTERED_BRANCH_OR_WORKTREE_LOCATED_UNTOUCHED"
+  },
+  "synthetic_scenarios": {
+    "artifact": "fixtures/pass8/pass_08_resilience_scenarios.json",
+    "scenario_count": 4,
+    "derived_outcomes_match_expected": true,
+    "scenario_a": "ESCALATE_HALT",
+    "scenario_b": "DENY_HALT",
+    "scenario_c": "VIOLATING_PLAN_REJECTED_SAFE_SYNTHETIC_ALTERNATIVE_ONLY",
+    "scenario_d": "DENY_HALT_NO_DOWNGRADE_NO_DUPLICATE_EFFECT",
+    "real_world_data": false,
+    "live_external_effect": false
+  },
+  "operator_activation_boundary": {
+    "normal_cli": "FAIL_CLOSED_MISSING_AUTHORISED_SIGNING_SECRET",
+    "replay_cli": "FAIL_CLOSED_MISSING_AUTHORISED_SIGNING_SECRET",
+    "isolated_test_trust_runtime_and_replay": "PASS",
+    "stored_measured_startup": "FAIL_STALE_OR_INVALID_OWNER_EVIDENCE",
+    "stored_local_trust_and_release": "FAIL_STALE_OWNER_EVIDENCE",
+    "owner_evidence_overwritten": false
+  },
+  "deferred_or_excluded": {
+    "extended_soak_modes_run": false,
+    "pqc_profile_runtime_migration": false,
+    "pqc_clone_merge": false,
+    "app_implementation": false,
+    "live_skg_dtn": false,
+    "external_credentials": false,
+    "distributed_runtime": false,
+    "real_weapon_or_infrastructure_integration": false,
+    "windows_ivvf_completion": false,
+    "production_or_certification_claim": false
+  }
+}
