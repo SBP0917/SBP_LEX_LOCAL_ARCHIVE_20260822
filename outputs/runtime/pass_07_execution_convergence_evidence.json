@@ -1,0 +1,193 @@
+{
+  "schema_version": "desktop-v1.runtime-pass7-execution-convergence-evidence.v1",
+  "evidence_date": "2026-08-09",
+  "pass_identifier": "RUNTIME_ENGINEERING_PASS_07_EXECUTION_CONVERGENCE",
+  "pass_status": "COMPLETE",
+  "runtime": "SBP_LEX_DUAL_V6_DESKTOP_V1",
+  "branch": "main",
+  "repository_starting_commit": "85ea181ecabecb93d6f424581104a1a3b89a80e8",
+  "repository_implementation_commit": "83de406902970150ec3a879dbd7db1d352774cec",
+  "repository_final_code_commit": "ac5ac74ea5af09e99cd1852711f156b9cf954d3b",
+  "evidence_recording_commit": "the Git commit containing this file; supplied in the final handoff",
+  "working_tree_initial": "clean",
+  "working_tree_at_final_full_suite": "clean",
+  "provider_mode": "synthetic_local",
+  "python": {
+    "executable": "C:\\Users\\LeighMC\\Documents\\Codex\\V\\VENV_SBP_V1_3ef5992_20260716T152709+1000\\Scripts\\python.exe",
+    "version": "3.12.13",
+    "pytest_version": "9.1.1"
+  },
+  "scope": {
+    "entry": "signed valid Domain/Aurion handoff entering terminal convergence",
+    "exit": "controlled local effect result or deterministic non-execution with terminal custody",
+    "desktop_v1_exclusive_mediation_only": true,
+    "architecture_changed": false,
+    "canon_changed": false,
+    "traversal_order_changed": false,
+    "authority_ownership_changed": false,
+    "live_external_service_activated": false,
+    "cloud_nodes_quorum_mesh_or_distributed_runtime_added": false,
+    "provenance_package_created_or_promoted": false,
+    "clone_creation_performed": false
+  },
+  "verification": {
+    "compile": {
+      "command": "python -m compileall -q .",
+      "status": "PASS",
+      "exit_code": 0,
+      "note": "Repository code compiled; compileall reported inaccessible ignored historical pytest temporary directories without changing its successful exit status. Source/test-specific compile checks also passed."
+    },
+    "pass7_focused": {
+      "status": "PASS",
+      "passed": 114,
+      "duration_seconds": 354.55,
+      "suites": [
+        "tests/test_runtime_pass7_execution_convergence_hardening.py",
+        "tests/test_runtime_pass7_terminal_custody.py",
+        "Pass 7 affected terminal-runtime test selections"
+      ],
+      "required_classes_covered": [
+        "A_positive_convergence",
+        "B_missing_mandatory_token",
+        "C_invalid_token_digest",
+        "D_invalid_token_signature",
+        "E_request_fingerprint_mismatch",
+        "F_EIE_mismatch",
+        "G_state_hash_mismatch",
+        "H_tier_downgrade",
+        "I_governance_deny_conservation",
+        "J_procedural_truth_failure_conservation",
+        "K_domain_failure_conservation",
+        "L_aurion_failure_conservation",
+        "M_hash_chain_mutation",
+        "N_stale_or_replayed_token",
+        "O_capability_reuse",
+        "P_cross_request_capability_reuse",
+        "Q_audit_readiness",
+        "R_replay_non_effect",
+        "S_measured_runtime_invalidity",
+        "T_ambiguous_effect",
+        "U_duplicate_execution",
+        "V_terminal_exception"
+      ]
+    },
+    "targeted_isolation_regression": {
+      "status": "PASS",
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_red_20a_attack_classes_20_16.py tests/test_red_20b_attack_classes_15_11.py",
+      "passed": 28,
+      "duration_seconds": 27.68
+    },
+    "representative_h7_and_terminal_custody_regression": {
+      "status": "PASS",
+      "passed": 21,
+      "duration_seconds": 132.99
+    },
+    "full_windows_suite": {
+      "command": "scripts\\run_tests.bat -q -p no:cacheprovider",
+      "status": "PASS",
+      "passed": 2175,
+      "skipped": 7,
+      "duration_seconds": 4680.99,
+      "exit_code": 0,
+      "environment": "existing isolated Windows Python 3.12.13 environment; user site and pytest plugin autoload disabled",
+      "commit": "ac5ac74ea5af09e99cd1852711f156b9cf954d3b"
+    },
+    "windows_r4_relevant": {
+      "status": "PASS",
+      "passed": 44,
+      "duration_seconds": 252.36,
+      "scope_note": "Existing R4 regression tests only; no R4 or provenance package was created, rebuilt or promoted."
+    },
+    "r2_supply_chain_relevant": {
+      "status": "PASS",
+      "passed": 47,
+      "skipped": 3,
+      "duration_seconds": 276.16,
+      "scope_note": "Existing R2 regression tests only; no provenance package was created, rebuilt or promoted."
+    },
+    "local_trust_tests": {
+      "status": "PASS",
+      "passed": 24,
+      "duration_seconds": 9.44
+    },
+    "runtime_cli": {
+      "command": "python main.py",
+      "status": "EXPECTED_FAIL_CLOSED",
+      "exit_code": 1,
+      "reason": "SBP_LEX_SIGNING_SECRET is absent from the operator environment; a trusted ML-DSA seed must be exactly 64 lowercase hexadecimal characters",
+      "valid_operational_fixture": "PASS via test_a_positive_operational_convergence_is_exactly_terminally_bound",
+      "production_or_durable_test_secret_injected": false
+    },
+    "replay_cli": {
+      "command": "python main.py replay",
+      "status": "EXPECTED_FAIL_CLOSED",
+      "exit_code": 1,
+      "reason": "SBP_LEX_SIGNING_SECRET is absent from the operator environment",
+      "deterministic_non_effect_fixture": "PASS via Pass 7 replay tests",
+      "fresh_effect_authority_issued": false
+    },
+    "stored_local_trust_artifacts": {
+      "release_integrity": "FAIL_STALE_ARTIFACT",
+      "local_trust_capstone": "FAIL_STALE_ARTIFACT",
+      "stored_repository_commit": "f5ba5b...",
+      "current_repository_commit_at_check": "83de406...",
+      "refresh_attempt": "BLOCKED_BEFORE_WRITE_MISSING_AUTHORISED_SIGNING_SECRET",
+      "source_or_evidence_overwritten": false
+    }
+  },
+  "runtime_assurance": {
+    "required_token_verification": "PASS",
+    "conditional_threshold_token_verification": "PASS",
+    "denial_conservation": "PASS",
+    "cross_request_state_and_eie_binding": "PASS",
+    "hash_chain_mutation_rejection": "PASS",
+    "single_use_capability_and_replay_rejection": "PASS",
+    "measured_startup_continuity": "PASS",
+    "audit_continuity_and_terminal_custody": "PASS",
+    "replay_determinism_and_non_authority": "PASS",
+    "ambiguous_effect_non_success": "PASS",
+    "duplicate_and_race_handling": "PASS",
+    "terminal_exception_fail_closed": "PASS",
+    "dual_divergence_persistent_inoperability": "PASS"
+  },
+  "implementation_summary": {
+    "strict_gate_and_token_semantics": true,
+    "signed_traversal_receipt_bound_to_measured_startup_and_request": true,
+    "process_local_atomic_single_use_claim": true,
+    "replay_receipt_is_non_operational": true,
+    "terminal_preseal_and_durable_custody": true,
+    "hard_entry_rejection_custody": true,
+    "dual_divergence_success_surfaces_removed": true,
+    "exact_adapter_acknowledgement_binding": true,
+    "formal_terminal_preseal_digest_binding": true,
+    "terminal_aware_hash_profile": true,
+    "test_subprocess_startup_cache_isolated_at_legacy_boundary": true
+  },
+  "unresolved_findings": [
+    {
+      "classification": "OWNER_DECISION_REQUIRED",
+      "finding": "The durable local runtime needs an authorised SBP_LEX_SIGNING_SECRET before normal or replay CLI entrypoints can operate."
+    },
+    {
+      "classification": "IMPLEMENTED_NOT_EVIDENCED_CURRENT_COMMIT",
+      "finding": "Stored release-integrity and local-trust capstone artifacts predate Pass 7 and must be refreshed at an authorised later provenance/trust milestone."
+    },
+    {
+      "classification": "OWNER_DECISION_REQUIRED",
+      "finding": "The source baseline for ten clean clones remains deferred pending the owner's choice between baseline 10 and baseline 12."
+    },
+    {
+      "classification": "NOT_APPLICABLE_DESKTOP_V1",
+      "finding": "Live SKG/DTN, cloud, nodes, quorum, mesh and distributed governance remain outside Desktop V1."
+    },
+    {
+      "classification": "IMPLEMENTED_NOT_EXTERNALLY_ASSURED",
+      "finding": "No external certification, independent IV&V, production-readiness or complete formal-proof claim is made."
+    }
+  ],
+  "evidence_digest": {
+    "algorithm": "SHA-256",
+    "scope": "canonical JSON object excluding evidence_digest",
+    "value": "4dcbac6ea0da6068a77577972e9d70b063cae87c89d84c6dbf61a14d74d826c5"
+  }
+}
