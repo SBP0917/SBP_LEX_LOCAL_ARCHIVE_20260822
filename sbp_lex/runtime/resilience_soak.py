@@ -42,6 +42,7 @@ EXTENDED_SOAK_MODES = {
     "extended_8h": 28800,
 }
 CASE_ORDER = ("valid", "denied", "escalated", "malformed", "replay")
+HANDLE_RETAINED_GROWTH_ALLOWANCE = 2
 
 
 class _ProcessMemoryCounters(ctypes.Structure):
@@ -108,6 +109,18 @@ def _open_file_count() -> int | None:
         import psutil  # type: ignore[import-not-found]
     except ImportError:
         return None
+
+
+def _retained_handle_growth_bounded(
+    reference_count: int | None,
+    end_count: int | None,
+    *,
+    allowance: int = HANDLE_RETAINED_GROWTH_ALLOWANCE,
+) -> bool:
+    """Assess retained growth, without treating cleanup as positive growth."""
+    if reference_count is None or end_count is None:
+        return True
+    return end_count <= reference_count + allowance
     try:
         return len(psutil.Process().open_files())
     except Exception:
@@ -400,8 +413,9 @@ def run_deterministic_soak(
             and counters["replay_records"] == iteration
         ),
         "no_unbounded_thread_growth": max(thread_values) - min(thread_values) <= 1,
-        "no_unbounded_handle_growth": (
-            True if not handle_values else max(handle_values) - min(handle_values) <= 2
+        "no_unbounded_handle_growth": _retained_handle_growth_bounded(
+            warmup_end["windows_handle_count"],
+            end["windows_handle_count"],
         ),
         "memory_growth_explained_and_bounded": (
             len(samples) <= 1024
@@ -472,6 +486,24 @@ def run_deterministic_soak(
                 "no workload-proportional retained state"
             ),
             "universal_threshold_used": False,
+        },
+        "handle_growth_observation": {
+            "reference": "warmup_end",
+            "reference_count": warmup_end["windows_handle_count"],
+            "peak_count": max(handle_values) if handle_values else None,
+            "end_count": end["windows_handle_count"],
+            "retained_delta": (
+                None
+                if warmup_end["windows_handle_count"] is None
+                or end["windows_handle_count"] is None
+                else end["windows_handle_count"]
+                - warmup_end["windows_handle_count"]
+            ),
+            "allowed_retained_growth": HANDLE_RETAINED_GROWTH_ALLOWANCE,
+            "criterion": (
+                "end count does not exceed warmup-end count plus allowance; "
+                "transient peak is reported separately"
+            ),
         },
     }
     latencies = list(latency_samples_ms)

@@ -23,6 +23,7 @@ from sbp_lex.runtime.resilience_soak import (
     EXTENDED_SOAK_MODES,
     _handle_count,
     _process_working_set_bytes,
+    _retained_handle_growth_bounded,
     run_deterministic_soak,
 )
 from sbp_lex.runtime.resource_budgets import (
@@ -215,6 +216,28 @@ def test_short_soak_is_balanced_bounded_and_replay_complete() -> None:
     )
     assert "process_working_set_bytes" in result["resource_summary"]["baseline"]
     assert "open_file_count" in result["resource_summary"]["baseline"]
+    assert (
+        result["resource_summary"]["handle_growth_observation"]["reference"]
+        == "warmup_end"
+    )
+
+
+@pytest.mark.parametrize(
+    ("reference_count", "end_count", "expected"),
+    [
+        (216, 208, True),
+        (216, 216, True),
+        (216, 218, True),
+        (216, 219, False),
+        (None, None, True),
+    ],
+)
+def test_handle_growth_assessment_measures_retained_upward_growth(
+    reference_count: int | None,
+    end_count: int | None,
+    expected: bool,
+) -> None:
+    assert _retained_handle_growth_bounded(reference_count, end_count) is expected
 
 
 def test_short_pass9_migration_aware_soak_binds_every_workload_and_checkpoint() -> None:
