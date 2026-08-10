@@ -66,6 +66,10 @@ from sbp_lex.runtime.measured_startup import (
     validate_baseline_store,
     verify_startup_attestation,
 )
+from sbp_lex.security.migration_profile import (
+    CRYPTO_PROFILE_VERSION,
+    VERIFICATION_POLICY_VERSION,
+)
 from sbp_lex.security.pqc import (
     EXPECTED_SIGNER_FINGERPRINT_ENVIRONMENT_NAME,
     generate_digest,
@@ -755,30 +759,45 @@ def _verify_r2_evidence(
     if any(build.get(key) != value for key, value in build_expected.items()):
         raise IVVPError("stale_r2_evidence")
     provider = build.get("pqc_provider")
+    cryptographic_provider = build.get("cryptographic_provider")
     if (
         not isinstance(provider, Mapping)
         or set(provider) != {
             "policy",
             "signature_algorithm",
             "provider",
+            "provider_version",
             "provider_available",
             "trusted_signing_key_available",
             "trusted_signing_key_fingerprint",
+            "crypto_profile_version",
+            "verification_policy_version",
+            "migration_profile_ready",
+            "migration_profile_error",
             "fail_closed",
         }
         or provider.get("policy") != "NIST_FIPS_203_204_205"
         or provider.get("signature_algorithm") != "ML-DSA"
         or provider.get("provider") != "cryptography.mldsa"
+        or not isinstance(provider.get("provider_version"), str)
+        or not provider["provider_version"]
         or provider.get("provider_available") is not True
         or provider.get("trusted_signing_key_available") is not True
+        or provider.get("crypto_profile_version") != CRYPTO_PROFILE_VERSION
+        or provider.get("verification_policy_version")
+        != VERIFICATION_POLICY_VERSION
+        or provider.get("migration_profile_ready") is not True
+        or provider.get("migration_profile_error") is not None
         or provider.get("fail_closed") is not True
         or provider.get("trusted_signing_key_fingerprint")
         != identity["trusted_signing_key_fingerprint"]
+        or not isinstance(cryptographic_provider, Mapping)
+        or provider.get("provider_version")
+        != cryptographic_provider.get("version")
     ):
         raise IVVPError("r2_pqc_provider_invalid")
     python = build.get("python")
     operating_system = build.get("operating_system")
-    cryptographic_provider = build.get("cryptographic_provider")
     if (
         not isinstance(build.get("measured_baseline_sequence"), int)
         or isinstance(build.get("measured_baseline_sequence"), bool)

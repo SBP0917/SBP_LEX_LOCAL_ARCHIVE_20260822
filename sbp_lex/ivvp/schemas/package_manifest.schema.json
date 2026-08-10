@@ -89,6 +89,66 @@
         "size_bytes": {"type": "integer", "minimum": 0}
       }
     },
+    "cryptoProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_version",
+        "provider_id",
+        "provider_version",
+        "algorithm_family",
+        "algorithm_identifier",
+        "security_profile",
+        "signature_mode",
+        "hybrid_mode",
+        "components",
+        "key_id",
+        "public_key_fingerprint",
+        "created_at",
+        "expires_at",
+        "revoked",
+        "verification_policy_version",
+        "migration_status",
+        "legacy_status",
+        "deprecation_status",
+        "approval_reference"
+      ],
+      "properties": {
+        "profile_version": {"const": "PASS9_CONTROLLED_PQC_PROFILE_V2"},
+        "provider_id": {"const": "cryptography.mldsa"},
+        "provider_version": {"type": "string", "minLength": 1, "maxLength": 8192},
+        "algorithm_family": {
+          "const": "POST_QUANTUM_DIGITAL_SIGNATURE"
+        },
+        "algorithm_identifier": {"const": "ML-DSA"},
+        "security_profile": {"const": "NIST_FIPS_203_204_205"},
+        "signature_mode": {"const": "SINGLE_PROVIDER_SIGNATURE"},
+        "hybrid_mode": {"const": false},
+        "components": {"const": []},
+        "key_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "pattern": "^[A-Za-z0-9_.:/-]+$"
+        },
+        "public_key_fingerprint": {"$ref": "#/$defs/sha256"},
+        "created_at": {"type": "string", "minLength": 1, "maxLength": 64},
+        "expires_at": {"type": "string", "minLength": 1, "maxLength": 64},
+        "revoked": {"const": false},
+        "verification_policy_version": {
+          "const": "PASS9_NO_SILENT_DOWNGRADE_POLICY_V2"
+        },
+        "migration_status": {"const": "MIGRATED_APPROVED"},
+        "legacy_status": {"const": "CURRENT_NOT_LEGACY"},
+        "deprecation_status": {"const": "ACTIVE_NOT_DEPRECATED"},
+        "approval_reference": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "pattern": "^[A-Za-z0-9_.:/-]+$"
+        }
+      }
+    },
     "signature": {
       "type": "object",
       "additionalProperties": false,
@@ -100,6 +160,7 @@
         "provider_available",
         "signature_version",
         "key_fingerprint",
+        "crypto_profile",
         "digest",
         "signature",
         "public_key"
@@ -110,8 +171,9 @@
         "policy": {"const": "NIST_FIPS_203_204_205"},
         "provider": {"const": "cryptography.mldsa"},
         "provider_available": {"const": true},
-        "signature_version": {"const": "PQC_01_PROVIDER_SIGNATURE_V2"},
+        "signature_version": {"const": "PQC_01_PROVIDER_SIGNATURE_V3"},
         "key_fingerprint": {"$ref": "#/$defs/sha256"},
+        "crypto_profile": {"$ref": "#/$defs/cryptoProfile"},
         "digest": {"$ref": "#/$defs/sha256"},
         "signature": {"type": "string", "minLength": 1},
         "public_key": {"type": "string", "minLength": 1}
