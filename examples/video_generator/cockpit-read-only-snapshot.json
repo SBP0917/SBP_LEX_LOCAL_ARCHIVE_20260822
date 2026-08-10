@@ -1,0 +1,30 @@
+{
+  "snapshot_type": "detached_observability_export",
+  "traversal_stages": [
+    {
+      "elapsed_ms": 0,
+      "name": "Ingress",
+      "status": "complete"
+    },
+    {
+      "elapsed_ms": 140,
+      "name": "Evidence and authority",
+      "status": "complete"
+    },
+    {
+      "elapsed_ms": 310,
+      "name": "Dual pipeline convergence",
+      "status": "matched"
+    },
+    {
+      "elapsed_ms": 460,
+      "name": "Admissibility observation",
+      "status": "observed"
+    },
+    {
+      "elapsed_ms": 610,
+      "name": "Audit continuity",
+      "status": "complete"
+    }
+  ]
+}
