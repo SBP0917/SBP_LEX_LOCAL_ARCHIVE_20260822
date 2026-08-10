@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import os
 import subprocess
@@ -160,17 +161,25 @@ def test_manifest_rejects_signature_from_unauthorised_mldsa_key(
     trusted_public_key = os.environ[
         "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY"
     ]
+    trusted_fingerprint = os.environ[
+        "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT"
+    ]
     attacker_seed = "a1" * 32
     _, attacker_public_key = derive_signing_keypair(
         bytes.fromhex(attacker_seed),
         "ML-DSA",
     )
+    attacker_fingerprint = hashlib.sha256(attacker_public_key).hexdigest()
     try:
         reset_signing_identity_for_tests()
         monkeypatch.setenv("SBP_LEX_SIGNING_SECRET", attacker_seed)
         monkeypatch.setenv(
             "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
             base64.b64encode(attacker_public_key).decode("ascii"),
+        )
+        monkeypatch.setenv(
+            "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT",
+            attacker_fingerprint,
         )
         payload_digest = hash_manifest_payload(manifest)
         manifest["manifest_signature"] = manifest_signature_for(payload_digest)
@@ -184,6 +193,10 @@ def test_manifest_rejects_signature_from_unauthorised_mldsa_key(
             "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
             trusted_public_key,
         )
+        monkeypatch.setenv(
+            "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT",
+            trusted_fingerprint,
+        )
         validation = validate_local_trust_manifest(manifest)
     finally:
         reset_signing_identity_for_tests()
@@ -191,6 +204,10 @@ def test_manifest_rejects_signature_from_unauthorised_mldsa_key(
         monkeypatch.setenv(
             "SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY",
             trusted_public_key,
+        )
+        monkeypatch.setenv(
+            "SBP_LEX_EXPECTED_SIGNER_FINGERPRINT",
+            trusted_fingerprint,
         )
 
     assert validation["local_trust_status"] == LOCAL_TRUST_INVALID

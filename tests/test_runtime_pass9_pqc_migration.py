@@ -41,6 +41,7 @@ from sbp_lex.security.migration_profile import (
     CryptoProfileRequirement,
     build_active_crypto_profile,
     provider_version,
+    revoked_key_fingerprints,
     validate_crypto_profile,
 )
 from sbp_lex.security.pqc import (
@@ -361,6 +362,13 @@ def test_active_profile_configuration_rejects_bad_revocation_registry(
     monkeypatch.setenv("SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS", "malformed")
     with pytest.raises(CryptoProfileConfigurationError, match="revocation_registry_invalid"):
         build_active_crypto_profile(public_key_fingerprint=fingerprint)
+
+
+def test_explicit_none_revocation_registry_is_empty_and_cross_process_safe(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS", "NONE")
+    assert revoked_key_fingerprints() == frozenset()
 
 
 @pytest.mark.parametrize(
