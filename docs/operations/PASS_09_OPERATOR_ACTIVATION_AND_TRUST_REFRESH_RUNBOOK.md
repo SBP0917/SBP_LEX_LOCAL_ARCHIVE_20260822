@@ -73,4 +73,3 @@ The owner activation gap closes only when the owner-classified preflight,
 runtime, replay, measured startup, local evidence chain, capstone, release
 integrity, and ledger validation all pass against one exact clean commit. A
 repository test-trust pass demonstrates readiness but is not owner authority.
-

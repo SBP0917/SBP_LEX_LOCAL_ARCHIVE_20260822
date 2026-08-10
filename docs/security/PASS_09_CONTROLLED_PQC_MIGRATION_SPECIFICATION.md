@@ -95,4 +95,3 @@ Repository completion does not self-issue independent specialist approval,
 production HSM/TPM custody, trusted production time, live external-provider
 assurance, APP/privacy requirements, production operations, certification, or
 final native-Windows IVVF. Those remain explicit handoff gates.
-
