@@ -28,6 +28,7 @@ SIGNING_KEY_ID_ENVIRONMENT_NAME = "SBP_LEX_SIGNING_KEY_ID"
 SIGNING_KEY_ACTIVATED_AT_ENVIRONMENT_NAME = "SBP_LEX_SIGNING_KEY_ACTIVATED_AT"
 SIGNING_KEY_EXPIRES_AT_ENVIRONMENT_NAME = "SBP_LEX_SIGNING_KEY_EXPIRES_AT"
 REVOKED_SIGNING_KEYS_ENVIRONMENT_NAME = "SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS"
+EMPTY_REVOCATION_REGISTRY_VALUE = "NONE"
 APPROVED_LEGACY_ARCHIVE_POLICIES_ENVIRONMENT_NAME = (
     "SBP_LEX_APPROVED_LEGACY_ARCHIVE_POLICIES"
 )
@@ -145,9 +146,10 @@ def _time(value: object, *, reason: str) -> datetime:
 
 def revoked_key_fingerprints(raw: str | None = None) -> frozenset[str]:
     value = os.environ.get(REVOKED_SIGNING_KEYS_ENVIRONMENT_NAME, "") if raw is None else raw
-    if not value.strip():
+    normalized = value.strip()
+    if not normalized or normalized == EMPTY_REVOCATION_REGISTRY_VALUE:
         return frozenset()
-    items = [item.strip() for item in value.split(",")]
+    items = [item.strip() for item in normalized.split(",")]
     if any(_HEX64.fullmatch(item) is None for item in items) or len(items) != len(set(items)):
         raise CryptoProfileConfigurationError("cryptographic_revocation_registry_invalid")
     return frozenset(items)

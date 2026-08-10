@@ -17,7 +17,9 @@ value. The exact dependency environment is in `requirements-pass9.lock.txt`.
 1. Start from the final clean Pass 9 implementation commit.
 2. Provision the ML-DSA seed, separately authenticated public key and
    fingerprint, migration approval, key ID, UTC activation and expiry, and the
-   explicit revocation registry.
+   explicit revocation registry. Set
+   `SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS=NONE` when no key is revoked;
+   an empty Windows environment value may disappear across subprocesses.
 3. Run the non-authoritative preflight:
 
    ```text

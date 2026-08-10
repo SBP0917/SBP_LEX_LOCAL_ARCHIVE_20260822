@@ -33,7 +33,8 @@ Runtime signing and verification require all of the following operator values:
 - `SBP_LEX_SIGNING_KEY_ACTIVATED_AT`;
 - `SBP_LEX_SIGNING_KEY_EXPIRES_AT`;
 - an explicitly present `SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS` registry,
-  which may be empty when no key is revoked.
+  using `NONE` when no key is revoked. The non-empty sentinel preserves the
+  explicit registry across Windows subprocess boundaries.
 
 Missing, malformed, future, expired, revoked, substituted, mismatched, or
 unknown values fail closed. A signing identity or profile change in an active
