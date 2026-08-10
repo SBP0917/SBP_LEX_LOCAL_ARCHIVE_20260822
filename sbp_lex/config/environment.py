@@ -12,6 +12,11 @@ from sbp_lex.security.pqc_provider import (
     PQCProviderUnavailable,
     derive_signing_keypair,
 )
+from sbp_lex.security.migration_profile import (
+    CryptoProfileConfigurationError,
+    build_active_crypto_profile,
+    crypto_profile_digest,
+)
 
 
 def environment_security_report() -> Dict[str, Any]:
@@ -93,6 +98,22 @@ def environment_security_report() -> Dict[str, Any]:
         warnings.append("expected_signer_fingerprint_missing")
     elif not expected_fingerprint_valid:
         warnings.append("expected_signer_fingerprint_invalid_or_mismatched")
+    migration_profile_ready = False
+    migration_profile_error: str | None = None
+    migration_profile_fingerprint: str | None = None
+    if expected_fingerprint_valid and trusted_key_fingerprint is not None:
+        try:
+            profile = build_active_crypto_profile(
+                public_key_fingerprint=trusted_key_fingerprint,
+            )
+            migration_profile_ready = True
+            migration_profile_fingerprint = crypto_profile_digest(profile)
+        except CryptoProfileConfigurationError as exc:
+            migration_profile_error = str(exc)
+    else:
+        migration_profile_error = "cryptographic_trusted_identity_unavailable"
+    if not migration_profile_ready:
+        warnings.append("pqc_migration_profile_invalid")
     if api_token is not None and len(api_token) < 24:
         warnings.append("api_token_short")
 
@@ -110,6 +131,9 @@ def environment_security_report() -> Dict[str, Any]:
             expected_signer_fingerprint
         ),
         "expected_signer_fingerprint_valid": expected_fingerprint_valid,
+        "pqc_migration_profile_ready": migration_profile_ready,
+        "pqc_migration_profile_digest": migration_profile_fingerprint,
+        "pqc_migration_profile_error": migration_profile_error,
         "api_token_configured": api_token is not None,
         "warnings": warnings,
         "valid": not warnings,

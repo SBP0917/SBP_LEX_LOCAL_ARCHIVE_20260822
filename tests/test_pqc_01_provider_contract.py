@@ -156,7 +156,11 @@ def test_pqc_signature_envelope_is_real_provider_metadata() -> None:
     assert signature["policy"] == "NIST_FIPS_203_204_205"
     assert signature["provider"] == "cryptography.mldsa"
     assert signature["provider_available"] is True
-    assert signature["signature_version"] == "PQC_01_PROVIDER_SIGNATURE_V2"
+    assert signature["signature_version"] == "PQC_01_PROVIDER_SIGNATURE_V3"
+    assert signature["crypto_profile"]["migration_status"] == "MIGRATED_APPROVED"
+    assert signature["crypto_profile"]["public_key_fingerprint"] == signature[
+        "key_fingerprint"
+    ]
     assert signature["key_fingerprint"] == hashlib.sha256(
         b64decode(signature["public_key"])
     ).hexdigest()
@@ -280,4 +284,3 @@ def test_no_homemade_pqc_algorithm_implementation_exists() -> None:
     assert "hmac" not in source.lower()
     assert "falcon" not in source.lower()
     assert "fn-dsa" not in source.lower()
-

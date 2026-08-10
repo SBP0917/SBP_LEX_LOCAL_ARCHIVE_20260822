@@ -92,6 +92,7 @@ def test_current_profile_is_explicit_and_provider_is_unchanged() -> None:
         ("created_at", None, "cryptographic_created_at_invalid"),
         ("hybrid_mode", "implicit", "cryptographic_hybrid_mode_invalid"),
         ("legacy_status", "LEGACY", "cryptographic_legacy_downgrade_rejected"),
+        ("migration_status", "MIGRATION_CANDIDATE", "cryptographic_migrated_profile_required"),
         ("deprecation_status", "DEPRECATED", "cryptographic_algorithm_deprecated"),
     ],
 )
@@ -125,10 +126,10 @@ def test_profile_missing_provider_expiry_key_and_fingerprint_requirements_fail_c
     assert valid is False
     assert {
         "cryptographic_key_id_mismatch",
-        "cryptographic_public_key_fingerprint_mismatch",
-        "cryptographic_key_expired",
-        "cryptographic_migrated_profile_required",
-        "cryptographic_provider_unavailable",
+            "cryptographic_public_key_fingerprint_mismatch",
+            "cryptographic_key_expired",
+            "cryptographic_key_lifecycle_order_invalid",
+            "cryptographic_provider_unavailable",
     }.issubset(failures)
 
 

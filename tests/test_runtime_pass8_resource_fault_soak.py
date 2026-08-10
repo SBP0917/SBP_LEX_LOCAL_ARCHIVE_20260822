@@ -217,6 +217,26 @@ def test_short_soak_is_balanced_bounded_and_replay_complete() -> None:
     assert "open_file_count" in result["resource_summary"]["baseline"]
 
 
+def test_short_pass9_migration_aware_soak_binds_every_workload_and_checkpoint() -> None:
+    result = run_deterministic_soak(
+        duration_seconds=0.15,
+        warmup_seconds=0.02,
+        sample_interval_seconds=0.01,
+        iteration_interval_seconds=0.001,
+        migration_aware=True,
+        trust_classification="ISOLATED_TEST_TRUST",
+        migration_checkpoint_interval=2,
+    )
+    assert result["pass_status"] == "PASS"
+    assert result["migration_aware"] is True
+    assert result["migration_context"]["trust_classification"] == "ISOLATED_TEST_TRUST"
+    assert result["migration_context"]["private_key_material_recorded"] is False
+    assert result["counters"]["profile_bound_workloads"] == result["workload_count"]
+    assert result["counters"]["migration_checkpoint_failures"] == 0
+    assert result["counters"]["migration_checkpoint_passes"] > 0
+    assert all(result["assertions"].values())
+
+
 def test_windows_process_resource_adapters_return_real_measurements() -> None:
     if os.name != "nt":
         pytest.skip("Windows Desktop V1 resource adapter")
@@ -242,6 +262,12 @@ def test_extended_soak_modes_remain_available_but_are_not_implicitly_run() -> No
         {"duration_seconds": 1, "warmup_seconds": 1},
         {"duration_seconds": 1, "sample_interval_seconds": 0},
         {"duration_seconds": 1, "iteration_interval_seconds": -1},
+        {
+            "duration_seconds": 1,
+            "migration_aware": True,
+            "trust_classification": "NOT_APPLICABLE",
+        },
+        {"duration_seconds": 1, "migration_checkpoint_interval": 0},
     ],
 )
 def test_soak_rejects_unbounded_or_invalid_configuration(kwargs) -> None:

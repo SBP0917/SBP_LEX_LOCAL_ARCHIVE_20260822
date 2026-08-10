@@ -18,6 +18,8 @@ This repository contains the SBP-LEX Desktop V1 local operator release.
    The requirements include `cryptography>=49.0.0`, which provides the tested
    `cryptography.mldsa` ML-DSA provider used by the PQC provider contract.
    If that provider is unavailable, PQC signature operations fail closed.
+   To reproduce the exact Pass 9 assurance environment or a later approved
+   clean-clone baseline, use `requirements-pass9.lock.txt` instead.
 
 7. Start the runtime:
 

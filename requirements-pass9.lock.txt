@@ -1,0 +1,11 @@
+# Pass 9 exact assurance environment for reproducible baseline cloning.
+# Generated from the verified Windows Desktop V1 virtual environment.
+cffi==2.1.0
+colorama==0.4.6
+cryptography==49.0.0
+iniconfig==2.3.0
+packaging==26.2
+pluggy==1.6.0
+pycparser==3.0
+Pygments==2.20.0
+pytest==9.1.1

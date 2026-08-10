@@ -13,6 +13,14 @@ SBP_LEX_API_SECURITY_MODE=private
 SBP_LEX_REQUIRE_API_TOKEN=1
 SBP_LEX_API_TOKEN=<strong bearer token>
 SBP_LEX_SIGNING_SECRET=<strong signing secret>
+SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY=<separately authenticated public key>
+SBP_LEX_EXPECTED_SIGNER_FINGERPRINT=<separately authenticated 64-hex fingerprint>
+SBP_LEX_PQC_MIGRATION_STATUS=MIGRATED_APPROVED
+SBP_LEX_PQC_MIGRATION_APPROVAL_REFERENCE=<owner approval reference>
+SBP_LEX_SIGNING_KEY_ID=<owner key identifier>
+SBP_LEX_SIGNING_KEY_ACTIVATED_AT=<UTC activation timestamp>
+SBP_LEX_SIGNING_KEY_EXPIRES_AT=<UTC expiry timestamp>
+SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS=<explicit registry; may be empty>
 ```
 
 ## Do not expose without token mode
@@ -214,6 +222,12 @@ Tested cryptography version: 49.0.0
 Provider availability is required. If the provider is unavailable, PQC signing
 and verification fail closed. Placeholder/HMAC PQC signatures are not accepted,
 and setting `verified=true` cannot make a token or signature valid.
+
+Pass 9 additionally requires the signed V3 migration profile and exact provider
+version. Missing lifecycle/approval metadata, profile substitution, revoked or
+expired keys, mid-process key/profile rotation, or runtime V2 replay fail closed.
+Historical V2 reading is separate, archive-only, and requires a registered
+approval reference; it never grants runtime authority.
 
 Local deterministic `PLACEHOLDER` labels in local-trust evidence tooling are not
 the active PQC provider path and must not be described as production

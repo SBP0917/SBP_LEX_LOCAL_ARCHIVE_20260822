@@ -11,13 +11,30 @@ import time
 import tracemalloc
 from collections import Counter, deque
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Mapping, Sequence
 
 from sbp_lex.recovery.common import atomic_json
-from sbp_lex.security.pqc import generate_digest
+from sbp_lex.security.migration_profile import (
+    CRYPTO_PROFILE_VERSION,
+    VERIFICATION_POLICY_VERSION,
+    build_active_crypto_profile,
+    crypto_profile_digest,
+)
+from sbp_lex.security.pqc import (
+    PQC_SIGNATURE_VERSION,
+    generate_digest,
+    sign_payload,
+    trusted_signing_key_fingerprint,
+    verify_signature,
+)
 
 
 SOAK_VERSION = "PASS8_DESKTOP_V1_DETERMINISTIC_SOAK_V1"
+MIGRATION_SOAK_VERSION = "PASS9_DESKTOP_V1_MIGRATION_AWARE_SOAK_V1"
+MIGRATION_TRUST_CLASSIFICATIONS = frozenset({
+    "OWNER_AUTHORISED_OPERATOR",
+    "ISOLATED_TEST_TRUST",
+})
 EXTENDED_SOAK_MODES = {
     "required_30m": 1800,
     "extended_2h": 7200,
@@ -127,14 +144,18 @@ def _sample(started: float, counters: Counter[str]) -> dict[str, Any]:
     }
 
 
-def _projection(case: str, request_identifier: str) -> dict[str, Any]:
+def _projection(
+    case: str,
+    request_identifier: str,
+    migration_context: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     if case == "valid":
         decision, result, effect = "ALLOW", "EXECUTE", "SYNTHETIC_CONFIRMED"
     elif case == "escalated":
         decision, result, effect = "ESCALATE", "HALT", "NOT_ATTEMPTED"
     else:
         decision, result, effect = "DENY", "HALT", "NOT_ATTEMPTED"
-    return {
+    result = {
         "request_identifier": request_identifier,
         "case": case,
         "decision": decision,
@@ -144,6 +165,15 @@ def _projection(case: str, request_identifier: str) -> dict[str, Any]:
         "provider_mode": "synthetic_local",
         "authority_source": "CANONICAL_CONTROLS_ONLY",
     }
+    if migration_context is not None:
+        result.update({
+            "migration_profile_version": migration_context["profile_version"],
+            "migration_profile_digest": migration_context["profile_digest"],
+            "verification_policy_version": migration_context[
+                "verification_policy_version"
+            ],
+        })
+    return result
 
 
 def _run_case(
@@ -153,15 +183,24 @@ def _run_case(
     recent_capabilities: deque[str],
     recent_set: set[str],
     latency_samples_ms: deque[float],
+    *,
+    soak_version: str,
+    migration_context: Mapping[str, Any] | None,
+    migration_checkpoint_interval: int,
 ) -> None:
     case_started = time.perf_counter_ns()
     request_identifier = generate_digest({
-        "soak_version": SOAK_VERSION,
+        "soak_version": soak_version,
         "case": case,
         "iteration": iteration,
+        "migration_profile_digest": (
+            migration_context["profile_digest"]
+            if migration_context is not None
+            else None
+        ),
     })[:32]
-    first = _projection(case, request_identifier)
-    second = _projection(case, request_identifier)
+    first = _projection(case, request_identifier, migration_context)
+    second = _projection(case, request_identifier, migration_context)
     if generate_digest(first) != generate_digest(second):
         counters["parity_mismatches"] += 1
     counters[case] += 1
@@ -186,6 +225,33 @@ def _run_case(
         recent_set.add(capability)
     elif case == "replay":
         counters["replay_rejections"] += 1
+    if migration_context is not None:
+        counters["migration_profile_validations"] += 1
+        counters["profile_bound_workloads"] += 1
+        if iteration % migration_checkpoint_interval == 0:
+            counters["migration_checkpoint_attempts"] += 1
+            checkpoint = {
+                "soak_version": soak_version,
+                "iteration": iteration,
+                "migration_profile_digest": migration_context["profile_digest"],
+                "authority_granted": False,
+            }
+            try:
+                envelope = sign_payload(checkpoint)
+                profile = envelope.get("crypto_profile", {})
+                valid = (
+                    envelope.get("signature_version") == PQC_SIGNATURE_VERSION
+                    and isinstance(profile, Mapping)
+                    and crypto_profile_digest(profile)
+                    == migration_context["profile_digest"]
+                    and verify_signature(checkpoint, envelope)
+                )
+            except Exception:
+                valid = False
+            if valid:
+                counters["migration_checkpoint_passes"] += 1
+            else:
+                counters["migration_checkpoint_failures"] += 1
     latency_samples_ms.append(
         (time.perf_counter_ns() - case_started) / 1_000_000
     )
@@ -197,11 +263,20 @@ def run_deterministic_soak(
     warmup_seconds: float | None = None,
     sample_interval_seconds: float = 5.0,
     iteration_interval_seconds: float = 0.05,
+    migration_aware: bool = False,
+    trust_classification: str = "NOT_APPLICABLE",
+    migration_checkpoint_interval: int = 128,
 ) -> dict[str, Any]:
     if duration_seconds <= 0:
         raise ValueError("soak_duration_invalid")
     if sample_interval_seconds <= 0 or iteration_interval_seconds < 0:
         raise ValueError("soak_interval_invalid")
+    if not isinstance(migration_checkpoint_interval, int) or migration_checkpoint_interval <= 0:
+        raise ValueError("soak_migration_checkpoint_interval_invalid")
+    if migration_aware and trust_classification not in MIGRATION_TRUST_CLASSIFICATIONS:
+        raise ValueError("soak_migration_trust_classification_invalid")
+    if not migration_aware and trust_classification != "NOT_APPLICABLE":
+        raise ValueError("soak_migration_trust_classification_unexpected")
     warmup = (
         min(60.0, duration_seconds / 10.0)
         if warmup_seconds is None
@@ -210,6 +285,37 @@ def run_deterministic_soak(
     if warmup < 0 or warmup >= duration_seconds:
         raise ValueError("soak_warmup_invalid")
     counters: Counter[str] = Counter()
+    soak_version = MIGRATION_SOAK_VERSION if migration_aware else SOAK_VERSION
+    migration_context: dict[str, Any] | None = None
+    if migration_aware:
+        fingerprint = trusted_signing_key_fingerprint()
+        profile = build_active_crypto_profile(
+            public_key_fingerprint=fingerprint,
+        )
+        profile_digest = crypto_profile_digest(profile)
+        challenge = {
+            "soak_version": soak_version,
+            "purpose": "MIGRATION_PROFILE_STARTUP_CHALLENGE",
+            "migration_profile_digest": profile_digest,
+            "authority_granted": False,
+        }
+        challenge_signature = sign_payload(challenge)
+        if not verify_signature(challenge, challenge_signature):
+            raise ValueError("soak_migration_startup_challenge_failed")
+        migration_context = {
+            "profile_version": profile["profile_version"],
+            "verification_policy_version": profile["verification_policy_version"],
+            "profile_digest": profile_digest,
+            "provider_id": profile["provider_id"],
+            "provider_version": profile["provider_version"],
+            "algorithm_identifier": profile["algorithm_identifier"],
+            "signature_version": challenge_signature["signature_version"],
+            "key_id": profile["key_id"],
+            "public_key_fingerprint": profile["public_key_fingerprint"],
+            "approval_reference": profile["approval_reference"],
+            "trust_classification": trust_classification,
+            "private_key_material_recorded": False,
+        }
     recent_capabilities: deque[str] = deque(maxlen=1024)
     recent_set: set[str] = set()
     latency_samples_ms: deque[float] = deque(maxlen=4096)
@@ -231,6 +337,9 @@ def run_deterministic_soak(
             recent_capabilities,
             recent_set,
             latency_samples_ms,
+            soak_version=soak_version,
+            migration_context=migration_context,
+            migration_checkpoint_interval=migration_checkpoint_interval,
         )
         iteration += 1
         now = time.monotonic()
@@ -309,6 +418,37 @@ def run_deterministic_soak(
             and counters["replay_records"] == iteration
         ),
     }
+    if migration_aware:
+        for name in (
+            "migration_profile_validations",
+            "profile_bound_workloads",
+            "migration_checkpoint_attempts",
+            "migration_checkpoint_passes",
+            "migration_checkpoint_failures",
+        ):
+            counters[name] += 0
+        assertions.update({
+            "migration_profile_bound_to_every_workload": (
+                counters["profile_bound_workloads"] == iteration
+                and counters["migration_profile_validations"] == iteration
+            ),
+            "migration_profile_version_enforced": (
+                migration_context is not None
+                and migration_context["profile_version"] == CRYPTO_PROFILE_VERSION
+                and migration_context["verification_policy_version"]
+                == VERIFICATION_POLICY_VERSION
+            ),
+            "migration_checkpoints_complete": (
+                counters["migration_checkpoint_attempts"] > 0
+                and counters["migration_checkpoint_attempts"]
+                == counters["migration_checkpoint_passes"]
+                and counters["migration_checkpoint_failures"] == 0
+            ),
+            "migration_private_key_not_recorded": (
+                migration_context is not None
+                and migration_context["private_key_material_recorded"] is False
+            ),
+        })
     resource_summary = {
         "baseline": baseline,
         "warmup_end": warmup_end,
@@ -344,8 +484,17 @@ def run_deterministic_soak(
         "maximum": max(latencies),
     }
     payload = {
-        "soak_version": SOAK_VERSION,
-        "provider_mode": "synthetic_local",
+        "soak_version": soak_version,
+        "provider_mode": (
+            "synthetic_local_with_real_mldsa_profile_checkpoints"
+            if migration_aware
+            else "synthetic_local"
+        ),
+        "migration_aware": migration_aware,
+        "migration_context": migration_context,
+        "migration_checkpoint_interval": (
+            migration_checkpoint_interval if migration_aware else None
+        ),
         "requested_duration_seconds": duration_seconds,
         "actual_duration_seconds": actual_duration,
         "warmup_duration_seconds": warmup,
@@ -384,6 +533,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--warmup-seconds", type=float)
     parser.add_argument("--sample-interval-seconds", type=float, default=5.0)
     parser.add_argument("--iteration-interval-seconds", type=float, default=0.05)
+    parser.add_argument("--migration-aware", action="store_true")
+    parser.add_argument(
+        "--trust-classification",
+        choices=tuple(sorted(MIGRATION_TRUST_CLASSIFICATIONS)),
+    )
+    parser.add_argument("--migration-checkpoint-interval", type=int, default=128)
     parser.add_argument("--output")
     args = parser.parse_args(argv)
     if args.mode and args.duration_seconds is not None:
@@ -398,6 +553,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         warmup_seconds=args.warmup_seconds,
         sample_interval_seconds=args.sample_interval_seconds,
         iteration_interval_seconds=args.iteration_interval_seconds,
+        migration_aware=args.migration_aware,
+        trust_classification=(
+            args.trust_classification or "NOT_APPLICABLE"
+        ),
+        migration_checkpoint_interval=args.migration_checkpoint_interval,
     )
     if args.output:
         atomic_json(Path(args.output), result)

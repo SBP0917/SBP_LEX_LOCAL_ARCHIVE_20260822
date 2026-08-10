@@ -61,6 +61,7 @@ class ArtifactSpec:
 DEFAULT_ARTIFACT_SPECS: tuple[ArtifactSpec, ...] = (
     ArtifactSpec("configuration.version", "configuration", "VERSION", "configuration/VERSION", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 100, "sha256", "repository_release_authority"),
     ArtifactSpec("configuration.requirements", "configuration", "requirements.txt", "configuration/requirements.txt", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 110, "sha256", "repository_release_authority"),
+    ArtifactSpec("configuration.requirements_lock", "configuration", "requirements-pass9.lock.txt", "configuration/requirements-pass9.lock.txt", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 115, "sha256", "repository_release_authority"),
     ArtifactSpec("configuration.environment_template", "configuration", ".env.example", "configuration/.env.example", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 120, "sha256", "repository_configuration_authority"),
     ArtifactSpec("configuration.pytest_discovery", "configuration", "pytest.ini", "configuration/pytest.ini", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 125, "sha256", "repository_test_authority"),
     ArtifactSpec("configuration.canonical_readme", "configuration", "README.md", "configuration/README.md", "REQUIRED", "PUBLIC_EVIDENCE", "text", 1, None, 130, "sha256", "repository_document_authority"),

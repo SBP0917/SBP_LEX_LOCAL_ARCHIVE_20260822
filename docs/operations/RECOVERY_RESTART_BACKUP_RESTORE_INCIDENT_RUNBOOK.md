@@ -132,8 +132,10 @@ and do not start runtime processing from the candidate restore.
 If the mandatory provider is missing, times out, reports another provider or
 algorithm, supplies malformed/wrong/revoked/expired key metadata, or presents a
 cross-version/legacy downgrade, reject verification and fail closed. Do not fall
-back silently. Pass 8 does not authorize selection or deployment of a new
-production provider. Escalate provider migration to the approved Pass 9 review.
+back silently. Pass 9 retains the selected local `cryptography.mldsa` provider
+and enforces its signed profile; it does not authorize an alternative provider
+or production deployment. Restore only the exact approved provider and profile,
+then repeat activation, measured-startup, recovery, and trust checks.
 
 ## Resource incident
 
@@ -168,7 +170,7 @@ recovery record grants no authority by itself.
 | Audit growth | bounded-record/size warning | stop admission before limit | truncate unsealed history | head/checkpoint/count and storage evidence | archive/rotate only under approved custody | continuity cannot be maintained | verified continuity and bounded active store |
 | Backup failure | staging/member/manifest/publication error | retain current authority; abandon candidate | publish partial backup | stage metadata and failure reason | rebuild from stable source into new destination | authoritative source changed or secret detected | independently valid package |
 | Restore failure | preflight/generation/fresh-process failure | retain prior authoritative generation | repoint to failed restore | package, failure record, prior pointer | correct cause and use new separate target | commit/identity/baseline continuity unresolved | valid restore and fresh-process checks |
-| Provider failure/downgrade | unavailable/timeout/substitution/profile error | reject protected object | silent fallback or legacy acceptance | profile, provider metadata, bounded error | restore approved provider; reverify object | provider selection/migration is required | exact-provider valid verification |
+| Provider failure/downgrade | unavailable/timeout/substitution/profile error | reject protected object | silent fallback or runtime legacy acceptance | profile, provider metadata, bounded error | restore exact approved provider/profile; repeat activation and reverify | replacement, production custody, or specialist decision is required | exact-provider V3 verification plus refreshed trust evidence |
 | Local trust stale/dirty/invalid | capstone/evidence/release status failure | keep activation closed | regenerate without owner authority | current trust artifacts, commit, status | owner-authorized trust-evidence regeneration | authorised secret/approval is absent | valid commit-bound trust chain |
 
 ## Escalation conditions

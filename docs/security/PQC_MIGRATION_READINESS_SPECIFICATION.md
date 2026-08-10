@@ -1,6 +1,7 @@
 # PQC Migration Readiness Specification
 
-Status: Pass 8 readiness only; migration not completed
+Status: historical Pass 8 readiness record; superseded for active behavior by
+`PASS_09_CONTROLLED_PQC_MIGRATION_SPECIFICATION.md`
 
 Current provider: `cryptography.mldsa`
 

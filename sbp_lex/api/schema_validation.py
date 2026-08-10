@@ -6,8 +6,15 @@ import re
 from typing import Any, Mapping
 
 MAX_JSON_DEPTH = 8
-MAX_JSON_KEYS = 160
-MAX_STRING_LENGTH = 8192
+# Pass 9 signature profiles add a fixed, validated lifecycle/policy envelope to
+# canonical signatures. 256 preserves a hard bound while accommodating the
+# measured 219-key signed synthetic ingress fixture.
+MAX_JSON_KEYS = 256
+# A canonical controlled-denial proof is carried as one JSON string. The V3
+# ML-DSA migration profile increases the measured fixed proof from below 8 KiB
+# to 8,876 bytes. Keep a hard 12 KiB ceiling; the overall request-size limit and
+# evidence-count bounds continue to apply independently.
+MAX_STRING_LENGTH = 12_288
 MAX_LIST_LENGTH = 128
 MAX_EVIDENCE_ITEMS = 25
 MAX_PRE_CONTEXT_SIGNAL_KEYS = 32

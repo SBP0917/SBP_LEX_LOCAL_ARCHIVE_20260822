@@ -95,6 +95,22 @@ if (-not $env:SBP_LEX_SIGNING_SECRET) {
 if (-not $env:SBP_LEX_TRUSTED_SIGNING_PUBLIC_KEY) {
     Stop-Handover "The trusted public verification key is not provisioned out of band."
 }
+$requiredMigrationEnvironment = @(
+    "SBP_LEX_PQC_MIGRATION_STATUS",
+    "SBP_LEX_PQC_MIGRATION_APPROVAL_REFERENCE",
+    "SBP_LEX_SIGNING_KEY_ID",
+    "SBP_LEX_SIGNING_KEY_ACTIVATED_AT",
+    "SBP_LEX_SIGNING_KEY_EXPIRES_AT",
+    "SBP_LEX_REVOKED_SIGNING_KEY_FINGERPRINTS"
+)
+foreach ($name in $requiredMigrationEnvironment) {
+    if (-not (Test-Path -LiteralPath "Env:$name")) {
+        Stop-Handover "Required Pass 9 migration environment is not provisioned: $name"
+    }
+}
+if ($env:SBP_LEX_PQC_MIGRATION_STATUS -ne "MIGRATED_APPROVED") {
+    Stop-Handover "Pass 9 migration status is not owner approved."
+}
 $env:SBP_LEX_EXPECTED_SIGNER_FINGERPRINT = $ExpectedFingerprint
 
 Remove-Item Env:SBP_LEX_APPROVED_RUNTIME_BASELINE_PATH -ErrorAction SilentlyContinue

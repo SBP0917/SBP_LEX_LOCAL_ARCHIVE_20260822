@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import base64
 from copy import deepcopy
+from hashlib import sha256
 from typing import Any, Mapping
 
 from external_substrates.shared.canonical_json import canonical_bytes
+from external_substrates.shared.migration_profile import (
+    build_external_source_profile,
+    validate_external_source_profile,
+)
 
 ALGORITHM = "ML-DSA"
 PURPOSE = "EXTERNAL_EVIDENCE_PACKAGE_VERIFICATION"
-SIGNATURE_VERSION = "H6G_EXTERNAL_SOURCE_SIGNATURE_V1"
+SIGNATURE_VERSION = "H6G_EXTERNAL_SOURCE_SIGNATURE_V2"
 DOMAINS = {
     "SKG": b"SBP_LEX_DESKTOP_V1_EXTERNAL_SKG_SOURCE_PACKAGE_V1\x00",
     "DTN": b"SBP_LEX_DESKTOP_V1_EXTERNAL_DTN_SOURCE_PACKAGE_V1\x00",
@@ -47,7 +52,8 @@ def _decode(value: Any, *, error: str) -> bytes:
 
 def signature_claims(
     *, package: Mapping[str, Any], source_id: str, key_id: str,
-    substrate_type: str, algorithm: str = ALGORITHM, purpose: str = PURPOSE,
+    substrate_type: str, crypto_profile: Mapping[str, Any],
+    algorithm: str = ALGORITHM, purpose: str = PURPOSE,
 ) -> dict[str, Any]:
     return {
         "signature_version": SIGNATURE_VERSION,
@@ -60,6 +66,7 @@ def signature_claims(
         "schema_version": package.get("schema_version"),
         "package_id": package.get("package_id"),
         "package_digest": package.get("digest"),
+        "crypto_profile": deepcopy(dict(crypto_profile)),
     }
 
 
@@ -75,12 +82,23 @@ def sign_source_package(
     package: Mapping[str, Any], *, private_key: bytes, source_id: str,
     key_id: str, substrate_type: str,
 ) -> dict[str, Any]:
+    try:
+        private = _module().MLDSA65PrivateKey.from_seed_bytes(private_key)
+        public_key = private.public_key().public_bytes_raw()
+    except Exception as exc:
+        raise ExternalSourceCryptoError("malformed_private_key") from exc
+    crypto_profile = build_external_source_profile(
+        source_id=source_id,
+        key_id=key_id,
+        public_key_fingerprint=sha256(public_key).hexdigest(),
+    )
     claims = signature_claims(
         package=package, source_id=source_id, key_id=key_id,
         substrate_type=substrate_type,
+        crypto_profile=crypto_profile,
     )
     try:
-        signature = _module().MLDSA65PrivateKey.from_seed_bytes(private_key).sign(_message(claims))
+        signature = private.sign(_message(claims))
     except Exception as exc:
         raise ExternalSourceCryptoError("malformed_private_key") from exc
     result = deepcopy(dict(package))
@@ -96,9 +114,22 @@ def verify_source_signature(
     signature = package.get("signature")
     if not isinstance(signature, Mapping):
         return False
+    try:
+        public_key = _decode(public_verification_material, error="malformed_public_key")
+    except ExternalSourceCryptoError:
+        return False
+    public_key_fingerprint = sha256(public_key).hexdigest()
+    if not validate_external_source_profile(
+        signature.get("crypto_profile"),
+        source_id=expected_source_id,
+        key_id=expected_key_id,
+        public_key_fingerprint=public_key_fingerprint,
+    ):
+        return False
     expected = signature_claims(
         package=package, source_id=expected_source_id, key_id=expected_key_id,
         substrate_type=expected_substrate_type,
+        crypto_profile=signature["crypto_profile"],
         algorithm=expected_algorithm, purpose=expected_purpose,
     )
     if set(signature) != set(expected) | {"signature"}:
@@ -108,7 +139,6 @@ def verify_source_signature(
     if expected_algorithm != ALGORITHM or expected_purpose != PURPOSE:
         return False
     try:
-        public_key = _decode(public_verification_material, error="malformed_public_key")
         signature_bytes = _decode(signature.get("signature"), error="malformed_signature")
         _module().MLDSA65PublicKey.from_public_bytes(public_key).verify(
             signature_bytes, _message(expected)
@@ -129,7 +159,15 @@ def source_signature_shape_valid(package: Mapping[str, Any], *, substrate_type: 
     expected = signature_claims(
         package=package, source_id=source_id, key_id=key_id,
         substrate_type=substrate_type,
+        crypto_profile=signature.get("crypto_profile", {}),
     )
-    return set(signature) == set(expected) | {"signature"} and all(
+    profile = signature.get("crypto_profile")
+    fingerprint = profile.get("public_key_fingerprint") if isinstance(profile, Mapping) else ""
+    return validate_external_source_profile(
+        profile,
+        source_id=source_id,
+        key_id=key_id,
+        public_key_fingerprint=str(fingerprint),
+    ) and set(signature) == set(expected) | {"signature"} and all(
         signature.get(key) == value for key, value in expected.items()
     ) and isinstance(signature.get("signature"), str) and bool(signature.get("signature"))
