@@ -43,6 +43,15 @@ def test_workspace_confines_projects_builds_assets_and_compiles(tmp_path: Path) 
         workspace.load_project("../escape")
 
 
+def test_new_projects_do_not_overwrite_an_existing_same_name_project(tmp_path: Path) -> None:
+    workspace = VideoWorkspace(tmp_path / "workspace")
+    first = workspace.new_project("Repeated Name")
+    second = workspace.new_project("Repeated Name")
+    assert first.to_dict()["project"]["id"] == "Repeated-Name"
+    assert second.to_dict()["project"]["id"] == "Repeated-Name-2"
+    assert len(workspace.list_projects()) == 2
+
+
 def test_workspace_imports_base64_asset_into_content_addressed_cache(tmp_path: Path) -> None:
     workspace = VideoWorkspace(tmp_path / "workspace")
     manifest = workspace.new_project("Asset Scene")

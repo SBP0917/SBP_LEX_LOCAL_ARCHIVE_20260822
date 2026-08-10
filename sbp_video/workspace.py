@@ -65,6 +65,7 @@ class VideoWorkspace:
             blender=blender,
             ffmpeg=ffmpeg,
         )
+        self._workspace_lock = threading.RLock()
         self._render_lock = threading.Lock()
 
     def _manifest_path(self, project_id: str) -> Path:
@@ -110,15 +111,24 @@ class VideoWorkspace:
         width: int = 1920,
         height: int = 1080,
     ) -> SceneManifest:
-        data = default_manifest(str(name or "Untitled Scene"))
-        data["render"].update(
-            {
-                "duration_seconds": duration_seconds,
-                "fps": fps,
-                "resolution": {"width": width, "height": height, "percentage": 100},
-            }
-        )
-        return self.save_manifest(data)
+        with self._workspace_lock:
+            data = default_manifest(str(name or "Untitled Scene"))
+            base_id = data["project"]["id"]
+            project_id = base_id
+            suffix = 2
+            while self._manifest_path(project_id).exists():
+                suffix_text = f"-{suffix}"
+                project_id = base_id[: 128 - len(suffix_text)] + suffix_text
+                suffix += 1
+            data["project"]["id"] = project_id
+            data["render"].update(
+                {
+                    "duration_seconds": duration_seconds,
+                    "fps": fps,
+                    "resolution": {"width": width, "height": height, "percentage": 100},
+                }
+            )
+            return self.save_manifest(data)
 
     def load_project(self, project_id: str) -> SceneManifest:
         path = self._manifest_path(project_id)
@@ -130,12 +140,13 @@ class VideoWorkspace:
         manifest = SceneManifest.from_dict(data)
         project_id = _project_id(manifest.to_dict()["project"]["id"])
         target = self._manifest_path(project_id)
-        temporary = target.with_suffix(".tmp")
-        temporary.write_text(
-            json.dumps(manifest.to_dict(), indent=2, sort_keys=True, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-        temporary.replace(target)
+        with self._workspace_lock:
+            temporary = target.with_suffix(".tmp")
+            temporary.write_text(
+                json.dumps(manifest.to_dict(), indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            temporary.replace(target)
         return manifest
 
     @staticmethod
@@ -167,7 +178,8 @@ class VideoWorkspace:
         return self.save_manifest(manifest.to_dict())
 
     def create_samples(self) -> dict[str, str]:
-        return write_samples(self.projects)
+        with self._workspace_lock:
+            return write_samples(self.projects)
 
     def import_asset(
         self,
