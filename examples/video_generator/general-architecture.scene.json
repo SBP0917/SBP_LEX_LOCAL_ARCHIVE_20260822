@@ -1,0 +1,536 @@
+{
+  "assets": [],
+  "audio": {
+    "sample_rate": 48000,
+    "tracks": []
+  },
+  "metadata": {
+    "application": "SBP Video Studio",
+    "canonical_runtime_mutation": false,
+    "runtime_authority": "NONE"
+  },
+  "output": {
+    "audio_codec": "aac",
+    "filename": "Arbitrary-Scene-Modular-Architecture.mp4",
+    "format": "mp4",
+    "quality": 18,
+    "video_codec": "libx264"
+  },
+  "project": {
+    "id": "Arbitrary-Scene-Modular-Architecture",
+    "name": "Arbitrary Scene — Modular Architecture",
+    "seed": 1
+  },
+  "render": {
+    "duration_seconds": 6.0,
+    "engine": "BLENDER_EEVEE_NEXT",
+    "fps": 24,
+    "resolution": {
+      "height": 720,
+      "percentage": 100,
+      "width": 1280
+    },
+    "samples": 64,
+    "transparent": false
+  },
+  "scene": {
+    "active_camera": "camera",
+    "cameras": [
+      {
+        "focal_length": 55,
+        "id": "camera",
+        "target": "center",
+        "transform": {
+          "location": [
+            0,
+            -12,
+            6
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "effects": [],
+    "environment": {
+      "color": [
+        0.008,
+        0.012,
+        0.025,
+        1
+      ],
+      "strength": 0.25
+    },
+    "lights": [
+      {
+        "color": [
+          0.6,
+          0.8,
+          1
+        ],
+        "energy": 1800,
+        "id": "key",
+        "size": 8,
+        "transform": {
+          "location": [
+            0,
+            -4,
+            7
+          ],
+          "rotation": [
+            30,
+            0,
+            0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      }
+    ],
+    "materials": [
+      {
+        "id": "block",
+        "shader": {
+          "base_color": [
+            0.05,
+            0.28,
+            0.52,
+            1
+          ],
+          "emission_color": [
+            0.0,
+            0.15,
+            0.5,
+            1
+          ],
+          "emission_strength": 1.2,
+          "metallic": 0.4,
+          "roughness": 0.3,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "line",
+        "shader": {
+          "base_color": [
+            0.1,
+            0.9,
+            0.8,
+            1
+          ],
+          "metallic": 0.0,
+          "roughness": 0.5,
+          "type": "emission"
+        }
+      }
+    ],
+    "objects": [
+      {
+        "id": "center",
+        "transform": {
+          "location": [
+            0,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "empty"
+      },
+      {
+        "id": "block-0",
+        "material": "block",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            -4.2,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "text-0",
+        "material": "line",
+        "text": "SCENE",
+        "transform": {
+          "location": [
+            -4.2,
+            -0.85,
+            0.1
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "id": "block-1",
+        "material": "block",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            -2.1,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "text-1",
+        "material": "line",
+        "text": "CAMERA",
+        "transform": {
+          "location": [
+            -2.1,
+            -0.85,
+            0.1
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "id": "block-2",
+        "material": "block",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            0.0,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "text-2",
+        "material": "line",
+        "text": "LIGHT",
+        "transform": {
+          "location": [
+            0.0,
+            -0.85,
+            0.1
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "id": "block-3",
+        "material": "block",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            2.1,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "text-3",
+        "material": "line",
+        "text": "VFX",
+        "transform": {
+          "location": [
+            2.1,
+            -0.85,
+            0.1
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "id": "block-4",
+        "material": "block",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            4.2,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "text-4",
+        "material": "line",
+        "text": "AUDIO",
+        "transform": {
+          "location": [
+            4.2,
+            -0.85,
+            0.1
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "type": "text"
+      }
+    ],
+    "overlays": [
+      {
+        "content": "ONE MANIFEST. ARBITRARY CONSTRUCTION.",
+        "font_size": 0.28,
+        "id": "title",
+        "position": [
+          0.05,
+          0.92
+        ],
+        "type": "hud"
+      }
+    ]
+  },
+  "schema_version": "sbp-video-scene/v1",
+  "timeline": {
+    "markers": [],
+    "tracks": [
+      {
+        "id": "rise-0",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 0.0,
+            "value": [
+              -4.2,
+              0,
+              -1
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 1.0,
+            "value": [
+              -4.2,
+              0,
+              0.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "object:block-0"
+      },
+      {
+        "id": "rise-1",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 0.5,
+            "value": [
+              -2.1,
+              0,
+              -1
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 1.5,
+            "value": [
+              -2.1,
+              0,
+              0.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "object:block-1"
+      },
+      {
+        "id": "rise-2",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 1.0,
+            "value": [
+              0.0,
+              0,
+              -1
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 2.0,
+            "value": [
+              0.0,
+              0,
+              0.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "object:block-2"
+      },
+      {
+        "id": "rise-3",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 1.5,
+            "value": [
+              2.1,
+              0,
+              -1
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 2.5,
+            "value": [
+              2.1,
+              0,
+              0.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "object:block-3"
+      },
+      {
+        "id": "rise-4",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 2.0,
+            "value": [
+              4.2,
+              0,
+              -1
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 3.0,
+            "value": [
+              4.2,
+              0,
+              0.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "object:block-4"
+      }
+    ]
+  }
+}

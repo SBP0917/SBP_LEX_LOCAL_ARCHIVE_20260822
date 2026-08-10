@@ -1,0 +1,472 @@
+{
+  "assets": [],
+  "audio": {
+    "sample_rate": 48000,
+    "tracks": []
+  },
+  "metadata": {
+    "application": "SBP Video Studio",
+    "canonical_runtime_mutation": false,
+    "runtime_authority": "NONE"
+  },
+  "output": {
+    "audio_codec": "aac",
+    "filename": "Arbitrary-Scene-Orbital-Product-Reveal.mp4",
+    "format": "mp4",
+    "quality": 18,
+    "video_codec": "libx264"
+  },
+  "project": {
+    "id": "Arbitrary-Scene-Orbital-Product-Reveal",
+    "name": "Arbitrary Scene — Orbital Product Reveal",
+    "seed": 1
+  },
+  "render": {
+    "duration_seconds": 8.0,
+    "engine": "BLENDER_EEVEE_NEXT",
+    "fps": 30,
+    "resolution": {
+      "height": 720,
+      "percentage": 100,
+      "width": 1280
+    },
+    "samples": 64,
+    "transparent": false
+  },
+  "scene": {
+    "active_camera": "hero-camera",
+    "cameras": [
+      {
+        "focal_length": 52,
+        "id": "hero-camera",
+        "target": "focus",
+        "transform": {
+          "location": [
+            7.5,
+            -9.0,
+            5.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "effects": [
+      {
+        "count": 48,
+        "emitter": "core",
+        "end": 7.5,
+        "id": "energy-particles",
+        "lifetime": 2.5,
+        "material": "accent",
+        "seed": 917,
+        "size": 0.025,
+        "speed": 0.75,
+        "spread": 1.5,
+        "start": 0.5,
+        "type": "particles"
+      }
+    ],
+    "environment": {
+      "color": [
+        0.002,
+        0.004,
+        0.015,
+        1.0
+      ],
+      "strength": 0.12
+    },
+    "lights": [
+      {
+        "color": [
+          0.45,
+          0.7,
+          1.0
+        ],
+        "energy": 1500,
+        "id": "key",
+        "size": 6,
+        "transform": {
+          "location": [
+            -4,
+            -4,
+            7
+          ],
+          "rotation": [
+            30,
+            0,
+            -25
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      },
+      {
+        "color": [
+          1.0,
+          0.3,
+          0.08
+        ],
+        "energy": 1100,
+        "id": "warm-rim",
+        "size": 4,
+        "transform": {
+          "location": [
+            4,
+            2,
+            4
+          ],
+          "rotation": [
+            -40,
+            0,
+            150
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      }
+    ],
+    "materials": [
+      {
+        "id": "stage",
+        "shader": {
+          "base_color": [
+            0.025,
+            0.035,
+            0.08,
+            1
+          ],
+          "metallic": 0.8,
+          "roughness": 0.2,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "core",
+        "shader": {
+          "base_color": [
+            0.015,
+            0.28,
+            0.65,
+            1
+          ],
+          "emission_color": [
+            0.0,
+            0.35,
+            1.0,
+            1
+          ],
+          "emission_strength": 3.0,
+          "metallic": 0.65,
+          "roughness": 0.15,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "accent",
+        "shader": {
+          "base_color": [
+            0.15,
+            0.85,
+            1.0,
+            1
+          ],
+          "metallic": 0.0,
+          "roughness": 0.5,
+          "type": "emission"
+        }
+      }
+    ],
+    "objects": [
+      {
+        "id": "focus",
+        "transform": {
+          "location": [
+            0,
+            0,
+            0.8
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "empty"
+      },
+      {
+        "id": "stage",
+        "material": "stage",
+        "primitive": "cylinder",
+        "transform": {
+          "location": [
+            0,
+            0,
+            -0.45
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            3.5,
+            3.5,
+            0.35
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "core",
+        "material": "core",
+        "primitive": "sphere",
+        "transform": {
+          "location": [
+            0,
+            0,
+            0.8
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.15,
+            1.15,
+            1.15
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "ring-a",
+        "material": "accent",
+        "parent": "core",
+        "primitive": "torus",
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            65,
+            0,
+            20
+          ],
+          "scale": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "ring-b",
+        "material": "accent",
+        "parent": "core",
+        "primitive": "torus",
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            70,
+            -15
+          ],
+          "scale": [
+            1.8,
+            1.8,
+            1.8
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.025,
+        "id": "title",
+        "material": "accent",
+        "text": "CONSTRUCT ANY SCENE",
+        "transform": {
+          "location": [
+            0,
+            0.8,
+            3.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.65,
+            0.65,
+            0.65
+          ]
+        },
+        "type": "text"
+      }
+    ],
+    "overlays": [
+      {
+        "content": "SBP VIDEO STUDIO  /  LOCAL-FIRST",
+        "font_size": 0.24,
+        "id": "caption",
+        "position": [
+          0.04,
+          0.93
+        ],
+        "type": "hud"
+      },
+      {
+        "content": "3D • VFX • TIMELINE • AUDIO • EXPORT",
+        "font_size": 0.18,
+        "id": "data",
+        "position": [
+          0.04,
+          0.08
+        ],
+        "type": "data"
+      }
+    ]
+  },
+  "schema_version": "sbp-video-scene/v1",
+  "timeline": {
+    "markers": [
+      {
+        "label": "Reveal",
+        "time": 2.0
+      },
+      {
+        "label": "Orbit apex",
+        "time": 4.0
+      },
+      {
+        "label": "Final frame",
+        "time": 8.0
+      }
+    ],
+    "tracks": [
+      {
+        "id": "core-spin",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0,
+            "value": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "interpolation": "LINEAR",
+            "time": 8,
+            "value": [
+              20,
+              35,
+              360
+            ]
+          }
+        ],
+        "property": "rotation",
+        "target": "object:core"
+      },
+      {
+        "id": "camera-arc",
+        "keyframes": [
+          {
+            "interpolation": "BEZIER",
+            "time": 0,
+            "value": [
+              7.5,
+              -9.0,
+              5.5
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 4,
+            "value": [
+              0.0,
+              -10.5,
+              3.5
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 8,
+            "value": [
+              -6.5,
+              -8.0,
+              4.5
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "camera:hero-camera"
+      },
+      {
+        "id": "title-reveal",
+        "keyframes": [
+          {
+            "interpolation": "CONSTANT",
+            "time": 0,
+            "value": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "interpolation": "LINEAR",
+            "time": 1.2,
+            "value": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 2.0,
+            "value": [
+              0.65,
+              0.65,
+              0.65
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:title"
+      }
+    ]
+  }
+}

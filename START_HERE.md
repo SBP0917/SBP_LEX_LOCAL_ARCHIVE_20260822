@@ -21,10 +21,10 @@ This repository contains the SBP-LEX Desktop V1 local operator release.
    To reproduce the exact Pass 9 assurance environment or a later approved
    clean-clone baseline, use `requirements-pass9.lock.txt` instead.
 
-7. Start the runtime:
+7. Start Desktop V1 and its integrated Video Studio:
 
    ```text
-   python main.py server 8000
+   scripts\run_desktop_runtime.bat
    ```
 
 8. Open this address in a browser:
@@ -34,21 +34,19 @@ This repository contains the SBP-LEX Desktop V1 local operator release.
    ```
 
 Keep the black command window open while using the dashboard. Closing it stops
-the runtime. To stop cleanly, return to the command window and press `Ctrl+C`.
+the runtime and Video Studio companion. Select **Video Studio** in the UI Cockpit
+to construct and render scenes. To stop cleanly, return to the command window and
+press `Ctrl+C`.
 
-## Optional Windows script
+## Direct runtime-only alternative
 
-You may alternatively run:
-
-```text
-scripts\run_desktop_runtime.bat
-```
-
-The recommended direct beginner method remains:
+For runtime-only engineering work without Video Studio, you may run:
 
 ```text
 python main.py server 8000
 ```
+
+The normal operator launch method is `scripts\run_desktop_runtime.bat`.
 
 See `DESKTOP_V1_OPERATOR_RELEASE_LOCK.md` for the full operator guide and
 `LOCAL_OPERATOR_GUIDE.md` for troubleshooting.

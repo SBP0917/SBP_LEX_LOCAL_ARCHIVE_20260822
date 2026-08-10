@@ -116,6 +116,22 @@ Desktop V1 does not claim public deployment readiness, commercial certification,
 
 Experimental cognitive work remains isolated from the canonical Desktop V1 runtime.
 
+## Integrated Video Studio
+
+Desktop V1 includes SBP Video Studio 0.2 as a general-purpose, local scene and
+video construction application. Start the normal Windows launcher,
+`scripts\run_desktop_runtime.bat`, open the UI Cockpit, and select **Video
+Studio**. The editor owns a deterministic scene manifest and supports scene
+graphs, environment and object construction, cameras, lighting, shaders,
+animation, VFX, HUD/data graphics, audio synchronization hooks, imported assets,
+and Blender/FFmpeg render export.
+
+Video Studio runs as a separate loopback companion with `runtime_authority:
+"NONE"`. Its Cockpit adapter reads detached observability snapshots only and
+preserves slower rehearsal, full-speed traversal, and constructed scenario
+presentation modes. It cannot make governance decisions, authorize execution,
+or mutate canonical runtime state. See `docs/VIDEO_GENERATOR.md`.
+
 ## Local verification
 
 From an approved local environment:

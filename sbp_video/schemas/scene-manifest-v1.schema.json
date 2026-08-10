@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sbp-lex.local/schemas/video/scene-manifest-v1.schema.json",
+  "title": "SBP Video Studio deterministic scene manifest",
+  "type": "object",
+  "required": ["schema_version", "project", "render", "assets", "scene", "timeline", "audio", "output", "metadata"],
+  "properties": {
+    "schema_version": {"const": "sbp-video-scene/v1"},
+    "project": {
+      "type": "object",
+      "required": ["id", "name", "seed"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"type": "string", "minLength": 1},
+        "seed": {"type": "integer"}
+      }
+    },
+    "render": {
+      "type": "object",
+      "required": ["duration_seconds", "fps", "resolution", "engine", "samples", "transparent"],
+      "properties": {
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 86400},
+        "fps": {"type": "integer", "minimum": 1, "maximum": 240},
+        "resolution": {
+          "type": "object",
+          "required": ["width", "height", "percentage"],
+          "properties": {
+            "width": {"type": "integer", "minimum": 1, "maximum": 16384},
+            "height": {"type": "integer", "minimum": 1, "maximum": 16384},
+            "percentage": {"type": "integer", "minimum": 1, "maximum": 100}
+          }
+        },
+        "engine": {"enum": ["BLENDER_EEVEE_NEXT", "BLENDER_EEVEE", "CYCLES", "BLENDER_WORKBENCH"]},
+        "samples": {"type": "integer", "minimum": 1, "maximum": 65536},
+        "transparent": {"type": "boolean"}
+      }
+    },
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "scene": {
+      "type": "object",
+      "required": ["environment", "materials", "objects", "cameras", "active_camera", "lights", "effects", "overlays"],
+      "properties": {
+        "environment": {
+          "type": "object",
+          "required": ["color", "strength"],
+          "properties": {"color": {"$ref": "#/$defs/color4"}, "strength": {"type": "number", "minimum": 0}}
+        },
+        "materials": {"type": "array", "items": {"$ref": "#/$defs/material"}},
+        "objects": {"type": "array", "items": {"$ref": "#/$defs/object"}},
+        "cameras": {"type": "array", "items": {"$ref": "#/$defs/camera"}},
+        "active_camera": {"type": ["string", "null"]},
+        "lights": {"type": "array", "items": {"$ref": "#/$defs/light"}},
+        "effects": {"type": "array", "items": {"$ref": "#/$defs/effect"}},
+        "overlays": {"type": "array", "items": {"$ref": "#/$defs/overlay"}}
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "required": ["tracks", "markers"],
+      "properties": {
+        "tracks": {"type": "array", "items": {"$ref": "#/$defs/track"}},
+        "markers": {"type": "array", "items": {"type": "object", "required": ["label", "time"], "properties": {"label": {"type": "string"}, "time": {"type": "number", "minimum": 0}}}}
+      }
+    },
+    "audio": {
+      "type": "object",
+      "required": ["sample_rate", "tracks"],
+      "properties": {
+        "sample_rate": {"enum": [22050, 32000, 44100, 48000, 88200, 96000]},
+        "tracks": {"type": "array", "items": {"$ref": "#/$defs/audioTrack"}}
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["format", "filename", "video_codec", "audio_codec", "quality"],
+      "properties": {
+        "format": {"enum": ["mp4", "webm", "mov", "png_sequence", "exr_sequence"]},
+        "filename": {"type": "string", "minLength": 1, "pattern": "^[^/\\\\]+$"},
+        "video_codec": {"type": "string"},
+        "audio_codec": {"type": "string"},
+        "quality": {"type": "integer", "minimum": 0, "maximum": 51}
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["runtime_authority", "canonical_runtime_mutation"],
+      "properties": {
+        "runtime_authority": {"const": "NONE"},
+        "canonical_runtime_mutation": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+    "vector2": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+    "vector3": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+    "color3": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+    "color4": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4},
+    "transform": {
+      "type": "object",
+      "required": ["location", "rotation", "scale"],
+      "properties": {"location": {"$ref": "#/$defs/vector3"}, "rotation": {"$ref": "#/$defs/vector3"}, "scale": {"$ref": "#/$defs/vector3"}}
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "kind", "uri"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["model", "image", "audio", "font", "video", "data"]},
+        "uri": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "material": {
+      "type": "object",
+      "required": ["id", "shader"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "shader": {"type": "object", "required": ["type"], "properties": {"type": {"enum": ["principled", "emission", "unlit"]}, "base_color": {"$ref": "#/$defs/color4"}}}
+      }
+    },
+    "object": {
+      "type": "object",
+      "required": ["id", "type", "transform"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "type": {"enum": ["primitive", "mesh", "curve", "text", "empty"]},
+        "primitive": {"enum": ["cube", "plane", "sphere", "cylinder", "cone", "torus"]},
+        "parent": {"$ref": "#/$defs/id"},
+        "material": {"$ref": "#/$defs/id"},
+        "asset_id": {"$ref": "#/$defs/id"},
+        "text": {"type": "string"},
+        "transform": {"$ref": "#/$defs/transform"}
+      }
+    },
+    "camera": {
+      "type": "object",
+      "required": ["id", "transform", "focal_length"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "transform": {"$ref": "#/$defs/transform"}, "focal_length": {"type": "number", "minimum": 1, "maximum": 1000}, "target": {"$ref": "#/$defs/id"}}
+    },
+    "light": {
+      "type": "object",
+      "required": ["id", "type", "transform", "color", "energy"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "type": {"enum": ["point", "sun", "spot", "area"]}, "transform": {"$ref": "#/$defs/transform"}, "color": {"$ref": "#/$defs/color3"}, "energy": {"type": "number", "minimum": 0}}
+    },
+    "effect": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "type": {"enum": ["particles", "glow", "fog", "trail"]}, "emitter": {"$ref": "#/$defs/id"}, "count": {"type": "integer", "minimum": 1, "maximum": 10000}}
+    },
+    "overlay": {
+      "type": "object",
+      "required": ["id", "type", "content", "position"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "type": {"enum": ["text", "hud", "data"]}, "content": {"type": "string"}, "position": {"$ref": "#/$defs/vector2"}}
+    },
+    "keyframe": {
+      "type": "object",
+      "required": ["time", "value"],
+      "properties": {"time": {"type": "number", "minimum": 0}, "value": {}, "interpolation": {"enum": ["CONSTANT", "LINEAR", "BEZIER"]}}
+    },
+    "track": {
+      "type": "object",
+      "required": ["id", "target", "property", "keyframes"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "target": {"type": "string"}, "property": {"type": "string"}, "keyframes": {"type": "array", "items": {"$ref": "#/$defs/keyframe"}}}
+    },
+    "audioTrack": {
+      "type": "object",
+      "required": ["id", "asset_id", "start", "gain_db"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "asset_id": {"$ref": "#/$defs/id"}, "start": {"type": "number", "minimum": 0}, "gain_db": {"type": "number"}, "loop": {"type": "boolean"}}
+    }
+  }
+}

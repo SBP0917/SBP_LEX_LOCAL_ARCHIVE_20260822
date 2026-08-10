@@ -314,6 +314,7 @@ def render_operator_cockpit(sample: Mapping[str, Any], background_url: str) -> s
         <button onclick="openDetail('audit')">Audit / Details<span class="action-description">Non-blocking panel</span></button>
         <button onclick="openDetail('truth')">Procedural Truth Details<span class="action-description">Retained status</span></button>
         <button onclick="openDetail('bridge')">SKG/DTN Bridge Details<span class="action-description">External readiness only</span></button>
+        <button onclick="window.location.href='/desktop/video-studio'">Video Studio<span class="action-description">Construct and render local scenes</span></button>
       </nav>
 
       <section id="pipelineVisual" class="cockpit-grid pipeline-mode-idle semantic-idle" aria-live="polite">

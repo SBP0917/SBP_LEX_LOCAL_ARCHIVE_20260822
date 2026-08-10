@@ -1,0 +1,949 @@
+{
+  "assets": [],
+  "audio": {
+    "sample_rate": 48000,
+    "tracks": []
+  },
+  "metadata": {
+    "application": "SBP Video Studio",
+    "audiences": [
+      "operators",
+      "assessors",
+      "deployment enterprise"
+    ],
+    "canonical_runtime_mutation": false,
+    "execution_authorization": false,
+    "governance_decisions": false,
+    "integration": "sbp-lex-cockpit-snapshot/v1",
+    "integration_access": "read_only",
+    "presentation_layer": "full-speed",
+    "presentation_speed_factor": 1.0,
+    "runtime_authority": "NONE",
+    "source_snapshot_digest": "ebe506a0e5fffa8a46b6b38b7d8c129e4ea5722c8a07e800afc855881990fe23"
+  },
+  "output": {
+    "audio_codec": "aac",
+    "filename": "SBP-LEX-Cockpit-Full-speed-traversal.mp4",
+    "format": "mp4",
+    "quality": 18,
+    "video_codec": "libx264"
+  },
+  "project": {
+    "id": "SBP-LEX-Cockpit-Full-speed-traversal",
+    "name": "SBP-LEX Cockpit — Full-speed traversal",
+    "seed": 1
+  },
+  "render": {
+    "duration_seconds": 4.0,
+    "engine": "BLENDER_EEVEE_NEXT",
+    "fps": 30,
+    "resolution": {
+      "height": 1080,
+      "percentage": 100,
+      "width": 1920
+    },
+    "samples": 64,
+    "transparent": false
+  },
+  "scene": {
+    "active_camera": "cockpit-camera",
+    "cameras": [
+      {
+        "focal_length": 48,
+        "id": "cockpit-camera",
+        "target": "traversal-center",
+        "transform": {
+          "location": [
+            -3.5,
+            -8.0,
+            4.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "effects": [
+      {
+        "count": 8,
+        "emitter": "stage-01",
+        "end": 1.75,
+        "id": "pulse-01",
+        "lifetime": 1.2,
+        "material": "positive",
+        "seed": 100,
+        "size": 0.025,
+        "speed": 0.45,
+        "spread": 0.55,
+        "start": 0.25,
+        "type": "particles"
+      },
+      {
+        "count": 8,
+        "emitter": "stage-02",
+        "end": 1.8900000000000001,
+        "id": "pulse-02",
+        "lifetime": 1.2,
+        "material": "positive",
+        "seed": 101,
+        "size": 0.025,
+        "speed": 0.45,
+        "spread": 0.55,
+        "start": 0.39,
+        "type": "particles"
+      },
+      {
+        "count": 8,
+        "emitter": "stage-03",
+        "end": 2.06,
+        "id": "pulse-03",
+        "lifetime": 1.2,
+        "material": "positive",
+        "seed": 102,
+        "size": 0.025,
+        "speed": 0.45,
+        "spread": 0.55,
+        "start": 0.56,
+        "type": "particles"
+      },
+      {
+        "count": 8,
+        "emitter": "stage-04",
+        "end": 2.21,
+        "id": "pulse-04",
+        "lifetime": 1.2,
+        "material": "observed",
+        "seed": 103,
+        "size": 0.025,
+        "speed": 0.45,
+        "spread": 0.55,
+        "start": 0.71,
+        "type": "particles"
+      },
+      {
+        "count": 8,
+        "emitter": "stage-05",
+        "end": 2.36,
+        "id": "pulse-05",
+        "lifetime": 1.2,
+        "material": "positive",
+        "seed": 104,
+        "size": 0.025,
+        "speed": 0.45,
+        "spread": 0.55,
+        "start": 0.86,
+        "type": "particles"
+      }
+    ],
+    "environment": {
+      "color": [
+        0.004,
+        0.009,
+        0.025,
+        1.0
+      ],
+      "strength": 0.18
+    },
+    "lights": [
+      {
+        "color": [
+          0.55,
+          0.72,
+          1.0
+        ],
+        "energy": 1300,
+        "id": "key",
+        "size": 7,
+        "transform": {
+          "location": [
+            4.8,
+            -3.5,
+            6
+          ],
+          "rotation": [
+            25,
+            0,
+            0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      },
+      {
+        "color": [
+          0.1,
+          0.6,
+          1.0
+        ],
+        "energy": 900,
+        "id": "rim",
+        "size": 5,
+        "transform": {
+          "location": [
+            4.8,
+            3.0,
+            3.5
+          ],
+          "rotation": [
+            -55,
+            0,
+            180
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      }
+    ],
+    "materials": [
+      {
+        "id": "floor",
+        "shader": {
+          "base_color": [
+            0.015,
+            0.025,
+            0.055,
+            1
+          ],
+          "metallic": 0.7,
+          "roughness": 0.25,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "observed",
+        "shader": {
+          "base_color": [
+            0.04,
+            0.3,
+            0.72,
+            1
+          ],
+          "emission_color": [
+            0.0,
+            0.15,
+            0.8,
+            1
+          ],
+          "emission_strength": 2.0,
+          "metallic": 0.6,
+          "roughness": 0.2,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "positive",
+        "shader": {
+          "base_color": [
+            0.02,
+            0.55,
+            0.35,
+            1
+          ],
+          "emission_color": [
+            0.0,
+            0.8,
+            0.35,
+            1
+          ],
+          "emission_strength": 2.0,
+          "metallic": 0.5,
+          "roughness": 0.25,
+          "type": "principled"
+        }
+      },
+      {
+        "id": "attention",
+        "shader": {
+          "base_color": [
+            0.75,
+            0.22,
+            0.04,
+            1
+          ],
+          "emission_color": [
+            1.0,
+            0.15,
+            0.0,
+            1
+          ],
+          "emission_strength": 1.5,
+          "metallic": 0.45,
+          "roughness": 0.3,
+          "type": "principled"
+        }
+      }
+    ],
+    "objects": [
+      {
+        "id": "traversal-center",
+        "transform": {
+          "location": [
+            4.8,
+            0,
+            0.8
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "empty"
+      },
+      {
+        "id": "cockpit-floor",
+        "material": "floor",
+        "primitive": "plane",
+        "transform": {
+          "location": [
+            4.8,
+            0,
+            -0.45
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            8.0,
+            3.0,
+            1.0
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "id": "stage-01",
+        "material": "positive",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            0.0,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.01,
+        "id": "label-01",
+        "material": "positive",
+        "text": "Ingress",
+        "transform": {
+          "location": [
+            0.0,
+            -0.9,
+            0.2
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "id": "stage-02",
+        "material": "positive",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            2.4,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.01,
+        "id": "label-02",
+        "material": "positive",
+        "text": "Evidence and authority",
+        "transform": {
+          "location": [
+            2.4,
+            -0.9,
+            0.2
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "bevel_depth": 0.035,
+        "id": "link-01",
+        "material": "observed",
+        "points": [
+          [
+            0.0,
+            0,
+            0.5
+          ],
+          [
+            2.4,
+            0,
+            0.5
+          ]
+        ],
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "curve"
+      },
+      {
+        "id": "stage-03",
+        "material": "positive",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            4.8,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.01,
+        "id": "label-03",
+        "material": "positive",
+        "text": "Dual pipeline convergence",
+        "transform": {
+          "location": [
+            4.8,
+            -0.9,
+            0.2
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "bevel_depth": 0.035,
+        "id": "link-02",
+        "material": "observed",
+        "points": [
+          [
+            2.4,
+            0,
+            0.5
+          ],
+          [
+            4.8,
+            0,
+            0.5
+          ]
+        ],
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "curve"
+      },
+      {
+        "id": "stage-04",
+        "material": "observed",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            7.199999999999999,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.01,
+        "id": "label-04",
+        "material": "observed",
+        "text": "Admissibility observation",
+        "transform": {
+          "location": [
+            7.199999999999999,
+            -0.9,
+            0.2
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "bevel_depth": 0.035,
+        "id": "link-03",
+        "material": "observed",
+        "points": [
+          [
+            4.8,
+            0,
+            0.5
+          ],
+          [
+            7.199999999999999,
+            0,
+            0.5
+          ]
+        ],
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "curve"
+      },
+      {
+        "id": "stage-05",
+        "material": "positive",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            9.6,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ]
+        },
+        "type": "primitive"
+      },
+      {
+        "extrude": 0.01,
+        "id": "label-05",
+        "material": "positive",
+        "text": "Audit continuity",
+        "transform": {
+          "location": [
+            9.6,
+            -0.9,
+            0.2
+          ],
+          "rotation": [
+            70,
+            0,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ]
+        },
+        "type": "text"
+      },
+      {
+        "bevel_depth": 0.035,
+        "id": "link-04",
+        "material": "observed",
+        "points": [
+          [
+            7.199999999999999,
+            0,
+            0.5
+          ],
+          [
+            9.6,
+            0,
+            0.5
+          ]
+        ],
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "curve"
+      }
+    ],
+    "overlays": [
+      {
+        "content": "Full-speed traversal",
+        "font_size": 0.36,
+        "id": "layer",
+        "position": [
+          0.04,
+          0.93
+        ],
+        "type": "hud"
+      },
+      {
+        "content": "For: operators, assessors, deployment enterprise",
+        "font_size": 0.22,
+        "id": "audience",
+        "position": [
+          0.04,
+          0.86
+        ],
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "sbp-video-scene/v1",
+  "timeline": {
+    "markers": [
+      {
+        "label": "Ingress",
+        "time": 0.25
+      },
+      {
+        "label": "Evidence and authority",
+        "time": 0.39
+      },
+      {
+        "label": "Dual pipeline convergence",
+        "time": 0.56
+      },
+      {
+        "label": "Admissibility observation",
+        "time": 0.71
+      },
+      {
+        "label": "Audit continuity",
+        "time": 0.86
+      }
+    ],
+    "tracks": [
+      {
+        "id": "reveal-01",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.04999999999999999,
+            "value": [
+              0.15,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.25,
+            "value": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:stage-01"
+      },
+      {
+        "id": "reveal-02",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.19,
+            "value": [
+              0.15,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.39,
+            "value": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:stage-02"
+      },
+      {
+        "id": "reveal-03",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.36000000000000004,
+            "value": [
+              0.15,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.56,
+            "value": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:stage-03"
+      },
+      {
+        "id": "reveal-04",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.51,
+            "value": [
+              0.15,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.71,
+            "value": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:stage-04"
+      },
+      {
+        "id": "reveal-05",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.6599999999999999,
+            "value": [
+              0.15,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.86,
+            "value": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        ],
+        "property": "scale",
+        "target": "object:stage-05"
+      },
+      {
+        "id": "camera-traversal",
+        "keyframes": [
+          {
+            "interpolation": "BEZIER",
+            "time": 0.0,
+            "value": [
+              -3.5,
+              -8.0,
+              4.0
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.25,
+            "value": [
+              -2.0,
+              -7.0,
+              3.2
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.39,
+            "value": [
+              0.3999999999999999,
+              -7.0,
+              3.2
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.56,
+            "value": [
+              2.8,
+              -7.0,
+              3.2
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.71,
+            "value": [
+              5.199999999999999,
+              -7.0,
+              3.2
+            ]
+          },
+          {
+            "interpolation": "BEZIER",
+            "time": 0.86,
+            "value": [
+              7.6,
+              -7.0,
+              3.2
+            ]
+          }
+        ],
+        "property": "location",
+        "target": "camera:cockpit-camera"
+      }
+    ]
+  }
+}

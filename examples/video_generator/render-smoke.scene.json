@@ -1,0 +1,215 @@
+{
+  "assets": [],
+  "audio": {
+    "sample_rate": 48000,
+    "tracks": []
+  },
+  "metadata": {
+    "application": "SBP Video Studio",
+    "canonical_runtime_mutation": false,
+    "runtime_authority": "NONE"
+  },
+  "output": {
+    "audio_codec": "aac",
+    "filename": "Video-Studio-Render-Smoke.mp4",
+    "format": "mp4",
+    "quality": 18,
+    "video_codec": "libx264"
+  },
+  "project": {
+    "id": "Video-Studio-Render-Smoke",
+    "name": "Video Studio Render Smoke",
+    "seed": 1
+  },
+  "render": {
+    "duration_seconds": 0.5,
+    "engine": "BLENDER_EEVEE_NEXT",
+    "fps": 12,
+    "resolution": {
+      "height": 180,
+      "percentage": 100,
+      "width": 320
+    },
+    "samples": 64,
+    "transparent": false
+  },
+  "scene": {
+    "active_camera": "smoke-camera",
+    "cameras": [
+      {
+        "focal_length": 50,
+        "id": "smoke-camera",
+        "target": "target",
+        "transform": {
+          "location": [
+            3.2,
+            -4.0,
+            2.4
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "effects": [],
+    "environment": {
+      "color": [
+        0.005,
+        0.01,
+        0.03,
+        1.0
+      ],
+      "strength": 0.3
+    },
+    "lights": [
+      {
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "energy": 700,
+        "id": "smoke-key",
+        "size": 4,
+        "transform": {
+          "location": [
+            -2,
+            -2,
+            4
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "area"
+      }
+    ],
+    "materials": [
+      {
+        "id": "smoke-blue",
+        "shader": {
+          "base_color": [
+            0.02,
+            0.25,
+            0.8,
+            1.0
+          ],
+          "emission_color": [
+            0.0,
+            0.12,
+            0.8,
+            1.0
+          ],
+          "emission_strength": 1.2,
+          "metallic": 0.45,
+          "roughness": 0.22,
+          "type": "principled"
+        }
+      }
+    ],
+    "objects": [
+      {
+        "id": "target",
+        "transform": {
+          "location": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "empty"
+      },
+      {
+        "id": "smoke-cube",
+        "material": "smoke-blue",
+        "primitive": "cube",
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "type": "primitive"
+      }
+    ],
+    "overlays": [
+      {
+        "content": "SBP VIDEO STUDIO",
+        "font_size": 0.16,
+        "id": "smoke-label",
+        "position": [
+          0.04,
+          0.9
+        ],
+        "type": "hud"
+      }
+    ]
+  },
+  "schema_version": "sbp-video-scene/v1",
+  "timeline": {
+    "markers": [],
+    "tracks": [
+      {
+        "id": "smoke-spin",
+        "keyframes": [
+          {
+            "interpolation": "LINEAR",
+            "time": 0.0,
+            "value": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "interpolation": "LINEAR",
+            "time": 0.5,
+            "value": [
+              20,
+              35,
+              90
+            ]
+          }
+        ],
+        "property": "rotation",
+        "target": "object:smoke-cube"
+      }
+    ]
+  }
+}

@@ -123,6 +123,7 @@ def run_smoke_check(
     *,
     expected_mode: str,
     token: str | None,
+    video_url: str | None = None,
 ) -> None:
     base_url = require_loopback_url(base_url)
 
@@ -195,6 +196,17 @@ def run_smoke_check(
         "Dashboard dual pipeline label was not found.",
     )
     print(f"[PASS] Dashboard: {base_url}/dashboard")
+    studio = get_text(base_url, "/desktop/video-studio", token).lower()
+    require("sbp video studio" in studio, "Video Studio page title was not found.")
+    require("constructed scenario mode" in studio, "Video Studio Cockpit layers were not found.")
+    require("/runtime/traverse" not in studio, "Video Studio must not expose runtime execution controls.")
+    print(f"[PASS] Video Studio UI: {base_url}/desktop/video-studio")
+    if video_url is not None:
+        video_health = get_json(video_url, "/health", None)
+        require(video_health.get("ok") is True, "Video Studio companion did not report ok=true.")
+        require(video_health.get("runtime_authority") == "NONE", "Video Studio reported runtime authority.")
+        require(video_health.get("canonical_runtime_mutation") is False, "Video Studio mutation boundary failed.")
+        print(f"[PASS] Video Studio companion: {video_url}/health")
     print("[PASS] Smoke check passed.")
 
 
@@ -247,6 +259,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--video-port", type=int, default=8765)
     parser.add_argument(
         "--expected-mode",
         choices=("local", "private"),
@@ -274,12 +287,17 @@ def parse_args() -> argparse.Namespace:
         args.base_url = f"http://{args.host}:{args.port}"
     if not 1 <= args.port <= 65535:
         parser.error("--port must be between 1 and 65535.")
+    if not 1 <= args.video_port <= 65535:
+        parser.error("--video-port must be between 1 and 65535.")
+    if args.launch and args.video_port == args.port:
+        parser.error("--video-port must differ from --port.")
     return args
 
 
 def main() -> int:
     args = parse_args()
     process: subprocess.Popen[Any] | None = None
+    video_process: subprocess.Popen[Any] | None = None
     try:
         if args.launch:
             if not is_loopback_host(args.host):
@@ -287,18 +305,41 @@ def main() -> int:
                     f"Refusing to launch on non-loopback host: {args.host}"
                 )
             base_url = require_loopback_url(f"http://{args.host}:{args.port}")
+            video_url = require_loopback_url(f"http://{args.host}:{args.video_port}")
             environment = os.environ.copy()
             environment["SBP_LEX_API_SECURITY_MODE"] = args.expected_mode
             environment["SBP_LEX_REQUIRE_API_TOKEN"] = (
                 "1" if args.expected_mode == "private" else "0"
             )
             environment["PYTHONUNBUFFERED"] = "1"
+            environment["SBP_VIDEO_PORT"] = str(args.video_port)
             if args.expected_mode == "private" and not args.token:
                 raise SmokeCheckError("Private mode requires SBP_LEX_API_TOKEN.")
             print(f"[INFO] Local/private mode: {args.expected_mode}")
             print(f"[INFO] Bind address: {args.host} only")
             print(f"[INFO] Dashboard URL: {base_url}/dashboard")
+            print(f"[INFO] Video Studio URL: {base_url}/desktop/video-studio")
             print(f"[INFO] Runtime health URL: {base_url}/health")
+            video_process = subprocess.Popen(
+                [
+                    sys.executable,
+                    "-m",
+                    "sbp_video",
+                    "service",
+                    "--host",
+                    args.host,
+                    "--port",
+                    str(args.video_port),
+                ],
+                cwd=ROOT_DIR,
+                env=environment,
+            )
+            wait_for_server(
+                video_url,
+                token=None,
+                process=video_process,
+                timeout_seconds=args.startup_timeout,
+            )
             process = subprocess.Popen(
                 [sys.executable, str(ROOT_DIR / "main.py"), "server", str(args.port)],
                 cwd=ROOT_DIR,
@@ -312,17 +353,23 @@ def main() -> int:
             )
         else:
             base_url = require_loopback_url(args.base_url)
+            video_url = None
 
         run_smoke_check(
             base_url,
             expected_mode=args.expected_mode,
             token=args.token,
+            video_url=video_url,
         )
 
         if process is not None and not args.exit_after_check:
             print("[INFO] Runtime is active. Press Ctrl+C to stop it.")
-            while process.poll() is None:
+            while process.poll() is None and (video_process is None or video_process.poll() is None):
                 time.sleep(0.5)
+            if video_process is not None and video_process.poll() is not None:
+                raise SmokeCheckError(
+                    f"Video Studio companion exited with code {video_process.returncode}."
+                )
             raise SmokeCheckError(
                 f"Runtime server exited with code {process.returncode}."
             )
@@ -337,6 +384,9 @@ def main() -> int:
         if process is not None:
             stop_process(process)
             print("[INFO] Local runtime stopped.")
+        if video_process is not None:
+            stop_process(video_process)
+            print("[INFO] Video Studio companion stopped.")
 
 
 if __name__ == "__main__":

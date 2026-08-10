@@ -54,6 +54,7 @@ echo [PASS] Python and required dependencies are available.
 set "SBP_LEX_API_SECURITY_MODE=local"
 set "SBP_LEX_REQUIRE_API_TOKEN=0"
 if not defined SBP_LEX_PORT set "SBP_LEX_PORT=8000"
+if not defined SBP_VIDEO_PORT set "SBP_VIDEO_PORT=8765"
 
 echo [INFO] Local/private mode: local
 echo [INFO] Bind address: 127.0.0.1 only
@@ -62,11 +63,12 @@ call "%~dp0run_tests.bat"
 if errorlevel 1 exit /b 1
 
 echo [INFO] Dashboard URL: http://127.0.0.1:%SBP_LEX_PORT%/dashboard
+echo [INFO] Video Studio URL: http://127.0.0.1:%SBP_LEX_PORT%/desktop/video-studio
 echo [INFO] Runtime health URL: http://127.0.0.1:%SBP_LEX_PORT%/health
 echo [INFO] Starting the local runtime and smoke check...
 
 set "SMOKE_EXIT_ARG="
 if "%SBP_LEX_EXIT_AFTER_CHECK%"=="1" set "SMOKE_EXIT_ARG=--exit-after-check"
 
-"%PYTHON_EXE%" %PYTHON_ARGS% scripts\smoke_check.py --launch --host 127.0.0.1 --port %SBP_LEX_PORT% --expected-mode local %SMOKE_EXIT_ARG%
+"%PYTHON_EXE%" %PYTHON_ARGS% scripts\smoke_check.py --launch --host 127.0.0.1 --port %SBP_LEX_PORT% --video-port %SBP_VIDEO_PORT% --expected-mode local %SMOKE_EXIT_ARG%
 exit /b %errorlevel%

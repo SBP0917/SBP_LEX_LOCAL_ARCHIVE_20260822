@@ -31,6 +31,8 @@ export SBP_LEX_API_SECURITY_MODE=local
 export SBP_LEX_REQUIRE_API_TOKEN=0
 SBP_LEX_PORT=${SBP_LEX_PORT:-8000}
 export SBP_LEX_PORT
+SBP_VIDEO_PORT=${SBP_VIDEO_PORT:-8765}
+export SBP_VIDEO_PORT
 
 echo "[INFO] Local/private mode: local"
 echo "[INFO] Bind address: 127.0.0.1 only"
@@ -38,6 +40,7 @@ echo "[INFO] Bind address: 127.0.0.1 only"
 "$SCRIPT_DIR/run_tests.sh"
 
 echo "[INFO] Dashboard URL: http://127.0.0.1:$SBP_LEX_PORT/dashboard"
+echo "[INFO] Video Studio URL: http://127.0.0.1:$SBP_LEX_PORT/desktop/video-studio"
 echo "[INFO] Runtime health URL: http://127.0.0.1:$SBP_LEX_PORT/health"
 echo "[INFO] Starting the local runtime and smoke check..."
 
@@ -50,5 +53,6 @@ exec "$PYTHON" scripts/smoke_check.py \
     --launch \
     --host 127.0.0.1 \
     --port "$SBP_LEX_PORT" \
+    --video-port "$SBP_VIDEO_PORT" \
     --expected-mode local \
     $SMOKE_EXIT_ARG

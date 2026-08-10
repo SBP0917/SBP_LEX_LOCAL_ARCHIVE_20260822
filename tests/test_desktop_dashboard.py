@@ -14,6 +14,7 @@ from sbp_lex.desktop.dashboard import (
     latest_runtime_snapshot,
     sample_request_payload,
 )
+from sbp_lex.desktop.video_studio import render_video_studio_page
 from sbp_lex.runtime.canonical_runtime import CANONICAL_RUNTIME
 
 
@@ -35,6 +36,8 @@ def test_desktop_dashboard_contains_required_runtime_sections() -> None:
     assert "Stop / Halt" in html
     assert "Procedural Truth Details" in html
     assert "SKG/DTN Bridge Details" in html
+    assert "Video Studio" in html
+    assert "/desktop/video-studio" in html
     assert "/runtime/traverse" in html
     assert "/runtime/replay" in html
     assert "/runtime/integrity" in html
@@ -131,6 +134,19 @@ def test_cockpit_renderer_imports_no_runtime_authority_modules() -> None:
         elif isinstance(item, ast.ImportFrom) and (item.module or "").startswith("sbp_lex"):
             internal_imports.append(item.module or "")
     assert internal_imports == []
+
+
+def test_video_studio_page_preserves_read_only_runtime_boundary() -> None:
+    html = render_video_studio_page()
+    assert "General-purpose local scene construction" in html
+    assert "/desktop/latest" in html
+    assert "/runtime/traverse" not in html
+    assert "/runtime/replay" not in html
+    assert "canonical_runtime_mutation" not in html
+    assert "Slower rehearsal / learning traversal" in html
+    assert "Full-speed traversal" in html
+    assert "Constructed scenario mode" in html
+    assert validate_path("GET", "/desktop/video-studio") == (True, "path_allowed")
 
 
 def test_cockpit_renderer_introduces_no_prohibited_topology_terms() -> None:

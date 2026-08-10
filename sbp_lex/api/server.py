@@ -28,6 +28,7 @@ from sbp_lex.desktop.dashboard import (
     export_traversal_events_json,
     latest_runtime_snapshot,
 )
+from sbp_lex.desktop.video_studio import render_video_studio_page
 from sbp_lex.connector.fabric import process_connector_envelope
 from sbp_lex.connector.recovery import CONNECTOR_RECOVERY
 from sbp_lex.persistence.integrity_store import RUNTIME_INTEGRITY_STORE
@@ -233,6 +234,14 @@ class RuntimeAPIHandler(BaseHTTPRequestHandler):
                 return _json_response(self, 200, {"ok": True, "service": "SBP-LEX V1 Canonical Runtime", "access": payload.get("access")})
             if parsed.path in {"/dashboard", "/desktop"}:
                 return _html_response(self, 200, desktop_dashboard_html())
+            if parsed.path == "/desktop/video-studio":
+                raw_port = os.environ.get("SBP_VIDEO_PORT", "8765")
+                video_port = int(raw_port) if raw_port.isdigit() and 1 <= int(raw_port) <= 65535 else 8765
+                return _html_response(
+                    self,
+                    200,
+                    render_video_studio_page(f"http://127.0.0.1:{video_port}"),
+                )
             if parsed.path == "/desktop/static/images/sbp_lex_background.png":
                 return _png_response(self, 200, desktop_background_bytes())
             if parsed.path == "/desktop/latest":
