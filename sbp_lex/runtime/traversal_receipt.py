@@ -204,7 +204,8 @@ def build_traversal_receipt(
     measurement_failures = _measurement_failures(current)
     if measurement_failures:
         raise ValueError(";".join(measurement_failures))
-    assert isinstance(current, Mapping)
+    if not isinstance(current, Mapping):
+        raise ValueError("runtime_traversal_receipt_measurement_invalid")
 
     payload: dict[str, Any] = {
         "receipt_version": TRAVERSAL_RECEIPT_VERSION,
@@ -227,7 +228,8 @@ def build_traversal_receipt(
         )
         if event_failures:
             raise ValueError(";".join(event_failures))
-        assert isinstance(traversal_started_event, Mapping)
+        if not isinstance(traversal_started_event, Mapping):
+            raise ValueError("runtime_traversal_receipt_event_invalid")
         payload.update(
             {
                 "traversal_started_event_hash": traversal_started_event[

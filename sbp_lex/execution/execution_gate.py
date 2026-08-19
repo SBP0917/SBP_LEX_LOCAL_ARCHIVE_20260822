@@ -168,7 +168,8 @@ def _runtime_binding(
     )
     if not receipt_valid:
         return None, receipt_failures
-    assert isinstance(payload, Mapping)
+    if not isinstance(payload, Mapping):
+        return None, ["runtime_traversal_receipt_payload_invalid"]
     binding: Dict[str, Any] = {
         "binding_version": RUNTIME_BINDING_VERSION,
         "receipt_digest": receipt.get("receipt_digest"),
@@ -500,7 +501,21 @@ def _run_execution_gate(state: Mapping[str, Any]) -> Dict[str, Any]:
             },
         )
 
-    assert runtime_binding is not None
+    if runtime_binding is None:
+        working_state = _strip_success_material(working_state)
+        working_state["effect_phase"] = "NOT_AUTHORISED"
+        working_state = _apply_fail_closed(
+            working_state, ["runtime_traversal_receipt_binding_missing"]
+        )
+        return append_hash_entry(
+            working_state,
+            stage="execution_gate",
+            payload={
+                "execution_result": "HALT",
+                "decision": "DENY",
+                "failures": ["runtime_traversal_receipt_binding_missing"],
+            },
+        )
     gate_input_state_hash = str(working_state.get("state_hash", ""))
     working_state["execution_runtime_binding"] = runtime_binding
     working_state["audit_readiness"] = _build_audit_readiness(working_state)
@@ -897,8 +912,10 @@ def _evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, A
     if not verify_audit_record(audit_record):
         failures.append("audit_record_invalid")
         audit_payload: Mapping[str, Any] = {}
+    elif not isinstance(audit_record, Mapping):
+        failures.append("audit_record_invalid")
+        audit_payload = {}
     else:
-        assert isinstance(audit_record, Mapping)
         audit_payload = audit_record.get("payload", {})
         if state.get("audit_hash") != audit_record.get("audit_hash"):
             failures.append("audit_hash_mismatch")
@@ -955,8 +972,9 @@ def _evaluate_strict_execution_security(state: Mapping[str, Any]) -> Dict[str, A
     controlled_outcome = state.get("controlled_outcome")
     if not verify_controlled_outcome(controlled_outcome):
         failures.append("controlled_outcome_invalid")
+    elif not isinstance(controlled_outcome, Mapping):
+        failures.append("controlled_outcome_invalid")
     else:
-        assert isinstance(controlled_outcome, Mapping)
         outcome_payload = controlled_outcome.get("payload", {})
         expected_outcome_values = {
             "request_fingerprint": state.get("request_fingerprint"),

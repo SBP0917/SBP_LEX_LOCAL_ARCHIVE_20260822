@@ -330,7 +330,9 @@ def _validate_provenance(value: Any, failures: list[str]) -> None:
             item, allowed, "provenance_invalid", failures
         ):
             continue
-        assert isinstance(item, Mapping)
+        if not isinstance(item, Mapping):
+            failures.append("provenance_invalid")
+            continue
         if any(
             not isinstance(item.get(key), str)
             or not str(item.get(key)).strip()
@@ -364,7 +366,9 @@ def _validate_common(
         package, allowed_fields, "schema_fields_rejected", failures
     ):
         return False
-    assert isinstance(package, Mapping)
+    if not isinstance(package, Mapping):
+        failures.append("schema_fields_rejected")
+        return False
     if package.get("package_type") != expected_type:
         failures.append("package_type_rejected")
     if package.get("schema_version") != expected_version:
@@ -429,7 +433,9 @@ def validate_synthetic_skg_package(
         failures=failures,
     ):
         return _result(failures)
-    assert isinstance(package, Mapping)
+    if not isinstance(package, Mapping):
+        failures.append("schema_fields_rejected")
+        return _result(failures)
     hierarchy = package.get("authority_hierarchy")
     hierarchy_fields = frozenset({
         "authority_id", "parent_authority_id",
@@ -444,7 +450,9 @@ def validate_synthetic_skg_package(
                 "authority_hierarchy_invalid", failures,
             ):
                 continue
-            assert isinstance(item, Mapping)
+            if not isinstance(item, Mapping):
+                failures.append("authority_hierarchy_invalid")
+                continue
             if (
                 not isinstance(item.get("authority_id"), str)
                 or not item.get("authority_id")
@@ -546,7 +554,9 @@ def validate_synthetic_dtn_package(
         failures=failures,
     ):
         return _result(failures)
-    assert isinstance(package, Mapping)
+    if not isinstance(package, Mapping):
+        failures.append("schema_fields_rejected")
+        return _result(failures)
     if (
         skg_digest is not None
         and package.get("skg_constraint_digest") != skg_digest
@@ -598,7 +608,9 @@ def validate_synthetic_dtn_package(
                 failures,
             ):
                 continue
-            assert isinstance(item, Mapping)
+            if not isinstance(item, Mapping):
+                failures.append("dependencies_invalid")
+                continue
             dependency_id = item.get("dependency_id")
             if not isinstance(dependency_id, str) or not dependency_id:
                 failures.append("dependencies_invalid")
