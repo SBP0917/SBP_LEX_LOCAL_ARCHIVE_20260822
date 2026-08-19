@@ -112,7 +112,8 @@ def generated_evidence_lineage_is_bounded(
         "rev-list",
         "--reverse",
         "--ancestry-path",
-        f"{recorded_commit}..{selected_current}",
+        selected_current,
+        f"^{recorded_commit}",
     )
     if not _result_succeeded(lineage_result):
         return False
