@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from sbp_lex.assurance.double_triple import (
+    COMPLETE_SUITE_TIMEOUT_SECONDS,
     DoubleTripleError,
+    _run,
     evidence_command_plan,
     sanitized_subprocess_environment,
     scan_legacy_evidence,
@@ -32,6 +35,21 @@ def test_source_plan_is_one_complete_run_plus_three_fresh_linkage_runs():
     ]
     assert sum("linkage_assurance" not in command for _, command in plan) == 1
     assert sum(command[-1] == "linkage_assurance" for _, command in plan) == 3
+    assert COMPLETE_SUITE_TIMEOUT_SECONDS == 7200
+
+
+def test_run_reports_timeout_distinctly(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def _timeout(*_args, **_kwargs):
+        raise subprocess.TimeoutExpired(("python", "-m", "pytest"), 7)
+
+    monkeypatch.setattr(
+        "sbp_lex.assurance.double_triple.subprocess.run", _timeout,
+    )
+    with pytest.raises(DoubleTripleError, match="command_timeout:fixture:7"):
+        _run(tmp_path, "fixture", ("python", "-m", "pytest"), timeout=7)
 
 
 def test_subprocess_environment_removes_injection_and_test_trust():

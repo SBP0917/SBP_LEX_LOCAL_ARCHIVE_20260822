@@ -40,6 +40,7 @@ TEST_TRUST_ENVIRONMENT_NAMES = (
 )
 EVIDENCE_SCAN_ROOTS = ("outputs", "validation_package")
 EVIDENCE_SCAN_FILES = ("sbp_lex/runtime/approved_runtime_baselines.json",)
+COMPLETE_SUITE_TIMEOUT_SECONDS = 7200
 REQUIRED_HANDOVER_PATHS = (
     "outputs/local_trust_root_manifest.json",
     "outputs/local_evidence_chain.json",
@@ -529,7 +530,11 @@ def _run(
                 pycache_prefix=pycache_prefix,
             ),
         )
-    except (OSError, subprocess.TimeoutExpired) as exc:
+    except subprocess.TimeoutExpired as exc:
+        raise DoubleTripleError(
+            f"command_timeout:{label}:{timeout}"
+        ) from exc
+    except OSError as exc:
         raise DoubleTripleError(f"command_unavailable:{label}") from exc
     if completed.stdout:
         print(completed.stdout, end="")
@@ -604,7 +609,11 @@ def run_source_assurance(root: Path) -> None:
             label,
             command,
             for_tests=True,
-            timeout=1200 if label == "complete_suite" else 600,
+            timeout=(
+                COMPLETE_SUITE_TIMEOUT_SECONDS
+                if label == "complete_suite"
+                else 600
+            ),
         )
     require_clean_repository(root)
     print("[PASS] DOUBLE_TRIPLE_SOURCE_ASSURANCE_PASS")
