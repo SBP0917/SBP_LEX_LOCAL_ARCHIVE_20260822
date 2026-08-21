@@ -40,7 +40,9 @@ TEST_TRUST_ENVIRONMENT_NAMES = (
 )
 EVIDENCE_SCAN_ROOTS = ("outputs", "validation_package")
 EVIDENCE_SCAN_FILES = ("sbp_lex/runtime/approved_runtime_baselines.json",)
-COMPLETE_SUITE_TIMEOUT_SECONDS = 7200
+# The canonical Windows V1 suite exceeded five hours at the repair candidate.
+# Eight hours retains a finite fail-closed bound while allowing that measured run.
+COMPLETE_SUITE_TIMEOUT_SECONDS = 28800
 REQUIRED_HANDOVER_PATHS = (
     "outputs/local_trust_root_manifest.json",
     "outputs/local_evidence_chain.json",

@@ -35,7 +35,7 @@ def test_source_plan_is_one_complete_run_plus_three_fresh_linkage_runs():
     ]
     assert sum("linkage_assurance" not in command for _, command in plan) == 1
     assert sum(command[-1] == "linkage_assurance" for _, command in plan) == 3
-    assert COMPLETE_SUITE_TIMEOUT_SECONDS == 7200
+    assert COMPLETE_SUITE_TIMEOUT_SECONDS == 28800
 
 
 def test_run_reports_timeout_distinctly(
