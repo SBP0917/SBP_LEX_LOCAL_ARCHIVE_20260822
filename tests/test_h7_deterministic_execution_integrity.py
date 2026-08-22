@@ -913,13 +913,14 @@ def test_control_authorization_actor_action_and_expiry_fail_closed(h7_factory: A
 def test_safe_cancellation_during_execution_requires_adapter_termination_acknowledgement(h7_factory: Any) -> None:
     harness = h7_factory(safe_cancellation_supported=True)
     capability = harness.issue(activate=True)
+    execution_context = harness.context(capability)
     adapter = BlockingCancellableAdapter()
     execution_errors: list[str] = []
 
     def execute() -> None:
         try:
             harness.service.execute_once(
-                capability, context_provider=lambda: harness.context(capability),
+                capability, context_provider=lambda: deepcopy(execution_context),
                 parameters=DEFAULT_PARAMETERS, adapter=adapter,
             )
         except ExecutionIntegrityError as exc:
@@ -927,14 +928,17 @@ def test_safe_cancellation_during_execution_requires_adapter_termination_acknowl
 
     thread = threading.Thread(target=execute)
     thread.start()
-    assert adapter.started.wait(timeout=10)
-    authorization = authorize_control(
-        capability_id=capability["capability_id"], action="CANCEL",
-        actor_id="SBP_LEX_DESKTOP_V1_OPERATOR", reason="safe stop", now=harness.clock(),
-    )
-    record = harness.service.cancel(capability, authorization=authorization)
-    adapter.release.set()
-    thread.join(timeout=10)
+    try:
+        assert adapter.started.wait(timeout=10)
+        authorization = authorize_control(
+            capability_id=capability["capability_id"], action="CANCEL",
+            actor_id="SBP_LEX_DESKTOP_V1_OPERATOR", reason="safe stop", now=harness.clock(),
+        )
+        record = harness.service.cancel(capability, authorization=authorization)
+    finally:
+        adapter.release.set()
+        thread.join(timeout=10)
+    assert not thread.is_alive()
     assert harness.store.state(capability["capability_id"]) == "CANCELLED"
     assert adapter.termination_calls == 1
     assert execution_errors
